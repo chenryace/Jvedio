@@ -1671,4 +1671,7 @@
   <data name="RowNumber" xml:space="preserve">
     <value>行数</value>
   </data>
+  <data name="SyncMagnets" xml:space="preserve">
+    <value>同步磁力</value>
+  </data>
 </root>

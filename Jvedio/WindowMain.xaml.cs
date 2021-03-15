@@ -381,6 +381,7 @@ namespace Jvedio
             foreach (StackPanel item in ActorInfoStackPanel.Children.OfType<StackPanel>().ToList())
             {
                 TextBox textBox = item.Children[1] as TextBox;
+                
                 textBox.PreviewKeyUp += SaveActress;
             }
 
@@ -3232,9 +3233,9 @@ namespace Jvedio
 
             vieModel.SelectedMovie.ToList().ForEach(arg =>
             {
-                if (!string.IsNullOrEmpty(arg.sourceurl) && arg.sourceurl.IndexOf("http") >= 0)
+                if (arg.sourceurl.IsProperUrl())
                 {
-                    FileHelper.TryOpenUrl(arg.sourceurl, GrowlToken);
+                    FileHelper.TryOpenUrl(arg.GetSourceUrl(), GrowlToken);
                 }
                 else
                 {

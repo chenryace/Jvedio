@@ -233,6 +233,51 @@ namespace Jvedio
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+
+        /// <summary>
+        /// 将source url 中的 链接替换掉
+        /// </summary>
+        /// <returns></returns>
+        public string GetSourceUrl()
+        {
+            string result = "";
+            if (this.sourceurl.IsProperUrl())
+            {
+                Uri uri1 = new Uri(sourceurl);
+                // 需要替换网址的有 ： bus db library
+                string Source = source.ToUpper();
+
+                if (Source == "JAVBUS")
+                {
+                    if (JvedioServers.Bus.Url.IsProperUrl())
+                    {
+                        Uri uri = new Uri(JvedioServers.Bus.Url);
+                        result= uri1.OriginalString.Replace(uri1.Host, uri.Host);
+                    }
+                }
+                else if (Source == "JAVDB")
+                {
+                    if (JvedioServers.DB.Url.IsProperUrl())
+                    {
+                        Uri uri = new Uri(JvedioServers.DB.Url);
+                        result= uri1.OriginalString.Replace(uri1.Host, uri.Host);
+                    }
+                }
+                else if (Source == "javlibrary".ToUpper())
+                {
+                    if (JvedioServers.Library.Url.IsProperUrl())
+                    {
+                        Uri uri = new Uri(JvedioServers.Library.Url);
+                        result= uri1.OriginalString.Replace(uri1.Host, uri.Host);
+                    }
+                }
+
+            }
+
+            return result;
+        }
+
+
     }
 
 

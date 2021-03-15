@@ -31,6 +31,7 @@
     SizeChanged="Window_SizeChanged"
     PreviewKeyDown="Window_PreviewKeyDown"
     Deactivated="Window_Deactivated"
+    
     >
 
 
@@ -40,6 +41,7 @@
 
         <!--Converter-->
 
+        <local:favoritesConverter x:Key="favoritesConverter" />
         <local:IntToVisibilityConverter x:Key="IntToVisibilityConverter" />
         <local:BoolToOppositeVisibilityConverter x:Key="BoolToOppositeVisibilityConverter" />
         <local:SmallerThicknessConverter x:Key="SmallerThicknessConverter" />
@@ -73,6 +75,12 @@
         <BooleanToVisibilityConverter x:Key="bool2VisibilityConverter"/>
 
 
+
+        <!--动画-->
+
+
+        <DoubleAnimation x:Key="shrinkBlurRadius"   From="40" To="10" Duration="00:00:1"  Storyboard.TargetProperty="(Border.Effect).(DropShadowEffect.BlurRadius)"/>
+        <DoubleAnimation x:Key="expandBlurRadius"    From="10" To="40" Duration="00:00:2"  Storyboard.TargetProperty="(Border.Effect).(DropShadowEffect.BlurRadius)"/>
 
 
         <Style x:Key="ActorInfoTextBlock" TargetType="{x:Type TextBlock}">
@@ -218,6 +226,28 @@
             <Setter Property="Height" Value="auto"/>
             <Setter Property="BorderThickness" Value="2"/>
             <Setter Property="BorderBrush" Value="Transparent"/>
+
+            <!--<Style.Triggers>
+                <DataTrigger Binding="{Binding favorites,Converter={StaticResource favoritesConverter},Mode=OneWay}" Value="True">
+                    <DataTrigger.EnterActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <StaticResource ResourceKey="shrinkBlurRadius"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </DataTrigger.EnterActions>
+                    <DataTrigger.ExitActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <StaticResource ResourceKey="expandBlurRadius"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </DataTrigger.ExitActions>
+                </DataTrigger>
+            </Style.Triggers>-->
+
+            
+
         </Style>
 
 
@@ -805,7 +835,7 @@
                                                 <MenuItem  Header="{x:Static lang:Resources.Picture}" Click="OpenImageSavePath"   />
                                                 <MenuItem  Header="{x:Static lang:Resources.SoftWare}" Click="OpenApplicationPath"  />
                                             </MenuItem>
-                                            <MenuItem Visibility="Visible"  Header="{x:Static lang:Resources.ScreenShot}" PreviewMouseLeftButtonUp="ScreenShot"   />
+                                            <MenuItem Visibility="Collapsed"  Header="{x:Static lang:Resources.ScreenShot}" PreviewMouseLeftButtonUp="ScreenShot"   />
                                             <MenuItem Header="{x:Static lang:Resources.Upgrade}" Click="CheckUpgrade"   />
                                         </ContextMenu>
                                     </Border.ContextMenu>
@@ -1091,7 +1121,7 @@
                                             </Border>
 
 
-                                            <Button Visibility="Visible" Click="Test" Content="Test" Style="{StaticResource FlatButton}" />
+                                            <Button Visibility="Collapsed" Click="Test" Content="Test" Style="{StaticResource FlatButton}" />
 
                                         </StackPanel>
 
@@ -1470,7 +1500,7 @@
 
 
                                     <!--演员-->
-                                    <Grid Grid.Column="0" Visibility="{Binding ActorInfoGrid,FallbackValue=collapsed}"    Margin="10">
+                                    <Grid Grid.Column="0" Visibility="{Binding ActorInfoGrid,FallbackValue=Visible}"    Margin="10">
                                         <Border   Background="{DynamicResource BackgroundTitle}" CornerRadius="5" Margin="5"  >
                                             <Border.Effect>
                                                 <DropShadowEffect BlurRadius="20" Direction="-90"  RenderingBias="Quality" ShadowDepth="0"/>
@@ -1529,6 +1559,27 @@
                                             <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Visible" Margin="0 5">
                                                 <StackPanel x:Name="ActorInfoStackPanel"  >
                                                     <TextBox Text="{Binding Actress.id}" Style="{StaticResource InfoTextBox}" Visibility="Collapsed"  />
+                                                    <!--<StackPanel Orientation="Horizontal" Margin="0 5">
+                                                        <TextBlock Text="脸蛋：" Style="{StaticResource ActorInfoTextBlock}"/>
+                                                        <hc:Rate  AllowClear="True" Value="{Binding DetailMovie.favorites,Mode=TwoWay}" Background="{DynamicResource BackgroundMain}" Foreground="#FF7B3B"   ValueChanged="Rate_ValueChanged" DefaultValue="0" VerticalAlignment="Center"/>
+                                                    </StackPanel>
+
+                                                    <StackPanel Orientation="Horizontal" Margin="0 5">
+                                                        <TextBlock Text="身材：" Style="{StaticResource ActorInfoTextBlock}"/>
+                                                        <hc:Rate  AllowClear="True" Value="{Binding DetailMovie.favorites,Mode=TwoWay}" Background="{DynamicResource BackgroundMain}" Foreground="#FF7B3B"   ValueChanged="Rate_ValueChanged" DefaultValue="0" VerticalAlignment="Center"/>
+                                                    </StackPanel>
+
+                                                    <StackPanel Orientation="Horizontal" Margin="0 5">
+                                                        <TextBlock Text="乳房：" Style="{StaticResource ActorInfoTextBlock}"/>
+                                                        <hc:Rate  AllowClear="True" Value="{Binding DetailMovie.favorites,Mode=TwoWay}" Background="{DynamicResource BackgroundMain}" Foreground="#FF7B3B"   ValueChanged="Rate_ValueChanged" DefaultValue="0" VerticalAlignment="Center"/>
+                                                    </StackPanel>
+
+                                                    <StackPanel Orientation="Horizontal" Margin="0 5">
+                                                        <TextBlock Text="私处：" Style="{StaticResource ActorInfoTextBlock}"/>
+                                                        <hc:Rate  AllowClear="True" Value="{Binding DetailMovie.favorites,Mode=TwoWay}" Background="{DynamicResource BackgroundMain}" Foreground="#FF7B3B"   ValueChanged="Rate_ValueChanged" DefaultValue="0" VerticalAlignment="Center"/>
+                                                    </StackPanel>-->
+
+
                                                     <StackPanel Orientation="Horizontal">
                                                         <TextBlock Text="{x:Static lang:Resources.Actress_Birthday}"  Style="{StaticResource ActorInfoTextBlock}" />
                                                         <TextBox Text="{Binding Actress.birthday,Mode=TwoWay}" Style="{StaticResource ActorTextBox}"   ToolTip="【0000-00-00】" />
@@ -1767,8 +1818,10 @@
                                                                 <Grid Margin="5" >
                                                                     <Border MinWidth="200" Opacity="{Binding MovieOpacity, Mode=OneWay, Source={x:Static p:Settings.Default}}" Name="MovieBorder"    CornerRadius="3" Background="{DynamicResource BackgroundSide}" Style="{StaticResource ViewBorder}"   >
                                                                         <Border.Effect>
-                                                                            <DropShadowEffect BlurRadius="10" Color="SkyBlue" Direction="-90"  RenderingBias="Quality" ShadowDepth="0"/>
+                                                                            <DropShadowEffect x:Name="blurEffect" BlurRadius="10" Color="SkyBlue" Direction="-90"  RenderingBias="Quality" ShadowDepth="0"/>
                                                                         </Border.Effect>
+
+
                                                                     </Border>
                                                                     <StackPanel Tag="{Binding id,Mode=OneWay}"    ContextMenuOpening="ContextMenu_ContextMenuOpening"   >
                                                                         <!--影片右键菜单-->
@@ -2534,25 +2587,30 @@
                             <RowDefinition Height="auto"/>
                         </Grid.RowDefinitions>
 
-                        <ItemsControl x:Name="LabelItemsControl"  Grid.Row="0" ItemsSource="{Binding LabelList}"  Height="auto"  VerticalAlignment="Top"  Background="Transparent">
-                            <ItemsControl.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <WrapPanel  Orientation="Horizontal" MaxWidth="400" VerticalAlignment="Top" >
+                        <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                            <ItemsControl x:Name="LabelItemsControl"  ItemsSource="{Binding LabelList}"  Height="auto"  VerticalAlignment="Top"  Background="Transparent">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <WrapPanel  Orientation="Horizontal" MaxWidth="400" VerticalAlignment="Top" >
 
-                                    </WrapPanel>
-                                </ItemsPanelTemplate>
-                            </ItemsControl.ItemsPanel>
+                                        </WrapPanel>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
 
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <WrapPanel x:Name="LabelWrapPanel">
-                                        <ToggleButton  Style="{StaticResource ToggleButtonStyle1}"  Padding="5" Margin="10" FontSize="15" BorderThickness="0" Content="{Binding }"  Foreground="{DynamicResource ForegroundSearch}">
-                                        </ToggleButton>
-                                    </WrapPanel>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <WrapPanel x:Name="LabelWrapPanel">
+                                            <ToggleButton  Style="{StaticResource ToggleButtonStyle1}"  Padding="5" Margin="10" FontSize="15" BorderThickness="0" Content="{Binding }"  Foreground="{DynamicResource ForegroundSearch}">
+                                            </ToggleButton>
+                                        </WrapPanel>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
 
+
+                        </ScrollViewer>
+
+    
                         <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Right">
                             <Button  Style="{StaticResource ButtonStyleFill}" Content="{x:Static lang:Resources.Confirm}"  Click="Button_Click"/>
                             <Button  Style="{StaticResource ButtonStyleFill}" Content="{x:Static lang:Resources.Cancel}"  Click="Button_Click_1"/>

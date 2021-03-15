@@ -50,7 +50,7 @@ namespace Jvedio
 		{
 			stop = false;
 			timerImageChange.Start();
-
+			timerImageChange.Interval = new TimeSpan(0, 0, 0);
 		}
 
 		public void Stop()

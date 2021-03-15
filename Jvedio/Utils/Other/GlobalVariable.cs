@@ -83,7 +83,7 @@ namespace Jvedio
 
         public static string[] NeedCookie = new[] {"DB","DMM","MOO" };
 
-        public static bool showSecret = true;
+        public static bool showSecret = false;//限制级内容
 
         #region "热键"
         [DllImport("user32.dll")]
@@ -185,6 +185,12 @@ namespace Jvedio
             GenreUncensored[5] = Resource_String.GenreUncensored.Split('|')[5];
             GenreUncensored[6] = Resource_String.GenreUncensored.Split('|')[6];
             GenreUncensored[7] = Resource_String.GenreUncensored.Split('|')[7];
+
+            //配置 ffmpeg 路径
+            if ( !File.Exists(Properties.Settings.Default.FFMPEG_Path) && File.Exists("ffmpeg.exe"))
+            {
+                Properties.Settings.Default.FFMPEG_Path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "ffmpeg.exe");
+            }
 
     }
 

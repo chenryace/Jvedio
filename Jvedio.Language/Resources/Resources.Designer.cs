@@ -4093,6 +4093,15 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 同步磁力 的本地化字符串。
+        /// </summary>
+        public static string SyncMagnets {
+            get {
+                return ResourceManager.GetString("SyncMagnets", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 系列 的本地化字符串。
         /// </summary>
         public static string Tag {

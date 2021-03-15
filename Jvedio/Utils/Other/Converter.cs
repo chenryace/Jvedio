@@ -13,7 +13,22 @@ using static Jvedio.GlobalVariable;
 namespace Jvedio
 {
 
-    
+
+
+
+    public class favoritesConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            int.TryParse(value.ToString(), out int result);
+            if (result == 5) return true;
+            return false;
+        }
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return null;
+        }
+    }
     public class IntConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -40,11 +55,11 @@ namespace Jvedio
             return value.ToString();
         }
     }
-        public class IntToVisibilityConverter : IValueConverter
+    public class IntToVisibilityConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value == null || parameter == null) return  Visibility.Collapsed;
+            if (value == null || parameter == null) return Visibility.Collapsed;
             else
             {
                 int.TryParse(value.ToString(), out int idx);

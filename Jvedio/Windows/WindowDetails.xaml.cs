@@ -18,7 +18,6 @@ using System.Windows.Threading;
 using static Jvedio.GlobalVariable;
 using static Jvedio.FileProcess;
 using static Jvedio.ImageProcess;
-using static Jvedio.FileProcess;
 using System.Collections.ObjectModel;
 using System.Windows.Controls.Primitives;
 using System.Text.RegularExpressions;
@@ -598,7 +597,7 @@ namespace Jvedio
             e.Handled = true;
         }
 
-        public void PreviewMovie(object sender, MouseButtonEventArgs e)
+        public void PreviousMovie(object sender, MouseButtonEventArgs e)
         {
             cancelLoadImage = true;
             StopDownLoad();
@@ -652,9 +651,18 @@ namespace Jvedio
             }
 
             if (showSecret)
+            {
+                ExtraSync.Visibility = Visibility.Visible;
                 CopyMagnetsMenuItem.Visibility = Visibility.Visible;
+            }
             else
+            {
+                ExtraSync.Visibility = Visibility.Collapsed;
                 CopyMagnetsMenuItem.Visibility = Visibility.Collapsed;
+            }
+
+
+
         }
 
         bool cancelLoadImage = false;
@@ -705,10 +713,17 @@ namespace Jvedio
                 vieModel.SelectImageIndex = 0;
             }
 
+
             if (showSecret)
+            {
+                ExtraSync.Visibility = Visibility.Visible;
                 CopyMagnetsMenuItem.Visibility = Visibility.Visible;
+            }
             else
+            {
+                ExtraSync.Visibility = Visibility.Collapsed;
                 CopyMagnetsMenuItem.Visibility = Visibility.Collapsed;
+            }
 
         }
 
@@ -1090,7 +1105,7 @@ namespace Jvedio
         {
             DetailMovie detailMovie = vieModel.DetailMovie;
             if (detailMovie.sourceurl.IsProperUrl())
-                FileHelper.TryOpenUrl(vieModel.DetailMovie.sourceurl, GrowlToken);
+                FileHelper.TryOpenUrl(vieModel.DetailMovie.GetSourceUrl(), GrowlToken);
             else
                 FileHelper.TryOpenUrl(JvedioServers.Bus.Url + detailMovie.id, GrowlToken);//为空则使用 bus 打开
         }
@@ -1298,7 +1313,7 @@ namespace Jvedio
             if (e.Key == Key.Escape)
                 this.Close();
             else if (e.Key == Key.Left)
-                PreviewMovie(sender, new MouseButtonEventArgs(InputManager.Current.PrimaryMouseDevice, 0, MouseButton.Left));
+                PreviousMovie(sender, new MouseButtonEventArgs(InputManager.Current.PrimaryMouseDevice, 0, MouseButton.Left));
             else if (e.Key == Key.Right)
                 NextMovie(sender, new MouseButtonEventArgs(InputManager.Current.PrimaryMouseDevice, 0, MouseButton.Left));
             else if (e.Key == Key.Space || e.Key == Key.Enter || e.Key == Key.P)
@@ -1532,11 +1547,21 @@ namespace Jvedio
         {
             HandyControl.Controls.Tag Tag = sender as HandyControl.Controls.Tag;
             string text = Tag.Content.ToString();
+            //if (text == "+") return;  //不能直接这么写
             //删除
             if (vieModel.DetailMovie.labellist.Contains(text))
             {
                 vieModel.DetailMovie.labellist.Remove(text);
+                vieModel.DetailMovie.label = string.Join(" ", vieModel.DetailMovie.labellist);
                 vieModel.SaveLabel();
+                vieModel.DetailMovie.labellist = LabelToList(vieModel.DetailMovie.label);//必须new 一个 才能显示
+                if (!vieModel.DetailMovie.labellist.Contains("+")) vieModel.DetailMovie.labellist.Insert(0, "+");
+                LabelListItemsControl.GetBindingExpression(ItemsControl.ItemsSourceProperty).UpdateTarget();
+                //OnPropertyChanged(LabelListItemsControl.ItemsSource);
+                //显示到主界面
+                Main main = App.Current.Windows[0] as Main;
+                main.RefreshMovieByID(vieModel.DetailMovie.id);
+
             }
 
             if (text == "+")
@@ -1610,7 +1635,7 @@ namespace Jvedio
             }
             else
             {
-                PreviewMovie(sender, new MouseButtonEventArgs(InputManager.Current.PrimaryMouseDevice, 0, MouseButton.Left));
+                PreviousMovie(sender, new MouseButtonEventArgs(InputManager.Current.PrimaryMouseDevice, 0, MouseButton.Left));
             }
         }
 
@@ -2112,6 +2137,11 @@ namespace Jvedio
                 //更新主界面
                 textBox.GetBindingExpression(TextBox.TextProperty).UpdateTarget();
             }
+        }
+
+        private void DownLoadMagnets(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 

@@ -105,7 +105,7 @@ namespace Jvedio
                         Uri uri = new Uri(Url);
                         Request.Host = headers.Host == "" ? uri.Host : headers.Host;
                         Request.Accept = headers.Accept;
-                        Request.Timeout = HTTPTIMEOUT;
+                        Request.Timeout = HTTPTIMEOUT*1000;
                         Request.Method = headers.Method;
                         Request.KeepAlive = true;
                         Request.AllowAutoRedirect = allowRedirect;
@@ -354,7 +354,7 @@ namespace Jvedio
             }
             else
             {
-                httpResult = await Http(Url);
+                httpResult = await Http(Url, new CrawlerHeader() { Cookies = Cookie });
                 if (httpResult != null)
                 {
                     result = true;

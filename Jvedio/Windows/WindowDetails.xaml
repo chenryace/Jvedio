@@ -197,7 +197,7 @@
 
 
                 <Grid x:Name="PreviousGrid" Grid.Column="0" PreviewMouseWheel="Border_PreviewMouseWheel" >
-                    <Border x:Name="PreviousBorder"  Cursor="Hand"  Height="60"      ToolTip="{x:Static lang:Resources.Previous}"    Width="30" Margin="5 0" CornerRadius="10" MouseLeftButtonUp="PreviewMovie">
+                    <Border x:Name="PreviousBorder"  Cursor="Hand"  Height="60"      ToolTip="{x:Static lang:Resources.Previous}"    Width="30" Margin="5 0" CornerRadius="10" MouseLeftButtonUp="PreviousMovie">
                         <Border.Style>
                             <Style TargetType="Border">
                                 <Setter Property="Background" Value="{DynamicResource BackgroundSide}"/>
@@ -336,6 +336,9 @@
                                 <Grid.ContextMenu>
                                     <ContextMenu Opacity="0.8"  PreviewKeyUp="ContextMenu_PreviewKeyUp" >
                                         <MenuItem Header="{x:Static lang:Resources.Menu_SyncInfo}" Click="DownLoad"/>
+                                        <MenuItem x:Name="ExtraSync"  Header="{x:Static lang:Resources.Menu_SyncExtra}"   Visibility="Collapsed"  >
+                                            <MenuItem Header="{x:Static lang:Resources.SyncMagnets}" Click="DownLoadMagnets"   ></MenuItem>
+                                        </MenuItem>
                                         <MenuItem Header="{x:Static lang:Resources.Menu_Advance}"   >
                                             <MenuItem Header="{x:Static lang:Resources.Menu_Translate}" Click="TranslateMovie"  />
                                             <MenuItem Header="{x:Static lang:Resources.Menu_GenerateThumbnail}" Click="GenerateSmallImage" />
@@ -352,7 +355,7 @@
                                             <MenuItem Header="{x:Static lang:Resources.ScreenShot}" Click="OpenImagePath"   ></MenuItem>
                                         </MenuItem>
 
-                                        <MenuItem   Header="{x:Static lang:Resources.ScreenShot}" PreviewMouseLeftButtonUp="StartScreenShot"   />
+                                        <MenuItem   Header="{x:Static lang:Resources.ScreenShot}" Visibility="Collapsed" PreviewMouseLeftButtonUp="StartScreenShot"   />
 
 
                                         <MenuItem Header="{x:Static lang:Resources.Menu_AddToList}"   Name="ListMenuItem"   />
@@ -485,7 +488,7 @@
 
                                                 </StackPanel>
 
-                                                <StackPanel Width="auto" HorizontalAlignment="Left"  Margin="0 20" Cursor="Hand">
+                                                <StackPanel Width="auto" HorizontalAlignment="Left"  Margin="0 20" Cursor="Hand" Visibility="{Binding Path=DisplayFavorites,Converter={StaticResource bool2VisibilityConverter}, Source={x:Static p:Settings.Default},Mode=OneWay}">
                                                     <hc:Rate  AllowClear="True" Value="{Binding DetailMovie.favorites,Mode=TwoWay}" Background="{DynamicResource BackgroundTitle}" Foreground="#FF7B3B"   ValueChanged="Rate_ValueChanged" DefaultValue="0"/>
                                                 </StackPanel>
                                             </StackPanel>
@@ -813,24 +816,28 @@
                     <RowDefinition Height="auto"/>
                 </Grid.RowDefinitions>
 
-                <ItemsControl x:Name="LabelItemsControl"  Grid.Row="0" ItemsSource="{Binding LabelList}"  Height="auto"  VerticalAlignment="Top"  Background="Transparent">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <WrapPanel  Orientation="Horizontal" MaxWidth="400" VerticalAlignment="Top" >
+                <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                    <ItemsControl x:Name="LabelItemsControl"   ItemsSource="{Binding LabelList}"  Height="auto"  VerticalAlignment="Top"  Background="Transparent">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel  Orientation="Horizontal" MaxWidth="400" VerticalAlignment="Top" >
 
-                            </WrapPanel>
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
+                                </WrapPanel>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
 
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <WrapPanel x:Name="LabelWrapPanel">
-                                <ToggleButton  Style="{StaticResource ToggleButtonStyle1}"  Padding="5" Margin="10" FontSize="15" BorderThickness="0" Content="{Binding }"  Foreground="{DynamicResource ForegroundSearch}">
-                                </ToggleButton>
-                            </WrapPanel>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <WrapPanel x:Name="LabelWrapPanel">
+                                    <ToggleButton  Style="{StaticResource ToggleButtonStyle1}"  Padding="5" Margin="10" FontSize="15" BorderThickness="0" Content="{Binding }"  Foreground="{DynamicResource ForegroundSearch}">
+                                    </ToggleButton>
+                                </WrapPanel>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+
+                </ScrollViewer>
+
 
                 <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Right">
                     <Button  Style="{StaticResource FlatButton}" Content="确定"  Click="LabelConfirm"/>

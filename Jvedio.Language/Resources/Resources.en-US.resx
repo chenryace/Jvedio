@@ -1671,4 +1671,7 @@
   <data name="RowNumber" xml:space="preserve">
     <value>RowNumber</value>
   </data>
+  <data name="SyncMagnets" xml:space="preserve">
+    <value>Sync Magnets</value>
+  </data>
 </root>

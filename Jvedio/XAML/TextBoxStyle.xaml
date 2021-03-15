@@ -3,7 +3,7 @@
 >
 
     <Style x:Key="BaseTextBlock" TargetType="{x:Type TextBlock}">
-        <Setter Property="FontFamily" Value="Times New Romans"/>
+        <!--<Setter Property="FontFamily" Value="Times New Romans"/>-->
         <Setter Property="TextWrapping" Value="Wrap"/>
         <Setter Property="TextAlignment" Value="Center"/>
         <Setter Property="FontSize" Value="15"/>
