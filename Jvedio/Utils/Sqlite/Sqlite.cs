@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Jvedio;
+using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
 
@@ -15,7 +16,7 @@ namespace MyLibrary.SQL
 
         public Sqlite(string path)
         {
-
+            SqlitePath = path;
         }
 
 
@@ -64,7 +65,7 @@ namespace MyLibrary.SQL
                     }
                 }
             }
-            catch (System.Data.SQLite.SQLiteException ex) { Console.WriteLine(ex.Message); }
+            catch (System.Data.SQLite.SQLiteException ex) { Logger.LogD(ex); }
             return tables;
         }
 
@@ -79,7 +80,7 @@ namespace MyLibrary.SQL
                     cmd.ExecuteNonQuery();
                     return true;
                 }
-                catch (Exception e) { Console.WriteLine(e.Message); return false; }
+                catch (Exception e) { Logger.LogD(e); return false; }
 
             }
             else
@@ -97,11 +98,11 @@ namespace MyLibrary.SQL
                     cmd.ExecuteNonQuery();
                     return true;
                 }
-                catch (Exception e) { Console.WriteLine(e.Message); return false; }
+                catch (Exception e) { Logger.LogD(e); return false; }
 
             }
-            else
-                return false;
+
+            return false;
         }
 
 
@@ -117,7 +118,7 @@ namespace MyLibrary.SQL
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
+                Logger.LogD(e);
                 return false;
             }
 
@@ -165,7 +166,7 @@ namespace MyLibrary.SQL
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
+                Logger.LogD(e);
                 return false;
             }
 

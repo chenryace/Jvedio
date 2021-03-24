@@ -4741,7 +4741,7 @@ namespace Jvedio
                                     //复制大图
                                     if (File.Exists(GlobalVariable.BasePicPath + $"SmallPic\\{dm.id}.jpg") & !File.Exists(GlobalVariable.BasePicPath + $"BigPic\\{dm.id}.jpg"))
                                     {
-                                        File.Copy(GlobalVariable.BasePicPath + $"SmallPic\\{dm.id}.jpg", GlobalVariable.BasePicPath + $"BigPic\\{dm.id}.jpg");
+                                        FileHelper.TryCopyFile(GlobalVariable.BasePicPath + $"SmallPic\\{dm.id}.jpg", GlobalVariable.BasePicPath + $"BigPic\\{dm.id}.jpg");
                                     }
                                 }
                                 else
@@ -4782,7 +4782,7 @@ namespace Jvedio
                 FileInfo fileInfo = new FileInfo(file);
                 if (fileInfo.Extension.ToLower() == ".jpg")
                 {
-                    File.Copy(fileInfo.FullName, BasePicPath + $"Actresses\\{vieModel.Actress.name}.jpg", true);
+                    FileHelper.TryCopyFile(fileInfo.FullName, BasePicPath + $"Actresses\\{vieModel.Actress.name}.jpg", true);
                     Actress actress = vieModel.Actress;
                     actress.smallimage = null;
                     actress.smallimage = GetActorImage(actress.name);
@@ -4842,7 +4842,7 @@ namespace Jvedio
                 FileInfo fileInfo = new FileInfo(file);
                 if (fileInfo.Extension.ToLower() == ".jpg")
                 {
-                    File.Copy(fileInfo.FullName, BasePicPath + $"Actresses\\{currentActress.name}.jpg", true);
+                    FileHelper.TryCopyFile(fileInfo.FullName, BasePicPath + $"Actresses\\{currentActress.name}.jpg", true);
                     Actress actress = currentActress;
                     actress.smallimage = null;
                     actress.smallimage = GetActorImage(actress.name);

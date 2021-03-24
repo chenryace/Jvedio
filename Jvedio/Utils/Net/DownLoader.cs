@@ -13,14 +13,13 @@ using static Jvedio.Net;
 
 namespace Jvedio
 {
-
+    // 明明很简单的东西，现在居然有点看不懂了
 
     /// <summary>
     /// 下载类，分为FC2和非FC2，前者同时下载2个，后者同时下载3个
     /// </summary>
     public class DownLoader
     {
-        public static int DelayInvterval = 1000;//暂停 1 s
         public static int SemaphoreNum = 3;
         public static int SemaphoreFC2Num = 1;
         public DownLoadState State = DownLoadState.DownLoading;
@@ -30,8 +29,7 @@ namespace Jvedio
         private Semaphore SemaphoreFC2;
         public DownLoadProgress downLoadProgress;
 
-        protected object LockDataBase;
-        public bool enforce = false;
+        public bool enforce = false;//是否强制下载信息
         private bool Cancel { get; set; }
         public List<Movie> Movies { get; set; }
 
@@ -42,12 +40,12 @@ namespace Jvedio
         /// <summary>
         /// 初始化 DownLoader
         /// </summary>
-        /// <param name="_movies">非 FC2 影片</param>
-        /// <param name="_moviesFC2">FC2 影片</param>
-        public DownLoader(List<Movie> _movies, List<Movie> _moviesFC2)
+        /// <param name="movies">非 FC2 影片</param>
+        /// <param name="moviesFC2">FC2 影片</param>
+        public DownLoader(List<Movie> movies, List<Movie> moviesFC2)
         {
-            Movies = _movies;
-            MoviesFC2 = _moviesFC2;
+            Movies = movies;
+            MoviesFC2 = moviesFC2;
             Semaphore = new Semaphore(SemaphoreNum, SemaphoreNum);
             SemaphoreFC2 = new Semaphore(SemaphoreFC2Num, SemaphoreFC2Num);
             downLoadProgress = new DownLoadProgress() { lockobject = new object(), value = 0, maximum = Movies.Count + MoviesFC2.Count };//所有影片的进度
@@ -78,7 +76,6 @@ namespace Jvedio
         public void StartThread()
         {
             if (Movies.Count == 0 & MoviesFC2.Count == 0) { this.State = DownLoadState.Completed; return; }
-            LockDataBase = new object();
             for (int i = 0; i < Movies.Count; i++)
             {
                 Thread threadObject = new Thread(DownLoad);
@@ -159,13 +156,7 @@ namespace Jvedio
                 //复制海报图作为缩略图
                 if (File.Exists(BasePicPath + $"BigPic\\{dm.id}.jpg") && !File.Exists(BasePicPath + $"SmallPic\\{dm.id}.jpg"))
                 {
-                    try {
-                        File.Copy(BasePicPath + $"BigPic\\{dm.id}.jpg", BasePicPath + $"SmallPic\\{dm.id}.jpg");
-                    }
-                    catch(Exception ex)
-                    {
-                        Logger.LogF(ex);
-                    }
+                    FileHelper.TryCopyFile(BasePicPath + $"BigPic\\{dm.id}.jpg", BasePicPath + $"SmallPic\\{dm.id}.jpg");
                 }
 
             }
@@ -181,7 +172,7 @@ namespace Jvedio
             dm.bigimage = ImageProcess.GetBitmapImage(dm.id, "BigPic");
             lock (downLoadProgress.lockobject) downLoadProgress.value += 1;//完全下载完一个影片
             InfoUpdate?.Invoke(this, new InfoUpdateEventArgs() { Movie = dm, progress = downLoadProgress.value, state = State, Success = true });//委托到主界面显示
-            Task.Delay(DelayInvterval).Wait();//每个线程之间暂停
+            Task.Delay(Delay.MEDIUM).Wait();//每个线程之间暂停
             //取消阻塞
             if (movie.id.ToUpper().IndexOf("FC2") >= 0) 
                 SemaphoreFC2.Release();

@@ -40,8 +40,8 @@ namespace Jvedio
     {
 
         protected string Url = "";//网址
-        protected CrawlerHeader headers;
-        protected HttpResult httpResult;
+        protected CrawlerHeader headers = new CrawlerHeader();
+        protected HttpResult httpResult=null;
         
 
 

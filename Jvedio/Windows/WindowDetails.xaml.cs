@@ -888,14 +888,6 @@ namespace Jvedio
             try
             {
                 File.Copy(path, BasePicPath + $"BigPic\\{vieModel.DetailMovie.id}.jpg", true);
-                ////BigImage.Source = new BitmapImage(new Uri(path));
-                //DetailMovie detailMovie = vieModel.DetailMovie;
-                //detailMovie.bigimage = null;
-
-                //vieModel.DetailMovie = null;
-
-                //detailMovie.bigimage = StaticClass.BitmapImageFromFile(path);
-                //vieModel.DetailMovie = detailMovie;
 
                 RefreshUI("", path);
                 HandyControl.Controls.Growl.Info(Jvedio.Language.Resources.Message_Success, GrowlToken);
@@ -1430,7 +1422,7 @@ namespace Jvedio
                 {
                     //try
                     //{
-                    File.Copy(fileInfo.FullName, BasePicPath + $"BigPic\\{vieModel.DetailMovie.id}.jpg", true);
+                    FileHelper.TryCopyFile(fileInfo.FullName, BasePicPath + $"BigPic\\{vieModel.DetailMovie.id}.jpg", true);
                     DetailMovie detailMovie = vieModel.DetailMovie;
                     detailMovie.bigimage = null;
                     detailMovie.bigimage = BitmapImageFromFile(fileInfo.FullName);

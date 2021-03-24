@@ -12,7 +12,7 @@ namespace Jvedio
 
         public static string[] FLOWOUT = new string[] {"流出", "留出", "泄露", "泄密", "曝光" ,"flowout"};
         public static string[] CHS = new string[] {  "中字", "中文字幕", "字幕","中文","translated" , "translate" };
-        public static string[] HDV = new string[] { "hd", "high_definition", "high definition","高清" };
+        public static string[] HDV = new string[] { "hd", "high_definition", "high definition","高清", "2K", "4K","8K","16K","32K" };
 
         public static void InitFanhaoList()
         {
@@ -25,8 +25,6 @@ namespace Jvedio
         public static string GetFanhaoFromDMMUrl(string url)
         {
             string result = "";
-            //https://www.dmm.co.jp/mono/dvd/-/detail/=/cid=apns006dod/?i3_ref=search&amp;i3_ord=1
-            //https://www.dmm.co.jp/mono/dvd/-/detail/=/cid=mmus032/?i3_ref=search&amp;i3_ord=1
             var values = url.Split('/').ToList();
             string cid = "";
             foreach (var item in values)
@@ -280,6 +278,8 @@ namespace Jvedio
             Fanhao = GetFanhaoByRegExp(FileName, @"\d+-[A-Za-z]+");
             if (Fanhao != "") return GetFanhaoByRegExp(Fanhao, @"\d+-[A-Za-z]+")  ;
 
+            //TODO
+            //自定义增加正则
 
             return "";
         }

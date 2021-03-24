@@ -118,7 +118,7 @@ namespace Jvedio
                 if (File.Exists($"DataBase\\{name}.sqlite"))
                 {
                     //备份
-                    File.Copy($"DataBase\\{name}.sqlite", $"BackUp\\{dirpath}\\{name}.sqlite", true);
+                    FileHelper.TryCopyFile($"DataBase\\{name}.sqlite", $"BackUp\\{dirpath}\\{name}.sqlite", true);
                     //删除
 
                     try
@@ -262,7 +262,7 @@ namespace Jvedio
                     {
                         if (new Msgbox(this, $"{ Jvedio.Language.Resources.Message_AlreadyExist} {name}，{ Jvedio.Language.Resources.IsToOverWrite}").ShowDialog() == true)
                         {
-                            File.Copy(item, $"DataBase\\{name}.sqlite", true);
+                            FileHelper.TryCopyFile(item, $"DataBase\\{name}.sqlite", true);
 
                             if (!vieModel_DBManagement.DataBases.Contains(name)) vieModel_DBManagement.DataBases.Add(name);
 
@@ -270,7 +270,7 @@ namespace Jvedio
                     }
                     else
                     {
-                        File.Copy(item, $"DataBase\\{name}.sqlite", true);
+                        FileHelper.TryCopyFile(item, $"DataBase\\{name}.sqlite", true);
                         if (!vieModel_DBManagement.DataBases.Contains(name)) vieModel_DBManagement.DataBases.Add(name);
 
                     }

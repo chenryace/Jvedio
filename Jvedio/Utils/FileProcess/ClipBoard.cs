@@ -31,6 +31,8 @@ namespace Jvedio
             }
         }
 
+        //TODO
+        //复制文件显示成功，却无法粘贴
         public static bool TrySetFileDropList(StringCollection filePaths, string token, bool showsuccess = true)
         {
             try

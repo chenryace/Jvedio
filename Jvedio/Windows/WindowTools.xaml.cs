@@ -593,14 +593,13 @@ namespace Jvedio
                     {
                         if (item.ToLower().IndexOf("poster") >= 0 || item.ToLower().IndexOf($"{id.ToLower()}_s") >= 0)
                         {
-                            try { File.Copy(item, GlobalVariable.BasePicPath + $"SmallPic\\{id}.jpg", true); }
-                            catch { }
+                            FileHelper.TryCopyFile(item, GlobalVariable.BasePicPath + $"SmallPic\\{id}.jpg", true); 
+
 
                         }
                         else if (item.ToLower().IndexOf("fanart") >= 0 || item.ToLower().IndexOf($"{id.ToLower()}_b") >= 0)
                         {
-                            try { File.Copy(item, GlobalVariable.BasePicPath + $"BigPic\\{id}.jpg", true); }
-                            catch { }
+                            FileHelper.TryCopyFile(item, GlobalVariable.BasePicPath + $"BigPic\\{id}.jpg", true);
                         }
                     }
 

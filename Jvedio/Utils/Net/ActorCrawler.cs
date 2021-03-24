@@ -13,6 +13,9 @@ using System.Net;
 namespace Jvedio
 {
 
+    /// <summary>
+    /// 该演员曾出演过的影片
+    /// </summary>
     public class ActorSearch
     {
         public string Name { get; set; }

@@ -656,7 +656,7 @@ namespace Jvedio
         }
 
 
-        public Server()
+        public Server() 
         {
 
         }
@@ -749,7 +749,7 @@ namespace Jvedio
         /// <returns></returns>
         public bool IsProper()
         {
-            bool result = Jav321.IsEnable && !string.IsNullOrEmpty(Jav321.Url)
+            return Jav321.IsEnable && !string.IsNullOrEmpty(Jav321.Url)
                                 || Bus.IsEnable && !string.IsNullOrEmpty(Bus.Url)
                                 || BusEurope.IsEnable && !string.IsNullOrEmpty(BusEurope.Url)
                                 || Library.IsEnable && !string.IsNullOrEmpty(Library.Url)
@@ -757,7 +757,6 @@ namespace Jvedio
                                 || FC2.IsEnable && !string.IsNullOrEmpty(FC2.Url)
                                 || DMM.IsEnable && !string.IsNullOrEmpty(DMM.Url)
                                 || MOO.IsEnable && !string.IsNullOrEmpty(MOO.Url);
-            return result;
         }
 
     }

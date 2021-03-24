@@ -797,7 +797,7 @@
 
         <!--标签-->
 
-        <Grid x:Name="LabelGrid" Background="Transparent" VerticalAlignment="Center" HorizontalAlignment="Center" Height="300" Width="500" Visibility="Hidden" >
+        <Grid x:Name="LabelGrid" Background="Transparent" VerticalAlignment="Center" HorizontalAlignment="Center" Height="500" Width="800" Visibility="Hidden" >
             <Border Background="{DynamicResource BackgroundMain}" CornerRadius="5" Margin="2"  >
                 <Border.Effect>
                     <DropShadowEffect BlurRadius="15" Direction="-90" RenderingBias="Quality" ShadowDepth="2"/>

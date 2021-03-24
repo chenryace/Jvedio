@@ -19,14 +19,12 @@ namespace Jvedio
     public class MySqlite : Sqlite
     {
 
+        public MySqlite(string path) : this(path,false)
+        {
+            
+        }
 
-
-        /// <summary>
-        /// 默认读取同目录下的 .sqlite 文件
-        /// </summary>
-        /// <param name="path"></param>
-        /// <param name="DatabaseName"></param>
-        public MySqlite(string path, bool absolute = false) : base(path)
+        public MySqlite(string path, bool absolute ) : base(path)
         {
             if (string.IsNullOrEmpty(path))
                 SqlitePath = Properties.Settings.Default.DataBasePath;
@@ -60,7 +58,7 @@ namespace Jvedio
 
         private DetailMovie GetDetailMovieFromSQLiteDataReader(SQLiteDataReader sr)
         {
-            if (sr["id"] == null || string.IsNullOrEmpty(sr["id"].ToString())) return null;
+            if (sr==null || sr["id"] == null || string.IsNullOrEmpty(sr["id"].ToString())) return null;
             DetailMovie detailMovie = new DetailMovie()
             {
                 id = sr["id"].ToString(),
@@ -118,7 +116,7 @@ namespace Jvedio
 
         private Magnet GetMagnetFromSQLiteDataReader(SQLiteDataReader sr)
         {
-            if (sr["id"] == null || string.IsNullOrEmpty(sr["id"].ToString())) return null;
+            if (sr==null || sr["id"] == null || string.IsNullOrEmpty(sr["id"].ToString())) return null;
             Magnet result = new Magnet()
             {
                 id = sr["id"].ToString(),
@@ -144,12 +142,6 @@ namespace Jvedio
             return result;
         }
 
-
-        /// <summary>
-        /// 通过 sql 获得影片列表
-        /// </summary>
-        /// <param name="sqltext"></param>
-        /// <returns></returns>
         public List<Movie> SelectMoviesBySql(string sqltext)
         {
             List<Movie> result = new List<Movie>();
@@ -262,15 +254,9 @@ namespace Jvedio
             return result;
         }
 
-
-
-        /// <summary>
-        /// 插入 完整 的数据
-        /// </summary>
-        /// <param name="movie"></param>
         public void InsertFullMovie(Movie movie, string table)
         {
-            if (movie.vediotype == 0) return;
+            if (movie.vediotype == 0) return;//不能插入未指定类型的视频
             movie.id = movie.id.Replace("FC2PPV", "FC2");
             string sqltext = $"INSERT INTO {table}(id  , title  , filesize  , filepath  , subsection  , vediotype  , scandate  , releasedate , visits , director  , genre  , tag  , actor  , actorid  ,studio  , rating , chinesetitle  , favorites  , label  , plot  , outline  , year   , runtime , country  , countrycode ,otherinfo , sourceurl , source ,actressimageurl ,smallimageurl ,bigimageurl ,extraimageurl ) " +
                "values(@id  , @title  , @filesize  , @filepath  , @subsection  , @vediotype  , @scandate  , @releasedate , @visits , @director  , @genre  , @tag  , @actor  , @actorid  ,@studio  , @rating , @chinesetitle  , @favorites  ,@label  , @plot  , @outline  , @year   , @runtime , @country  , @countrycode ,@otherinfo , @sourceurl , @source ,@actressimageurl ,@smallimageurl ,@bigimageurl ,@extraimageurl) " +
@@ -444,7 +430,7 @@ namespace Jvedio
                     }
                 }
             }
-            catch (Exception ex) { Console.WriteLine(ex.Message); }
+            catch (Exception ex) { Logger.LogD(ex); }
             return result;
         }
 
@@ -463,7 +449,7 @@ namespace Jvedio
                     }
                 }
             }
-            catch (Exception ex) { Console.WriteLine(ex.Message); }
+            catch (Exception ex) { Logger.LogD(ex); }
 
             return result;
         }

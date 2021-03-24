@@ -8,6 +8,20 @@ namespace Jvedio
 {
     public static class FileHelper
     {
+
+        public static bool TryCopyFile(string src,string target,bool overwrite = false)
+        {
+            try
+            {
+                File.Copy(src, target, overwrite);
+                return true;
+            }catch(Exception ex)
+            {
+                Logger.LogF(ex);
+                return false;
+            }
+        }
+
         public static bool TryOpenUrl(string url, string token = "")
         {
             try

@@ -167,7 +167,7 @@ namespace Jvedio
                 if (!Directory.Exists("DataBase")) Directory.CreateDirectory("DataBase");
                 if (File.Exists("info.sqlite"))
                 {
-                    File.Copy("info.sqlite", "DataBase\\info.sqlite");
+                    FileHelper.TryCopyFile("info.sqlite", "DataBase\\info.sqlite");
                     File.Delete("info.sqlite");
                 }
             }
@@ -356,19 +356,12 @@ namespace Jvedio
                 string target= Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "BackUp", filename);
                 if (!File.Exists(target))
                 {
-                    try
-                    {
-                        File.Copy(src, target);
-                    }
-                    catch(Exception ex) { }
+                        FileHelper.TryCopyFile(src, target);
+
                     
                 }else if(new FileInfo(target).Length<new FileInfo(src).Length)
                 {
-                    try
-                    {
-                        File.Copy(src, target,true);
-                    }
-                    catch (Exception ex) { }
+                        FileHelper.TryCopyFile(src, target,true);
                 }
             }
         }
@@ -503,13 +496,13 @@ namespace Jvedio
                     {
                         if (new Msgbox(this, $"{Jvedio.Language.Resources.Message_AlreadyExist} {name} {Jvedio.Language.Resources.IsToOverWrite} ？").ShowDialog() == true)
                         {
-                            File.Copy(item, $"DataBase\\{name}.sqlite", true);
+                            FileHelper.TryCopyFile(item, $"DataBase\\{name}.sqlite", true);
                             if (!vieModel_StartUp.DataBases.Contains(name)) vieModel_StartUp.DataBases.Add(name);
                         }
                     }
                     else
                     {
-                        File.Copy(item, $"DataBase\\{name}.sqlite", true);
+                        FileHelper.TryCopyFile(item, $"DataBase\\{name}.sqlite", true);
                         if (!vieModel_StartUp.DataBases.Contains(name)) vieModel_StartUp.DataBases.Add(name);
                     }
 
@@ -548,7 +541,7 @@ namespace Jvedio
                 if (File.Exists($"DataBase\\{name}.sqlite"))
                 {
                     //备份
-                    File.Copy($"DataBase\\{name}.sqlite", $"BackUp\\{dirpath}\\{name}.sqlite", true);
+                    FileHelper.TryCopyFile($"DataBase\\{name}.sqlite", $"BackUp\\{dirpath}\\{name}.sqlite", true);
                     //删除
 
                     try
