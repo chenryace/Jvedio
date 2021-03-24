@@ -274,6 +274,13 @@ namespace Jvedio
             Fanhao = GetFanhaoByRegExp(FileName, @"[A-Za-z]{2,}(-|_)?\d+[A-Za-z]");
             if (Fanhao != "") return GetFanhaoByRegExp(Fanhao, @"[A-Za-z]{2,}") + "-" +  GetFanhaoByRegExp(Fanhao, @"\d+[A-Za-z]");
 
+
+            // 1000girl
+            //141212-MIO
+            Fanhao = GetFanhaoByRegExp(FileName, @"\d+-[A-Za-z]+");
+            if (Fanhao != "") return GetFanhaoByRegExp(Fanhao, @"\d+-[A-Za-z]+")  ;
+
+
             return "";
         }
 

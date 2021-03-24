@@ -1136,15 +1136,18 @@ namespace Jvedio
 
         }
 
+
+        private bool IsTranslating = false;
         public async void TranslateMovie(object sender, RoutedEventArgs e)
         {
-            Button button = (Button)sender;
+            if (IsTranslating) return;
+            
             if (!Properties.Settings.Default.Enable_TL_BAIDU & !Properties.Settings.Default.Enable_TL_YOUDAO) { HandyControl.Controls.Growl.Warning("请设置【有道翻译】并测试", GrowlToken); return; }
             string result = "";
             MySqlite dataBase = new MySqlite("Translate");
 
             DetailMovie movie = vieModel.DetailMovie;
-            button.IsEnabled = false;
+            IsTranslating = true;
             //检查是否已经翻译过，如有则跳过
             if (!string.IsNullOrEmpty(dataBase.SelectByField("translate_title", "youdao", movie.id))) { HandyControl.Controls.Growl.Warning("影片已经翻译过！", GrowlToken); return; }
             if (movie.title != "")
@@ -1185,7 +1188,7 @@ namespace Jvedio
 
             }
             dataBase.CloseDB();
-            button.IsEnabled = true;
+            IsTranslating = false;
         }
 
 

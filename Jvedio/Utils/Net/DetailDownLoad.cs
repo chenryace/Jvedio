@@ -75,7 +75,7 @@ namespace Jvedio
 
             }
             DetailMovie dm = DataBase.SelectDetailMovieById(DetailMovie.id);
-            if (string.IsNullOrEmpty(dm.title))
+            if (dm==null || string.IsNullOrEmpty(dm.title))
             {
                 InfoUpdate?.Invoke(this, new DetailMovieEventArgs() { DetailMovie = dm, value = 1, maximum = 1 });
                 return;

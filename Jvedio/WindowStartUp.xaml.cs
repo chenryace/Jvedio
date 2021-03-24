@@ -212,6 +212,7 @@ namespace Jvedio
                 statusText.Text = Jvedio.Language.Resources.Status_InitScan;
                 Scan.InitSearchPattern();
                 InitVariable();
+
             }
             catch (Exception ex)
             {
@@ -234,6 +235,9 @@ namespace Jvedio
                 MessageBox.Show(ex.Message);
                 Logger.LogE(ex);
             }
+
+
+
             statusText.Text = Jvedio.Language.Resources.Status_InitNet;
             try
             {
@@ -253,6 +257,10 @@ namespace Jvedio
                 MessageBox.Show(ex.Message);
                 Logger.LogE(ex);
             }
+
+            BackUp("Magnets.sqlite");//备份文件
+            BackUp("AI.sqlite");//备份文件
+            BackUp("Translate.sqlite");//备份文件
 
             //默认打开某个数据库
             if (Properties.Settings.Default.OpenDataBaseDefault && File.Exists(Properties.Settings.Default.DataBasePath))
@@ -338,6 +346,33 @@ namespace Jvedio
                 this.Close();
             }
         }
+
+        private void BackUp(string filename)
+        {
+            if (!Directory.Exists("BackUp")) Directory.CreateDirectory("BackUp");
+            if (File.Exists(filename))
+            {
+                string src = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, filename);
+                string target= Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "BackUp", filename);
+                if (!File.Exists(target))
+                {
+                    try
+                    {
+                        File.Copy(src, target);
+                    }
+                    catch(Exception ex) { }
+                    
+                }else if(new FileInfo(target).Length<new FileInfo(src).Length)
+                {
+                    try
+                    {
+                        File.Copy(src, target,true);
+                    }
+                    catch (Exception ex) { }
+                }
+            }
+        }
+
         private void InitDataBase()
         {
             if (!File.Exists(AIDataBasePath))

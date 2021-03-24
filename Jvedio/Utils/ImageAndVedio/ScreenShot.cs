@@ -83,10 +83,10 @@ namespace Jvedio
             string message = "";
             List<string> outputPath = new List<string>();
             await Task.Run(() => {
-                // n 个线程截图
+                
                 if (!File.Exists(Properties.Settings.Default.FFMPEG_Path)) { result = false; message = Jvedio.Language.Resources.Message_SetFFmpeg; return; }
 
-                int num = Properties.Settings.Default.ScreenShot_ThreadNum;
+                int num = Properties.Settings.Default.ScreenShot_ThreadNum;// n 个线程截图
                 string ScreenShotPath = "";
                 ScreenShotPath = BasePicPath + "ScreenShot\\" + movie.id;
 

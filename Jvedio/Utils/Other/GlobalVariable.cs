@@ -29,7 +29,7 @@ namespace Jvedio
 
 
 
-        public static int MaxProcessWaitingSecond = 1; //ffmpeg 超时等待时间
+        public static int MaxProcessWaitingSecond = 5; //ffmpeg 超时等待时间
         public static Stopwatch stopwatch = new Stopwatch();//计时
 
         public static string InfoDataBasePath = AppDomain.CurrentDomain.BaseDirectory + "Info.sqlite";
