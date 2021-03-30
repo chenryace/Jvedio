@@ -1674,4 +1674,16 @@
   <data name="SyncMagnets" xml:space="preserve">
     <value>Sync Magnets</value>
   </data>
+  <data name="ManageImage" xml:space="preserve">
+    <value>Manage Image</value>
+  </data>
+  <data name="AllImage" xml:space="preserve">
+    <value>All Image</value>
+  </data>
+  <data name="RecentView" xml:space="preserve">
+    <value>Recent View</value>
+  </data>
+  <data name="Filter" xml:space="preserve">
+    <value>Filter</value>
+  </data>
 </root>

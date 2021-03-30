@@ -137,10 +137,11 @@
         <Style x:Key="BaseFilterTextBlock" TargetType="{x:Type TextBlock}">
             <Setter Property="TextWrapping" Value="Wrap"/>
             <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="TextAlignment" Value="Left"/>
             <Setter Property="FontFamily" Value="微软雅黑"/>
             <Setter Property="FontSize" Value="15"/>
-            <Setter Property="MinWidth" Value="100"/>
+            <!--<Setter Property="MinWidth" Value="100"/>-->
             <Setter Property="Margin" Value="10 5"/>
             <Setter Property="Foreground" Value="{DynamicResource ForegroundSearch}"/>
         </Style>
@@ -246,7 +247,7 @@
                 </DataTrigger>
             </Style.Triggers>-->
 
-            
+
 
         </Style>
 
@@ -802,6 +803,7 @@
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="40"/>
                                 <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
                                 <RowDefinition Height="*"/>
                                 <RowDefinition Height="40"/>
                             </Grid.RowDefinitions>
@@ -823,6 +825,8 @@
                                             <MenuItem   Header="{x:Static lang:Resources.MovieManagement}"  Click="OpenDataBase"    />
                                             <MenuItem    Header="{x:Static lang:Resources.BatchProcessing}"  Click="OpenBatching"    />
                                             <MenuItem Click="MenuItem_Click"    Header="{x:Static lang:Resources.EasyMode}"  IsCheckable="True" IsChecked="{Binding EasyMode,Source={x:Static p:Settings.Default},Mode=TwoWay}"    />
+                                            <MenuItem     Header="{x:Static lang:Resources.ManageImage}"  Click="ManageImage" Visibility="Collapsed"    />
+
                                             <MenuItem   Header="Jvedio" >
                                                 <MenuItem  Header="{x:Static lang:Resources.About}" Click="ShowAbout"     />
                                                 <MenuItem  Header="{x:Static lang:Resources.Help}" Click="OpenHelp"   />
@@ -848,7 +852,7 @@
 
                                 <Grid>
                                     <Image  Source="{Binding Themes, Mode=OneWay, ConverterParameter=all,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="22" HorizontalAlignment="Left" Panel.ZIndex="2" Margin="10 0"    />
-                                    <RadioButton IsChecked="True"  Padding="20 0"     Style="{StaticResource SideRadioButtonStyle}"  Command="{Binding ResetCommand}" Content="{x:Static lang:Resources.AllVideo}"      />
+                                    <RadioButton x:Name="AllRadioButton"  IsChecked="True"  Padding="20 0"     Style="{StaticResource SideRadioButtonStyle}"  Command="{Binding ResetCommand}" Content="{x:Static lang:Resources.AllVideo}"      />
                                     <TextBlock Text="{Binding AllVedioCount}" Style="{StaticResource BaseTextBlock}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10 0" Foreground="{DynamicResource ForegroundGlobal}"/>
                                 </Grid>
 
@@ -883,7 +887,8 @@
                                 </Grid>
                             </StackPanel>
 
-                            <StackPanel Grid.Row="2"  >
+                            <!--我的清单-->
+                            <StackPanel Grid.Row="2"  Visibility="{Binding ShowList,Source={x:Static p:Settings.Default},Converter={StaticResource bool2VisibilityConverter},Mode=OneWay}" >
                                 <Rectangle HorizontalAlignment="Stretch" Fill="{DynamicResource ForegroundGlobal}" Height="2" RadiusX="1" RadiusY="1" Margin="2 0"/>
 
                                 <Grid>
@@ -936,7 +941,105 @@
 
                             </StackPanel>
 
-                            <Grid Cursor="Hand"  Grid.Row="3"  HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0 0 10 10"   >
+
+
+                            <StackPanel Width="auto" Margin="5" Grid.Row="3"       Visibility="{Binding ShowFilter,Source={x:Static p:Settings.Default},Converter={StaticResource bool2VisibilityConverter},Mode=OneWay}">
+                                <Expander   Margin="0 5 0 0"    Header="{x:Static lang:Resources.ReleaseYear}" Background="{DynamicResource BackgroundTitle}"  >
+                                    <Border     BorderThickness="0"   Background="{DynamicResource BackgroundMain}" CornerRadius="0,0,4,4">
+                                        <ScrollViewer MaxHeight="200">
+                                            
+                                        
+                                        <ItemsControl   x:Name="SideFilterYear"   >
+                                            <ItemsControl.ItemsPanel>
+                                                <ItemsPanelTemplate>
+                                                    <StackPanel />
+                                                </ItemsPanelTemplate>
+                                            </ItemsControl.ItemsPanel>
+
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <CheckBox Content="{Binding }" Name="CheckBox"  Click="FilterSide" HorizontalAlignment="Left"/>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                        </ScrollViewer>
+                                    </Border>
+
+                                </Expander>
+                                <Expander Margin="0 5 0 0" Header="{x:Static lang:Resources.FileSize}" Background="{DynamicResource BackgroundTitle}"  >
+                                    <Border   BorderThickness="0"   Background="{DynamicResource BackgroundMain}" CornerRadius="0,0,4,4">
+                                        <ItemsControl  x:Name="SideFilterFileSize" >
+                                            <ItemsControl.ItemsPanel>
+                                                <ItemsPanelTemplate>
+                                                    <StackPanel></StackPanel>
+                                                </ItemsPanelTemplate>
+                                            </ItemsControl.ItemsPanel>
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <CheckBox Content="{Binding }" Name="CheckBox"  Click="FilterSide"  HorizontalAlignment="Left"/>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                    </Border>
+
+                                </Expander>
+                                <Expander Margin="0 5 0 0" Header="{x:Static lang:Resources.VedioDuration}" Background="{DynamicResource BackgroundTitle}" >
+                                    <Border  BorderThickness="0"   Background="{DynamicResource BackgroundMain}" CornerRadius="0,0,4,4">
+                                        <ItemsControl x:Name="SideFilterRuntime">
+                                            <ItemsControl.ItemsPanel>
+                                                <ItemsPanelTemplate>
+                                                    <StackPanel></StackPanel>
+                                                </ItemsPanelTemplate>
+                                            </ItemsControl.ItemsPanel>
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <CheckBox Content="{Binding }" Name="CheckBox"  Click="FilterSide"  HorizontalAlignment="Left"/>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                    </Border>
+                                </Expander>
+                                <Expander Margin="0 5 0 0" Header="{x:Static lang:Resources.MovieRating}" Background="{DynamicResource BackgroundTitle}" >
+                                    <Border  BorderThickness="0"   Background="{DynamicResource BackgroundMain}" CornerRadius="0,0,4,4">
+                                        <ItemsControl x:Name="SideFilterRating">
+                                            <ItemsControl.ItemsPanel>
+                                                <ItemsPanelTemplate>
+                                                    <StackPanel></StackPanel>
+                                                </ItemsPanelTemplate>
+                                            </ItemsControl.ItemsPanel>
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <CheckBox Content="{Binding }" Name="CheckBox"  Click="FilterSide"  HorizontalAlignment="Left"/>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                    </Border>
+                                </Expander>
+                                <Expander  Margin="0 5 0 0" Header="{x:Static lang:Resources.MovieLabels}" Background="{DynamicResource BackgroundTitle}" >
+                                    <Border  BorderThickness="0"   Background="{DynamicResource BackgroundMain}" CornerRadius="0,0,4,4">
+                                        <ScrollViewer MaxHeight="200"  >
+                                        <ItemsControl x:Name="SideFilterLabel">
+                                            <ItemsControl.ItemsPanel>
+                                                <ItemsPanelTemplate>
+                                                    <StackPanel></StackPanel>
+                                                </ItemsPanelTemplate>
+                                            </ItemsControl.ItemsPanel>
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <CheckBox Content="{Binding }" Name="CheckBox"  Click="FilterSide" HorizontalAlignment="Left"/>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                    </ScrollViewer>
+                                    </Border>
+                                </Expander>
+
+                            </StackPanel>
+
+
+
+
+                            <Grid Cursor="Hand"  Grid.Row="4"  HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0 0 10 10"   >
                                 <ToggleButton Padding="0" Height="27" Width="27"  Background="Transparent" IsChecked="{Binding HideSide,Mode=TwoWay}" >
                                     <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=hide,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"  />
                                 </ToggleButton>
@@ -1187,7 +1290,7 @@
 
 
 
-                                    <Grid  x:Name="FilterGrid"  Visibility="Collapsed" IsEnabled="{Binding IsLoadingFilter,Converter={StaticResource OppositeBooleanConverter},FallbackValue=True}"   Grid.Row="1" HorizontalAlignment="Stretch"  Background="{DynamicResource BackgroundTitle}"  >
+                                    <Grid  x:Name="FilterGrid"  Visibility="Collapsed" IsEnabled="{Binding IsLoadingFilter,Converter={StaticResource OppositeBooleanConverter},FallbackValue=True}"   Grid.Row="1" HorizontalAlignment="Stretch"     >
 
 
                                         <Grid.RowDefinitions>
@@ -1230,9 +1333,9 @@
                                             <StackPanel  x:Name="FilterStackPanel"  >
 
 
-                                                <WrapPanel  >
+                                                <WrapPanel Margin="0 5"  >
                                                     <TextBlock Text="{x:Static lang:Resources.VedioType}" Style="{StaticResource BaseFilterTextBlock}"/>
-                                                    <ToggleButton Style="{StaticResource ToggleButtonStyle2}"  Content="{x:Static lang:Resources.Uncensored}" />
+                                                    <ToggleButton Margin="10 0 0 0" Style="{StaticResource ToggleButtonStyle2}"  Content="{x:Static lang:Resources.Uncensored}" />
                                                     <ToggleButton Style="{StaticResource ToggleButtonStyle2}"  Content="{x:Static lang:Resources.Censored}"  />
                                                     <ToggleButton Style="{StaticResource ToggleButtonStyle2}"  Content="{x:Static lang:Resources.Europe}" />
                                                 </WrapPanel>
@@ -1333,8 +1436,10 @@
 
                                                 <WrapPanel >
                                                     <TextBlock Text="{x:Static lang:Resources.MovieGenre}" Style="{StaticResource BaseFilterTextBlock}"/>
-                                                    <TextBlock Cursor="Hand" PreviewMouseLeftButtonUp="Genre_PreviewMouseLeftButtonUp" Text="{x:Static lang:Resources.ShowAll}"   Style="{StaticResource BaseFilterTextBlock}" TextDecorations="UnderLine" Foreground="#326CF3"/>
-                                                    <ScrollViewer  FocusVisualStyle="{x:Null}"  CanContentScroll="True" MaxHeight="100">
+                                                    <Button Cursor="Hand" PreviewMouseLeftButtonUp="Genre_PreviewMouseLeftButtonUp" Content="{x:Static lang:Resources.ShowAll}"   Style="{StaticResource ButtonPrimary}" Margin="5 10"   />
+
+                                                    <Border   CornerRadius="5" Margin="10 0">
+                                                        <ScrollViewer  FocusVisualStyle="{x:Null}"  CanContentScroll="True" MaxHeight="100">
                                                         <ItemsControl x:Name="GenreItemsControl"  ItemsSource="{Binding Genre}" ScrollViewer.VerticalScrollBarVisibility="Disabled" Margin="5 5 5 5" Background="Transparent">
                                                             <ItemsControl.ItemsPanel>
                                                                 <ItemsPanelTemplate>
@@ -1354,13 +1459,18 @@
                                                             </ItemsControl.ItemTemplate>
                                                         </ItemsControl>
                                                     </ScrollViewer>
+                                                    </Border>
                                                 </WrapPanel>
 
 
                                                 <WrapPanel >
                                                     <TextBlock Text="{x:Static lang:Resources.MovieActors}" Style="{StaticResource BaseFilterTextBlock}"/>
-                                                    <TextBlock Text="{x:Static lang:Resources.ShowAll}" Cursor="Hand"  PreviewMouseLeftButtonUp="Actor_PreviewMouseLeftButtonUp"  Style="{StaticResource BaseFilterTextBlock}" TextDecorations="UnderLine" Foreground="#326CF3"/>
-                                                    <ScrollViewer  FocusVisualStyle="{x:Null}"  CanContentScroll="True" MaxHeight="100">
+                                                    <Button Content="{x:Static lang:Resources.ShowAll}" Cursor="Hand"  PreviewMouseLeftButtonUp="Actor_PreviewMouseLeftButtonUp"   Style="{StaticResource ButtonPrimary}" Margin="5 10"/>
+
+                                                    <Border  CornerRadius="5" Margin="10 0">
+                                                        
+                                                    
+                                                    <ScrollViewer  FocusVisualStyle="{x:Null}"  CanContentScroll="True" MaxHeight="100" >
 
                                                         <ItemsControl x:Name="ActorFilterItemsControl"  ItemsSource="{Binding Actor}" ScrollViewer.VerticalScrollBarVisibility="Disabled" Margin="5 5 5 5" Background="Transparent">
                                                             <ItemsControl.ItemsPanel>
@@ -1381,12 +1491,14 @@
                                                             </ItemsControl.ItemTemplate>
                                                         </ItemsControl>
                                                     </ScrollViewer>
+                                                    </Border>
                                                 </WrapPanel>
 
 
                                                 <WrapPanel >
-                                                    <TextBlock Text="{x:Static lang:Resources.MovieLabels}" Style="{StaticResource BaseFilterTextBlock}"/>
-                                                    <ScrollViewer  FocusVisualStyle="{x:Null}"  CanContentScroll="True" MaxHeight="100">
+                                                    <TextBlock  Text="{x:Static lang:Resources.MovieLabels}" Style="{StaticResource BaseFilterTextBlock}"/>
+                                                    <Border   CornerRadius="5" Margin="10 0">
+                                                        <ScrollViewer  FocusVisualStyle="{x:Null}"  CanContentScroll="True" MaxHeight="100">
                                                         <ItemsControl  x:Name="LabelFilterItemsControl"  ItemsSource="{Binding Label}" ScrollViewer.VerticalScrollBarVisibility="Disabled" Margin="5 5 5 5" Background="Transparent">
                                                             <ItemsControl.ItemsPanel>
                                                                 <ItemsPanelTemplate>
@@ -1406,20 +1518,21 @@
                                                             </ItemsControl.ItemTemplate>
                                                         </ItemsControl>
                                                     </ScrollViewer>
+                                                    </Border>
                                                 </WrapPanel>
 
                                             </StackPanel>
 
                                         </Grid>
 
-                                        <StackPanel Grid.Row="1" Orientation="Horizontal">
-                                            <Button Style="{StaticResource ButtonStyleFill}" Content="{x:Static lang:Resources.Apply}" HorizontalAlignment="Left"  Click="ApplyFilter"/>
-                                            <Button Style="{StaticResource ButtonStyleFill}" Content="{x:Static lang:Resources.Clear}" HorizontalAlignment="Left"  Click="ClearFilter"/>
+                                        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="10 10 0 0">
+                                            <Button Style="{StaticResource ButtonStyleFill}" Content="{x:Static lang:Resources.Apply}" HorizontalAlignment="Left"  Click="ApplyFilter" Height="30" Margin="5 10"/>
+                                            <Button Style="{StaticResource ButtonStyleFill}" Content="{x:Static lang:Resources.Clear}" HorizontalAlignment="Left"  Click="ClearFilter" Height="30" Margin="5 10"/>
                                         </StackPanel>
 
 
-                                        <Border Grid.Row="2"   Height="27" Width="27" Margin="5 0" CornerRadius="3" Style="{StaticResource BorderStyle}" MouseLeftButtonUp="ShowFilterGrid" >
-                                            <Image Cursor="Hand"  Source="/Resources/Picture/收起.png" Height="20" Width="20" />
+                                        <Border Grid.Row="2" Cursor="Hand"   Height="27" Width="auto" Margin="5 0" CornerRadius="3" Style="{StaticResource BorderStyle}" MouseLeftButtonUp="ShowFilterGrid" >
+                                            <Image   Source="/Resources/Picture/收起.png" Height="20" Width="20" />
                                         </Border>
 
 
@@ -1934,7 +2047,7 @@
                                                                                 <Label Margin="2 0"   BorderThickness="0"  Visibility="{Binding tagstamps,Converter={StaticResource TagStampsConverter},ConverterParameter=3,Mode=OneWay}" Background="#00B0F0" Content="{x:Static lang:Resources.FlowOut}" Foreground="{DynamicResource ForegroundSearch}" />
                                                                             </StackPanel>
                                                                         </Grid>
-                                                                        
+
                                                                         <TextBlock 
                                                                             MouseLeftButtonDown="CopyText"
                                                                              Cursor="Hand"
@@ -2610,7 +2723,7 @@
 
                         </ScrollViewer>
 
-    
+
                         <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Right">
                             <Button  Style="{StaticResource ButtonStyleFill}" Content="{x:Static lang:Resources.Confirm}"  Click="Button_Click"/>
                             <Button  Style="{StaticResource ButtonStyleFill}" Content="{x:Static lang:Resources.Cancel}"  Click="Button_Click_1"/>

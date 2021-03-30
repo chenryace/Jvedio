@@ -497,8 +497,9 @@
                         <CheckBox IsChecked="{Binding DisplayFunBar, Mode=TwoWay, Source={x:Static p:Settings.Default}}"   Content="{x:Static lang:Resources.FunctionBar}"  />
                         <CheckBox IsChecked="{Binding DisplayNavigation, Mode=TwoWay, Source={x:Static p:Settings.Default}}"   Content="{x:Static lang:Resources.Navigation}"  />
 
-                        <CheckBox IsChecked="{Binding OnlyShowPlay, Mode=TwoWay, Source={x:Static p:Settings.Default}}"   Content="{x:Static lang:Resources.ShowExists}"  />
-                        <CheckBox IsChecked="{Binding OnlyShowSubSection, Mode=TwoWay, Source={x:Static p:Settings.Default}}"   Content="{x:Static lang:Resources.ShowSubSection}"  />
+                        <CheckBox IsChecked="{Binding ShowList, Mode=TwoWay, Source={x:Static p:Settings.Default}}"   Content="{x:Static lang:Resources.MyList}"  />
+                        <CheckBox IsChecked="{Binding ShowFilter, Mode=TwoWay, Source={x:Static p:Settings.Default}}"   Content="{x:Static lang:Resources.Filter}"  />
+
                         <CheckBox IsChecked="{Binding ShowFileNameIfTitleEmpty, Mode=TwoWay, Source={x:Static p:Settings.Default}}"   Content="{x:Static lang:Resources.ShowFIlename}"  />
                         <CheckBox IsChecked="{Binding TitleShowTranslate, Mode=TwoWay, Source={x:Static p:Settings.Default}}"   Content="{x:Static lang:Resources.ShowTranslation}"  />
                         <CheckBox IsChecked="{Binding PlotShowTranslate, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Content="{x:Static lang:Resources.ShowTranslate2}"  />

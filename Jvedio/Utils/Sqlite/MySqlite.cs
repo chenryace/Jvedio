@@ -145,9 +145,9 @@ namespace Jvedio
         public List<Movie> SelectMoviesBySql(string sqltext)
         {
             List<Movie> result = new List<Movie>();
+            if (!IsTableExist("movie")) return result;
             if (string.IsNullOrEmpty(sqltext)) return result;
             else cmd.CommandText = sqltext;
-            if (!IsTableExist("movie")) return result;
             using (SQLiteDataReader sr = cmd.ExecuteReader())
             {
                 try

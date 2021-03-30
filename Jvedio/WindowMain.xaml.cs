@@ -426,6 +426,7 @@ namespace Jvedio
                 else
                     vieModel.Reset();
 
+                
 
                 Dispatcher.BeginInvoke(DispatcherPriority.Background, (Action)delegate
                 {
@@ -436,6 +437,7 @@ namespace Jvedio
                     else
                         itemsControl = MovieItemsControl;
                     itemsControl.ItemsSource = vieModel.CurrentMovieList;
+                    vieModel.GetFilterInfo();
                 });
 
                 vieModel.CurrentMovieListHideOrChanged += (s, ev) => { StopDownLoad(); };
@@ -4148,8 +4150,8 @@ namespace Jvedio
                 //切换数据库
                 vieModel.IsRefresh = true;
                 vieModel.Reset();
-                //vieModel.GetFilterInfo();
                 vieModel.InitLettersNavigation();
+                vieModel.GetFilterInfo();
             }
         }
 
@@ -4165,7 +4167,7 @@ namespace Jvedio
             //这里只能用 Visibility 判断
             if (FilterGrid.Visibility == Visibility.Visible)
             {
-                DoubleAnimation doubleAnimation1 = new DoubleAnimation(600, 0, new Duration(TimeSpan.FromMilliseconds(300)), FillBehavior.HoldEnd);
+                DoubleAnimation doubleAnimation1 = new DoubleAnimation(2000, 0, new Duration(TimeSpan.FromMilliseconds(300)), FillBehavior.HoldEnd);
                 FilterGrid.BeginAnimation(FrameworkElement.MaxHeightProperty, doubleAnimation1);
                 await Task.Delay(300);
                 FilterGrid.Visibility = Visibility.Collapsed;
@@ -4174,7 +4176,7 @@ namespace Jvedio
             {
                 if (vieModel.Filters == null) vieModel.GetFilterInfo();
                 FilterGrid.Visibility = Visibility.Visible;
-                DoubleAnimation doubleAnimation1 = new DoubleAnimation(0, 600, new Duration(TimeSpan.FromMilliseconds(300)), FillBehavior.HoldEnd);
+                DoubleAnimation doubleAnimation1 = new DoubleAnimation(0, 2000, new Duration(TimeSpan.FromMilliseconds(300)), FillBehavior.HoldEnd);
                 FilterGrid.BeginAnimation(FrameworkElement.MaxHeightProperty, doubleAnimation1);
                 await Task.Delay(300);
             }
@@ -5043,6 +5045,23 @@ namespace Jvedio
                 ToggleButton tb = c.ContentTemplate.FindName("CheckBox", c) as ToggleButton;
                 if (tb != null)
                     if ((bool)tb.IsChecked) result.Add(tb.Content.ToString());
+            }
+            return result;
+        }
+
+        private List<string> GetFilterFromSideItemsControl(ItemsControl itemsControl)
+        {
+            List<string> result = new List<string>();
+            for (int i = 0; i < itemsControl.Items.Count; i++)
+            {
+                ContentPresenter c = (ContentPresenter)itemsControl.ItemContainerGenerator.ContainerFromItem(itemsControl.Items[i]);
+                if (c != null)
+                {
+                    CheckBox cb = c.ContentTemplate.FindName("CheckBox", c) as CheckBox;
+                    if (cb != null)
+                        if ((bool)cb.IsChecked) result.Add(cb.Content.ToString());
+                }
+
             }
             return result;
         }
@@ -6100,6 +6119,67 @@ namespace Jvedio
                 }
             }
 
+
+        }
+
+        private void ManageImage(object sender, RoutedEventArgs e)
+        {
+            //WindowManageImage windowManageImage = new WindowManageImage();
+            //windowManageImage.Show();
+        }
+
+        private void FilterSide(object sender, RoutedEventArgs e)
+        {
+            AllRadioButton.IsChecked = true;
+            //年份
+            List<string> year = GetFilterFromSideItemsControl(SideFilterYear);
+            //时长
+            List<string> runtime = GetFilterFromSideItemsControl(SideFilterRuntime);
+
+            //文件大小
+            List<string> filesize = GetFilterFromSideItemsControl(SideFilterFileSize);
+
+            //评分
+            List<string> rating = GetFilterFromSideItemsControl(SideFilterRating);
+
+            //标签
+            List<string> label = GetFilterFromSideItemsControl(SideFilterLabel);
+            string sql = "select * from movie where ";
+
+            string s = "";
+
+            year.ForEach(arg => { s += $"releasedate like '%{arg}%' or "; });
+            if (year.Count >= 1) s = s.Substring(0, s.Length - 4);
+            if (s != "") sql += "(" + s + ") and "; s = "";
+
+            label.ForEach(arg => { s += $"label like '%{arg}%' or "; });
+            if (label.Count >= 1) s = s.Substring(0, s.Length - 4);
+            if (s != "") sql += "(" + s + ") and "; s = "";
+
+
+            if (runtime.Count > 0 & rating.Count < 4)
+            {
+                runtime.ForEach(arg => { s += $"(runtime >={arg.Split('-')[0]} and runtime<={arg.Split('-')[1]}) or "; });
+                if (runtime.Count >= 1) s = s.Substring(0, s.Length - 4);
+                if (s != "") sql += "(" + s + ") and "; s = "";
+            }
+
+            if (filesize.Count > 0 & rating.Count < 4)
+            {
+                filesize.ForEach(arg => { s += $"(filesize >={double.Parse(arg.Split('-')[0]) * 1024 * 1024 * 1024} and filesize<={double.Parse(arg.Split('-')[1]) * 1024 * 1024 * 1024}) or "; });
+                if (filesize.Count >= 1) s = s.Substring(0, s.Length - 4);
+                if (s != "") sql += "(" + s + ") and "; s = "";
+            }
+
+            if (rating.Count > 0 & rating.Count < 5)
+            {
+                rating.ForEach(arg => { s += $"(rating >={arg.Split('-')[0]} and rating<={arg.Split('-')[1]}) or "; });
+                if (rating.Count >= 1) s = s.Substring(0, s.Length - 4);
+                if (s != "") sql += "(" + s + ") and "; s = "";
+            }
+            sql = sql.Substring(0, sql.Length - 5);
+            Console.WriteLine(sql);
+            vieModel.ExecutiveSqlCommand(0, "筛选", sql);
 
         }
     }

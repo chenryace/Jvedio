@@ -50,7 +50,10 @@ namespace Jvedio
                 {
                     UpgradeLoadingCircle.Visibility = Visibility.Hidden;
                     //执行命令
-                    string arg = "xcopy /y/e Temp %cd%&TIMEOUT /T 1&start \"\" \"jvedio.exe\" &exit";
+                    // 我对这个命令有点无语，xcopy直接复制同目录的文件夹竟然不成功，原因是父目录有空格，但是下面这个命令里没有涉及到父目录啊？！
+                    // xcopy /y/e Temp %cd%&TIMEOUT /T 1&start \"\" \"jvedio.exe\" &exit
+                    // 没办法只能修改成绝对路径了，而且如果放在C盘，也不知道是否需要权限
+                    string arg = $"xcopy /y/e \"{Path.Combine(AppDomain.CurrentDomain.BaseDirectory,"Temp")}\" \"{AppDomain.CurrentDomain.BaseDirectory}\"&TIMEOUT /T 1&start \"\" \"jvedio.exe\" &exit";
                     using (StreamWriter sw = new StreamWriter("upgrade.bat"))
                     {
                         sw.Write(arg);

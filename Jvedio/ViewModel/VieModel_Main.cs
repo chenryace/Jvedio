@@ -1098,7 +1098,7 @@ namespace Jvedio.ViewModel
 
         #region "筛选"
 
-        public ObservableCollection<string> _Year;
+        private ObservableCollection<string> _Year;
 
         public ObservableCollection<string> Year
         {
@@ -1110,7 +1110,7 @@ namespace Jvedio.ViewModel
             }
         }
 
-        public ObservableCollection<string> _Genre;
+        private ObservableCollection<string> _Genre;
 
         public ObservableCollection<string> Genre
         {
@@ -1121,7 +1121,7 @@ namespace Jvedio.ViewModel
                 RaisePropertyChanged();
             }
         }
-        public ObservableCollection<string> _Actor;
+        private ObservableCollection<string> _Actor;
 
         public ObservableCollection<string> Actor
         {
@@ -1134,7 +1134,7 @@ namespace Jvedio.ViewModel
         }
 
 
-        public ObservableCollection<string> _Label;
+        private ObservableCollection<string> _Label;
 
         public ObservableCollection<string> Label
         {
@@ -1147,7 +1147,7 @@ namespace Jvedio.ViewModel
         }
 
 
-        public ObservableCollection<string> _Runtime;
+        private ObservableCollection<string> _Runtime;
 
         public ObservableCollection<string> Runtime
         {
@@ -1161,7 +1161,7 @@ namespace Jvedio.ViewModel
 
 
 
-        public ObservableCollection<string> _FileSize;
+        private ObservableCollection<string> _FileSize;
 
         public ObservableCollection<string> FileSize
         {
@@ -1175,7 +1175,7 @@ namespace Jvedio.ViewModel
 
 
 
-        public ObservableCollection<string> _Rating;
+        private ObservableCollection<string> _Rating;
 
         public ObservableCollection<string> Rating
         {
@@ -1221,6 +1221,7 @@ namespace Jvedio.ViewModel
             Rating.AddRange(Filters[6]);
             IsLoadingFilter = false;
 
+            
 
             Main main = GetWindowByName("Main") as Main;
             main.GenreItemsControl.ItemsSource = null;
@@ -1231,6 +1232,26 @@ namespace Jvedio.ViewModel
 
             main.LabelFilterItemsControl.ItemsSource = null;
             main.LabelFilterItemsControl.ItemsSource = Label;
+
+
+            //他妈的必须要强制指定，Expander 搞毛啊
+            main.SideFilterYear.ItemsSource = null;
+            main.SideFilterYear.ItemsSource = Year.OrderByDescending(arg=>arg).ToList();
+
+            main.SideFilterFileSize.ItemsSource = null;
+            main.SideFilterFileSize.ItemsSource = FileSize;
+
+
+            main.SideFilterLabel.ItemsSource = null;
+            main.SideFilterLabel.ItemsSource = Label;
+
+            main.SideFilterRating.ItemsSource = null;
+            main.SideFilterRating.ItemsSource = Rating;
+
+            main.SideFilterRuntime.ItemsSource = null;
+            main.SideFilterRuntime.ItemsSource = Runtime;
+
+
         }
 
 

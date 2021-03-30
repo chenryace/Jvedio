@@ -1674,4 +1674,16 @@
   <data name="SyncMagnets" xml:space="preserve">
     <value>同步磁力</value>
   </data>
+  <data name="ManageImage" xml:space="preserve">
+    <value>图片管理</value>
+  </data>
+  <data name="AllImage" xml:space="preserve">
+    <value>所有图片</value>
+  </data>
+  <data name="RecentView" xml:space="preserve">
+    <value>最近浏览</value>
+  </data>
+  <data name="Filter" xml:space="preserve">
+    <value>筛选器</value>
+  </data>
 </root>

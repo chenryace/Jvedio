@@ -241,6 +241,15 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 所有图片 的本地化字符串。
+        /// </summary>
+        public static string AllImage {
+            get {
+                return ResourceManager.GetString("AllImage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 所有视频 的本地化字符串。
         /// </summary>
         public static string AllVideo {
@@ -1231,6 +1240,15 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 筛选器 的本地化字符串。
+        /// </summary>
+        public static string Filter {
+            get {
+                return ResourceManager.GetString("Filter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 网址的第一页 的本地化字符串。
         /// </summary>
         public static string FirstPageOfUrl {
@@ -1803,6 +1821,15 @@ namespace Jvedio.Language {
         public static string Log {
             get {
                 return ResourceManager.GetString("Log", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 图片管理 的本地化字符串。
+        /// </summary>
+        public static string ManageImage {
+            get {
+                return ResourceManager.GetString("ManageImage", resourceCulture);
             }
         }
         
@@ -3063,6 +3090,15 @@ namespace Jvedio.Language {
         public static string RecentPlay {
             get {
                 return ResourceManager.GetString("RecentPlay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 最近浏览 的本地化字符串。
+        /// </summary>
+        public static string RecentView {
+            get {
+                return ResourceManager.GetString("RecentView", resourceCulture);
             }
         }
         

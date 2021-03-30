@@ -1786,5 +1786,29 @@ namespace Jvedio.Properties {
                 this["EasyMode"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ShowList {
+            get {
+                return ((bool)(this["ShowList"]));
+            }
+            set {
+                this["ShowList"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ShowFilter {
+            get {
+                return ((bool)(this["ShowFilter"]));
+            }
+            set {
+                this["ShowFilter"] = value;
+            }
+        }
     }
 }

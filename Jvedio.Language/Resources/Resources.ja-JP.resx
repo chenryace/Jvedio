@@ -1674,4 +1674,16 @@
   <data name="SyncMagnets" xml:space="preserve">
     <value>同期磁気</value>
   </data>
+  <data name="ManageImage" xml:space="preserve">
+    <value>画像管理</value>
+  </data>
+  <data name="AllImage" xml:space="preserve">
+    <value>すべての写真</value>
+  </data>
+  <data name="RecentView" xml:space="preserve">
+    <value>最近閲覧した</value>
+  </data>
+  <data name="Filter" xml:space="preserve">
+    <value>フィルター</value>
+  </data>
 </root>
