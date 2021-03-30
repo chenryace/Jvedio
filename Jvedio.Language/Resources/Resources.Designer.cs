@@ -3184,6 +3184,15 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 部分效果重启后生效 的本地化字符串。
+        /// </summary>
+        public static string RestartToTakeEffect {
+            get {
+                return ResourceManager.GetString("RestartToTakeEffect", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 恢复默认 的本地化字符串。
         /// </summary>
         public static string Restore {

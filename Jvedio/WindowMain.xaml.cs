@@ -3918,8 +3918,15 @@ namespace Jvedio
 
         public void ShowSettingsPopup(object sender, MouseButtonEventArgs e)
         {
-            Border border = (Border)sender;
-            border.ContextMenu.IsOpen = true;
+            if (e.ChangedButton == MouseButton.Left)
+            {
+                Border border = sender as Border;
+                ContextMenu contextMenu = border.ContextMenu;
+                contextMenu.PlacementTarget = border;
+                contextMenu.Placement = PlacementMode.Bottom;
+                contextMenu.IsOpen = true;
+            }
+            e.Handled = true;
         }
 
 
@@ -3933,7 +3940,7 @@ namespace Jvedio
         }
 
 
-        private async void Window_ContentRendered(object sender, EventArgs e)
+        private  void Window_ContentRendered(object sender, EventArgs e)
         {
 
             if (Properties.Settings.Default.FirstRun)
@@ -3976,10 +3983,29 @@ namespace Jvedio
 
             InitList();
             vieModel.InitLettersNavigation();
-            //OpenDataBase(null, null);
-            //Window_ScreenShot window_ScreenShot = new Window_ScreenShot(this, ImageProcess.GetScreenShot());
-            //window_ScreenShot.ShowDialog();
+            //设置渐变
 
+        }
+
+        public void SetSkin()
+        {
+            FileProcess.SetSkin();
+            switch (Properties.Settings.Default.Themes)
+            {
+                case "蓝色":
+                    //设置渐变
+                    LinearGradientBrush myLinearGradientBrush = new LinearGradientBrush();
+                    myLinearGradientBrush.StartPoint = new Point(0.5, 0);
+                    myLinearGradientBrush.EndPoint = new Point(0.5, 1);
+                    myLinearGradientBrush.GradientStops.Add(new GradientStop(Color.FromRgb(62, 191, 223), 1));
+                    myLinearGradientBrush.GradientStops.Add(new GradientStop(Color.FromRgb(11, 114, 189), 0));
+                    SideBorder.Background = myLinearGradientBrush;
+                    break;
+
+                default:
+                    SideBorder.Background = (SolidColorBrush)Application.Current.Resources["BackgroundSide"];
+                    break;
+            }
         }
 
         public void InitList()
@@ -3997,67 +4023,8 @@ namespace Jvedio
         }
 
 
-        public void SetSkin()
-        {
-            if (Properties.Settings.Default.Themes == "黑色")
-            {
-                Application.Current.Resources["Color_BackgroundTitle"] = (Color)ColorConverter.ConvertFromString("#22252A");
-                Application.Current.Resources["Color_BackgroundMain"] = (Color)ColorConverter.ConvertFromString("#1B1B1F");
-                Application.Current.Resources["Color_BackgroundSide"] = (Color)ColorConverter.ConvertFromString("#101013");
-                Application.Current.Resources["Color_BackgroundTab"] = (Color)ColorConverter.ConvertFromString("#383838");
-                Application.Current.Resources["Color_BackgroundSearch"] = (Color)ColorConverter.ConvertFromString("#18191B");
-                Application.Current.Resources["Color_BackgroundMenu"] = (Color)ColorConverter.ConvertFromString("#252526");
-                Application.Current.Resources["Color_ForegroundGlobal"] = (Color)ColorConverter.ConvertFromString("#AFAFAF");
-                Application.Current.Resources["Color_ForegroundSearch"] = Colors.White;
-                Application.Current.Resources["Color_BorderBursh"] = Colors.Transparent;
-            }
-            else if (Properties.Settings.Default.Themes == "白色")
-            {
-                Application.Current.Resources["Color_BackgroundTitle"] = (Color)ColorConverter.ConvertFromString("#E2E3E5");
-                Application.Current.Resources["Color_BackgroundMain"] = (Color)ColorConverter.ConvertFromString("#F9F9F9");
-                Application.Current.Resources["Color_BackgroundSide"] = (Color)ColorConverter.ConvertFromString("#F2F3F4");
-                Application.Current.Resources["Color_BackgroundTab"] = (Color)ColorConverter.ConvertFromString("#FFF5EE");
-                Application.Current.Resources["Color_BackgroundSearch"] = (Color)ColorConverter.ConvertFromString("#D1D1D1");
-                Application.Current.Resources["Color_BackgroundMenu"] = Colors.White;
-                Application.Current.Resources["Color_ForegroundGlobal"] = (Color)ColorConverter.ConvertFromString("#555555");
-                Application.Current.Resources["Color_ForegroundSearch"] = Colors.Black;
-                Application.Current.Resources["Color_BorderBursh"] = Colors.Gray;
-            }
-            else if (Properties.Settings.Default.Themes == "蓝色")
+        
 
-            {
-                Application.Current.Resources["Color_BackgroundTitle"] = (Color)ColorConverter.ConvertFromString("#0B72BD");
-                Application.Current.Resources["Color_BackgroundMain"] = (Color)ColorConverter.ConvertFromString("#2BA2D2");
-                Application.Current.Resources["Color_BackgroundSide"] = (Color)ColorConverter.ConvertFromString("#61AEDA");
-                Application.Current.Resources["Color_BackgroundTab"] = (Color)ColorConverter.ConvertFromString("#3DBEDE");
-                Application.Current.Resources["Color_BackgroundSearch"] = (Color)ColorConverter.ConvertFromString("#87CEEB");
-                Application.Current.Resources["Color_BackgroundMenu"] = Colors.SkyBlue;
-                Application.Current.Resources["Color_ForegroundGlobal"] = Colors.White;
-                Application.Current.Resources["Color_ForegroundSearch"] = Colors.White;
-                Application.Current.Resources["Color_BorderBursh"] = (Color)ColorConverter.ConvertFromString("#95DCED");
-
-            }
-
-            Application.Current.Resources["BackgroundTitle"] = new SolidColorBrush((Color)Application.Current.Resources["Color_BackgroundTitle"]);
-            Application.Current.Resources["BackgroundMain"] = new SolidColorBrush((Color)Application.Current.Resources["Color_BackgroundMain"]);
-            Application.Current.Resources["BackgroundSide"] = new SolidColorBrush((Color)Application.Current.Resources["Color_BackgroundSide"]);
-            Application.Current.Resources["BackgroundTab"] = new SolidColorBrush((Color)Application.Current.Resources["Color_BackgroundTab"]);
-            Application.Current.Resources["BackgroundSearch"] = new SolidColorBrush((Color)Application.Current.Resources["Color_BackgroundSearch"]);
-            Application.Current.Resources["BackgroundMenu"] = new SolidColorBrush((Color)Application.Current.Resources["Color_BackgroundMenu"]);
-            Application.Current.Resources["ForegroundGlobal"] = new SolidColorBrush((Color)Application.Current.Resources["Color_ForegroundGlobal"]);
-            Application.Current.Resources["ForegroundSearch"] = new SolidColorBrush((Color)Application.Current.Resources["Color_ForegroundSearch"]);
-            Application.Current.Resources["BorderBursh"] = new SolidColorBrush((Color)Application.Current.Resources["Color_BorderBursh"]);
-
-        }
-
-        private void SetSkinProperty(object sender, RoutedEventArgs e)
-        {
-            Properties.Settings.Default.Themes = ((Button)sender).Content.ToString();
-            Properties.Settings.Default.Save();
-            SetSkin();
-            SetSelected();
-            ActorSetSelected();
-        }
 
 
         private void CheckBox_Click(object sender, RoutedEventArgs e)
@@ -6182,6 +6149,8 @@ namespace Jvedio
             vieModel.ExecutiveSqlCommand(0, "筛选", sql);
 
         }
+
+
     }
 
 

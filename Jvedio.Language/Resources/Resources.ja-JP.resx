@@ -1686,4 +1686,7 @@
   <data name="Filter" xml:space="preserve">
     <value>フィルター</value>
   </data>
+  <data name="RestartToTakeEffect" xml:space="preserve">
+    <value>一部の効果は再起動後に有効になります</value>
+  </data>
 </root>

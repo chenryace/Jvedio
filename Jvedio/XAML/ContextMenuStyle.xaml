@@ -1,6 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                      xmlns:lang="clr-namespace:Jvedio.Language;assembly=Jvedio.Language"
+                    xmlns:p="clr-namespace:Jvedio.Properties"
 >
 
 
@@ -11,7 +12,7 @@
 
 
     <!--contextmenu 样式-->
-    <Style TargetType="{x:Type ContextMenu}">
+    <Style   TargetType="ContextMenu">
         <Setter Property="FontFamily" Value="微软雅黑"/>
         <Setter Property="SnapsToDevicePixels" Value="True" />
         <Setter Property="OverridesDefaultStyle" Value="True" />
@@ -55,9 +56,9 @@
                         <Popup HorizontalOffset="-3"  VerticalOffset="-5"  Placement="Right" x:Name="SubMenuPopup" AllowsTransparency="True"   Focusable="False"  IsOpen="{TemplateBinding IsSubmenuOpen}" >
                             <ScrollViewer   ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                                 <Grid >
-                                    <Border x:Name="Border" Opacity="0.7"      Background="{DynamicResource BackgroundMenu}" CornerRadius="2" Margin="5" BorderThickness="0"   >
+                                    <Border x:Name="Border" Opacity="0.8"      Background="{DynamicResource BackgroundMenu}" CornerRadius="2" Margin="5" BorderThickness="0"   >
                                         <Border.Effect>
-                                            <DropShadowEffect BlurRadius="5" Direction="-90"  RenderingBias="Quality" ShadowDepth="0"/>
+                                            <DropShadowEffect BlurRadius="5" Direction="-90" Opacity="0.5"  RenderingBias="Quality" ShadowDepth="0"/>
                                         </Border.Effect>
                                     </Border>
                                     <StackPanel  Margin="5 10"   IsItemsHost="True"   KeyboardNavigation.DirectionalNavigation="Cycle" />
@@ -86,6 +87,7 @@
                             <Setter TargetName="_path" Property="Visibility" Value="Visible"/>
                         </Trigger>
                         <Trigger Property="IsMouseOver" Value="true">
+                            <!--鼠标悬浮时的背景色-->
                             <Setter TargetName="_border" Property="Background" Value="{DynamicResource BackgroundSearch}"/>
                             <Setter TargetName="_txt" Property="Foreground" Value="{DynamicResource ForegroundSearch}"/>
                             <Setter TargetName="_path" Property="Fill" Value="{DynamicResource ForegroundSearch}"/>
@@ -98,6 +100,8 @@
             </Setter.Value>
         </Setter>
     </Style>
+
+   
 
     <ContextMenu x:Key="TextBoxContextMenu">
         <MenuItem Command="ApplicationCommands.Copy" Header="{x:Static lang:Resources.Copy}" />
@@ -113,5 +117,6 @@
     </ContextMenu>
 
 
+   
 
 </ResourceDictionary>

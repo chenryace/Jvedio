@@ -599,8 +599,8 @@ namespace Jvedio
         {
             Properties.Settings.Default.Themes = (sender as RadioButton).Content.ToString();
             Properties.Settings.Default.Save();
-            Main main = App.Current.Windows[0] as Main;
-            main?.SetSkin();
+            Main main = GetWindowByName("Main") as Main;
+            main.SetSkin();
             main?.SetSelected();
             main?.ActorSetSelected();
         }
@@ -1165,8 +1165,7 @@ namespace Jvedio
                     GlobalVariable.BackgroundImage = ImageProcess.BitmapImageFromFile(path);
 
                     Properties.Settings.Default.BackgroundImage = path;
-                    Main main = ((Main)GetWindowByName("Main"));
-                    if (main != null) main.SetSkin();
+                    FileProcess.SetSkin();
 
                     WindowDetails windowDetails = ((WindowDetails)GetWindowByName("WindowDetails"));
                     if (windowDetails != null) windowDetails.SetSkin();

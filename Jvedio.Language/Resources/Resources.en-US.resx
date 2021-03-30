@@ -1686,4 +1686,7 @@
   <data name="Filter" xml:space="preserve">
     <value>Filter</value>
   </data>
+  <data name="RestartToTakeEffect" xml:space="preserve">
+    <value>Restart To Take Effect</value>
+  </data>
 </root>

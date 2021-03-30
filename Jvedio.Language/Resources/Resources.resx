@@ -1686,4 +1686,7 @@
   <data name="Filter" xml:space="preserve">
     <value>筛选器</value>
   </data>
+  <data name="RestartToTakeEffect" xml:space="preserve">
+    <value>部分效果重启后生效</value>
+  </data>
 </root>
