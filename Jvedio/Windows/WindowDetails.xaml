@@ -248,7 +248,7 @@
 
 
 
-                            <Button     Style="{StaticResource CloseButton}" Click="CloseWindow">
+                            <Button     Style="{StaticResource RoundCloseButton}" Click="CloseWindow" >
                                 <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=close,Converter={StaticResource StringToUriStringConverterOther}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
                             </Button>
                         </StackPanel>
@@ -515,7 +515,7 @@
 
                                                             <ItemsControl.ItemTemplate>
                                                                 <DataTemplate>
-                                                                    <Label Style="{StaticResource GenLabel}" Content="{Binding name}" MouseUp="ShowSameActor"  MouseEnter="ShowActor" MouseLeave="HideActor" MouseMove="ActorMouseMove" ToolTip="{x:Null}"/>
+                                                                    <Label Style="{StaticResource GenLabel}" Content="{Binding name}" MouseLeftButtonUp="ShowSameActor"  MouseEnter="ShowActor" MouseLeave="HideActor" MouseMove="ActorMouseMove" ToolTip="{x:Null}"/>
                                                                 </DataTemplate>
                                                             </ItemsControl.ItemTemplate>
                                                         </ItemsControl>
@@ -587,7 +587,7 @@
                                                             <ItemsControl.ItemTemplate>
                                                                 <DataTemplate>
                                                                     <Border Padding="5 2" Cursor="Hand" CornerRadius="3" Margin="5 0" Style="{StaticResource BorderStyle}">
-                                                                        <TextBlock Text="{Binding}" Style="{StaticResource BaseTextBlock}" MouseUp="ShowSameGenre" ToolTip="{x:Null}"/>
+                                                                        <TextBlock Text="{Binding}" Style="{StaticResource BaseTextBlock}" MouseLeftButtonUp="ShowSameGenre" ToolTip="{x:Null}"/>
                                                                     </Border>
                                                                 </DataTemplate>
                                                             </ItemsControl.ItemTemplate>

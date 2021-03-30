@@ -11,6 +11,21 @@
         <Setter Property="Foreground" Value="{DynamicResource ForegroundSearch}"/>
     </Style>
 
+    <Style x:Key="GenreTextBlock" TargetType="{x:Type TextBlock}">
+        <Setter Property="TextAlignment" Value="Center"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="FontSize" Value="15"/>
+        <Setter Property="Margin" Value="0"/>
+        <Setter Property="Padding" Value="10 5"/>
+        <Setter Property="Foreground" Value="{DynamicResource ForegroundGlobal}"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Foreground" Value="#54D5C8"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
     <Style x:Key="BaseTextBox" TargetType="{x:Type TextBox}">
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="Height" Value="40"/>

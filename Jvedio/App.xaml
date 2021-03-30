@@ -13,6 +13,10 @@
                 <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/SkinDefault.xaml"/>
                 <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/Theme.xaml"/>
 
+                <!--Fuck!why HandyControl must change all controls style-->
+                <!--Fuck! Why can not  App.xaml use Chinese-->
+                <!--Fuck! I won't use wpf any more, i just want to draw everything by myself, not use xmal or anything else!!!-->
+                
                 <!--Main-->
                 <ResourceDictionary Source="XAML/Main/SideRadioButtonStyle.xaml"/>
                 <ResourceDictionary Source="XAML/Main/SideComboBoxStyle.xaml"/>

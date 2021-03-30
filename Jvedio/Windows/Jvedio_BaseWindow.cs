@@ -252,23 +252,23 @@ namespace Jvedio
             {
                 MainGrid.Margin = new Thickness(0);
                 ContentGrid.Margin = new Thickness(0);
-                MainBorder.CornerRadius = new CornerRadius() { TopLeft = 0, TopRight = 0, BottomRight = 0, BottomLeft = 0 };
-                BorderTitle.CornerRadius = new CornerRadius() { TopLeft = 0, TopRight = 0, BottomRight = 0, BottomLeft = 0 };
+                //MainBorder.CornerRadius = new CornerRadius() { TopLeft = 0, TopRight = 0, BottomRight = 0, BottomLeft = 0 };
+                //BorderTitle.CornerRadius = new CornerRadius() { TopLeft = 0, TopRight = 0, BottomRight = 0, BottomLeft = 0 };
                 this.ResizeMode = ResizeMode.NoResize;
             }
             else if (this.WindowState == WindowState.Maximized)
             {
                 MainGrid.Margin = new Thickness(0);
-                MainBorder.CornerRadius = new CornerRadius() { TopLeft = 0, TopRight = 0, BottomRight = 0, BottomLeft = 0 };
-                BorderTitle.CornerRadius = new CornerRadius() { TopLeft = 0, TopRight = 0, BottomRight = 0, BottomLeft = 0 };
+                //MainBorder.CornerRadius = new CornerRadius() { TopLeft = 0, TopRight = 0, BottomRight = 0, BottomLeft = 0 };
+                //BorderTitle.CornerRadius = new CornerRadius() { TopLeft = 0, TopRight = 0, BottomRight = 0, BottomLeft = 0 };
                 this.ResizeMode = ResizeMode.NoResize;
             }
             else
             {
                 MainGrid.Margin = new Thickness(10);
                 ContentGrid.Margin = new Thickness(5);
-                MainBorder.CornerRadius = new CornerRadius() { TopLeft = 5, TopRight = 5, BottomRight = 5, BottomLeft = 5 };
-                BorderTitle.CornerRadius = new CornerRadius() { TopLeft = 5, TopRight = 5, BottomRight = 0, BottomLeft = 0 };
+                //MainBorder.CornerRadius = new CornerRadius() { TopLeft = 5, TopRight = 5, BottomRight = 5, BottomLeft = 5 };
+                //BorderTitle.CornerRadius = new CornerRadius() { TopLeft = 5, TopRight = 5, BottomRight = 0, BottomLeft = 0 };
                 this.ResizeMode = ResizeMode.CanResize;
             }
         }
@@ -387,16 +387,16 @@ namespace Jvedio
             {
                 MainGrid.Margin = new Thickness(10);
                 ContentGrid.Margin = new Thickness(5);
-                MainBorder.CornerRadius = new CornerRadius() { TopLeft = 5, TopRight = 5, BottomRight = 5, BottomLeft = 5 };
-                BorderTitle.CornerRadius = new CornerRadius() { TopLeft = 5, TopRight = 5, BottomRight = 0, BottomLeft = 0 };
+                //MainBorder.CornerRadius = new CornerRadius() { TopLeft = 5, TopRight = 5, BottomRight = 5, BottomLeft = 5 };
+                //BorderTitle.CornerRadius = new CornerRadius() { TopLeft = 5, TopRight = 5, BottomRight = 0, BottomLeft = 0 };
                 this.ResizeMode = ResizeMode.CanResize;
             }
             else if (WinState == JvedioWindowState.Maximized || this.WindowState==WindowState.Maximized)
             {
                 MainGrid.Margin = new Thickness(0);
                 ContentGrid.Margin = new Thickness(0);
-                MainBorder.CornerRadius = new CornerRadius() { TopLeft = 0, TopRight = 0, BottomRight = 0, BottomLeft = 0 };
-                BorderTitle.CornerRadius = new CornerRadius() { TopLeft = 0, TopRight = 0, BottomRight = 0, BottomLeft = 0 };
+                //MainBorder.CornerRadius = new CornerRadius() { TopLeft = 0, TopRight = 0, BottomRight = 0, BottomLeft = 0 };
+                //BorderTitle.CornerRadius = new CornerRadius() { TopLeft = 0, TopRight = 0, BottomRight = 0, BottomLeft = 0 };
                 this.ResizeMode = ResizeMode.NoResize;
 
             }

@@ -744,7 +744,7 @@
 
         <!--显示侧边栏-->
         <Grid  Visibility="{Binding HideSide,Converter={StaticResource BoolToVisibilityConverter}}" Panel.ZIndex="10"  HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10 50"   >
-            <ToggleButton Cursor="Hand" Padding="0" Height="27" Width="27"  Background="Transparent" IsChecked="{Binding HideSide,Mode=TwoWay}" >
+            <ToggleButton Cursor="Hand" Padding="0" Height="27" Width="27"  Background="Transparent" IsChecked="{Binding HideSide,Mode=TwoWay}" BorderThickness="2"  >
                 <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=hide,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="20" Width="20" RenderTransformOrigin=".5,.5"  >
                     <Image.RenderTransform>
                         <RotateTransform Angle="180" />
@@ -756,25 +756,26 @@
 
         <Grid Margin="{Binding MainGridThickness,Converter={StaticResource SmallerThicknessConverter},ConverterParameter=-5,FallbackValue=5}">
             <Grid.RowDefinitions>
-                <RowDefinition Height="40"/>
+                <RowDefinition Height="30"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
             <Border PreviewMouseLeftButtonDown="TopBorder_MouseLeftButtonUp" Grid.Row="0"  Background="{DynamicResource BackgroundTitle}"   BorderThickness="0"  MouseMove="MoveWindow"  >
                 <Grid Panel.ZIndex="50" >
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="10 0">
-                        <Image HorizontalAlignment="Center"  VerticalAlignment="Center" Height="20" Source="/Resources/Picture/Jvedio.png"/>
-                        <Image  ToolTip="Jvedio" Margin="10" HorizontalAlignment="Center" Height="20"  VerticalAlignment="Center"  Source="Resources/Picture/Title.png"/>
-                    </StackPanel>
+                    <Image   VerticalAlignment="Center" Height="20" Source="/Resources/Picture/Jvedio.png" HorizontalAlignment="Left" Margin="10 0"/>
 
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <Image  ToolTip="Jvedio"   HorizontalAlignment="Center" Height="20"  VerticalAlignment="Center"  Source="Resources/Picture/Title.png" Margin="0"/>
+                    </StackPanel>
+ 
                     <StackPanel Panel.ZIndex="5" Orientation="Horizontal" HorizontalAlignment="Right">
-                        <Button     Style="{StaticResource TitleButton}" Click="MinWindow" >
+                        <Button     Style="{StaticResource TitleButton}" Click="MinWindow" Height="30" Width="40"  Margin="0" >
                             <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=min,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"  />
                         </Button>
-                        <Button   Style="{StaticResource TitleButton}" Click="MaxWindow">
+                        <Button   Style="{StaticResource TitleButton}" Click="MaxWindow" Height="30" Width="40"  Margin="0" >
                             <Image    Source="{Binding Themes, Mode=OneWay, ConverterParameter=max,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
                         </Button>
-                        <Button    Style="{StaticResource CloseButton}" Click="CloseWindow">
+                        <Button    Style="{StaticResource CloseButton}" Click="CloseWindow" Height="30" Width="40" Margin="0" >
                             <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=close,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
                         </Button>
                     </StackPanel>
@@ -813,12 +814,12 @@
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="auto"/>
                                 </Grid.ColumnDefinitions>
-                                <ComboBox SelectedIndex="{Binding DatabaseSelectedIndex,FallbackValue=0}" Grid.Column="0" FontSize="16"  Style="{StaticResource SideComboBoxStyle}"  Margin="5"  SelectionChanged="DatabaseComboBox_SelectionChanged"  ItemsSource="{Binding DataBases}"   Width="150"  Height="30"  ToolTip="{Binding RelativeSource={RelativeSource Mode=Self},Path=Text}" />
+                                <ComboBox SelectedIndex="{Binding DatabaseSelectedIndex,FallbackValue=0}" Grid.Column="0" FontSize="16"  Style="{StaticResource SideComboBoxStyle}"  Margin="5"  SelectionChanged="DatabaseComboBox_SelectionChanged"  ItemsSource="{Binding DataBases}"   MinWidth="150"  Height="30"  ToolTip="{Binding RelativeSource={RelativeSource Mode=Self},Path=Text}" HorizontalAlignment="Stretch" />
 
                                 <Border Grid.Column="1"  ToolTip="{x:Static lang:Resources.Settings}"   Width="27" Height="27"  Margin="5 0"  CornerRadius="3" Style="{StaticResource BorderStyle}"  MouseLeftButtonUp="ShowSettingsPopup">
                                     <Image  Source="{Binding Themes, Mode=OneWay, ConverterParameter=menu,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="20" Width="20" Margin="4,4,3.2,0" VerticalAlignment="Center"   />
                                     <Border.ContextMenu >
-                                        <ContextMenu  Opacity="0.8" VerticalOffset="-10"   HorizontalOffset="-50" Placement="Mouse"  >
+                                        <ContextMenu    VerticalOffset="-10"   HorizontalOffset="-50" Placement="Mouse"  >
 
                                             <MenuItem   Header="{x:Static lang:Resources.Settings}" Click="OpenSet_MouseDown"  />
                                             <MenuItem   Header="{x:Static lang:Resources.Tools}"  Click="OpenTools"    />
@@ -944,8 +945,8 @@
 
 
                             <StackPanel Width="auto" Margin="5" Grid.Row="3"       Visibility="{Binding ShowFilter,Source={x:Static p:Settings.Default},Converter={StaticResource bool2VisibilityConverter},Mode=OneWay}">
-                                <Expander   Margin="0 5 0 0"    Header="{x:Static lang:Resources.ReleaseYear}" Background="{DynamicResource BackgroundTitle}"  >
-                                    <Border     BorderThickness="0"   Background="{DynamicResource BackgroundMain}" CornerRadius="0,0,4,4">
+                                <Expander   Margin="0 5 0 0"    Header="{x:Static lang:Resources.ReleaseYear}"  Foreground="{DynamicResource ForegroundGlobal}" Background="{DynamicResource BackgroundMain}"  >
+                                    <Border     BorderThickness="0"   Background="{DynamicResource BackgroundTab}" CornerRadius="0,0,4,4">
                                         <ScrollViewer MaxHeight="200">
                                             
                                         
@@ -966,8 +967,8 @@
                                     </Border>
 
                                 </Expander>
-                                <Expander Margin="0 5 0 0" Header="{x:Static lang:Resources.FileSize}" Background="{DynamicResource BackgroundTitle}"  >
-                                    <Border   BorderThickness="0"   Background="{DynamicResource BackgroundMain}" CornerRadius="0,0,4,4">
+                                <Expander Margin="0 5 0 0" Header="{x:Static lang:Resources.FileSize}"   Foreground="{DynamicResource ForegroundGlobal}" Background="{DynamicResource BackgroundMain}" >
+                                    <Border   BorderThickness="0"   Background="{DynamicResource BackgroundTab}" CornerRadius="0,0,4,4">
                                         <ItemsControl  x:Name="SideFilterFileSize" >
                                             <ItemsControl.ItemsPanel>
                                                 <ItemsPanelTemplate>
@@ -983,8 +984,8 @@
                                     </Border>
 
                                 </Expander>
-                                <Expander Margin="0 5 0 0" Header="{x:Static lang:Resources.VedioDuration}" Background="{DynamicResource BackgroundTitle}" >
-                                    <Border  BorderThickness="0"   Background="{DynamicResource BackgroundMain}" CornerRadius="0,0,4,4">
+                                <Expander Margin="0 5 0 0" Header="{x:Static lang:Resources.VedioDuration}"  Foreground="{DynamicResource ForegroundGlobal}" Background="{DynamicResource BackgroundMain}" >
+                                    <Border  BorderThickness="0"   Background="{DynamicResource BackgroundTab}" CornerRadius="0,0,4,4">
                                         <ItemsControl x:Name="SideFilterRuntime">
                                             <ItemsControl.ItemsPanel>
                                                 <ItemsPanelTemplate>
@@ -999,8 +1000,8 @@
                                         </ItemsControl>
                                     </Border>
                                 </Expander>
-                                <Expander Margin="0 5 0 0" Header="{x:Static lang:Resources.MovieRating}" Background="{DynamicResource BackgroundTitle}" >
-                                    <Border  BorderThickness="0"   Background="{DynamicResource BackgroundMain}" CornerRadius="0,0,4,4">
+                                <Expander Margin="0 5 0 0" Header="{x:Static lang:Resources.MovieRating}"  Foreground="{DynamicResource ForegroundGlobal}" Background="{DynamicResource BackgroundMain}" >
+                                    <Border  BorderThickness="0"   Background="{DynamicResource BackgroundTab}" CornerRadius="0,0,4,4">
                                         <ItemsControl x:Name="SideFilterRating">
                                             <ItemsControl.ItemsPanel>
                                                 <ItemsPanelTemplate>
@@ -1015,8 +1016,8 @@
                                         </ItemsControl>
                                     </Border>
                                 </Expander>
-                                <Expander  Margin="0 5 0 0" Header="{x:Static lang:Resources.MovieLabels}" Background="{DynamicResource BackgroundTitle}" >
-                                    <Border  BorderThickness="0"   Background="{DynamicResource BackgroundMain}" CornerRadius="0,0,4,4">
+                                <Expander  Margin="0 5 0 0" Header="{x:Static lang:Resources.MovieLabels}"  Foreground="{DynamicResource ForegroundGlobal}" Background="{DynamicResource BackgroundMain}">
+                                    <Border  BorderThickness="0"   Background="{DynamicResource BackgroundTab}" CornerRadius="0,0,4,4">
                                         <ScrollViewer MaxHeight="200"  >
                                         <ItemsControl x:Name="SideFilterLabel">
                                             <ItemsControl.ItemsPanel>
@@ -1040,7 +1041,7 @@
 
 
                             <Grid Cursor="Hand"  Grid.Row="4"  HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0 0 10 10"   >
-                                <ToggleButton Padding="0" Height="27" Width="27"  Background="Transparent" IsChecked="{Binding HideSide,Mode=TwoWay}" >
+                                <ToggleButton Padding="0" Height="27" Width="27"  Background="Transparent" IsChecked="{Binding HideSide,Mode=TwoWay}" BorderThickness="2" >
                                     <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=hide,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"  />
                                 </ToggleButton>
                             </Grid>
@@ -1078,118 +1079,122 @@
                                     <Grid Grid.Row="0">
 
                                         <!--搜索-->
-                                        <Grid Focusable="True"  HorizontalAlignment="Left"   Height="40"  Width="300" Margin="10 5"   >
-                                            <Border       CornerRadius="2"   Background="Transparent" BorderBrush="{DynamicResource BackgroundSide}"  BorderThickness="2" >
+                                        <StackPanel Orientation="Horizontal">
+                                            <Grid Focusable="True"  HorizontalAlignment="Left"   Height="40"  Width="300" Margin="10 5"   >
+                                                <Border       CornerRadius="2"   Background="Transparent" BorderBrush="{DynamicResource BackgroundSide}"  BorderThickness="2" >
 
-                                            </Border>
-
-
-                                            <Grid  VerticalAlignment="Center"  Width="25" Panel.ZIndex="3" HorizontalAlignment="Left" Margin="10 0 0 0" MouseUp="ShowSearchMenu" Cursor="Hand">
-                                                <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=up,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"  RenderTransformOrigin=".5,.5"   >
-                                                    <Image.RenderTransform>
-                                                        <RotateTransform Angle="180" />
-                                                    </Image.RenderTransform>
-                                                </Image>
-                                                <Popup  VerticalOffset="5" HorizontalOffset="-15" x:Name="SearchOptionPopup" Placement="Bottom" PopupAnimation="Fade"  AllowsTransparency="True" StaysOpen="False" IsOpen="False">
+                                                </Border>
 
 
+                                                <Grid  VerticalAlignment="Center"  Width="25" Panel.ZIndex="3" HorizontalAlignment="Left" Margin="10 0 0 0" MouseUp="ShowSearchMenu" Cursor="Hand">
+                                                    <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=up,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"  RenderTransformOrigin=".5,.5"   >
+                                                        <Image.RenderTransform>
+                                                            <RotateTransform Angle="180" />
+                                                        </Image.RenderTransform>
+                                                    </Image>
+                                                    <Popup  VerticalOffset="5" HorizontalOffset="-15" x:Name="SearchOptionPopup" Placement="Bottom" PopupAnimation="Fade"  AllowsTransparency="True" StaysOpen="False" IsOpen="False">
 
+
+
+                                                        <Grid    Margin="5"   >
+                                                            <Border     Background="{DynamicResource BackgroundMenu}" CornerRadius="5" Margin="5"  >
+                                                                <Border.Effect>
+                                                                    <DropShadowEffect BlurRadius="10" Direction="-90"  RenderingBias="Quality" ShadowDepth="0"/>
+                                                                </Border.Effect>
+                                                            </Border>
+                                                            <StackPanel Margin="5">
+                                                                <RadioButton Click="SaveAllSearchType" IsChecked="True"  Content="{x:Static lang:Resources.ID}" Style="{StaticResource RadioButtonStyle}"  GroupName="SearchTypeRadioButton" Template="{DynamicResource RadioButtonControlTemplate1}"/>
+                                                                <RadioButton Click="SaveAllSearchType"      Content="{x:Static lang:Resources.Title}" Style="{StaticResource RadioButtonStyle}" GroupName="SearchTypeRadioButton" Template="{DynamicResource RadioButtonControlTemplate1}"/>
+                                                                <RadioButton Click="SaveAllSearchType"      Content="{x:Static lang:Resources.Actor}" Style="{StaticResource RadioButtonStyle}" GroupName="SearchTypeRadioButton" Template="{DynamicResource RadioButtonControlTemplate1}"/>
+                                                                <CheckBox   Margin="5 0" IsChecked="{Binding SearchInCurrent,Mode=TwoWay}" Content="{x:Static lang:Resources.SearchCurrent}" Style="{StaticResource CheckBoxStyle1}"/>
+                                                            </StackPanel>
+                                                        </Grid>
+                                                    </Popup>
+                                                </Grid>
+
+                                                <hc:SearchBar x:Name="SearchBar" ContextMenu="{StaticResource TextBoxContextMenu}"  Focusable="True" LostFocus="SearchBar_LostFocus" GotFocus="SearchBar_GotFocus"  PreviewKeyUp="SearchBar_PreviewKeyUp"    TextChanged="RefreshCandiadte" PreviewMouseLeftButtonDown="ShowSearchPopup" BorderThickness="0" Padding="35 0" ShowClearButton="True"  hc:InfoElement.TitleWidth="140" CaretBrush="{DynamicResource ForegroundSearch}" Foreground="{DynamicResource ForegroundSearch}" hc:InfoElement.Placeholder="{Binding SearchHint}" Margin="5 5 5 5" Background="Transparent"  hc:InfoElement.Title="" Style="{StaticResource SearchBarPlus}"  />
+
+                                                <Popup  Focusable="True" IsOpen="{Binding ShowSearchPopup,FallbackValue=False}"  VerticalOffset="2"  HorizontalOffset="0"      Width="{Binding  RelativeSource={RelativeSource AncestorType={x:Type Grid},Mode=FindAncestor},Path=ActualWidth}" Visibility="Visible"  AllowsTransparency="True" Placement="Bottom"  StaysOpen="True" >
                                                     <Grid    Margin="5"   >
-                                                        <Border     Background="{DynamicResource BackgroundMenu}" CornerRadius="5" Margin="5"  >
+                                                        <Border Name="SearchBorder"    Background="{DynamicResource BackgroundMenu}" CornerRadius="5" Margin="5"  >
                                                             <Border.Effect>
                                                                 <DropShadowEffect BlurRadius="10" Direction="-90"  RenderingBias="Quality" ShadowDepth="0"/>
                                                             </Border.Effect>
                                                         </Border>
-                                                        <StackPanel Margin="5">
-                                                            <RadioButton Click="SaveAllSearchType" IsChecked="True"  Content="{x:Static lang:Resources.ID}" Style="{StaticResource RadioButtonStyle}"  GroupName="SearchTypeRadioButton" Template="{DynamicResource RadioButtonControlTemplate1}"/>
-                                                            <RadioButton Click="SaveAllSearchType"      Content="{x:Static lang:Resources.Title}" Style="{StaticResource RadioButtonStyle}" GroupName="SearchTypeRadioButton" Template="{DynamicResource RadioButtonControlTemplate1}"/>
-                                                            <RadioButton Click="SaveAllSearchType"      Content="{x:Static lang:Resources.Actor}" Style="{StaticResource RadioButtonStyle}" GroupName="SearchTypeRadioButton" Template="{DynamicResource RadioButtonControlTemplate1}"/>
-                                                            <CheckBox   Margin="5 0" IsChecked="{Binding SearchInCurrent,Mode=TwoWay}" Content="{x:Static lang:Resources.SearchCurrent}" Style="{StaticResource CheckBoxStyle1}"/>
-                                                        </StackPanel>
-                                                    </Grid>
-                                                </Popup>
-                                            </Grid>
 
-                                            <hc:SearchBar x:Name="SearchBar" ContextMenu="{StaticResource TextBoxContextMenu}"  Focusable="True" LostFocus="SearchBar_LostFocus" GotFocus="SearchBar_GotFocus"  PreviewKeyUp="SearchBar_PreviewKeyUp"    TextChanged="RefreshCandiadte" PreviewMouseLeftButtonDown="ShowSearchPopup" BorderThickness="0" Padding="35 0" ShowClearButton="True"  hc:InfoElement.TitleWidth="140" CaretBrush="{DynamicResource ForegroundSearch}" Foreground="{DynamicResource ForegroundSearch}" hc:InfoElement.Placeholder="{Binding SearchHint}" Margin="5 5 5 5" Background="Transparent"  hc:InfoElement.Title="" Style="{StaticResource SearchBarPlus}"  />
+                                                        <ScrollViewer Margin="10" Background="Transparent"    Width="auto" Height="auto"   Canvas.Top="40" Panel.ZIndex="4"         HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden">
+                                                            <StackPanel>
+                                                                <StackPanel x:Name="SearchHistoryStackPanel">
 
-                                            <Popup  Focusable="True" IsOpen="{Binding ShowSearchPopup,FallbackValue=False}"  VerticalOffset="2"  HorizontalOffset="0"      Width="{Binding  RelativeSource={RelativeSource AncestorType={x:Type Grid},Mode=FindAncestor},Path=ActualWidth}" Visibility="Visible"  AllowsTransparency="True" Placement="Bottom"  StaysOpen="True" >
-                                                <Grid    Margin="5"   >
-                                                    <Border Name="SearchBorder"    Background="{DynamicResource BackgroundMenu}" CornerRadius="5" Margin="5"  >
-                                                        <Border.Effect>
-                                                            <DropShadowEffect BlurRadius="10" Direction="-90"  RenderingBias="Quality" ShadowDepth="0"/>
-                                                        </Border.Effect>
-                                                    </Border>
+                                                                    <StackPanel Orientation="Horizontal" >
+                                                                        <TextBlock Margin="5" VerticalAlignment="Center" Height="auto"  Style="{StaticResource BaseTextBlock}" Text="{x:Static lang:Resources.SearchHistory}" HorizontalAlignment="Left" FontSize="12"/>
+                                                                        <Border     Height="20" Width="20" Margin="5 0" CornerRadius="3" Style="{StaticResource CloseBorderStyle}" MouseLeftButtonDown="ClearSearchHistory">
+                                                                            <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=clear,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="15" Width="15"   />
+                                                                        </Border>
+                                                                    </StackPanel>
 
-                                                    <ScrollViewer Margin="10" Background="Transparent"    Width="auto" Height="auto"   Canvas.Top="40" Panel.ZIndex="4"         HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden">
-                                                        <StackPanel>
-                                                            <StackPanel x:Name="SearchHistoryStackPanel">
+                                                                    <ItemsControl Margin="5 0" Width="{Binding ElementName=SearchBorder,Path=ActualWidth,Converter={StaticResource WidthConverter},ConverterParameter=-20,Mode=OneWay}" HorizontalAlignment="Left"  Background="Transparent"   ItemsSource="{Binding SearchHistory,Mode=OneWay}" ScrollViewer.VerticalScrollBarVisibility="Disabled"  >
+                                                                        <ItemsControl.ItemsPanel>
+                                                                            <ItemsPanelTemplate>
+                                                                                <WrapPanel   Orientation="Horizontal" >
 
-                                                                <StackPanel Orientation="Horizontal" >
-                                                                    <TextBlock Margin="5" VerticalAlignment="Center" Height="auto"  Style="{StaticResource BaseTextBlock}" Text="{x:Static lang:Resources.SearchHistory}" HorizontalAlignment="Left" FontSize="12"/>
-                                                                    <Border     Height="20" Width="20" Margin="5 0" CornerRadius="3" Style="{StaticResource CloseBorderStyle}" MouseLeftButtonDown="ClearSearchHistory">
-                                                                        <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=clear,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="15" Width="15"   />
-                                                                    </Border>
+                                                                                </WrapPanel>
+                                                                            </ItemsPanelTemplate>
+                                                                        </ItemsControl.ItemsPanel>
+
+                                                                        <ItemsControl.ItemTemplate>
+                                                                            <DataTemplate>
+
+                                                                                <Border    CornerRadius="3" Style="{StaticResource BorderStyle}" >
+                                                                                    <TextBlock  PreviewMouseLeftButtonDown="SetSearchValue"  TextWrapping="NoWrap" FontSize="15" Width="auto" ToolTip="{Binding Path=Text,RelativeSource={RelativeSource Mode=Self}}" Padding="2" Margin="10 5"    Text="{Binding }"    Style="{StaticResource SearchCandidateTextBlock }" />
+                                                                                </Border>
+
+                                                                            </DataTemplate>
+                                                                        </ItemsControl.ItemTemplate>
+                                                                    </ItemsControl>
                                                                 </StackPanel>
 
-                                                                <ItemsControl Margin="5 0" Width="{Binding ElementName=SearchBorder,Path=ActualWidth,Converter={StaticResource WidthConverter},ConverterParameter=-20,Mode=OneWay}" HorizontalAlignment="Left"  Background="Transparent"   ItemsSource="{Binding SearchHistory,Mode=OneWay}" ScrollViewer.VerticalScrollBarVisibility="Disabled"  >
+                                                                <TextBlock  Margin="5"  Grid.Row="0" Style="{StaticResource BaseTextBlock}" Text="{x:Static lang:Resources.SearchResult}" HorizontalAlignment="Left" FontSize="12"/>
+
+                                                                <ItemsControl Background="Transparent" x:Name="SearchItemsControl"   ItemsSource="{Binding CurrentSearchCandidate}" ScrollViewer.VerticalScrollBarVisibility="Disabled"  >
                                                                     <ItemsControl.ItemsPanel>
                                                                         <ItemsPanelTemplate>
-                                                                            <WrapPanel   Orientation="Horizontal" >
+                                                                            <StackPanel   Orientation="Vertical" >
 
-                                                                            </WrapPanel>
+                                                                            </StackPanel>
                                                                         </ItemsPanelTemplate>
                                                                     </ItemsControl.ItemsPanel>
 
                                                                     <ItemsControl.ItemTemplate>
                                                                         <DataTemplate>
+                                                                            <StackPanel  Name="SearchStackPanel"  >
 
-                                                                            <Border    CornerRadius="3" Style="{StaticResource BorderStyle}" >
-                                                                                <TextBlock  PreviewMouseLeftButtonDown="SetSearchValue"  TextWrapping="NoWrap" FontSize="15" Width="auto" ToolTip="{Binding Path=Text,RelativeSource={RelativeSource Mode=Self}}" Padding="2" Margin="10 5"    Text="{Binding }"    Style="{StaticResource SearchCandidateTextBlock }" />
-                                                                            </Border>
+                                                                                <Border    CornerRadius="3" Style="{StaticResource BorderStyle}" >
+                                                                                    <TextBlock  PreviewMouseLeftButtonDown="SetSearchValue"  TextWrapping="NoWrap" FontSize="15" Width="auto" ToolTip="{Binding Path=Text,RelativeSource={RelativeSource Mode=Self}}" Padding="2" Margin="10 5"    Text="{Binding }"    Style="{StaticResource SearchCandidateTextBlock }" />
 
+                                                                                </Border>
+
+                                                                            </StackPanel>
                                                                         </DataTemplate>
                                                                     </ItemsControl.ItemTemplate>
                                                                 </ItemsControl>
+
                                                             </StackPanel>
-
-                                                            <TextBlock  Margin="5"  Grid.Row="0" Style="{StaticResource BaseTextBlock}" Text="{x:Static lang:Resources.SearchResult}" HorizontalAlignment="Left" FontSize="12"/>
-
-                                                            <ItemsControl Background="Transparent" x:Name="SearchItemsControl"   ItemsSource="{Binding CurrentSearchCandidate}" ScrollViewer.VerticalScrollBarVisibility="Disabled"  >
-                                                                <ItemsControl.ItemsPanel>
-                                                                    <ItemsPanelTemplate>
-                                                                        <StackPanel   Orientation="Vertical" >
-
-                                                                        </StackPanel>
-                                                                    </ItemsPanelTemplate>
-                                                                </ItemsControl.ItemsPanel>
-
-                                                                <ItemsControl.ItemTemplate>
-                                                                    <DataTemplate>
-                                                                        <StackPanel  Name="SearchStackPanel"  >
-
-                                                                            <Border    CornerRadius="3" Style="{StaticResource BorderStyle}" >
-                                                                                <TextBlock  PreviewMouseLeftButtonDown="SetSearchValue"  TextWrapping="NoWrap" FontSize="15" Width="auto" ToolTip="{Binding Path=Text,RelativeSource={RelativeSource Mode=Self}}" Padding="2" Margin="10 5"    Text="{Binding }"    Style="{StaticResource SearchCandidateTextBlock }" />
-
-                                                                            </Border>
-
-                                                                        </StackPanel>
-                                                                    </DataTemplate>
-                                                                </ItemsControl.ItemTemplate>
-                                                            </ItemsControl>
-
-                                                        </StackPanel>
-                                                    </ScrollViewer>
-                                                </Grid>
-                                            </Popup>
-                                        </Grid>
-
-
-                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                                        </ScrollViewer>
+                                                    </Grid>
+                                                </Popup>
+                                            </Grid>
                                             <Button x:Name="HideButton" VerticalAlignment="Center" Style="{StaticResource FlatButton}"  Content="{x:Static lang:Resources.LoadFromNet}" Margin="5 0" Click="LoadFromPage"   HorizontalAlignment="Stretch" Visibility="Collapsed"   />
 
                                             <CheckBox Content="{x:Static lang:Resources.MultiSelect}" IsChecked="{Binding EditMode, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Click="SetSelectMode"/>
 
                                             <Button VerticalAlignment="Center" Style="{StaticResource ButtonPrimary}"  Content="{x:Static lang:Resources.FastImport}" Command="{Binding AddNewMovie}"   HorizontalAlignment="Stretch"   />
+
+                                        </StackPanel>
+                                      
+
+
+                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
 
                                             <Border   ToolTip="{x:Static lang:Resources.ImageType}" Style="{StaticResource ToolsBarBorderStyle}" MouseLeftButtonUp="ShowImagePopup">
                                                 <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=image,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
@@ -1578,9 +1583,9 @@
 
                                 <!--导航栏-->
                                 <Grid Visibility="{Binding DisplayNavigation,Source={x:Static p:Settings.Default},Converter={StaticResource BoolToVisibilityConverter},FallbackValue=Visible}" Grid.Row="1"   Panel.ZIndex="4"  VerticalAlignment="Center" HorizontalAlignment="Right" MinWidth="40" Margin="20" MinHeight="50">
-                                    <Rectangle Opacity="0.5"  RadiusX="5" RadiusY="5"  Fill="{DynamicResource BackgroundTitle}"  Margin="{Binding MainGridThickness,Converter={StaticResource SmallerThicknessConverter},ConverterParameter=-5,FallbackValue=5}"  >
+                                    <Rectangle Opacity="0.5"  RadiusX="2" RadiusY="2"  Fill="{DynamicResource BackgroundSide}" Stroke="#5AC6FC" StrokeThickness="1"  Margin="{Binding MainGridThickness,Converter={StaticResource SmallerThicknessConverter},ConverterParameter=-5,FallbackValue=5}"  >
                                         <Rectangle.Effect>
-                                            <DropShadowEffect BlurRadius="20" Direction="-90"   RenderingBias="Quality" ShadowDepth="0"/>
+                                            <DropShadowEffect BlurRadius="0" Direction="-90"   RenderingBias="Quality" ShadowDepth="0"/>
                                         </Rectangle.Effect>
                                     </Rectangle>
                                     <ScrollViewer VerticalScrollBarVisibility="Hidden"  Margin="0 10">
@@ -1809,7 +1814,7 @@
                                                                     <StackPanel     ContextMenuOpening="ContextMenu_ContextMenuOpening"   Tag="{Binding id,Mode=OneWay}" >
                                                                         <!--影片右键菜单-->
                                                                         <StackPanel.ContextMenu  >
-                                                                            <ContextMenu Opacity="0.9"  PreviewKeyUp="ContextMenu_PreviewKeyUp" >
+                                                                            <ContextMenu Opacity="0.9"    PreviewKeyUp="ContextMenu_PreviewKeyUp" >
                                                                                 <MenuItem Header="{x:Static lang:Resources.Menu_SyncInfo}" Click="DownLoadSelectMovie"   ></MenuItem>
                                                                                 <MenuItem  Header="{x:Static lang:Resources.Menu_SyncExtra}" Visibility="Visible"  >
                                                                                     <MenuItem Header="{x:Static lang:Resources.Menu_CustomUrl}" Click="DownLoadWithUrl"   ></MenuItem>
@@ -1939,7 +1944,7 @@
                                                                     <StackPanel Tag="{Binding id,Mode=OneWay}"    ContextMenuOpening="ContextMenu_ContextMenuOpening"   >
                                                                         <!--影片右键菜单-->
                                                                         <StackPanel.ContextMenu  >
-                                                                            <ContextMenu Opacity="0.9"  PreviewKeyUp="ContextMenu_PreviewKeyUp" >
+                                                                            <ContextMenu Opacity="0.9"    PreviewKeyUp="ContextMenu_PreviewKeyUp" >
                                                                                 <MenuItem Header="{x:Static lang:Resources.Menu_SyncInfo}" Click="DownLoadSelectMovie"   ></MenuItem>
                                                                                 <MenuItem  Header="{x:Static lang:Resources.Menu_SyncExtra}" Visibility="Visible"  >
                                                                                     <MenuItem Header="{x:Static lang:Resources.Menu_CustomUrl}" Click="DownLoadWithUrl"   ></MenuItem>
@@ -2156,7 +2161,7 @@
                                     <!--页码-->
                                     <StackPanel IsEnabled="{Binding IsLoadingMovie,Converter={StaticResource OppositeBooleanConverter}}" Visibility="Visible" Grid.Column="3" Orientation="Horizontal"  VerticalAlignment="Center" HorizontalAlignment="Right"  Background="Transparent" Height="40" Width="auto"  >
 
-                                        <Border  Cursor="Hand"  PreviewMouseLeftButtonDown="PreviousPage"    Padding="3" VerticalAlignment="Center" BorderThickness="2" BorderBrush="{DynamicResource BackgroundSide}" ToolTip="{x:Static lang:Resources.PreviewPage}"     Margin="5 0" CornerRadius="3" Style="{StaticResource BorderStyle}" >
+                                        <Border  Cursor="Hand"  PreviewMouseLeftButtonDown="PreviousPage"    Padding="3" VerticalAlignment="Center" BorderThickness="0" BorderBrush="{DynamicResource BackgroundSide}" ToolTip="{x:Static lang:Resources.PreviewPage}"     Margin="5 0" CornerRadius="3" Style="{StaticResource BorderStyle}" >
                                             <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=left,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
                                         </Border>
 
@@ -2168,7 +2173,7 @@
                                             <TextBlock Foreground="{DynamicResource ForegroundSearch}" Padding="10 0"  Text="{Binding TotalPage, StringFormat=/\{0\}}" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="10 1 10 1"/>
                                         </StackPanel>
 
-                                        <Border  Cursor="Hand"  PreviewMouseLeftButtonDown="NextPage"  HorizontalAlignment="Left"   Padding="3" VerticalAlignment="Center" BorderThickness="2" BorderBrush="{DynamicResource BackgroundSide}" ToolTip="{x:Static lang:Resources.NextPage}"     Margin="5 0" CornerRadius="3" Style="{StaticResource BorderStyle}" >
+                                        <Border  Cursor="Hand"  PreviewMouseLeftButtonDown="NextPage"  HorizontalAlignment="Left"   Padding="3" VerticalAlignment="Center" BorderThickness="0" BorderBrush="{DynamicResource BackgroundSide}" ToolTip="{x:Static lang:Resources.NextPage}"     Margin="5 0" CornerRadius="3" Style="{StaticResource BorderStyle}" >
                                             <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=right,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   Visibility="Visible" />
                                         </Border>
 
@@ -2293,7 +2298,7 @@
                                                     <DataTemplate>
                                                         <WrapPanel  Name="ActorWrapPanel" Orientation="Horizontal">
                                                             <Grid Margin="5" Height="200" >
-                                                                <Border  Style="{StaticResource ActorBorder}" Background="{DynamicResource BackgroundSide}"  CornerRadius="5"  >
+                                                                <Border  Style="{StaticResource ActorBorder}" Background="{DynamicResource BackgroundSide}"  CornerRadius="0"  >
                                                                     <Border.Effect>
                                                                         <DropShadowEffect BlurRadius="10" Color="SkyBlue" Direction="-90"  RenderingBias="Quality" ShadowDepth="0"/>
                                                                     </Border.Effect>
@@ -2346,7 +2351,7 @@
                                                                 <ItemsControl.ItemTemplate>
                                                                     <DataTemplate>
                                                                         <Border Style="{StaticResource GenreBorderStyle}">
-                                                                            <TextBlock Text="{Binding}" Style="{StaticResource BaseTextBlock}" MouseUp="Genre_MouseDown"/>
+                                                                            <TextBlock Text="{Binding}" Style="{StaticResource GenreTextBlock}" MouseUp="Genre_MouseDown"/>
                                                                         </Border>
                                                                     </DataTemplate>
                                                                 </ItemsControl.ItemTemplate>
@@ -2361,7 +2366,7 @@
                                                                 <ItemsControl.ItemTemplate>
                                                                     <DataTemplate>
                                                                         <Border Style="{StaticResource GenreBorderStyle}">
-                                                                            <TextBlock Text="{Binding}" Style="{StaticResource BaseTextBlock}" MouseUp="Genre_MouseDown"/>
+                                                                            <TextBlock Text="{Binding}" Style="{StaticResource GenreTextBlock}" MouseUp="Genre_MouseDown"/>
                                                                         </Border>
                                                                     </DataTemplate>
                                                                 </ItemsControl.ItemTemplate>
@@ -2376,7 +2381,7 @@
                                                                 <ItemsControl.ItemTemplate>
                                                                     <DataTemplate>
                                                                         <Border Style="{StaticResource GenreBorderStyle}">
-                                                                            <TextBlock Text="{Binding}" Style="{StaticResource BaseTextBlock}" MouseUp="Genre_MouseDown"/>
+                                                                            <TextBlock Text="{Binding}" Style="{StaticResource GenreTextBlock}" MouseUp="Genre_MouseDown"/>
                                                                         </Border>
                                                                     </DataTemplate>
                                                                 </ItemsControl.ItemTemplate>
@@ -2391,7 +2396,7 @@
                                                                 <ItemsControl.ItemTemplate>
                                                                     <DataTemplate>
                                                                         <Border Style="{StaticResource GenreBorderStyle}">
-                                                                            <TextBlock Text="{Binding}" Style="{StaticResource BaseTextBlock}" MouseUp="Genre_MouseDown"/>
+                                                                            <TextBlock Text="{Binding}" Style="{StaticResource GenreTextBlock}" MouseUp="Genre_MouseDown"/>
                                                                         </Border>
                                                                     </DataTemplate>
                                                                 </ItemsControl.ItemTemplate>
@@ -2406,7 +2411,7 @@
                                                                 <ItemsControl.ItemTemplate>
                                                                     <DataTemplate>
                                                                         <Border Style="{StaticResource GenreBorderStyle}">
-                                                                            <TextBlock Text="{Binding}" Style="{StaticResource BaseTextBlock}" MouseUp="Genre_MouseDown"/>
+                                                                            <TextBlock Text="{Binding}" Style="{StaticResource GenreTextBlock}" MouseUp="Genre_MouseDown"/>
                                                                         </Border>
                                                                     </DataTemplate>
                                                                 </ItemsControl.ItemTemplate>
@@ -2421,7 +2426,7 @@
                                                                 <ItemsControl.ItemTemplate>
                                                                     <DataTemplate>
                                                                         <Border Style="{StaticResource GenreBorderStyle}">
-                                                                            <TextBlock Text="{Binding}" Style="{StaticResource BaseTextBlock}" MouseUp="Genre_MouseDown"/>
+                                                                            <TextBlock Text="{Binding}" Style="{StaticResource GenreTextBlock}" MouseUp="Genre_MouseDown"/>
                                                                         </Border>
                                                                     </DataTemplate>
                                                                 </ItemsControl.ItemTemplate>
@@ -2436,7 +2441,7 @@
                                                                 <ItemsControl.ItemTemplate>
                                                                     <DataTemplate>
                                                                         <Border Style="{StaticResource GenreBorderStyle}">
-                                                                            <TextBlock Text="{Binding}" Style="{StaticResource BaseTextBlock}" MouseUp="Genre_MouseDown"/>
+                                                                            <TextBlock Text="{Binding}" Style="{StaticResource GenreTextBlock}" MouseUp="Genre_MouseDown"/>
                                                                         </Border>
                                                                     </DataTemplate>
                                                                 </ItemsControl.ItemTemplate>
@@ -2451,7 +2456,7 @@
                                                                 <ItemsControl.ItemTemplate>
                                                                     <DataTemplate>
                                                                         <Border Width="auto" Height="50" Style="{StaticResource GenreBorderStyle}">
-                                                                            <TextBlock Text="{Binding}" Style="{StaticResource BaseTextBlock}" MouseUp="Genre_MouseDown"/>
+                                                                            <TextBlock Text="{Binding}" Style="{StaticResource GenreTextBlock}" MouseUp="Genre_MouseDown"/>
                                                                         </Border>
                                                                     </DataTemplate>
                                                                 </ItemsControl.ItemTemplate>
@@ -2478,7 +2483,7 @@
                                                 <ItemsControl.ItemTemplate>
                                                     <DataTemplate>
                                                         <Border Style="{StaticResource GenreBorderStyle}">
-                                                            <TextBlock Text="{Binding}" Style="{StaticResource BaseTextBlock}" MouseUp="Label_MouseDown"/>
+                                                            <TextBlock Text="{Binding}" Style="{StaticResource GenreTextBlock}" MouseUp="Label_MouseDown"/>
                                                         </Border>
                                                     </DataTemplate>
                                                 </ItemsControl.ItemTemplate>
@@ -2503,7 +2508,7 @@
                                                     <DataTemplate >
 
                                                         <Border Style="{StaticResource GenreBorderStyle}">
-                                                            <TextBlock Text="{Binding}" Style="{StaticResource BaseTextBlock}" MouseUp="Label_MouseDown"/>
+                                                            <TextBlock Text="{Binding}" Style="{StaticResource GenreTextBlock}" MouseUp="Label_MouseDown"/>
                                                         </Border>
                                                     </DataTemplate>
                                                 </ItemsControl.ItemTemplate>
@@ -2527,7 +2532,7 @@
                                                 <ItemsControl.ItemTemplate>
                                                     <DataTemplate>
                                                         <Border Style="{StaticResource GenreBorderStyle}">
-                                                            <TextBlock Text="{Binding}" Style="{StaticResource BaseTextBlock}" MouseUp="Label_MouseDown"/>
+                                                            <TextBlock Text="{Binding}" Style="{StaticResource GenreTextBlock}" MouseUp="Label_MouseDown"/>
                                                         </Border>
                                                     </DataTemplate>
                                                 </ItemsControl.ItemTemplate>
@@ -2553,7 +2558,7 @@
                                                     <DataTemplate>
 
                                                         <Border Style="{StaticResource GenreBorderStyle}">
-                                                            <TextBlock Text="{Binding}" Style="{StaticResource BaseTextBlock}" MouseUp="Label_MouseDown"/>
+                                                            <TextBlock Text="{Binding}" Style="{StaticResource GenreTextBlock}" MouseUp="Label_MouseDown"/>
                                                         </Border>
                                                     </DataTemplate>
                                                 </ItemsControl.ItemTemplate>

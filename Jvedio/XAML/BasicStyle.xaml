@@ -12,7 +12,7 @@
     <Color x:Key="Color_BackgroundSide"  >#101013</Color>
     <Color x:Key="Color_BackgroundTab"  >#383838</Color>
     <Color x:Key="Color_BackgroundSearch"  >#18191B</Color>
-    <Color x:Key="Color_BackgroundMenu" >Black</Color>
+    <Color x:Key="Color_BackgroundMenu" >#252526</Color>
     <Color x:Key="Color_ForegroundGlobal"  >#AFAFAF</Color>
     <Color x:Key="Color_ForegroundSearch"  >#FFFFFF</Color>
     <Color x:Key="Color_BorderBursh"  >Transparent</Color>
@@ -47,29 +47,16 @@
         <Setter Property="Margin" Value="5"/>
         <Setter Property="CornerRadius" Value="3"/>
         <Setter Property="Cursor" Value="Hand"/>
-        <Setter Property="Padding" Value="3"/>
+        <Setter Property="Padding" Value="5"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
-        <Setter Property="BorderThickness" Value="2"/>
+        <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="BorderBrush" Value="{DynamicResource BackgroundSide}"/>
         <Setter Property="Background" Value="Transparent"/>
 
         <Setter Property="Background" Value="Transparent"/>
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Trigger.EnterActions>
-                    <BeginStoryboard >
-                        <Storyboard FillBehavior="HoldEnd" >
-                            <ColorAnimation Duration="0:0:0.2"  Storyboard.TargetProperty="Background.Color" To="Gray" />
-                        </Storyboard>
-                    </BeginStoryboard>
-                </Trigger.EnterActions>
-                <Trigger.ExitActions>
-                    <BeginStoryboard>
-                        <Storyboard >
-                            <ColorAnimation Duration="0:0:0.2"  Storyboard.TargetProperty="Background.Color" To="Transparent" />
-                        </Storyboard>
-                    </BeginStoryboard>
-                </Trigger.ExitActions>
+                <Setter Property="Background" Value="{DynamicResource BackgroundTitle}"/>
             </Trigger>
         </Style.Triggers>
     </Style>
@@ -105,7 +92,8 @@
         <Setter Property="Background" Value="Transparent"/>
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Trigger.EnterActions>
+                <Setter Property="Background" Value="{DynamicResource BackgroundTitle}"/>
+                <!--<Trigger.EnterActions>
                     <BeginStoryboard >
                         <Storyboard FillBehavior="HoldEnd" >
                             <ColorAnimation Duration="0:0:0.2"  Storyboard.TargetProperty="Background.Color" To="Gray" />
@@ -118,7 +106,7 @@
                             <ColorAnimation Duration="0:0:0.2"  Storyboard.TargetProperty="Background.Color" To="Transparent" />
                         </Storyboard>
                     </BeginStoryboard>
-                </Trigger.ExitActions>
+                </Trigger.ExitActions>-->
             </Trigger>
         </Style.Triggers>
     </Style>
@@ -127,12 +115,16 @@
     <Style x:Key="GenreBorderStyle" TargetType="Border">
         <Setter Property="CornerRadius" Value="3"/>
         <Setter Property="Margin" Value="10"/>
-        <Setter Property="Padding" Value="10 5"/>
+        <Setter Property="Padding" Value="0"/>
         <Setter Property="Cursor" Value="Hand"/>
-        <Setter Property="Background" Value="{DynamicResource BackgroundSide}"/>
+        <Setter Property="BorderThickness" Value="2"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource BackgroundSide}"/>
+        <Setter Property="Background" Value="Transparent"/>
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{DynamicResource BackgroundTitle}"/>
+                <!--<Setter Property="Background" Value="{DynamicResource BackgroundTitle}"/>-->
+                <Setter Property="Background" Value="#EAFCFA"/>
+                <Setter Property="BorderBrush" Value="#79DFD5"/>
             </Trigger>
         </Style.Triggers>
     </Style>
@@ -141,20 +133,7 @@
         <Setter Property="Background" Value="Transparent"/>
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Trigger.EnterActions>
-                    <BeginStoryboard>
-                        <Storyboard FillBehavior="HoldEnd">
-                            <ColorAnimation Duration="0:0:0.2"  Storyboard.TargetProperty="Background.Color" To="Red" />
-                        </Storyboard>
-                    </BeginStoryboard>
-                </Trigger.EnterActions>
-                <Trigger.ExitActions>
-                    <BeginStoryboard>
-                        <Storyboard >
-                            <ColorAnimation Duration="0:0:0.2"  Storyboard.TargetProperty="Background.Color" To="Transparent" />
-                        </Storyboard>
-                    </BeginStoryboard>
-                </Trigger.ExitActions>
+                <Setter Property="Background" Value="Red"/>
             </Trigger>
         </Style.Triggers>
     </Style>
