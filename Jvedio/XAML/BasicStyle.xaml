@@ -4,9 +4,8 @@
 
 
     <!--动态资源-->
-
-    <!--黑色皮肤-->
-
+    
+    <!--默认黑色皮肤-->
     <Color x:Key="Color_BackgroundTitle"  >#22252A</Color>
     <Color x:Key="Color_BackgroundMain"  >#1B1B1F</Color>
     <Color x:Key="Color_BackgroundSide"  >#101013</Color>

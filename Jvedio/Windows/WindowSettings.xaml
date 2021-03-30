@@ -277,15 +277,15 @@
                             </ListBox>
 
                             <StackPanel Orientation="Horizontal" Margin="0 10" HorizontalAlignment="Left">
-                                <Border  Height="27" Width="27" Margin="5 0" CornerRadius="3" Style="{StaticResource BorderStyle}" MouseLeftButtonUp="AddPath">
+                                <Button  Height="27" Width="27" Margin="5 0"   Style="{StaticResource RoundTitleButton}" Click="AddPath">
                                     <Image Source="{Binding Themes, ConverterParameter=openfolder, Converter={StaticResource StringToUriStringConverterOther}, Mode=OneWay, Source={x:Static p:Settings.Default}}" Height="20" Width="20"  />
-                                </Border>
-                                <Border  Height="27" Width="27" Margin="5 0" CornerRadius="3" Style="{StaticResource BorderStyle}" MouseLeftButtonUp="DelPath">
+                                </Button>
+                                <Button  Height="27" Width="27" Margin="5 0"   Style="{StaticResource RoundTitleButton}" Click="DelPath">
                                     <Image Source="{Binding Themes, ConverterParameter=min, Converter={StaticResource StringToUriStringConverterOther}, Mode=OneWay, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
-                                </Border>
-                                <Border  Height="27" Width="27" Margin="5 0" CornerRadius="3" Style="{StaticResource CloseBorderStyle}" MouseLeftButtonUp="ClearPath">
+                                </Button>
+                                <Button  Height="27" Width="27" Margin="5 0"  Style="{StaticResource RoundCloseButton}" Click="ClearPath">
                                     <Image Source="{Binding Themes, ConverterParameter=clear, Converter={StaticResource StringToUriStringConverterOther}, Mode=OneWay, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
-                                </Border>
+                                </Button>
                             </StackPanel>
 
                         </StackPanel>
@@ -763,8 +763,8 @@
                         <!--{'\\','#','%', '&', '*', '|', ':', '"', ' <', '>', '?', '/','.' }-->
                         <StackPanel Orientation="Horizontal" Margin="10 5">
                             <TextBlock Text="{x:Static lang:Resources.OuterSplitChar}" Style="{StaticResource BaseTextBlock}"/>
-                            <ComboBox x:Name="OutComboBox" Width="100" SelectionChanged="OutComboBox_SelectionChanged" Margin="10 0" >
-                                <ComboBoxItem Content="_"/>
+                            <ComboBox x:Name="OutComboBox" Width="100" SelectionChanged="OutComboBox_SelectionChanged" Margin="10 0" Style="{StaticResource ComboBoxStyle1}" >
+                                <ComboBoxItem Content="_"  />
                                 <ComboBoxItem Content="-"/>
                                 <ComboBoxItem Content="$"/>
                                 <ComboBoxItem Content="%"/>
@@ -778,7 +778,7 @@
 
                         <StackPanel Orientation="Horizontal" Margin="10 5">
                             <TextBlock Text="{x:Static lang:Resources.InnerSplitChar}" Style="{StaticResource BaseTextBlock}" />
-                            <ComboBox    x:Name="InComboBox"   Width="100" SelectionChanged="InComboBox_SelectionChanged"  Margin="10 0" >
+                            <ComboBox    x:Name="InComboBox"   Width="100" SelectionChanged="InComboBox_SelectionChanged"  Margin="10 0"  Style="{StaticResource ComboBoxStyle1}" >
                                 <ComboBoxItem Content="_"/>
                                 <ComboBoxItem Content="-"/>
                                 <ComboBoxItem Content="$"/>

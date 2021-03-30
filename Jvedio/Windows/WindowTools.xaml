@@ -69,13 +69,13 @@
 
                                 <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Left"  >
 
-                                    <Button  Style="{StaticResource TitleButton}" Click="AddPath">
+                                    <Button  Style="{StaticResource RoundTitleButton}" Click="AddPath">
                                         <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=openfolder,Converter={StaticResource StringToUriStringConverterOther}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"  />
                                     </Button>
-                                    <Button   Style="{StaticResource TitleButton}" Click="DelPath">
+                                    <Button   Style="{StaticResource RoundTitleButton}" Click="DelPath">
                                         <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=min,Converter={StaticResource StringToUriStringConverterOther}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
                                     </Button>
-                                    <Button   Style="{StaticResource CloseButton}" Click="ClearPath">
+                                    <Button   Style="{StaticResource RoundCloseButton}" Click="ClearPath">
                                         <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=clear,Converter={StaticResource StringToUriStringConverterOther}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
                                     </Button>
 
@@ -160,13 +160,13 @@
 
                                             <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Left" >
 
-                                                <Button   Style="{StaticResource TitleButton}" Click="AddNFOPath">
+                                                <Button   Style="{StaticResource RoundTitleButton}" Click="AddNFOPath">
                                                     <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=openfolder,Converter={StaticResource StringToUriStringConverterOther}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"  />
                                                 </Button>
-                                                <Button   Style="{StaticResource TitleButton}" Click="DelNFOPath">
+                                                <Button   Style="{StaticResource RoundTitleButton}" Click="DelNFOPath">
                                                     <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=min,Converter={StaticResource StringToUriStringConverterOther}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
                                                 </Button>
-                                                <Button   Style="{StaticResource CloseButton}" Click="ClearNFOPath">
+                                                <Button   Style="{StaticResource RoundCloseButton}" Click="ClearNFOPath">
                                                     <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=clear,Converter={StaticResource StringToUriStringConverterOther}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
                                                 </Button>
 
@@ -238,13 +238,13 @@
 
                                 <StackPanel Orientation="Horizontal" Margin="25 5" HorizontalAlignment="Left" >
 
-                                    <Button   Style="{StaticResource TitleButton}" Click="AddEuPath">
+                                    <Button   Style="{StaticResource RoundTitleButton}" Click="AddEuPath">
                                         <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=openfolder,Converter={StaticResource StringToUriStringConverterOther}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
                                     </Button>
-                                    <Button Style="{StaticResource TitleButton}" Click="DelEuPath">
+                                    <Button Style="{StaticResource RoundTitleButton}" Click="DelEuPath">
                                         <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=min,Converter={StaticResource StringToUriStringConverterOther}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
                                     </Button>
-                                    <Button   Style="{StaticResource CloseButton}" Click="ClearEuPath">
+                                    <Button   Style="{StaticResource RoundCloseButton}" Click="ClearEuPath">
                                         <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=clear,Converter={StaticResource StringToUriStringConverterOther}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"  />
                                     </Button>
 

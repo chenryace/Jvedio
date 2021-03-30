@@ -214,7 +214,7 @@ namespace Jvedio
 
 
 
-        public void AddPath(object sender, MouseButtonEventArgs e)
+        public void AddPath(object sender, RoutedEventArgs e)
         {
             System.Windows.Forms.FolderBrowserDialog folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
             folderBrowserDialog.Description = Jvedio.Language.Resources.ChooseDir;
@@ -349,7 +349,7 @@ namespace Jvedio
             }
         }
 
-        public void DelPath(object sender, MouseButtonEventArgs e)
+        public void DelPath(object sender, RoutedEventArgs e)
         {
             if (PathListBox.SelectedIndex != -1)
             {
@@ -363,7 +363,7 @@ namespace Jvedio
 
         }
 
-        public void ClearPath(object sender, MouseButtonEventArgs e)
+        public void ClearPath(object sender, RoutedEventArgs e)
         {
 
             vieModel_Settings.ScanPath?.Clear();
