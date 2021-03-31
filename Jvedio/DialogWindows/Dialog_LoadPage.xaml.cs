@@ -23,7 +23,7 @@ namespace Jvedio
     /// <summary>
     /// Settings.xaml 的交互逻辑
     /// </summary>
-    public partial class Dialog_LoadPage : BaseDialog
+    public partial class Dialog_LoadPage : Jvedio.Style.BaseDialog
     {
 
         public List<ActorSearch> ActorSearches;

@@ -115,8 +115,8 @@
     <Reference Include="HandyControl, Version=3.1.0.0, Culture=neutral, PublicKeyToken=45be8712787a1e5b, processorArchitecture=MSIL">
       <HintPath>..\packages\HandyControl.3.1.0\lib\net472\HandyControl.dll</HintPath>
     </Reference>
-    <Reference Include="HtmlAgilityPack, Version=1.11.24.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
-      <HintPath>..\packages\HtmlAgilityPack.1.11.24\lib\Net45\HtmlAgilityPack.dll</HintPath>
+    <Reference Include="HtmlAgilityPack, Version=1.11.32.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
+      <HintPath>..\packages\HtmlAgilityPack.1.11.32\lib\Net45\HtmlAgilityPack.dll</HintPath>
     </Reference>
     <Reference Include="LiveCharts, Version=0.9.7.0, Culture=neutral, PublicKeyToken=0bc1f845d1ebb8df, processorArchitecture=MSIL">
       <HintPath>..\packages\LiveCharts.0.9.7\lib\net45\LiveCharts.dll</HintPath>
@@ -246,13 +246,10 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="UserControls\OutputPanel.xaml.cs">
-      <DependentUpon>OutputPanel.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Utils\FileProcess\ClipBoard.cs" />
     <Compile Include="Utils\FileProcess\FileHelper.cs" />
     <Compile Include="Utils\Net\ActorCrawler.cs" />
-    <Compile Include="Utils\Net\Delay.cs" />
+    <Compile Include="Utils\Net\MyNet.cs" />
     <Compile Include="Utils\Other\BaseClass.cs" />
     <Compile Include="Utils\Other\Comparer.cs" />
     <Compile Include="Utils\Other\Converter.cs" />
@@ -269,22 +266,12 @@
     <Compile Include="Utils\Config\RecentWatchedConfig.cs" />
     <Compile Include="Utils\Config\ServerConfig.cs" />
     <Compile Include="Utils\Config\ScanPathConfig.cs" />
-    <Compile Include="UserControls\WaitingPanel.xaml.cs">
-      <DependentUpon>WaitingPanel.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Utils\Other\CustomExtension.cs" />
-    <Compile Include="Utils\Sqlite\Sqlite.cs" />
-    <Compile Include="Utils\Sqlite\MySqlite.cs" />
     <Compile Include="Utils\ImageAndVedio\MediaInfo.cs" />
     <Compile Include="Utils\ImageAndVedio\ImageProcess.cs" />
-    <Compile Include="DialogWindows\BaseDialog.cs" />
     <Compile Include="DialogWindows\Dialog_Thanks.xaml.cs">
       <DependentUpon>Dialog_Thanks.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Utils\Plot\Bar\BarView.xaml.cs">
-      <DependentUpon>BarView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Utils\Plot\Bar\BarViewModel.cs" />
     <Compile Include="Utils\Net\Translate.cs" />
     <Compile Include="Resource_IDData.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -296,6 +283,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resource_String.resx</DependentUpon>
     </Compile>
+    <Compile Include="Utils\Plot\Bar\BarView.xaml.cs">
+      <DependentUpon>BarView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Utils\Plot\Bar\BarViewModel.cs" />
+    <Compile Include="Utils\Sqlite\MySqlite.cs" />
     <Compile Include="ViewModel\VieModel_Batch.cs" />
     <Compile Include="Windows\DialogInput.xaml.cs">
       <DependentUpon>DialogInput.xaml</DependentUpon>
@@ -306,7 +298,6 @@
     <Compile Include="Utils\Sqlite\DataBase.cs" />
     <Compile Include="Utils\FileProcess\Identify.cs" />
     <Compile Include="Utils\FileProcess\Logger.cs" />
-    <Compile Include="Utils\Net\Net.cs" />
     <Compile Include="Utils\Net\CrawlerParse.cs" />
     <Compile Include="Utils\FileProcess\NFO.cs" />
     <Compile Include="Utils\FileProcess\Scan.cs" />
@@ -373,25 +364,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="UserControls\OutputPanel.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="UserControls\WaitingPanel.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="DialogWindows\BaseDialogStyle.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="DialogWindows\Dialog_Thanks.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Utils\Plot\Bar\BarView.xaml">
-      <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Windows\WindowBatch.xaml">
       <Generator>MSBuild:Compile</Generator>

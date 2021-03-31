@@ -6,8 +6,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:local="clr-namespace:Jvedio"
     xmlns:converter="clr-namespace:Jvedio.Utils.Converter;assembly=Jvedio.Utils"
-    xmlns:JvedioControls="clr-namespace:Jvedio.Controls"
-    xmlns:wpftk="clr-namespace:WpfToolkit.Controls;assembly=VirtualizingWrapPanel"
+    xmlns:usercontrol="clr-namespace:Jvedio.Style.UserControls;assembly=Jvedio.Style"
     xmlns:p="clr-namespace:Jvedio.Properties"
     xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero"
     xmlns:hc="https://handyorg.github.io/handycontrol"
@@ -819,9 +818,9 @@
             <Grid Grid.Row="1"   >
 
 
-                <JvedioControls:WaitingPanel NoticeText="{x:Static lang:Resources.Wait}"   ShowCancelButton="Visible" ShowProgressBar="Collapsed" Visibility="{Binding IsScanning,Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=Hidden}"      Panel.ZIndex="5" Cancel="WaitingPanel_Cancel"  ></JvedioControls:WaitingPanel>
+                <usercontrol:WaitingPanel NoticeText="{x:Static lang:Resources.Wait}"   ShowCancelButton="Visible" ShowProgressBar="Collapsed" Visibility="{Binding IsScanning,Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=Hidden}"      Panel.ZIndex="5" Cancel="WaitingPanel_Cancel"  ></usercontrol:WaitingPanel>
 
-                <JvedioControls:WaitingPanel  x:Name="LoadSearchWaitingPanel"  NoticeText="{x:Static lang:Resources.Wait}"     ShowCancelButton="Visible" ShowProgressBar="Visible" Visibility="Hidden"  Panel.ZIndex="5" Cancel="CancelLoadActor"    ></JvedioControls:WaitingPanel>
+                <usercontrol:WaitingPanel  x:Name="LoadSearchWaitingPanel"  NoticeText="{x:Static lang:Resources.Wait}"     ShowCancelButton="Visible" ShowProgressBar="Visible" Visibility="Hidden"  Panel.ZIndex="5" Cancel="CancelLoadActor"    ></usercontrol:WaitingPanel>
 
 
 

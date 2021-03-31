@@ -19,6 +19,7 @@ using System.Windows.Shapes;
 using System.Windows.Threading;
 using static Jvedio.GlobalVariable;
 using Jvedio.Utils;
+using Jvedio.Utils.Net;
 
 namespace Jvedio.Comics
 {
@@ -398,7 +399,7 @@ namespace Jvedio.Comics
             }
             else
             {
-                (bool success, string remote, string updateContent) = await Net.CheckUpdate();
+                (bool success, string remote, string updateContent) = await new MyNet().CheckUpdate(UpdateUrl);
                 string local = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
                 if (success && local.CompareTo(remote) < 0)
                 {

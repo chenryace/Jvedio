@@ -11,8 +11,8 @@ using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
-using static Jvedio.GlobalVariable;
-using MyLibrary.SQL;
+using Jvedio.Utils;
+using Jvedio.Utils.Sqlite;
 
 namespace Jvedio
 {
@@ -26,10 +26,7 @@ namespace Jvedio
 
         public MySqlite(string path, bool absolute ) : base(path)
         {
-            if (string.IsNullOrEmpty(path))
-                SqlitePath = Properties.Settings.Default.DataBasePath;
-            else
-                SqlitePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, path.EndsWith(".sqlite") ? path : path + ".sqlite");
+            SqlitePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, path.EndsWith(".sqlite") ? path : path + ".sqlite");
             if (absolute && path != "") SqlitePath = path;
             cn = new SQLiteConnection("data source=" + SqlitePath);
             cn.Open();

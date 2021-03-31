@@ -1,11 +1,12 @@
 ﻿using Jvedio;
+using Jvedio.Utils.Interface;
 using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
 
 
 
-namespace MyLibrary.SQL
+namespace Jvedio.Utils.Sqlite
 {
     public class Sqlite : IDisposable
     {
@@ -65,7 +66,9 @@ namespace MyLibrary.SQL
                     }
                 }
             }
-            catch (System.Data.SQLite.SQLiteException ex) { Logger.LogD(ex); }
+            catch (System.Data.SQLite.SQLiteException ex) {
+                Console.WriteLine(ex.Message);
+            }
             return tables;
         }
 
@@ -80,7 +83,7 @@ namespace MyLibrary.SQL
                     cmd.ExecuteNonQuery();
                     return true;
                 }
-                catch (Exception e) { Logger.LogD(e); return false; }
+                catch (Exception ex) { Console.WriteLine(ex.Message); return false; }
 
             }
             else
@@ -98,7 +101,7 @@ namespace MyLibrary.SQL
                     cmd.ExecuteNonQuery();
                     return true;
                 }
-                catch (Exception e) { Logger.LogD(e); return false; }
+                catch (Exception ex) { Console.WriteLine(ex.Message); return false; }
 
             }
 
@@ -116,9 +119,9 @@ namespace MyLibrary.SQL
                 cmd.ExecuteNonQuery();
                 return true;
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Logger.LogD(e);
+                Console.WriteLine(ex.Message);
                 return false;
             }
 
@@ -164,15 +167,13 @@ namespace MyLibrary.SQL
                 cmd.ExecuteNonQuery();
                 return true;
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Logger.LogD(e);
+                Console.WriteLine(ex.Message);
                 return false;
             }
 
         }
-
-
     }
 
 

@@ -9,7 +9,8 @@
         xmlns:fa="http://schemas.fontawesome.io/icons/"
         xmlns:p="clr-namespace:Jvedio.Properties"
         xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero"
-        xmlns:JvedioControls="clr-namespace:Jvedio.Controls"
+        xmlns:usercontrol="clr-namespace:Jvedio.Style.UserControls;assembly=Jvedio.Style"
+        xmlns:usercontrols="clr-namespace:Jvedio.Style.UserControls;assembly=Jvedio.Style"
         xmlns:lang="clr-namespace:Jvedio.Language;assembly=Jvedio.Language"
         x:Class="Jvedio.WindowBatch"
         mc:Ignorable="d"
@@ -552,14 +553,14 @@
         </Grid.RowDefinitions>
 
 
-        <JvedioControls:WaitingPanel Visibility="Collapsed"  ShowCancelButton="Collapsed" x:Name="WaitingPanel"  Panel.ZIndex="5" ></JvedioControls:WaitingPanel>
+        <usercontrol:WaitingPanel Visibility="Collapsed"  ShowCancelButton="Collapsed" x:Name="WaitingPanel"  Panel.ZIndex="5" ></usercontrol:WaitingPanel>
 
         <!--消息提示框-->
         <ScrollViewer Height="auto" Background="Transparent" Panel.ZIndex="6" Width="auto" VerticalScrollBarVisibility="Hidden" VerticalAlignment="Bottom" HorizontalAlignment="Right"  Margin="20">
             <StackPanel hc:Growl.Token="BatchGrowl" VerticalAlignment="Bottom" Margin="0,10,10,10"/>
         </ScrollViewer>
 
-        <JvedioControls:OutputPanel x:Name="OutputPanel" Visibility="Collapsed"    Panel.ZIndex="5" Margin="20"></JvedioControls:OutputPanel>
+        <usercontrols:OutputPanel x:Name="OutputPanel" Visibility="Collapsed"    Panel.ZIndex="5" Margin="20"></usercontrols:OutputPanel>
 
 
 

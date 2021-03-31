@@ -16,13 +16,14 @@ using System.Xml;
 using static Jvedio.GlobalVariable;
 using static Jvedio.FileProcess;
 using Jvedio.Utils;
+using Jvedio.Style;
 
 namespace Jvedio
 {
     /// <summary>
     /// Settings.xaml 的交互逻辑
     /// </summary>
-    public partial class Dialog_NewMovie : BaseDialog
+    public partial class Dialog_NewMovie : Jvedio.Style.BaseDialog
     {
         public NewMovieDialogResult Result { get; private set; }
 

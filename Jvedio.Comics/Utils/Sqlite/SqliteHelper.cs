@@ -1,4 +1,4 @@
-﻿using MyLibrary.SQL;
+﻿
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -13,7 +13,7 @@ using static Jvedio.Comparer;
 using static Jvedio.GlobalVariable;
 using Jvedio.Utils;
 
-namespace Jvedio.Comics.Utils.Sqlite
+namespace Jvedio.Comics
 {
     public static class SqliteHelper
     {

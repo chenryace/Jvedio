@@ -28,6 +28,7 @@ using System.Text.RegularExpressions;
 using Jvedio.Library.Encrypt;
 using Jvedio.Utils;
 using Jvedio.Style;
+using Jvedio.Utils.Net;
 
 namespace Jvedio
 {
@@ -73,7 +74,7 @@ namespace Jvedio
             {
                 item.Click += AddToRename;
             }
-            if(Properties.Settings.Default.SettingsIndex==2)
+            if (Properties.Settings.Default.SettingsIndex == 2)
                 TabControl.SelectedIndex = 0;
             else
                 TabControl.SelectedIndex = Properties.Settings.Default.SettingsIndex;
@@ -236,7 +237,7 @@ namespace Jvedio
 
             }
 
-      
+
 
 
 
@@ -543,8 +544,8 @@ namespace Jvedio
             // TODO
             if (Directory.Exists(path))
             {
-                    if (path.Substring(path.Length - 1, 1) != "\\") { path = path + "\\"; }
-                    Properties.Settings.Default.BasePicPath = path;
+                if (path.Substring(path.Length - 1, 1) != "\\") { path = path + "\\"; }
+                Properties.Settings.Default.BasePicPath = path;
             }
             else
             {
@@ -563,7 +564,6 @@ namespace Jvedio
 
             GlobalVariable.InitVariable();
             Scan.InitSearchPattern();
-            Net.Init();
             HandyControl.Controls.Growl.Success(Jvedio.Language.Resources.Message_Success, GrowlToken);
         }
 
@@ -784,8 +784,8 @@ namespace Jvedio
             var path = FileHelper.SelectPath(this);
             if (Directory.Exists(path))
             {
-                    if (path.Substring(path.Length - 1, 1) != "\\") { path = path + "\\"; }
-                    Properties.Settings.Default.NFOSavePath = path;
+                if (path.Substring(path.Length - 1, 1) != "\\") { path = path + "\\"; }
+                Properties.Settings.Default.NFOSavePath = path;
 
             }
             else
@@ -812,14 +812,15 @@ namespace Jvedio
 
 
         private int CurrentRowIndex = 0;
-        private  void TestServer(object sender, RoutedEventArgs e)
+        private void TestServer(object sender, RoutedEventArgs e)
         {
             int rowIndex = CurrentRowIndex;
             vieModel_Settings.Servers[rowIndex].LastRefreshDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
             vieModel_Settings.Servers[rowIndex].Available = 2;
             ServersDataGrid.IsEnabled = false;
-            CheckUrl(vieModel_Settings.Servers[rowIndex], (s) => { 
-                ServersDataGrid.IsEnabled = true; 
+            CheckUrl(vieModel_Settings.Servers[rowIndex], (s) =>
+            {
+                ServersDataGrid.IsEnabled = true;
             });
         }
 
@@ -845,64 +846,64 @@ namespace Jvedio
             CurrentRowIndex = dgr.GetIndex();
         }
 
-        private async  void CheckUrl(Server server,Action<int> callback)
+        private async void CheckUrl(Server server, Action<int> callback)
         {
-                bool enablecookie = false;
-                if (server.Name == "DMM" || server.Name == "DB" || server.Name == "MOO") enablecookie = true;
-                (bool result, string title) = await Net.TestAndGetTitle(server.Url, enablecookie, server.Cookie, server.Name);
-                if (!result && title.IndexOf("DB") >= 0)
+            bool enablecookie = false;
+            if (server.Name == "DMM" || server.Name == "DB" || server.Name == "MOO") enablecookie = true;
+            (bool result, string title) = await new MyNet().TestAndGetTitle(server.Url, enablecookie, server.Cookie, server.Name);
+            if (!result && title.IndexOf("DB") >= 0)
+            {
+                await Dispatcher.BeginInvoke((Action)delegate
                 {
-                    await Dispatcher.BeginInvoke((Action)delegate
-                    {
-                        HandyControl.Controls.Growl.Error(Jvedio.Language.Resources.Message_TestError, GrowlToken);
-                    });
-                    callback.Invoke(0);
+                    HandyControl.Controls.Growl.Error(Jvedio.Language.Resources.Message_TestError, GrowlToken);
+                });
+                callback.Invoke(0);
+            }
+            if (result && title != "")
+            {
+                server.Available = 1;
+                if (title.IndexOf("JavBus") >= 0 && title.IndexOf("歐美") < 0)
+                {
+                    server.Name = "Bus";
                 }
-                if (result && title != "")
+                else if (title.IndexOf("JavBus") >= 0 && title.IndexOf("歐美") >= 0)
                 {
-                    server.Available = 1;
-                    if (title.IndexOf("JavBus") >= 0 && title.IndexOf("歐美") < 0)
-                    {
-                        server.Name = "Bus";
-                    }
-                    else if (title.IndexOf("JavBus") >= 0 && title.IndexOf("歐美") >= 0)
-                    {
-                        server.Name = "BusEurope";
-                    }
-                    else if (title.IndexOf("JavDB") >= 0)
-                    {
-                        server.Name = "DB";
-                    }
-                    else if (title.IndexOf("JavLibrary") >= 0)
-                    {
-                        server.Name = "Library";
-                    }
-                    else if (title.IndexOf("FANZA") >= 0)
-                    {
-                        server.Name = "DMM";
-                        if (server.Url.EndsWith("top/")) server.Url = server.Url.Replace("top/", "");
-                    }
-                    else if (title.IndexOf("FC2コンテンツマーケット") >= 0 || title.IndexOf("FC2电子市场") >= 0)
-                    {
-                        server.Name = "FC2";
-                    }
-                    else if (title.IndexOf("JAV321") >= 0)
-                    {
-                        server.Name = "Jav321";
-                    }
-                    else if (title.IndexOf("AVMOO") >= 0)
-                    {
-                        server.Name = "MOO";
-                    }
-                    else
-                    {
-                        server.Name = title;
-                    }
+                    server.Name = "BusEurope";
+                }
+                else if (title.IndexOf("JavDB") >= 0)
+                {
+                    server.Name = "DB";
+                }
+                else if (title.IndexOf("JavLibrary") >= 0)
+                {
+                    server.Name = "Library";
+                }
+                else if (title.IndexOf("FANZA") >= 0)
+                {
+                    server.Name = "DMM";
+                    if (server.Url.EndsWith("top/")) server.Url = server.Url.Replace("top/", "");
+                }
+                else if (title.IndexOf("FC2コンテンツマーケット") >= 0 || title.IndexOf("FC2电子市场") >= 0)
+                {
+                    server.Name = "FC2";
+                }
+                else if (title.IndexOf("JAV321") >= 0)
+                {
+                    server.Name = "Jav321";
+                }
+                else if (title.IndexOf("AVMOO") >= 0)
+                {
+                    server.Name = "MOO";
                 }
                 else
                 {
-                    server.Available = -1;
+                    server.Name = title;
                 }
+            }
+            else
+            {
+                server.Available = -1;
+            }
             await Dispatcher.BeginInvoke((Action)delegate
             {
                 ServersDataGrid.Items.Refresh();
@@ -910,27 +911,27 @@ namespace Jvedio
 
 
             if (NeedCookie.Contains(server.Name))
+            {
+                //是否包含 cookie
+                if (server.Cookie == Jvedio.Language.Resources.Nothing || server.Cookie == "")
                 {
-                    //是否包含 cookie
-                    if (server.Cookie == Jvedio.Language.Resources.Nothing || server.Cookie == "")
+                    server.Available = -1;
+                    await Dispatcher.BeginInvoke((Action)delegate
                     {
-                        server.Available = -1;
-                        await Dispatcher.BeginInvoke((Action)delegate
-                        {
-                            new Msgbox(this, Jvedio.Language.Resources.Message_NeedCookies).ShowDialog();
-                        });
+                        new Msgbox(this, Jvedio.Language.Resources.Message_NeedCookies).ShowDialog();
+                    });
 
-                    }
-                    else
-                    {
-                        ServerConfig.Instance.SaveServer(server);//保存覆盖
-                    }
                 }
                 else
                 {
                     ServerConfig.Instance.SaveServer(server);//保存覆盖
                 }
-                callback.Invoke(0);
+            }
+            else
+            {
+                ServerConfig.Instance.SaveServer(server);//保存覆盖
+            }
+            callback.Invoke(0);
         }
 
 
@@ -1160,7 +1161,7 @@ namespace Jvedio
 
         private void CopyFFmpegUrl(object sender, MouseButtonEventArgs e)
         {
-            FileHelper.TryOpenUrl(ffmpeg_url,GrowlToken);
+            FileHelper.TryOpenUrl(ffmpeg_url, GrowlToken);
         }
 
         private void LoadTranslate(object sender, RoutedEventArgs e)

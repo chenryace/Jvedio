@@ -14,7 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Jvedio.Controls
+namespace Jvedio.Style.UserControls
 {
     /// <summary>
     /// UserControl1.xaml 的交互逻辑
@@ -47,7 +47,7 @@ namespace Jvedio.Controls
             StatusTextBox.ScrollToEnd();
         }
 
-        public void AppendText(string str,bool newline)
+        public void AppendText(string str, bool newline)
         {
             if (newline) str += Environment.NewLine;
             StatusTextBox.AppendText(str);

@@ -5,38 +5,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static Jvedio.Net;
 using static Jvedio.GlobalVariable;
 using System.IO;
 using System.Net;
 using Jvedio.Utils;
+using Jvedio.Utils.Net;
+using static Jvedio.Utils.Net.Net;
 
 namespace Jvedio
 {
-
-    public class CrawlerHeader
-    {
-        public string Method="GET";
-        public string Host="";
-        public string Connection= "keep-alive";
-        public string CacheControl= "max-age=0";
-        public string UpgradeInsecureRequests= "1";
-        public string UserAgent= "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36";
-        public string Accept = "*/*";
-        public string SecFetchSite = "same-origin";
-        public string SecFetchMode = "navigate";
-        public string SecFetchUser = "?1";
-        public string SecFetchDest = "document";
-        public string AcceptEncoding = "";
-        public string AcceptLanguage = "zh-CN,zh;q=0.9";
-        public string Cookies = "";
-        public string Referer = "";
-        public string Origin = "";
-        public long ContentLength = 0;
-        public string ContentType = "";
-    }
-
-
     public abstract class Crawler
     {
 
@@ -101,7 +78,7 @@ namespace Jvedio
         public override async Task<HttpResult> Crawl()
         {
             if (Url.IsProperUrl()) InitHeaders();
-            httpResult = await Net.Http(Url,headers);
+            httpResult = await new MyNet().Http(Url,headers);
             if (httpResult != null && httpResult.StatusCode == HttpStatusCode.OK && httpResult.SourceCode != null)
             {
                 FileProcess.SaveInfo(GetInfo(), ID);
@@ -176,7 +153,7 @@ namespace Jvedio
         public override async Task<HttpResult> Crawl()
         {
             if (Url.IsProperUrl()) InitHeaders();
-            httpResult = await Net.Http(Url, headers);
+            httpResult = await new MyNet().Http(Url, headers);
             if (httpResult != null && httpResult.StatusCode == HttpStatusCode.OK && httpResult.SourceCode != null)
             {
                 if(httpResult.SourceCode.IndexOf("非常抱歉，此商品未在您的居住国家公开") < 0 && httpResult.SourceCode.IndexOf("非常抱歉，找不到您要的商品") < 0)
@@ -258,7 +235,7 @@ namespace Jvedio
             if (movieCode == "")
             {
                 //从网络获取
-                HttpResult result = await Net.Http(Url, headers, allowRedirect: false);
+                HttpResult result = await new MyNet().Http(Url, headers, allowRedirect: false);
                 if (result != null && result.StatusCode == HttpStatusCode.Redirect) callback?.Invoke(Jvedio.Language.Resources.SearchTooFrequent);
                 if (result!=null && result.SourceCode!="") 
                     movieCode = GetMovieCodeFromSearchResult(result.SourceCode);
@@ -316,7 +293,7 @@ namespace Jvedio
             if (MovieCode != "")
             {
                 Url = JvedioServers.DB.Url + $"v/{MovieCode}";
-                httpResult = await Net.Http(Url, headers);
+                httpResult = await new MyNet().Http(Url, headers);
                 if (httpResult != null && httpResult.StatusCode == HttpStatusCode.OK && httpResult.SourceCode != null)
                 {
                     FileProcess.SaveInfo(GetInfo(), ID);
@@ -370,7 +347,7 @@ namespace Jvedio
             //先从数据库获取
             if (string.IsNullOrEmpty(movieCode) || movieCode.IndexOf("zh-cn") >= 0)
             {
-                HttpResult result= await Net.Http(Url,headers, Mode: HttpMode.RedirectGet);
+                HttpResult result= await new MyNet().Http(Url,headers, Mode: HttpMode.RedirectGet);
                 if (result != null && result.StatusCode == HttpStatusCode.Redirect) movieCode = result.Headers.Location;
                 else if(result!=null) movieCode = GetMovieCodeFromSearchResult(result.SourceCode);
 
@@ -432,7 +409,7 @@ namespace Jvedio
             {
                 //解析
                 Url = JvedioServers.Library.Url + $"?v={MovieCode}";
-                httpResult = await Net.Http(Url, headers);
+                httpResult = await new MyNet().Http(Url, headers);
                 if (httpResult != null && httpResult.StatusCode == HttpStatusCode.OK && httpResult.SourceCode != null)
                 {
                     FileProcess.SaveInfo(GetInfo(), ID);
@@ -494,13 +471,13 @@ namespace Jvedio
             //从网络获取
             string movieCode = "";
             string link = "";
-            HttpResult result = await Net.Http(Url, headers, Mode: HttpMode.RedirectGet);
+            HttpResult result = await new MyNet().Http(Url, headers, Mode: HttpMode.RedirectGet);
             if (result != null && result.StatusCode == HttpStatusCode.Redirect) 
                 link = result.Headers.Location;//https://www.dmm.co.jp/mono/dvd/-/search/=/searchstr=ABP-123/
 
             if (link != "")
             {
-                HttpResult newResult= await Net.Http(link, headers);
+                HttpResult newResult= await new MyNet().Http(link, headers);
                 if (newResult != null && newResult.StatusCode == HttpStatusCode.OK)
                 {
                     if (newResult.SourceCode.IndexOf("に一致する商品は見つかりませんでした") > 0)
@@ -569,7 +546,7 @@ namespace Jvedio
             {
                 //解析
                 Url = MovieCode;
-                httpResult = await Net.Http(Url, headers);
+                httpResult = await new MyNet().Http(Url, headers);
                 if (httpResult != null && httpResult.StatusCode == HttpStatusCode.OK && httpResult.SourceCode != null)
                 {
                     if (!this.OnlyPlot)
@@ -626,7 +603,7 @@ namespace Jvedio
         {
 
             //从网络获取
-            HttpResult result = await Net.Http(Url, headers, allowRedirect: false);
+            HttpResult result = await new MyNet().Http(Url, headers, allowRedirect: false);
             //if (result != null && result.StatusCode == HttpStatusCode.Redirect) callback?.Invoke(Jvedio.Language.Resources.SearchTooFrequent);
             if (result != null && result.SourceCode != "")
                 return GetMovieCodeFromSearchResult(result.SourceCode);
@@ -671,7 +648,7 @@ namespace Jvedio
             if (MovieCode != "")
             {
                 Url = JvedioServers.MOO.Url + $"movie/{MovieCode}";
-                httpResult = await Net.Http(Url, headers);
+                httpResult = await new MyNet().Http(Url, headers);
                 if (httpResult != null && httpResult.StatusCode == HttpStatusCode.OK && httpResult.SourceCode != null)
                 {
                     FileProcess.SaveInfo(GetInfo(), ID);
@@ -739,7 +716,7 @@ namespace Jvedio
         {
             //从网络获取
             InitHeaders(ID);
-            HttpResult result = await Net.Http(Url, headers, allowRedirect: false,postString:$"sn={ID}");
+            HttpResult result = await new MyNet().Http(Url, headers, allowRedirect: false,postString:$"sn={ID}");
             if (result != null && result.StatusCode == HttpStatusCode.MovedPermanently && !string.IsNullOrEmpty(result.Headers.Location))
             {
                 return result.Headers.Location;
@@ -762,7 +739,7 @@ namespace Jvedio
             {
                 InitHeaders();
                 Url = JvedioServers.Jav321.Url + MovieCode.Substring(1);
-                httpResult = await Net.Http(Url, headers);
+                httpResult = await new MyNet().Http(Url, headers);
                 if (httpResult != null && httpResult.StatusCode == HttpStatusCode.OK && httpResult.SourceCode != null)
                 {
                     FileProcess.SaveInfo(GetInfo(), ID);

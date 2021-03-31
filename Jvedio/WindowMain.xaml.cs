@@ -41,6 +41,7 @@ using WpfAnimatedGif;
 using HtmlAgilityPack;
 using System.Net;
 using Jvedio.Style;
+using Jvedio.Utils.Net;
 
 namespace Jvedio
 {
@@ -599,7 +600,7 @@ namespace Jvedio
                         notices = sr.ReadToEnd();
                     }
                 }
-                HttpResult httpResult = await Net.Http(NoticeUrl);
+                HttpResult httpResult = await new MyNet().Http(NoticeUrl);
                 //判断公告是否内容不同
                 if (httpResult != null && httpResult.SourceCode != "" && httpResult.SourceCode != notices)
                 {
@@ -1235,7 +1236,7 @@ namespace Jvedio
             }
             else
             {
-                (bool success, string remote, string updateContent) = await Net.CheckUpdate();
+                (bool success, string remote, string updateContent) = await new MyNet().CheckUpdate(UpdateUrl);
                 string local = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
                 if (success && local.CompareTo(remote) < 0)
                 {
@@ -4720,7 +4721,7 @@ namespace Jvedio
                 {
 
                     string host = new Uri(url).Host;
-                    WebSite webSite = await Net.CheckUrlType(url.Split(':')[0] + "://" + host);
+                    WebSite webSite = await new MyNet().CheckUrlType(url.Split(':')[0] + "://" + host);
                     if (webSite == WebSite.None)
                     {
                         HandyControl.Controls.Growl.Error(Jvedio.Language.Resources.Message_NotRecognize, GrowlToken);
@@ -4734,7 +4735,7 @@ namespace Jvedio
                         else
                         {
                             HandyControl.Controls.Growl.Info($"{webSite} {Jvedio.Language.Resources.Message_BeginParse}", GrowlToken);
-                            bool result = await Net.ParseSpecifiedInfo(webSite, id, url);
+                            bool result = await MyNet.ParseSpecifiedInfo(webSite, id, url);
                             if (result)
                             {
                                 HandyControl.Controls.Growl.Success(Jvedio.Language.Resources.Message_BeginDownloadImage, GrowlToken);
@@ -4744,7 +4745,7 @@ namespace Jvedio
                                 //下载图片
                                 DetailMovie dm = DataBase.SelectDetailMovieById(id);
                                 //下载小图
-                                await Net.DownLoadSmallPic(dm, true);
+                                await MyNet.DownLoadSmallPic(dm, true);
                                 dm.smallimage = ImageProcess.GetBitmapImage(dm.id, "SmallPic");
                                 RefreshMovieByID(id);
 
@@ -4760,7 +4761,7 @@ namespace Jvedio
                                 else
                                 {
                                     //下载大图
-                                    await Net.DownLoadBigPic(dm, true);
+                                    await MyNet.DownLoadBigPic(dm, true);
                                 }
                                 dm.bigimage = ImageProcess.GetBitmapImage(dm.id, "BigPic");
                                 RefreshMovieByID(id);
@@ -5816,7 +5817,7 @@ namespace Jvedio
                 Console.WriteLine(name);
                 string url = $"{JvedioServers.Bus.Url}searchstar/{System.Web.HttpUtility.UrlEncode(name)}&type=&parent=ce";
 
-                HttpResult httpResult = await Net.Http(url, new CrawlerHeader() { Cookies = JvedioServers.Bus.Cookie });
+                HttpResult httpResult = await new MyNet().Http(url, new CrawlerHeader() { Cookies = JvedioServers.Bus.Cookie });
                 if (httpResult != null && httpResult.SourceCode != "")
                 {
                     if (CheckLoadActorCancel()) return;
@@ -5876,7 +5877,7 @@ namespace Jvedio
                                         log = LoadSearchWaitingPanel.NoticeExtraText;
                                     });
 
-                                    HttpResult newResult = await Net.Http(url, new CrawlerHeader() { Cookies = JvedioServers.Bus.Cookie });
+                                    HttpResult newResult = await new MyNet().Http(url, new CrawlerHeader() { Cookies = JvedioServers.Bus.Cookie });
                                     page++;
                                     if (newResult != null && newResult.SourceCode != "" && newResult.StatusCode == HttpStatusCode.OK)
                                     {
@@ -6068,9 +6069,9 @@ namespace Jvedio
                             });
                             HttpResult newResult = null;
                             if (webSite == WebSite.DB)
-                                 newResult = await Net.Http(Url, new CrawlerHeader() { Cookies = JvedioServers.DB.Cookie });
+                                 newResult = await new MyNet().Http(Url, new CrawlerHeader() { Cookies = JvedioServers.DB.Cookie });
                             else
-                                 newResult = await Net.Http(Url, new CrawlerHeader() { Cookies = JvedioServers.Bus.Cookie });
+                                 newResult = await new MyNet().Http(Url, new CrawlerHeader() { Cookies = JvedioServers.Bus.Cookie });
                             if (newResult != null && newResult.SourceCode != "" && newResult.StatusCode == HttpStatusCode.OK)
                             {
                                 //解析影片

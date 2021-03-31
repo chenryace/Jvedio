@@ -14,7 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Jvedio.Controls
+namespace Jvedio.Style.UserControls
 {
     /// <summary>
     /// UserControl1.xaml 的交互逻辑
@@ -29,7 +29,9 @@ namespace Jvedio.Controls
         public Visibility ShowCancelButton
         {
             get { return (Visibility)GetValue(ShowCancelButtonProperty); }
-            set { SetValue(ShowCancelButtonProperty, value);
+            set
+            {
+                SetValue(ShowCancelButtonProperty, value);
             }
         }
 
@@ -103,7 +105,7 @@ namespace Jvedio.Controls
         {
             InitializeComponent();
         }
-        
+
 
         void onButtonClick(object sender, RoutedEventArgs e)
         {

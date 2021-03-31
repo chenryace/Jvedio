@@ -24,6 +24,8 @@ using System.Text.RegularExpressions;
 using System.Windows.Media.Animation;
 using HandyControl.Data;
 using Jvedio.Utils;
+using Jvedio.Utils.Net;
+
 namespace Jvedio
 {
     /// <summary>

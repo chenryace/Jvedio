@@ -1,5 +1,6 @@
 ﻿using DynamicData.Annotations;
 using Jvedio.Library.Encrypt;
+using Jvedio.Utils.Net;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -9,7 +10,6 @@ using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using static Jvedio.GlobalVariable;
-using static Jvedio.Net;
 
 namespace Jvedio
 {
@@ -40,7 +40,7 @@ namespace Jvedio
 
         private async Task<bool> GetDownLoadList()
         {
-            HttpResult httpResult = await Net.Http(list_url);
+            HttpResult httpResult = await new MyNet().Http(list_url);
             if (httpResult == null || httpResult.SourceCode == "") return false;
             Dictionary<string, string> filemd5 = new Dictionary<string, string>();
             foreach (var item in httpResult.SourceCode.Split('\n'))
@@ -105,7 +105,7 @@ namespace Jvedio
                 string filepath = Path.Combine(temppath, item);
                 if (!File.Exists(filepath))
                 {
-                    HttpResult streamResult = await DownLoadFile(file_url + item);
+                    HttpResult streamResult = await new MyNet().DownLoadFile(file_url + item);
                     //写入本地
                     if (streamResult != null) WriteFile(streamResult.FileByte, filepath);
                 }

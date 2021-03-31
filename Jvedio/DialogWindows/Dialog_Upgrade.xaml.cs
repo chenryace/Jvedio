@@ -17,13 +17,14 @@ using static Jvedio.GlobalVariable;
 using static Jvedio.FileProcess;
 using System.Windows.Documents;
 using Jvedio.Library.Encrypt;
+using Jvedio.Utils.Net;
 
 namespace Jvedio
 {
     /// <summary>
     /// Settings.xaml 的交互逻辑
     /// </summary>
-    public partial class Dialog_Upgrade : BaseDialog
+    public partial class Dialog_Upgrade : Jvedio.Style.BaseDialog
     {
 
 
@@ -114,7 +115,7 @@ namespace Jvedio
             else
             {
 
-                (bool success, string remote, string updateContent) = await Net.CheckUpdate();
+                (bool success, string remote, string updateContent) = await new MyNet().CheckUpdate(UpdateUrl);
                 string local = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
                 if (success )
                 {
@@ -131,7 +132,7 @@ namespace Jvedio
             button.IsEnabled = false;
 
             UpgradeLoadingCircle.Visibility = Visibility.Visible;
-            (bool success, string remote, string updateContent) = await Net.CheckUpdate();
+            (bool success, string remote, string updateContent) = await new MyNet().CheckUpdate(UpdateUrl);
             string local = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
             if (success)
             {

@@ -14,6 +14,7 @@ using System.Windows.Media;
 using static Jvedio.FileProcess;
 using static Jvedio.GlobalVariable;
 using Jvedio.Utils;
+using Jvedio.Utils.Net;
 
 namespace Jvedio
 {
@@ -42,12 +43,12 @@ namespace Jvedio
 
             if (File.Exists("upgrade.bat"))
             {
-                try{ File.Delete("upgrade.bat"); } catch { }
+                try { File.Delete("upgrade.bat"); } catch { }
             }
 
             if (Directory.Exists("Temp"))
             {
-                try { Directory.Delete("Temp",true); } catch { }
+                try { Directory.Delete("Temp", true); } catch { }
             }
 
         }
@@ -63,11 +64,11 @@ namespace Jvedio
             TextBox TextBox = stackPanel.Children[1] as TextBox;
 
             string name = TextBox.Text;
-           if (name == Jvedio.Language.Resources.NewLibrary)
+            if (name == Jvedio.Language.Resources.NewLibrary)
             {
                 //重命名
                 TextBox.IsReadOnly = false;
-                TextBox.Text =Jvedio.Language.Resources.MyLibrary;
+                TextBox.Text = Jvedio.Language.Resources.MyLibrary;
                 TextBox.Focus();
                 TextBox.SelectAll();
                 TextBox.Cursor = Cursors.IBeam;
@@ -87,8 +88,9 @@ namespace Jvedio
                 {
                     try
                     {
-                        this.Dispatcher.BeginInvoke(new Action(() => { 
-                            statusText.Text = Jvedio.Language.Resources.Status_ScanDir; 
+                        this.Dispatcher.BeginInvoke(new Action(() =>
+                        {
+                            statusText.Text = Jvedio.Language.Resources.Status_ScanDir;
                         }), System.Windows.Threading.DispatcherPriority.Background);
                         List<string> filepaths = Scan.ScanPaths(ReadScanPathFromConfig(Path.GetFileNameWithoutExtension(Properties.Settings.Default.DataBasePath)), ct);
                         Scan.InsertWithNfo(filepaths, ct);
@@ -243,8 +245,6 @@ namespace Jvedio
             try
             {
 
-
-                Net.Init();
                 statusText.Text = Jvedio.Language.Resources.Status_CreateDir;
                 if (!Directory.Exists(BasePicPath + "ScreenShot\\")) { Directory.CreateDirectory(BasePicPath + "ScreenShot\\"); }
                 if (!Directory.Exists(BasePicPath + "SmallPic\\")) { Directory.CreateDirectory(BasePicPath + "SmallPic\\"); }
@@ -326,7 +326,7 @@ namespace Jvedio
 
             if (!Enum.IsDefined(typeof(MyLanguage), Properties.Settings.Default.Language))
             {
-                Properties.Settings.Default.Language =  MyLanguage.中文.ToString();
+                Properties.Settings.Default.Language = MyLanguage.中文.ToString();
                 Properties.Settings.Default.Save();
             }
 
@@ -354,15 +354,16 @@ namespace Jvedio
             if (File.Exists(filename))
             {
                 string src = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, filename);
-                string target= Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "BackUp", filename);
+                string target = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "BackUp", filename);
                 if (!File.Exists(target))
                 {
-                        FileHelper.TryCopyFile(src, target);
+                    FileHelper.TryCopyFile(src, target);
 
-                    
-                }else if(new FileInfo(target).Length<new FileInfo(src).Length)
+
+                }
+                else if (new FileInfo(target).Length < new FileInfo(src).Length)
                 {
-                        FileHelper.TryCopyFile(src, target,true);
+                    FileHelper.TryCopyFile(src, target, true);
                 }
             }
         }
@@ -496,11 +497,11 @@ namespace Jvedio
                         File.Delete($"DataBase\\{name}.sqlite");
                         vieModel_StartUp.DataBases.Remove(name);
                     }
-                    catch(Exception ex)
+                    catch (Exception ex)
                     {
                         MessageBox.Show(ex.Message);
                     }
-                    
+
                 }
 
 
@@ -548,7 +549,7 @@ namespace Jvedio
                 if (!string.IsNullOrWhiteSpace(name) && !string.IsNullOrEmpty(name) && !IsItemInList(name, vieModel_StartUp.DataBases) && name.IndexOfAny(Path.GetInvalidFileNameChars()) == -1)
                 {
                     //新建
-                    
+
                     MySqlite db = new MySqlite("DataBase\\" + name);
                     db.CreateTable(DataBase.SQLITETABLE_MOVIE);
                     db.CreateTable(DataBase.SQLITETABLE_ACTRESS);
@@ -556,7 +557,7 @@ namespace Jvedio
                     db.CreateTable(DataBase.SQLITETABLE_JAVDB);
                     db.CloseDB();
 
-                    if (vieModel_StartUp.DataBases.Contains(Jvedio.Language.Resources.NewLibrary)) vieModel_StartUp.DataBases.Remove( Jvedio.Language.Resources.NewLibrary);
+                    if (vieModel_StartUp.DataBases.Contains(Jvedio.Language.Resources.NewLibrary)) vieModel_StartUp.DataBases.Remove(Jvedio.Language.Resources.NewLibrary);
                     textBox.IsReadOnly = true;
                     textBox.Cursor = Cursors.Hand;
 
@@ -565,7 +566,7 @@ namespace Jvedio
                 }
                 else
                 {
-                    textBox.Text =  Jvedio.Language.Resources.NewLibrary;
+                    textBox.Text = Jvedio.Language.Resources.NewLibrary;
                 }
             }
             else
@@ -655,7 +656,7 @@ namespace Jvedio
             StackPanel stackPanel = grid.Children.OfType<StackPanel>().First();
             TextBox TextBox = stackPanel.Children[1] as TextBox;
             string name = TextBox.Text;
-            string path= AppDomain.CurrentDomain.BaseDirectory + $"DataBase\\{name}.sqlite";
+            string path = AppDomain.CurrentDomain.BaseDirectory + $"DataBase\\{name}.sqlite";
             FileHelper.TryOpenSelectPath(path);
         }
 

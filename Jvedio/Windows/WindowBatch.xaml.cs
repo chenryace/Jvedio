@@ -22,6 +22,7 @@ using System.ComponentModel;
 using Jvedio.Utils;
 using System.Threading;
 using Jvedio.Style;
+using Jvedio.Utils.Net;
 
 namespace Jvedio
 {
@@ -235,7 +236,7 @@ namespace Jvedio
             //下载信息
             if (downloadinfo)
             {
-                HttpResult httpResult = await Net.DownLoadFromNet(movie);
+                HttpResult httpResult = await MyNet.DownLoadFromNet(movie);
                 if (httpResult != null && httpResult.Success)
                 {
                     ShowStatus($"{id}：{Jvedio.Language.Resources.SyncInfo} {Jvedio.Language.Resources.Message_Success}");
@@ -275,7 +276,7 @@ namespace Jvedio
                 string path = Path.Combine(BasePicPath, "SmallPic", movie.id + ".jpg");
                 if (!File.Exists(path))
                 {
-                    (success, resultMessage) = await Net.DownLoadImage(movie.smallimageurl, ImageType.SmallImage, movie.id);
+                    (success, resultMessage) = await MyNet.DownLoadImage(movie.smallimageurl, ImageType.SmallImage, movie.id);
                     ShowStatus($"{Jvedio.Language.Resources.Download} {Jvedio.Language.Resources.Thumbnail}：{(success ? Jvedio.Language.Resources.Message_Success : Jvedio.Language.Resources.Message_Fail)}");
                     if (success) Task.Delay(vieModel.Timeout_Medium).Wait();
                 }
@@ -293,7 +294,7 @@ namespace Jvedio
                 if (!File.Exists(path))
                 {
 
-                    (success, resultMessage) = await Net.DownLoadImage(movie.bigimageurl, ImageType.BigImage, movie.id);
+                    (success, resultMessage) = await MyNet.DownLoadImage(movie.bigimageurl, ImageType.BigImage, movie.id);
                     ShowStatus($"{Jvedio.Language.Resources.Download} {Jvedio.Language.Resources.Poster}：{(success ? Jvedio.Language.Resources.Message_Success : Jvedio.Language.Resources.Message_Fail)}");
                     if (success) Task.Delay(vieModel.Timeout_Medium).Wait();
                 }
@@ -319,7 +320,7 @@ namespace Jvedio
                         filepath = Path.Combine(BasePicPath, "ExtraPic", movie.id, Path.GetFileName(new Uri(extraImageList[i]).LocalPath));
                         if (!File.Exists(filepath))
                         {
-                            (extraImageSuccess, cookies) = await Task.Run(() => { return Net.DownLoadImage(extraImageList[i], ImageType.ExtraImage, movie.id, Cookie: cookies); });
+                            (extraImageSuccess, cookies) = await Task.Run(() => { return MyNet.DownLoadImage(extraImageList[i], ImageType.ExtraImage, movie.id, Cookie: cookies); });
                             if (extraImageSuccess)
                                 ShowStatus($"{Jvedio.Language.Resources.Download} {Jvedio.Language.Resources.Preview} {Jvedio.Language.Resources.Message_Success} {i + 1}/{extraImageList.Count}");
                             else

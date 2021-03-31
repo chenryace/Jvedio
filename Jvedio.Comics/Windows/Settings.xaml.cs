@@ -42,9 +42,6 @@ namespace Jvedio.Comics
         private void SaveSettings(object sender, RoutedEventArgs e)
         {
 
-            GlobalVariable.InitVariable();
-            Scan.InitSearchPattern();
-            Net.Init();
         }
 
 

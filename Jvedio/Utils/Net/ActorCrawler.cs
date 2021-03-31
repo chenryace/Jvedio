@@ -9,6 +9,7 @@ using Jvedio.Utils;
 using static Jvedio.GlobalVariable;
 using System.IO;
 using System.Net;
+using Jvedio.Utils.Net;
 
 namespace Jvedio
 {
@@ -86,7 +87,7 @@ namespace Jvedio
         public override async Task<HttpResult> Crawl()
         {
             if (Url.IsProperUrl()) InitHeaders();
-            httpResult = await Net.Http(Url,headers);
+            httpResult = await new MyNet().Http(Url,headers);
             if (httpResult != null && httpResult.StatusCode == HttpStatusCode.OK && httpResult.SourceCode != null)
             {
                 
@@ -340,7 +341,7 @@ namespace Jvedio
         {
 
             //从网络获取
-            HttpResult result = await Net.Http(Url, headers, allowRedirect: false);
+            HttpResult result = await new MyNet().Http(Url, headers, allowRedirect: false);
             //if (result != null && result.StatusCode == HttpStatusCode.Redirect) callback?.Invoke(Jvedio.Language.Resources.SearchTooFrequent);
             if (result != null && result.SourceCode != "")
                 return GetMovieCodeFromSearchResult(result.SourceCode);

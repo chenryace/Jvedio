@@ -9,6 +9,8 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using static Jvedio.GlobalVariable;
 using Jvedio.Utils;
+using Jvedio.Utils.Net;
+
 namespace Jvedio
 {
 
@@ -312,7 +314,7 @@ namespace Jvedio
                 string uc = ucMatch.Value.Replace("var uc = ", "");
                 string url = $"https://www.fanbus.cam/ajax/uncledatoolsbyajax.php?gid={gid}&lang=zh&img={bigimage}&uc={uc}";
 
-                HttpResult httpResult = await Net.Http(url, new CrawlerHeader() { Cookies = JvedioServers.Bus.Cookie });
+                HttpResult httpResult = await new MyNet().Http(url, new CrawlerHeader() { Cookies = JvedioServers.Bus.Cookie });
                 if (httpResult != null && httpResult.SourceCode != "")
                 {
                     HtmlDocument doc = new HtmlDocument();

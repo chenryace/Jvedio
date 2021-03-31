@@ -22,7 +22,7 @@ namespace Jvedio
     /// <summary>
     /// Settings.xaml 的交互逻辑
     /// </summary>
-    public partial class Dialog_Thanks : BaseDialog
+    public partial class Dialog_Thanks : Jvedio.Style.BaseDialog
     {
 
         public Dialog_Thanks(Window owner,bool showbutton) : base(owner, showbutton)

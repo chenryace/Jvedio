@@ -5,7 +5,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
-using static Jvedio.GlobalVariable;
 using System.Windows.Shapes;
 using System.Windows.Interop;
 using System.Runtime.InteropServices;
@@ -13,7 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Effects;
 using System.Windows.Media.Animation;
 
-namespace Jvedio
+namespace Jvedio.Style
 {
 
     public  class BaseDialog : Window
@@ -64,7 +63,6 @@ namespace Jvedio
 
             Border borderTitle = (Border)baseDialogControlTemplate.FindName("BorderTitle", this);
             borderTitle.MouseMove += MoveWindow;
-            FadeIn();
         }
 
 
@@ -111,38 +109,11 @@ namespace Jvedio
         }
 
 
-        public  void FadeIn()
-        {
-            if (Properties.Settings.Default.EnableWindowFade)
-            {
-                var anim = new DoubleAnimation(0, 1, (Duration)FadeInterval, FillBehavior.Stop);
-                anim.Completed += (s, _) => this.Opacity = 1;
-                this.BeginAnimation(UIElement.OpacityProperty, anim);
-            }
-            else
-            {
-                this.Opacity = 1;
-            }
-        }
 
         public  void FadeOut()
         {
-            if (Properties.Settings.Default.EnableWindowFade)
-            {
-                var anim = new DoubleAnimation(1, 0, (Duration)FadeInterval, FillBehavior.Stop);
-                anim.Completed += (s, _) =>
-                {
-                    this.DialogResult = false;
-                    this.Close();
-                };
-                this.BeginAnimation(UIElement.OpacityProperty, anim);
-            }
-            else
-            {
                 this.DialogResult = false;
                 this.Close();
-            }
-
         }
 
 

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:lang="clr-namespace:Jvedio.Language;assembly=Jvedio.Language"
         xmlns:style="clr-namespace:Jvedio.Style;assembly=Jvedio.Style"
-        xmlns:JvedioControls="clr-namespace:Jvedio.Controls"
+        xmlns:usercontrol="clr-namespace:Jvedio.Style.UserControls;assembly=Jvedio.Style"
         xmlns:hc="https://handyorg.github.io/handycontrol"
         xmlns:converter="clr-namespace:Jvedio.Utils.Converter;assembly=Jvedio.Utils"
         xmlns:plot="clr-namespace:Jvedio.Plot.Bar"
@@ -65,7 +65,7 @@
     </style:BaseWindow.Resources>
     <Grid Background="{DynamicResource BackgroundMain}">
 
-        <JvedioControls:WaitingPanel Visibility="Collapsed" ShowCancelButton="Visible" x:Name="WaitingPanel"  Panel.ZIndex="5" Cancel="WaitingPanel_Cancel" ></JvedioControls:WaitingPanel>
+        <usercontrol:WaitingPanel Visibility="Collapsed" ShowCancelButton="Visible" x:Name="WaitingPanel"  Panel.ZIndex="5" Cancel="WaitingPanel_Cancel" ></usercontrol:WaitingPanel>
 
         <!--消息提示框-->
         <ScrollViewer Height="auto" Background="Transparent" Panel.ZIndex="6" Width="auto" VerticalScrollBarVisibility="Hidden" VerticalAlignment="Bottom" HorizontalAlignment="Right"  Margin="20">

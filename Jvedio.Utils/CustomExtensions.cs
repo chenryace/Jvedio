@@ -11,6 +11,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading;
 
 namespace Jvedio.Utils
 {
@@ -22,6 +23,23 @@ namespace Jvedio.Utils
         public static string CleanSqlString(this string str)
         {
             return str.Replace("\r", "").Replace("\n", "").Replace("\t", "").Replace(" ", "").Replace("'", "");
+        }
+
+        public static async Task<TResult> TimeoutAfter<TResult>(this Task<TResult> task, TimeSpan timeout)
+        {
+            using (var timeoutCancellationTokenSource = new CancellationTokenSource())
+            {
+                var completedTask = await Task.WhenAny(task, Task.Delay(timeout, timeoutCancellationTokenSource.Token));
+                if (completedTask == task)
+                {
+                    timeoutCancellationTokenSource.Cancel();
+                    return await task;  // Very important in order to propagate exceptions
+                }
+                else
+                {
+                    throw new TimeoutException(Jvedio.Language.Resources.TO);
+                }
+            }
         }
 
 
