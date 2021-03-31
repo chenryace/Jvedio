@@ -426,5 +426,42 @@ namespace Jvedio.Comics
             WindowSet = new Settings();
             WindowSet.Show();
         }
+
+        public void SetSkin()
+        {
+            FileProcess.SetSkin(Jvedio.Comics.Properties.Settings.Default.Themes);
+            switch (Properties.Settings.Default.Themes)
+            {
+                case "蓝色":
+                    //设置渐变
+                    LinearGradientBrush myLinearGradientBrush = new LinearGradientBrush();
+                    myLinearGradientBrush.StartPoint = new Point(0.5, 0);
+                    myLinearGradientBrush.EndPoint = new Point(0.5, 1);
+                    myLinearGradientBrush.GradientStops.Add(new GradientStop(Color.FromRgb(62, 191, 223), 1));
+                    myLinearGradientBrush.GradientStops.Add(new GradientStop(Color.FromRgb(11, 114, 189), 0));
+                    SideBorder.Background = myLinearGradientBrush;
+                    break;
+
+                default:
+                    SideBorder.Background = (SolidColorBrush)Application.Current.Resources["BackgroundSide"];
+                    break;
+            }
+
+            if (BackgroundImage != null)
+            {
+                SideBorder.Background = Brushes.Transparent;
+                TitleBorder.Background = Brushes.Transparent;
+                BgImage.Source = BackgroundImage;
+            }
+            else
+            {
+                TitleBorder.Background = (SolidColorBrush)Application.Current.Resources["BackgroundTitle"];
+            }
+        }
+
+        private void Window_ContentRendered(object sender, EventArgs e)
+        {
+            SetSkin();
+        }
     }
 }

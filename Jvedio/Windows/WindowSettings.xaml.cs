@@ -27,13 +27,14 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using Jvedio.Library.Encrypt;
 using Jvedio.Utils;
+using Jvedio.Style;
 
 namespace Jvedio
 {
     /// <summary>
     /// Settings.xaml 的交互逻辑
     /// </summary>
-    public partial class Settings : Jvedio_BaseWindow
+    public partial class Settings : BaseWindow
     {
 
         public const string ffmpeg_url = "https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-full.7z";

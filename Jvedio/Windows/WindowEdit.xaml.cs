@@ -1,4 +1,5 @@
-﻿using Jvedio.ViewModel;
+﻿using Jvedio.Style;
+using Jvedio.ViewModel;
 using System;
 using System.IO;
 using System.Linq;
@@ -7,13 +8,12 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using static Jvedio.FileProcess;
-using static Jvedio.FileProcess;
 namespace Jvedio
 {
     /// <summary>
     /// WindowEdit.xaml 的交互逻辑
     /// </summary>
-    public partial class WindowEdit : Jvedio_BaseWindow
+    public partial class WindowEdit :  BaseWindow
     {
 
 

@@ -1,4 +1,5 @@
-﻿using Jvedio.Utils;
+﻿using Jvedio.Style;
+using Jvedio.Utils;
 using Jvedio.ViewModel;
 using System;
 using System.Collections.Generic;
@@ -15,14 +16,13 @@ using System.Windows.Data;
 using System.Windows.Input;
 using System.Xml;
 using static Jvedio.FileProcess;
-using static Jvedio.FileProcess;
 
 namespace Jvedio
 {
     /// <summary>
     /// Settings.xaml 的交互逻辑
     /// </summary>
-    public partial class WindowTools : Jvedio_BaseWindow
+    public partial class WindowTools : BaseWindow
     {
         public const string GrowlToken = "ToolsGrowl";
         public CancellationTokenSource cts;

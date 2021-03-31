@@ -195,7 +195,7 @@ namespace Jvedio
                 if (!Directory.Exists("log\\scanlog")) { Directory.CreateDirectory("log\\scanlog"); }//创建 ScanLog 文件夹
                 if (!Directory.Exists("DataBase")) { Directory.CreateDirectory("DataBase"); }            //创建 DataBase 文件夹
                 if (!Directory.Exists("BackUp")) { Directory.CreateDirectory("BackUp"); }            //创建备份文件夹
-                SetSkin();
+                SetSkin(Properties.Settings.Default.Themes);
             }
             catch (Exception ex)
             {

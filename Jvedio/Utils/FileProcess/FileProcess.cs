@@ -23,9 +23,9 @@ namespace Jvedio
     public static class FileProcess
     {
 
-        public static void SetSkin()
+        public static void SetSkin(string theme)
         {
-            if (Properties.Settings.Default.Themes == "黑色")
+            if (theme == "黑色")
             {
                 Application.Current.Resources["Color_BackgroundTitle"] = (Color)ColorConverter.ConvertFromString("#22252A");
                 Application.Current.Resources["Color_BackgroundMain"] = (Color)ColorConverter.ConvertFromString("#1B1B1F");
@@ -37,7 +37,7 @@ namespace Jvedio
                 Application.Current.Resources["Color_ForegroundSearch"] = Colors.White;
                 Application.Current.Resources["Color_BorderBursh"] = Colors.Transparent;
             }
-            else if (Properties.Settings.Default.Themes == "白色")
+            else if (theme == "白色")
             {
                 Application.Current.Resources["Color_BackgroundTitle"] = (Color)ColorConverter.ConvertFromString("#E2E3E5");
                 Application.Current.Resources["Color_BackgroundMain"] = (Color)ColorConverter.ConvertFromString("#F9F9F9");
@@ -49,7 +49,7 @@ namespace Jvedio
                 Application.Current.Resources["Color_ForegroundSearch"] = Colors.Black;
                 Application.Current.Resources["Color_BorderBursh"] = Colors.Gray;
             }
-            else if (Properties.Settings.Default.Themes == "蓝色")
+            else if (theme == "蓝色")
 
             {
                 Application.Current.Resources["Color_BackgroundTitle"] = (Color)ColorConverter.ConvertFromString("#0288D1");

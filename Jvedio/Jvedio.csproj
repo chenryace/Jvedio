@@ -285,7 +285,6 @@
       <DependentUpon>BarView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Utils\Plot\Bar\BarViewModel.cs" />
-    <Compile Include="Windows\Jvedio_BaseWindow.cs" />
     <Compile Include="Utils\Net\Translate.cs" />
     <Compile Include="Resource_IDData.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -407,10 +406,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Windows\Window_ImageViewer.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Windows\Jvedio_BaseWindowStyle.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

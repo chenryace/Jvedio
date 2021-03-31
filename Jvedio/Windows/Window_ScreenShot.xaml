@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:Jvedio"
                 xmlns:hc="https://handyorg.github.io/handycontrol"
                 xmlns:p="clr-namespace:Jvedio.Properties"
+        
         xmlns:lang="clr-namespace:Jvedio.Language;assembly=Jvedio.Language"
         mc:Ignorable="d"
         ResizeMode="NoResize"

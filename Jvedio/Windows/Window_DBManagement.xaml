@@ -1,14 +1,12 @@
-﻿<local:Jvedio_BaseWindow x:Class="Jvedio.Window_DBManagement"
+﻿<style:BaseWindow x:Class="Jvedio.Window_DBManagement"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Jvedio"
         xmlns:lang="clr-namespace:Jvedio.Language;assembly=Jvedio.Language"
-        xmlns:p="clr-namespace:Jvedio.Properties"
+        xmlns:style="clr-namespace:Jvedio.Style;assembly=Jvedio.Style"
         xmlns:JvedioControls="clr-namespace:Jvedio.Controls"
         xmlns:hc="https://handyorg.github.io/handycontrol"
-        xmlns:trace="clr-namespace:System.Diagnostics;assembly=WindowsBase"
         xmlns:converter="clr-namespace:Jvedio.Utils.Converter;assembly=Jvedio.Utils"
         xmlns:plot="clr-namespace:Jvedio.Plot.Bar"
         mc:Ignorable="d"
@@ -22,7 +20,7 @@
                          Closing="Jvedio_BaseWindow_Closing"
         >
 
-    <Window.Resources>
+    <style:BaseWindow.Resources>
 
         <converter:OppositeBooleanConverter x:Key="OppositeBooleanConverter" />
         
@@ -64,7 +62,7 @@
             <Setter Property="Foreground" Value="{DynamicResource ForegroundSearch}"/>
         </Style>
 
-    </Window.Resources>
+    </style:BaseWindow.Resources>
     <Grid Background="{DynamicResource BackgroundMain}">
 
         <JvedioControls:WaitingPanel Visibility="Collapsed" ShowCancelButton="Visible" x:Name="WaitingPanel"  Panel.ZIndex="5" Cancel="WaitingPanel_Cancel" ></JvedioControls:WaitingPanel>
@@ -379,4 +377,4 @@
         </Grid>
 
     </Grid>
-</local:Jvedio_BaseWindow>
+</style:BaseWindow>

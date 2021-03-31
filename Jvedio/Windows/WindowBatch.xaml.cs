@@ -21,13 +21,14 @@ using FontAwesome.WPF;
 using System.ComponentModel;
 using Jvedio.Utils;
 using System.Threading;
+using Jvedio.Style;
 
 namespace Jvedio
 {
     /// <summary>
     /// Settings.xaml 的交互逻辑
     /// </summary>
-    public partial class WindowBatch : Jvedio_BaseWindow
+    public partial class WindowBatch :  BaseWindow
     {
         public VieModel_Batch vieModel;
 

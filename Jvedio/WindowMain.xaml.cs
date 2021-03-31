@@ -40,6 +40,7 @@ using Jvedio.Utils;
 using WpfAnimatedGif;
 using HtmlAgilityPack;
 using System.Net;
+using Jvedio.Style;
 
 namespace Jvedio
 {
@@ -1113,6 +1114,7 @@ namespace Jvedio
                 this.Height = SystemParameters.WorkArea.Height;
                 this.Top = SystemParameters.WorkArea.Top;
                 this.Left = SystemParameters.WorkArea.Left;
+                MaxButtonPath.Data = Geometry.Parse(PathData.MaxToNormalPath);
             }
             else
             {
@@ -1123,6 +1125,7 @@ namespace Jvedio
                 this.Width = WindowSize.Width;
                 this.Top = WindowPoint.Y;
                 this.Height = WindowSize.Height;
+                MaxButtonPath.Data = Geometry.Parse(PathData.MaxPath);
             }
             this.WindowState = WindowState.Normal;
             this.OnLocationChanged(EventArgs.Empty);
@@ -3999,7 +4002,7 @@ namespace Jvedio
 
         public void SetSkin()
         {
-            FileProcess.SetSkin();
+            FileProcess.SetSkin(Properties.Settings.Default.Themes);
             switch (Properties.Settings.Default.Themes)
             {
                 case "蓝色":
@@ -4685,11 +4688,13 @@ namespace Jvedio
             {
                 vieModel.MainGridThickness = new Thickness(5);
                 this.ResizeMode = ResizeMode.NoResize;
+                MaxButtonPath.Data = Geometry.Parse(PathData.MaxToNormalPath);
             }
             else
             {
                 vieModel.MainGridThickness = new Thickness(10);
                 this.ResizeMode = ResizeMode.CanResize;
+                MaxButtonPath.Data = Geometry.Parse(PathData.MaxPath);
             }
 
 

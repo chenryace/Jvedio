@@ -5,20 +5,21 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
-using static Jvedio.GlobalVariable;
 using System.Windows.Shapes;
 using System.Windows.Interop;
 using System.Runtime.InteropServices;
 using System.Windows.Media.Animation;
 using Jvedio.Utils;
-namespace Jvedio
+using System.Windows.Media;
+
+namespace Jvedio.Style
 {
 
 
     /// <summary>
     /// 除 Main 和 Detail 外的的窗口样式
     /// </summary>
-    public  class Jvedio_BaseWindow : Window
+    public class BaseWindow : Window
     {
         public Point WindowPoint = new Point(100, 100);
         public Size WindowSize = new Size(800, 500);
@@ -26,10 +27,11 @@ namespace Jvedio
         public event EventHandler SizedChangedCompleted;
         private HwndSource _hwndSource;
 
-        public Jvedio_BaseWindow()
+        public BaseWindow()
         {
             InitStyle();//窗体的 Style
             this.Loaded += delegate { InitEvent(); };//初始化载入事件
+            this.SizeChanged += delegate { };
             AdjustWindow();
         }
 
@@ -178,7 +180,7 @@ namespace Jvedio
 
         private void InitStyle()
         {
-            this.Style = (System.Windows.Style)App.Current.Resources["Jvedio_BaseWindowStyle"];
+            this.Style = (System.Windows.Style)App.Current.Resources["BaseWindowStyle"];
         }
 
         private void InitEvent()
@@ -196,7 +198,7 @@ namespace Jvedio
             Button closeBtn = (Button)baseWindowTemplate.FindName("BorderClose", this);
             closeBtn.Click += delegate (object sender, RoutedEventArgs e)
             {
-                FadeOut();
+                this.Close();
             };
 
             Border borderTitle = (Border)baseWindowTemplate.FindName("BorderTitle", this);
@@ -233,9 +235,6 @@ namespace Jvedio
             }
             PreviewMouseMove += OnPreviewMouseMove;
             #endregion
-
-            FadeIn();
-
         }
 
         private void onSizeChanged(object sender, SizeChangedEventArgs e)
@@ -246,77 +245,38 @@ namespace Jvedio
             Grid ContentGrid = (Grid)baseWindowTemplate.FindName("ContentGrid", this);
             Border MainBorder = (Border)baseWindowTemplate.FindName("MainBorder", this);
             Border BorderTitle = (Border)baseWindowTemplate.FindName("BorderTitle", this);
+            Path MaxButtonPath = (Path)baseWindowTemplate.FindName("MaxButtonPath", this);
             if (MainGrid == null) return;
 
             if (this.Width == SystemParameters.WorkArea.Width || this.Height == SystemParameters.WorkArea.Height)
             {
                 MainGrid.Margin = new Thickness(0);
                 ContentGrid.Margin = new Thickness(0);
-                //MainBorder.CornerRadius = new CornerRadius() { TopLeft = 0, TopRight = 0, BottomRight = 0, BottomLeft = 0 };
-                //BorderTitle.CornerRadius = new CornerRadius() { TopLeft = 0, TopRight = 0, BottomRight = 0, BottomLeft = 0 };
                 this.ResizeMode = ResizeMode.NoResize;
             }
             else if (this.WindowState == WindowState.Maximized)
             {
                 MainGrid.Margin = new Thickness(0);
-                //MainBorder.CornerRadius = new CornerRadius() { TopLeft = 0, TopRight = 0, BottomRight = 0, BottomLeft = 0 };
-                //BorderTitle.CornerRadius = new CornerRadius() { TopLeft = 0, TopRight = 0, BottomRight = 0, BottomLeft = 0 };
+                ContentGrid.Margin = new Thickness(0);
                 this.ResizeMode = ResizeMode.NoResize;
+                this.WindowState = WindowState.Normal;
+                MaxWindow(this, null);
             }
             else
             {
                 MainGrid.Margin = new Thickness(10);
                 ContentGrid.Margin = new Thickness(5);
-                //MainBorder.CornerRadius = new CornerRadius() { TopLeft = 5, TopRight = 5, BottomRight = 5, BottomLeft = 5 };
-                //BorderTitle.CornerRadius = new CornerRadius() { TopLeft = 5, TopRight = 5, BottomRight = 0, BottomLeft = 0 };
                 this.ResizeMode = ResizeMode.CanResize;
-            }
-        }
-
-        public  void FadeIn()
-        {
-            if (Properties.Settings.Default.EnableWindowFade)
-            {
-                var anim = new DoubleAnimation(0,1, (Duration)FadeInterval,FillBehavior.Stop);
-                anim.Completed += (s, _) =>  this.Opacity = 1; 
-                this.BeginAnimation(UIElement.OpacityProperty, anim);
-            }
-            else
-            {
-                this.Opacity = 1;
-            }
-            
-        }
-
-        public  void FadeOut()
-        {
-            if (Properties.Settings.Default.EnableWindowFade)
-            {
-                var anim = new DoubleAnimation(0, (Duration)FadeInterval);
-                anim.Completed += (s, _) => this.Close();
-                this.BeginAnimation(UIElement.OpacityProperty, anim);
-            }
-            else
-            {
-                this.Close();
+                MaxButtonPath.Data = Geometry.Parse(PathData.MaxPath);
             }
         }
 
 
-        public  void MinWindow()
+
+
+        public void MinWindow()
         {
-            if (Properties.Settings.Default.EnableWindowFade)
-            {
-                var anim = new DoubleAnimation(0, (Duration)FadeInterval,FillBehavior.Stop);
-                anim.Completed += (s, _) => this.WindowState = WindowState.Minimized;
-                this.BeginAnimation(UIElement.OpacityProperty, anim);
-            }
-            else
-            {
-                this.WindowState = WindowState.Minimized;
-            }
-
-
+            this.WindowState = WindowState.Minimized;
         }
 
 
@@ -333,15 +293,20 @@ namespace Jvedio
                 this.Height = SystemParameters.WorkArea.Height;
                 this.Top = SystemParameters.WorkArea.Top;
                 this.Left = SystemParameters.WorkArea.Left;
-
+                ControlTemplate baseWindowTemplate = (ControlTemplate)App.Current.Resources["BaseWindowControlTemplate"];
+                Path MaxButtonPath = (Path)baseWindowTemplate.FindName("MaxButtonPath", this);
+                MaxButtonPath.Data = Geometry.Parse(PathData.MaxToNormalPath);
             }
-            else 
+            else
             {
                 WinState = JvedioWindowState.Normal;
                 this.Left = WindowPoint.X;
                 this.Width = WindowSize.Width;
                 this.Top = WindowPoint.Y;
                 this.Height = WindowSize.Height;
+                ControlTemplate baseWindowTemplate = (ControlTemplate)App.Current.Resources["BaseWindowControlTemplate"];
+                Path MaxButtonPath = (Path)baseWindowTemplate.FindName("MaxButtonPath", this);
+                MaxButtonPath.Data = Geometry.Parse(PathData.MaxPath);
             }
             HideMargin();
 
@@ -382,21 +347,17 @@ namespace Jvedio
             Border MainBorder = (Border)baseWindowTemplate.FindName("MainBorder", this);
             Border BorderTitle = (Border)baseWindowTemplate.FindName("BorderTitle", this);
 
-            if (MainGrid == null ) return;
+            if (MainGrid == null) return;
             if (WinState == JvedioWindowState.Normal)
             {
                 MainGrid.Margin = new Thickness(10);
                 ContentGrid.Margin = new Thickness(5);
-                //MainBorder.CornerRadius = new CornerRadius() { TopLeft = 5, TopRight = 5, BottomRight = 5, BottomLeft = 5 };
-                //BorderTitle.CornerRadius = new CornerRadius() { TopLeft = 5, TopRight = 5, BottomRight = 0, BottomLeft = 0 };
                 this.ResizeMode = ResizeMode.CanResize;
             }
-            else if (WinState == JvedioWindowState.Maximized || this.WindowState==WindowState.Maximized)
+            else if (WinState == JvedioWindowState.Maximized || this.WindowState == WindowState.Maximized)
             {
                 MainGrid.Margin = new Thickness(0);
                 ContentGrid.Margin = new Thickness(0);
-                //MainBorder.CornerRadius = new CornerRadius() { TopLeft = 0, TopRight = 0, BottomRight = 0, BottomLeft = 0 };
-                //BorderTitle.CornerRadius = new CornerRadius() { TopLeft = 0, TopRight = 0, BottomRight = 0, BottomLeft = 0 };
                 this.ResizeMode = ResizeMode.NoResize;
 
             }

@@ -65,6 +65,8 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BaseWindows\BaseWindow.cs" />
+    <Compile Include="PathData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -92,6 +94,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="BaseWindows\BaseWindowStyle.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="XAML\BasicStyle.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -165,6 +171,10 @@
     <ProjectReference Include="..\Jvedio.Language\Jvedio.Language.csproj">
       <Project>{d7a06c53-5742-4894-820e-3697f81a3785}</Project>
       <Name>Jvedio.Language</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Jvedio.Utils\Jvedio.Utils.csproj">
+      <Project>{0eb5999e-c297-4a50-abb0-615bb92176dc}</Project>
+      <Name>Jvedio.Utils</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

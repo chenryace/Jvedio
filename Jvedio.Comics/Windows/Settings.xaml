@@ -1,10 +1,10 @@
-﻿<local:Jvedio_BaseWindow 
+﻿<style:BaseWindow 
     x:Class="Jvedio.Comics.Settings"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Jvedio;assembly=Jvedio"
+        xmlns:style="clr-namespace:Jvedio.Style;assembly=Jvedio.Style"
         xmlns:converter="clr-namespace:Jvedio.Utils.Converter;assembly=Jvedio.Utils"
         xmlns:p="clr-namespace:Jvedio.Comics.Properties"
         xmlns:hc="https://handyorg.github.io/handycontrol"
@@ -19,7 +19,7 @@
         ContentRendered="Window_ContentRendered"
         Closing="Window_Closing"
             >
-    <local:Jvedio_BaseWindow.Resources>
+    <style:BaseWindow.Resources>
 
 
         <converter:OppositeBooleanConverter x:Key="OppositeBooleanConverter" />
@@ -107,7 +107,7 @@
 
 
 
-    </local:Jvedio_BaseWindow.Resources>
+    </style:BaseWindow.Resources>
 
     <Grid  Background="{DynamicResource BackgroundMain}"   >
 
@@ -222,4 +222,4 @@
         </Grid>
 
     </Grid>
-</local:Jvedio_BaseWindow>
+</style:BaseWindow>

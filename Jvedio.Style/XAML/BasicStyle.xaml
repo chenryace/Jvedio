@@ -61,8 +61,8 @@
     <SolidColorBrush x:Key="ForegroundGlobal"  Color="{DynamicResource Color_ForegroundGlobal}" />
     <SolidColorBrush x:Key="ForegroundSearch"  Color="{DynamicResource Color_ForegroundSearch}" />
     <SolidColorBrush x:Key= "BorderBursh"  Color="{DynamicResource Color_BorderBursh}" />
-
-
+    
+    
 
 
     <Style x:Key="ToolsBarBorderStyle" TargetType="Border">

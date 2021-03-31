@@ -13,12 +13,13 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using static Jvedio.Comics.Global;
+using Jvedio.Style;
 namespace Jvedio.Comics
 {
     /// <summary>
     /// Settings.xaml 的交互逻辑
     /// </summary>
-    public partial class Settings : Jvedio_BaseWindow
+    public partial class Settings : BaseWindow
     {
         public static string GrowlToken = "SettingsGrowl";
         public Settings()
@@ -51,8 +52,8 @@ namespace Jvedio.Comics
         {
             Properties.Settings.Default.Themes = (sender as RadioButton).Content.ToString();
             Properties.Settings.Default.Save();
-            MainWindow main =GetWindowByName("Main") as MainWindow;
-            //main.SetSkin();
+            MainWindow main =GetWindowByName("MainWindow") as MainWindow;
+            main?.SetSkin();
             //main?.SetSelected();
             //main?.ActorSetSelected();
         }

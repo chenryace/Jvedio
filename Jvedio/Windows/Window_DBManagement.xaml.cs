@@ -1,4 +1,5 @@
 ﻿using Jvedio.Plot.Bar;
+using Jvedio.Style;
 using Jvedio.Utils;
 using Jvedio.ViewModel;
 using LiveCharts;
@@ -17,13 +18,12 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using static Jvedio.FileProcess;
-using static Jvedio.FileProcess;
 namespace Jvedio
 {
     /// <summary>
     /// Window_DBManagement.xaml 的交互逻辑
     /// </summary>
-    public partial class Window_DBManagement : Jvedio_BaseWindow
+    public partial class Window_DBManagement :  BaseWindow
     {
 
         public static string GrowlToken = "DBManageGrowl";
