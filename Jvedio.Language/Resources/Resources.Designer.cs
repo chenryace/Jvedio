@@ -232,6 +232,15 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 所有漫画 的本地化字符串。
+        /// </summary>
+        public static string AllComics {
+            get {
+                return ResourceManager.GetString("AllComics", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 所有文件 的本地化字符串。
         /// </summary>
         public static string AllFile {
@@ -2527,7 +2536,7 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
-        ///   查找类似 每页影片数目 的本地化字符串。
+        ///   查找类似 每页展示数目 的本地化字符串。
         /// </summary>
         public static string MoviePerPage {
             get {

@@ -2,9 +2,8 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-              xmlns:fa="http://schemas.fontawesome.io/icons/"
-                xmlns:p="clr-namespace:Jvedio.Properties"
-
+             xmlns:fa="http://schemas.fontawesome.io/icons/"
+             xmlns:p="clr-namespace:Jvedio.Properties"
              xmlns:local="clr-namespace:Jvedio"
              xmlns:hc="https://handyorg.github.io/handycontrol"
              xmlns:lang="clr-namespace:Jvedio.Language;assembly=Jvedio.Language"
@@ -36,7 +35,7 @@
                     <StackPanel  Orientation="Horizontal" HorizontalAlignment="Right">
                         <Button x:Name="ClearButton" Cursor="Hand"   Margin="5" Content="{x:Static lang:Resources.Clear}" Style="{StaticResource ButtonDanger}" />
                         <Button Click="Button_Click"   Height="27" Width="27" Margin="5 0" Style="{StaticResource CloseButton}" >
-                            <Image   Source="{Binding Themes, Mode=OneWay, ConverterParameter=close,Converter={StaticResource StringToUriStringConverterOther}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
+                            <Image   Source="{Binding Themes, Mode=OneWay, ConverterParameter=close,Converter={StaticResource StringToUriStringConverter}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
                         </Button>
                     </StackPanel>
 

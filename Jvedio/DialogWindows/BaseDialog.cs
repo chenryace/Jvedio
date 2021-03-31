@@ -23,7 +23,7 @@ namespace Jvedio
         bool IsFlashing = false;//是否因失去焦点而闪烁
         public BaseDialog(Window owner)
         {
-            this.Style = (Style)App.Current.Resources["BaseDialogStyle"];
+            this.Style = (System.Windows.Style)App.Current.Resources["BaseDialogStyle"];
             this.Loaded += delegate { InitEvent(); };//初始化载入事件
             this.ContentRendered += (s, e) => 
             {

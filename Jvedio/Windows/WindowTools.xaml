@@ -6,6 +6,8 @@
         xmlns:fa="http://schemas.fontawesome.io/icons/"
         xmlns:lang="clr-namespace:Jvedio.Language;assembly=Jvedio.Language"
         xmlns:local="clr-namespace:Jvedio"
+    xmlns:converter="clr-namespace:Jvedio.Utils.Converter;assembly=Jvedio.Utils"
+                    
         xmlns:p="clr-namespace:Jvedio.Properties"
         xmlns:hc="https://handyorg.github.io/handycontrol"
         xmlns:trace="clr-namespace:System.Diagnostics;assembly=WindowsBase"
@@ -22,8 +24,8 @@
         >
 
     <Window.Resources>
-        <local:StringToUriStringConverterOther x:Key="StringToUriStringConverterOther" />
-        <local:IntToVisibility x:Key="IntToVisibility"/>
+        <converter:StringToUriStringConverter x:Key="StringToUriStringConverter" />
+        <converter:IntToVisibility x:Key="IntToVisibility"/>
 
 
 
@@ -70,13 +72,13 @@
                                 <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Left"  >
 
                                     <Button  Style="{StaticResource RoundTitleButton}" Click="AddPath">
-                                        <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=openfolder,Converter={StaticResource StringToUriStringConverterOther}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"  />
+                                        <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=openfolder,Converter={StaticResource StringToUriStringConverter}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"  />
                                     </Button>
                                     <Button   Style="{StaticResource RoundTitleButton}" Click="DelPath">
-                                        <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=min,Converter={StaticResource StringToUriStringConverterOther}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
+                                        <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=min,Converter={StaticResource StringToUriStringConverter}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
                                     </Button>
                                     <Button   Style="{StaticResource RoundCloseButton}" Click="ClearPath">
-                                        <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=clear,Converter={StaticResource StringToUriStringConverterOther}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
+                                        <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=clear,Converter={StaticResource StringToUriStringConverter}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
                                     </Button>
 
                                 </StackPanel>
@@ -103,14 +105,14 @@
                             <Grid  VerticalAlignment="Top" >
 
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
-                                
-                                
-                                <hc:TextBox ContextMenu="{StaticResource TextBoxContextMenu}" CaretBrush="{DynamicResource ForegroundSearch}" Foreground="{DynamicResource ForegroundSearch}" ShowClearButton="True" Grid.Column="0"  x:Name="AccessPathTextBox"  Text="" Margin="20 20 0 20"  HorizontalAlignment="Stretch" BorderThickness="0" Background="{DynamicResource BackgroundSide}" Padding="10"/>
 
-                                <Button  Grid.Column="1"  Content="{x:Static lang:Resources.ChooseFile}"  Width="auto"  Style="{StaticResource ButtonStyleFill}" Margin="20" Click="ShowAccessPath"></Button>
+                                <Button  Grid.Column="0"  Content="{x:Static lang:Resources.ChooseFile}"  Width="auto"  Style="{StaticResource ButtonStyleFill}" Margin="20" Click="ShowAccessPath"></Button>
+
+                                <hc:TextBox ContextMenu="{StaticResource TextBoxContextMenu}" CaretBrush="{DynamicResource ForegroundSearch}" Foreground="{DynamicResource ForegroundSearch}" ShowClearButton="True" Grid.Column="1"  x:Name="AccessPathTextBox"  Text="" Margin="20 20 0 20"  HorizontalAlignment="Stretch" BorderThickness="0" Background="{DynamicResource BackgroundSide}" Padding="10"/>
+
 
                                 
                                
@@ -161,13 +163,13 @@
                                             <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Left" >
 
                                                 <Button   Style="{StaticResource RoundTitleButton}" Click="AddNFOPath">
-                                                    <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=openfolder,Converter={StaticResource StringToUriStringConverterOther}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"  />
+                                                    <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=openfolder,Converter={StaticResource StringToUriStringConverter}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"  />
                                                 </Button>
                                                 <Button   Style="{StaticResource RoundTitleButton}" Click="DelNFOPath">
-                                                    <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=min,Converter={StaticResource StringToUriStringConverterOther}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
+                                                    <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=min,Converter={StaticResource StringToUriStringConverter}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
                                                 </Button>
                                                 <Button   Style="{StaticResource RoundCloseButton}" Click="ClearNFOPath">
-                                                    <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=clear,Converter={StaticResource StringToUriStringConverterOther}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
+                                                    <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=clear,Converter={StaticResource StringToUriStringConverter}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
                                                 </Button>
 
                                             </StackPanel>
@@ -181,16 +183,16 @@
                                         <Grid   Visibility="Visible"   >
 
                                             <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="*"/>
                                                 <ColumnDefinition Width="auto"/>
+                                                <ColumnDefinition Width="*"/>
                                             </Grid.ColumnDefinitions>
 
 
+                                            <Button Grid.Column="0" HorizontalAlignment="Left" Margin="20"  Content="{x:Static lang:Resources.ChooseFile}" Height="auto" Width="100"  Style="{StaticResource ButtonStyleFill}" Click="ShowNFOPath"/>
 
 
-                                            <hc:TextBox ContextMenu="{StaticResource TextBoxContextMenu}"  CaretBrush="{DynamicResource ForegroundSearch}" Grid.Column="0" ShowClearButton="True"  Padding="10" x:Name="NFOPathTextBox"  Text="" Margin="20 20 0 20"    TextAlignment="Left" Foreground="{DynamicResource ForegroundSearch}" BorderThickness="0" Background="{DynamicResource BackgroundSide}" />
-                                            <Button Grid.Column="1" HorizontalAlignment="Left" Margin="20"  Content="{x:Static lang:Resources.ChooseFile}" Height="auto" Width="100"  Style="{StaticResource ButtonStyleFill}" Click="ShowNFOPath"/>
-
+                                            <hc:TextBox ContextMenu="{StaticResource TextBoxContextMenu}"  CaretBrush="{DynamicResource ForegroundSearch}" Grid.Column="1" ShowClearButton="True"  Padding="10" x:Name="NFOPathTextBox"  Text="" Margin="20 20 0 20"    TextAlignment="Left" Foreground="{DynamicResource ForegroundSearch}" BorderThickness="0" Background="{DynamicResource BackgroundSide}" />
+ 
 
                                         </Grid>
 
@@ -239,13 +241,13 @@
                                 <StackPanel Orientation="Horizontal" Margin="25 5" HorizontalAlignment="Left" >
 
                                     <Button   Style="{StaticResource RoundTitleButton}" Click="AddEuPath">
-                                        <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=openfolder,Converter={StaticResource StringToUriStringConverterOther}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
+                                        <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=openfolder,Converter={StaticResource StringToUriStringConverter}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
                                     </Button>
                                     <Button Style="{StaticResource RoundTitleButton}" Click="DelEuPath">
-                                        <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=min,Converter={StaticResource StringToUriStringConverterOther}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
+                                        <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=min,Converter={StaticResource StringToUriStringConverter}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
                                     </Button>
                                     <Button   Style="{StaticResource RoundCloseButton}" Click="ClearEuPath">
-                                        <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=clear,Converter={StaticResource StringToUriStringConverterOther}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"  />
+                                        <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=clear,Converter={StaticResource StringToUriStringConverter}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"  />
                                     </Button>
 
 
@@ -269,14 +271,14 @@
                         <StackPanel Orientation="Vertical">
                             <Grid>
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
 
+                                <Button  Grid.Column="0"  Content="{x:Static lang:Resources.ChooseDir}"  Width="auto"  Style="{StaticResource ButtonStyleFill}" Margin="20" Click="ShowUNCPath"/>
 
-                                <hc:TextBox ContextMenu="{StaticResource TextBoxContextMenu}"  CaretBrush="{DynamicResource ForegroundSearch}"  Grid.Column="0"  x:Name="UNCPathTextBox" ShowClearButton="True"   Text="" Margin="20 20 0 20"  BorderThickness="0" Background="{DynamicResource BackgroundSide}" Padding="10" ToolTip="\\用户名\\文件夹" />
+                                <hc:TextBox ContextMenu="{StaticResource TextBoxContextMenu}"  CaretBrush="{DynamicResource ForegroundSearch}"  Grid.Column="1"  x:Name="UNCPathTextBox" ShowClearButton="True"   Text="" Margin="20 20 0 20"  BorderThickness="0" Background="{DynamicResource BackgroundSide}" Padding="10" ToolTip="\\用户名\\文件夹" />
 
-                                <Button  Grid.Column="1"  Content="{x:Static lang:Resources.ChooseDir}"  Width="auto"  Style="{StaticResource ButtonStyleFill}" Margin="20" Click="ShowUNCPath"/>
 
 
                             </Grid>

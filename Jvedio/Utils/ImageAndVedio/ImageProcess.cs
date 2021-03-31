@@ -13,7 +13,7 @@ using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using static Jvedio.GlobalVariable;
-
+using Jvedio.Utils;
 namespace Jvedio
 {
     public static class ImageProcess

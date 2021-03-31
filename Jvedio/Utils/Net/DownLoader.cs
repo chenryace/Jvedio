@@ -9,7 +9,7 @@ using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using static Jvedio.GlobalVariable;
-using static Jvedio.Net;
+using Jvedio.Utils;
 
 namespace Jvedio
 {

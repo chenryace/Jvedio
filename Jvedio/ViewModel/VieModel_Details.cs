@@ -12,7 +12,7 @@ using System.IO;
 using System.Text.RegularExpressions;
 using DynamicData;
 using System.Windows.Media.Imaging;
-
+using Jvedio.Utils;
 namespace Jvedio.ViewModel
 {
     public class VieModel_Details : ViewModelBase

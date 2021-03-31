@@ -9,6 +9,7 @@
         xmlns:JvedioControls="clr-namespace:Jvedio.Controls"
         xmlns:hc="https://handyorg.github.io/handycontrol"
         xmlns:trace="clr-namespace:System.Diagnostics;assembly=WindowsBase"
+        xmlns:converter="clr-namespace:Jvedio.Utils.Converter;assembly=Jvedio.Utils"
         xmlns:plot="clr-namespace:Jvedio.Plot.Bar"
         mc:Ignorable="d"
         Title="{x:Static lang:Resources.MovieManagement}"       
@@ -23,7 +24,7 @@
 
     <Window.Resources>
 
-        <local:OppositeBooleanConverter x:Key="OppositeBooleanConverter" />
+        <converter:OppositeBooleanConverter x:Key="OppositeBooleanConverter" />
         
         <Style x:Key="DBBorder" TargetType="{x:Type Border}">
             <Setter Property="Cursor" Value="Hand"/>

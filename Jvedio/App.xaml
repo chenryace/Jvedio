@@ -18,26 +18,28 @@
                 <!--Fuck! I won't use wpf any more, i just want to draw everything by myself, not use xmal or anything else!!!-->
                 
                 <!--Main-->
-                <ResourceDictionary Source="XAML/Main/SideRadioButtonStyle.xaml"/>
-                <ResourceDictionary Source="XAML/Main/SideComboBoxStyle.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/Jvedio.Style;Component/XAML/ButtonStyle.xaml"/>
 
-                <ResourceDictionary Source="XAML/ContextMenuStyle.xaml"/>
-                <ResourceDictionary Source="XAML/RadioButtonStyle.xaml"/>
-                <ResourceDictionary Source="XAML/RadioButtonFlatStyle.xaml"/>
-                <ResourceDictionary Source="XAML/TabControlStyle.xaml"/>
-                <ResourceDictionary Source="XAML/ListBoxStyle.xaml"/>
-                <ResourceDictionary Source="XAML/ProgressBarStyle.xaml"/>
-                <ResourceDictionary Source="XAML/ScrollViewStyle.xaml"/>
-                <ResourceDictionary Source="XAML/ButtonStyle.xaml"/>
-                <ResourceDictionary Source="XAML/DataGridStyle.xaml"/>
-                <ResourceDictionary Source="XAML/ToggleButtonStyle.xaml"/>
-                <ResourceDictionary Source="XAML/ComboBoxStyle.xaml"/>
-                <ResourceDictionary Source="XAML/CheckBoxStyle.xaml"/>
-                <ResourceDictionary Source="XAML/TextBoxStyle.xaml"/>
-                <ResourceDictionary Source="XAML/BasicStyle.xaml"/>
-                <ResourceDictionary Source="XAML/Color.xaml"/>
-                <ResourceDictionary Source="Windows/Jvedio_BaseWindowStyle.xaml"/>
-                <ResourceDictionary Source="DialogWindows/BaseDialogStyle.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/Jvedio.Style;Component/XAML/SideRadioButtonStyle.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/Jvedio.Style;Component/XAML/SideComboBoxStyle.xaml"/>
+
+                <ResourceDictionary Source="pack://application:,,,/Jvedio.Style;Component/XAML/ContextMenuStyle.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/Jvedio.Style;Component/XAML/RadioButtonStyle.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/Jvedio.Style;Component/XAML/RadioButtonFlatStyle.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/Jvedio.Style;Component/XAML/TabControlStyle.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/Jvedio.Style;Component/XAML/ListBoxStyle.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/Jvedio.Style;Component/XAML/ProgressBarStyle.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/Jvedio.Style;Component/XAML/ScrollViewStyle.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/Jvedio.Style;Component/XAML/ButtonStyle.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/Jvedio.Style;Component/XAML/DataGridStyle.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/Jvedio.Style;Component/XAML/ToggleButtonStyle.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/Jvedio.Style;Component/XAML/ComboBoxStyle.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/Jvedio.Style;Component/XAML/CheckBoxStyle.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/Jvedio.Style;Component/XAML/TextBoxStyle.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/Jvedio.Style;Component/XAML/BasicStyle.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/Jvedio.Style;Component/XAML/Color.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/Jvedio;Component/Windows/Jvedio_BaseWindowStyle.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/Jvedio;Component/DialogWindows/BaseDialogStyle.xaml"/>
             </ResourceDictionary.MergedDictionaries>
 
 

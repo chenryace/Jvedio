@@ -22,7 +22,7 @@
 
         </Border>
         <Button Panel.ZIndex="5" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="10"  Click="CloseWindow"  Style="{StaticResource RoundCloseButton}" >
-            <Image   Source="{Binding Themes, Mode=OneWay, ConverterParameter=close,Converter={StaticResource StringToUriStringConverterOther}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
+            <Image   Source="{Binding Themes, Mode=OneWay, ConverterParameter=close,Converter={StaticResource StringToUriStringConverter}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
         </Button>
 
         <hc:ImageViewer BorderThickness="0" x:Name="ImageViewer" Margin="10" />

@@ -8,7 +8,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using static Jvedio.GlobalVariable;
-
+using Jvedio.Utils;
 namespace Jvedio
 {
 
@@ -330,7 +330,7 @@ namespace Jvedio
                             Magnet magnet = new Magnet(ID);
                             //名称和 tag
                             HtmlNodeCollection linkNodes = tdNodes[0].SelectNodes("a");
-                            magnet.title = linkNodes[0].InnerText.CleanString();
+                            magnet.title = linkNodes[0].InnerText.CleanSqlString();
                             magnet.link = linkNodes[0].Attributes["href"]?.Value;
 
                             for (int i = 1; i < linkNodes.Count; i++)
@@ -339,7 +339,7 @@ namespace Jvedio
                             }
 
                             //大小
-                            string size = tdNodes[1].SelectSingleNode("a").InnerText.CleanString();
+                            string size = tdNodes[1].SelectSingleNode("a").InnerText.CleanSqlString();
                             double filesize = 0;
                             if (size.EndsWith("GB"))
                             {
@@ -354,7 +354,7 @@ namespace Jvedio
                             }
                             magnet.size = filesize;
                             //发行日期
-                            magnet.releasedate = tdNodes[2].SelectSingleNode("a").InnerText.CleanString();
+                            magnet.releasedate = tdNodes[2].SelectSingleNode("a").InnerText.CleanSqlString();
                             if (magnet.link.IndexOf("&") > 0) magnet.link = magnet.link.Split('&')[0];
                             result.Add(magnet);
                         }

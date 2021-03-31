@@ -1,12 +1,10 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
                     xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero"
-                    xmlns:p="clr-namespace:Jvedio.Properties"
-                    xmlns:local="clr-namespace:Jvedio"
                     >
 
     <!--兼容win7  必须使用 PresentationFramework.Aero 而不是PresentationFramework.Aero2-->
-    <local:StringToUriStringConverterOther x:Key="StringToUriStringConverterOther" />
+
 
     <!--combobox-->
     <Style x:Key="ComboBoxToggleButton" TargetType="{x:Type ToggleButton}">
@@ -20,7 +18,7 @@
                     <Border CornerRadius="5" x:Name="templateRoot" SnapsToDevicePixels="true" Background="{TemplateBinding Background}" BorderThickness="0" BorderBrush="Transparent">
                         <Border x:Name="splitBorder" Width="30" SnapsToDevicePixels="true" Margin="0" HorizontalAlignment="Right" BorderThickness="0" BorderBrush="Transparent">
                             <!--<Path x:Name="arrow" VerticalAlignment="Center" Margin="0" HorizontalAlignment="Center" Fill="{DynamicResource ForegroundGlobal}" Data="F1 M 0,0 L 2.667,2.66665 L 5.3334,0 L 5.3334,-1.78168 L 2.6667,0.88501 L0,-1.78168 L0,0 Z" />-->
-                            <Image x:Name="ExpandImage" Source="{Binding Themes, Mode=OneWay, ConverterParameter=arrow_down,Converter={StaticResource StringToUriStringConverterOther}, Source={x:Static p:Settings.Default}}" Height="7"  />
+                            <Image x:Name="ExpandImage" Source="pack://Application:,,,/Jvedio;;;Component/Resources/Skin/Black/arrow_down.png" Height="7"  />
                         </Border>
                     </Border>
                     <ControlTemplate.Triggers>

@@ -13,6 +13,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using static Jvedio.FileProcess;
 using static Jvedio.GlobalVariable;
+using Jvedio.Utils;
 
 namespace Jvedio
 {
@@ -325,7 +326,7 @@ namespace Jvedio
 
             if (!Enum.IsDefined(typeof(MyLanguage), Properties.Settings.Default.Language))
             {
-                Properties.Settings.Default.Language = GlobalVariable.MyLanguage.中文.ToString();
+                Properties.Settings.Default.Language =  MyLanguage.中文.ToString();
                 Properties.Settings.Default.Save();
             }
 
@@ -428,10 +429,8 @@ namespace Jvedio
         {
             System.Windows.Forms.OpenFileDialog OpenFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             OpenFileDialog1.Title = Jvedio.Language.Resources.ChooseDataBase;
-            OpenFileDialog1.InitialDirectory = AppDomain.CurrentDomain.BaseDirectory;
             OpenFileDialog1.Filter = $"Sqlite {Jvedio.Language.Resources.File}|*.sqlite";
             OpenFileDialog1.Multiselect = true;
-            OpenFileDialog1.RestoreDirectory = true;
             if (OpenFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 string[] names = OpenFileDialog1.FileNames;

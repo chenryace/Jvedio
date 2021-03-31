@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Jvedio"
+                 xmlns:converter="clr-namespace:Jvedio.Utils.Converter;assembly=Jvedio.Utils"
         xmlns:fa="http://schemas.fontawesome.io/icons/"
         xmlns:p="clr-namespace:Jvedio.Properties"
         xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero"
@@ -30,22 +31,22 @@
 
 
         <BooleanToVisibilityConverter x:Key="BoolToVis" />
-        <local:StringToUriStringConverterOther x:Key="StringToUriStringConverterOther" />
-        <local:SkinTypeEnumConverter x:Key="SkinTypeEnumConverter"/>
-        <local:LanguageTypeEnumConverter x:Key="LanguageTypeEnumConverter"/>
+        <converter:StringToUriStringConverter x:Key="StringToUriStringConverter" />
+        <converter:SkinTypeEnumConverter x:Key="SkinTypeEnumConverter"/>
+        <converter:LanguageTypeEnumConverter x:Key="LanguageTypeEnumConverter"/>
 
-        <local:MultiIntToMarginConverter x:Key="MultiIntToMarginConverter" />
-
-
-        <local:StringToCheckedConverter x:Key="StringToCheckedConverter"/>
+        <converter:MultiIntToMarginConverter x:Key="MultiIntToMarginConverter" />
 
 
-        <local:ColorToBrushConverter x:Key="ColorToBrushConverter" />
-        <local:FontFamilyToSelectedIndexConverter x:Key="FontFamilyToSelectedIndexConverter" />
-        <local:BoolToFontBoldConverter x:Key="BoolToFontBoldConverter" />
-        <local:BoolToFontItalicConverter x:Key="BoolToFontItalicConverter" />
-        <local:BoolToUnderLineConverter x:Key="BoolToUnderLineConverter" />
-        <local:FontFamilyConverter x:Key="FontFamilyConverter" />
+        <converter:StringToCheckedConverter x:Key="StringToCheckedConverter"/>
+
+
+        <converter:ColorToBrushConverter x:Key="ColorToBrushConverter" />
+        <converter:FontFamilyToSelectedIndexConverter x:Key="FontFamilyToSelectedIndexConverter" />
+        <converter:BoolToFontBoldConverter x:Key="BoolToFontBoldConverter" />
+        <converter:BoolToFontItalicConverter x:Key="BoolToFontItalicConverter" />
+        <converter:BoolToUnderLineConverter x:Key="BoolToUnderLineConverter" />
+        <converter:FontFamilyConverter x:Key="FontFamilyConverter" />
 
 
 

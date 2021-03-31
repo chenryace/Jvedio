@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Jvedio"
+        xmlns:converter="clr-namespace:Jvedio.Utils.Converter;assembly=Jvedio.Utils"
         xmlns:hc="https://handyorg.github.io/handycontrol"
         xmlns:p="clr-namespace:Jvedio.Properties"
         xmlns:lang="clr-namespace:Jvedio.Language;assembly=Jvedio.Language"
@@ -18,8 +19,8 @@
 
     <Window.Resources>
 
-        <local:IntToCheckedConverter x:Key="IntToCheckedConverter" />
-        <local:BitToGBConverter x:Key="BitToGBConverter" />
+        <converter:IntToCheckedConverter x:Key="IntToCheckedConverter" />
+        <converter:BitToGBConverter x:Key="BitToGBConverter" />
 
 
         <Style x:Key="BaseHCTextBox" TargetType="TextBox" BasedOn="{StaticResource TextBoxBaseBaseStyle}">
@@ -1029,7 +1030,7 @@
                         </Style>
                     </Style.BasedOn>
                     <Style.Triggers>
-                        <Trigger Property="hc:TitleElement.TitleAlignment" Value="Left">
+                        <Trigger Property="hc:TitleElement.TitlePlacement" Value="Left">
                             <Setter Property="Template">
                                 <Setter.Value>
                                     <ControlTemplate TargetType="{x:Type DatePicker}">
@@ -1233,7 +1234,7 @@
                 </Style>
             </Style.BasedOn>
             <Style.Triggers>
-                <Trigger Property="hc:TitleElement.TitleAlignment" Value="Left">
+                <Trigger Property="hc:TitleElement.TitlePlacement" Value="Left">
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="{x:Type hc:DatePicker}">

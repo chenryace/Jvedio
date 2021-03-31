@@ -26,6 +26,7 @@ using System.Runtime.InteropServices;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using Jvedio.Library.Encrypt;
+using Jvedio.Utils;
 
 namespace Jvedio
 {
@@ -216,17 +217,13 @@ namespace Jvedio
 
         public void AddPath(object sender, RoutedEventArgs e)
         {
-            System.Windows.Forms.FolderBrowserDialog folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
-            folderBrowserDialog.Description = Jvedio.Language.Resources.ChooseDir;
-            folderBrowserDialog.ShowNewFolderButton = true;
-
-
-            if (folderBrowserDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK & !string.IsNullOrWhiteSpace(folderBrowserDialog.SelectedPath))
+            var path = FileHelper.SelectPath(this);
+            if (Directory.Exists(path))
             {
                 if (vieModel_Settings.ScanPath == null) { vieModel_Settings.ScanPath = new ObservableCollection<string>(); }
-                if (!vieModel_Settings.ScanPath.Contains(folderBrowserDialog.SelectedPath) && !vieModel_Settings.ScanPath.IsIntersectWith(folderBrowserDialog.SelectedPath))
+                if (!vieModel_Settings.ScanPath.Contains(path) && !vieModel_Settings.ScanPath.IsIntersectWith(path))
                 {
-                    vieModel_Settings.ScanPath.Add(folderBrowserDialog.SelectedPath);
+                    vieModel_Settings.ScanPath.Add(path);
                     //保存
                     FileProcess.SaveScanPathToConfig(vieModel_Settings.DataBase, vieModel_Settings.ScanPath?.ToList());
                 }
@@ -237,6 +234,8 @@ namespace Jvedio
 
 
             }
+
+      
 
 
 
@@ -374,7 +373,7 @@ namespace Jvedio
 
 
 
-        private void Button_Click_1(object sender, RoutedEventArgs e)
+        private void Restore(object sender, RoutedEventArgs e)
         {
             if (new Msgbox(this, Jvedio.Language.Resources.Message_IsToReset).ShowDialog() == true)
             {
@@ -524,10 +523,8 @@ namespace Jvedio
         {
             System.Windows.Forms.OpenFileDialog OpenFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             OpenFileDialog1.Title = Jvedio.Language.Resources.Choose;
-            OpenFileDialog1.InitialDirectory = AppDomain.CurrentDomain.BaseDirectory;
             OpenFileDialog1.Filter = "exe|*.exe";
             OpenFileDialog1.FilterIndex = 1;
-            OpenFileDialog1.RestoreDirectory = true;
             if (OpenFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 string exePath = OpenFileDialog1.FileName;
@@ -539,28 +536,22 @@ namespace Jvedio
 
         private void SetBasePicPath(object sender, RoutedEventArgs e)
         {
-            System.Windows.Forms.FolderBrowserDialog dialog = new System.Windows.Forms.FolderBrowserDialog();
-            dialog.Description = Jvedio.Language.Resources.ChooseDir;
-            if (Directory.Exists(AppDomain.CurrentDomain.BaseDirectory + "Pic\\")) dialog.SelectedPath = AppDomain.CurrentDomain.BaseDirectory + "Pic\\";
-            dialog.ShowNewFolderButton = true;
-            if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            var path = FileHelper.SelectPath(this);
+            if (Directory.Exists(AppDomain.CurrentDomain.BaseDirectory + "Pic\\")) path = AppDomain.CurrentDomain.BaseDirectory + "Pic\\";
+            //dialog.ShowNewFolderButton = true;
+            // TODO
+            if (Directory.Exists(path))
             {
-                if (string.IsNullOrEmpty(dialog.SelectedPath))
-                {
-                    System.Windows.MessageBox.Show(this, Jvedio.Language.Resources.Message_CanNotBeNull, Jvedio.Language.Resources.Hint);
-                    return;
-                }
-                else
-                {
-                    string path = dialog.SelectedPath;
                     if (path.Substring(path.Length - 1, 1) != "\\") { path = path + "\\"; }
                     Properties.Settings.Default.BasePicPath = path;
-
-                }
+            }
+            else
+            {
+                HandyControl.Controls.Growl.Error(Jvedio.Language.Resources.Message_CanNotBeNull, GrowlToken);
             }
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void SaveSettings(object sender, RoutedEventArgs e)
         {
             if (Properties.Settings.Default.Opacity_Main >= 0.5)
                 App.Current.Windows[0].Opacity = Properties.Settings.Default.Opacity_Main;
@@ -580,10 +571,8 @@ namespace Jvedio
             System.Windows.Forms.OpenFileDialog OpenFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             OpenFileDialog1.Title = Jvedio.Language.Resources.ChooseFFmpeg;
             OpenFileDialog1.FileName = "ffmpeg.exe";
-            OpenFileDialog1.InitialDirectory = AppDomain.CurrentDomain.BaseDirectory;
             OpenFileDialog1.Filter = "ffmpeg.exe|*.exe";
             OpenFileDialog1.FilterIndex = 1;
-            OpenFileDialog1.RestoreDirectory = true;
             if (OpenFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 string exePath = OpenFileDialog1.FileName;
@@ -791,22 +780,16 @@ namespace Jvedio
         private void Button_Click_3(object sender, RoutedEventArgs e)
         {
             //选择NFO存放位置
-            System.Windows.Forms.FolderBrowserDialog dialog = new System.Windows.Forms.FolderBrowserDialog();
-            dialog.Description = Jvedio.Language.Resources.ChooseDir;
-            dialog.ShowNewFolderButton = true;
-            if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            var path = FileHelper.SelectPath(this);
+            if (Directory.Exists(path))
             {
-                if (string.IsNullOrEmpty(dialog.SelectedPath))
-                {
-                    System.Windows.MessageBox.Show(this, Jvedio.Language.Resources.Message_CanNotBeNull, Jvedio.Language.Resources.Hint);
-                    return;
-                }
-                else
-                {
-                    string path = dialog.SelectedPath;
                     if (path.Substring(path.Length - 1, 1) != "\\") { path = path + "\\"; }
                     Properties.Settings.Default.NFOSavePath = path;
-                }
+
+            }
+            else
+            {
+                HandyControl.Controls.Growl.Error(Jvedio.Language.Resources.Message_CanNotBeNull, GrowlToken);
             }
 
         }
@@ -1014,13 +997,13 @@ namespace Jvedio
                 bool success = RegisterHotKey(_windowHandle, HOTKEY_ID, modifier, vk);
                 if (!success)
                 {
-                    MessageBox.Show(Jvedio.Language.Resources.BossKeyError, Jvedio.Language.Resources.Hint);
+                    HandyControl.Controls.Growl.Error(Jvedio.Language.Resources.BossKeyError, GrowlToken);
                     Properties.Settings.Default.HotKey_Enable = false;
                 }
             }
         }
 
-        private void CheckBox_Unchecked(object sender, RoutedEventArgs e)
+        private void Unregister_HotKey(object sender, RoutedEventArgs e)
         {
             UnregisterHotKey(_windowHandle, HOTKEY_ID);//取消之前的热键
         }
@@ -1150,10 +1133,8 @@ namespace Jvedio
             System.Windows.Forms.OpenFileDialog OpenFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             OpenFileDialog1.Title = Jvedio.Language.Resources.Choose;
             OpenFileDialog1.FileName = "background.jpg";
-            OpenFileDialog1.InitialDirectory = AppDomain.CurrentDomain.BaseDirectory;
-            OpenFileDialog1.Filter = "jpg|*.jpg";
+            OpenFileDialog1.Filter = "(jpg;jpeg;png)|*.jpg;*.jpeg;*.png";
             OpenFileDialog1.FilterIndex = 1;
-            OpenFileDialog1.RestoreDirectory = true;
             if (OpenFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 string path = OpenFileDialog1.FileName;
@@ -1163,12 +1144,9 @@ namespace Jvedio
                     GlobalVariable.BackgroundImage = null;
                     GC.Collect();
                     GlobalVariable.BackgroundImage = ImageProcess.BitmapImageFromFile(path);
-
                     Properties.Settings.Default.BackgroundImage = path;
-                    FileProcess.SetSkin();
-
-                    WindowDetails windowDetails = ((WindowDetails)GetWindowByName("WindowDetails"));
-                    if (windowDetails != null) windowDetails.SetSkin();
+                    (GetWindowByName("Main") as Main)?.SetSkin();
+                    (GetWindowByName("WindowDetails") as WindowDetails)?.SetSkin();
                 }
             }
         }

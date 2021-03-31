@@ -23,7 +23,7 @@ using System.Windows.Controls.Primitives;
 using System.Text.RegularExpressions;
 using System.Windows.Media.Animation;
 using HandyControl.Data;
-
+using Jvedio.Utils;
 namespace Jvedio
 {
     /// <summary>
@@ -85,13 +85,17 @@ namespace Jvedio
             switch (Properties.Settings.Default.Themes)
             {
                 case "蓝色":
-                    //设置渐变
-                    LinearGradientBrush myLinearGradientBrush = new LinearGradientBrush();
-                    myLinearGradientBrush.StartPoint = new Point(0.5, 0);
-                    myLinearGradientBrush.EndPoint = new Point(0.5, 1);
-                    myLinearGradientBrush.GradientStops.Add(new GradientStop(Color.FromRgb(62, 191, 223), 1));
-                    myLinearGradientBrush.GradientStops.Add(new GradientStop(Color.FromRgb(11, 114, 189), 0));
-                    BackBorder.Background = myLinearGradientBrush;
+                    if (BackGroundImage == null)
+                    {
+                        //设置渐变
+                        LinearGradientBrush myLinearGradientBrush = new LinearGradientBrush();
+                        myLinearGradientBrush.StartPoint = new Point(0.5, 0);
+                        myLinearGradientBrush.EndPoint = new Point(0.5, 1);
+                        myLinearGradientBrush.GradientStops.Add(new GradientStop(Color.FromRgb(62, 191, 223), 1));
+                        myLinearGradientBrush.GradientStops.Add(new GradientStop(Color.FromRgb(11, 114, 189), 0));
+                        BackBorder.Background = myLinearGradientBrush;
+                    }
+
                     break;
             }
 

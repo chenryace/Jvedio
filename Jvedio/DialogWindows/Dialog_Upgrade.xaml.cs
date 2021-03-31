@@ -72,7 +72,7 @@ namespace Jvedio
                     }
 
                 };
-                button.Style = (Style)App.Current.Resources["ButtonDanger"];
+                button.Style = (System.Windows.Style)App.Current.Resources["ButtonDanger"];
                 UpgradeProgressBar.Value = 0;
                 UpgradeLoadingCircle.Visibility = Visibility.Visible;
                 upgrade.Start();
@@ -81,7 +81,7 @@ namespace Jvedio
             else
             {
                 button.Content = Jvedio.Language.Resources.BeginUpgrade;
-                button.Style = (Style)App.Current.Resources["ButtonStyleFill"];
+                button.Style = (System.Windows.Style)App.Current.Resources["ButtonStyleFill"];
                 upgrade?.Stop();
                 UpgradeProgressStackPanel.Visibility = Visibility.Collapsed;
                 UpgradeLoadingCircle.Visibility = Visibility.Collapsed;

@@ -1,13 +1,37 @@
-﻿using System;
+﻿using Jvedio.Utils;
+using Microsoft.WindowsAPICodePack.Dialogs;
+using System;
 
 using System.Diagnostics;
 using System.IO;
-
+using System.Windows;
 
 namespace Jvedio
 {
     public static class FileHelper
     {
+        public static string SelectPath(Window window)
+        {
+            var dialog = new CommonOpenFileDialog();
+            string result = "";
+            dialog.Title = Jvedio.Language.Resources.ChooseDir;
+            dialog.IsFolderPicker = true;
+            dialog.InitialDirectory = AppDomain.CurrentDomain.BaseDirectory;
+            dialog.ShowHiddenItems = true;
+            if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
+            {
+                result= dialog.FileName;
+            }
+            //这个窗口会将之前的窗口置底，所以要置顶回来
+            window.Activate();
+            window.Topmost = true;
+            window.Topmost = false;
+            window.Focus();
+            return result;
+        }
+
+
+
 
         public static bool TryCopyFile(string src,string target,bool overwrite = false)
         {

@@ -9,6 +9,7 @@ using static Jvedio.Net;
 using static Jvedio.GlobalVariable;
 using System.IO;
 using System.Net;
+using Jvedio.Utils;
 
 namespace Jvedio
 {

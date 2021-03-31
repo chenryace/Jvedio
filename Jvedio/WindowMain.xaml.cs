@@ -49,10 +49,7 @@ namespace Jvedio
     public partial class Main : Window
     {
 
-        public const string NoticeUrl = "https://hitchao.github.io/JvedioWebPage/notice";
-        public const string FeedBackUrl = "https://github.com/hitchao/Jvedio/issues";
-        public const string WikiUrl = "https://github.com/hitchao/Jvedio/wiki";
-        public const string WebPageUrl = "https://hitchao.github.io/JvedioWebPage/";
+
 
         public static string GrowlToken = "Main";
 
@@ -409,9 +406,21 @@ namespace Jvedio
                 item.Click += SetTypeValue;
             }
 
-
             ResizingTimer.Interval = TimeSpan.FromSeconds(0.5);
             ResizingTimer.Tick += new EventHandler(ResizingTimer_Tick);
+        }
+
+        private childItem FindVisualChild<childItem>(DependencyObject obj)
+                               where childItem : DependencyObject
+        {
+            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(obj); i++)
+            {
+                DependencyObject child = VisualTreeHelper.GetChild(obj, i);
+                if (child is childItem) return (childItem)child;
+                childItem childOfChild = FindVisualChild<childItem>(child);
+                if (childOfChild != null) return childOfChild;
+            }
+            return null;
         }
 
 
@@ -3664,6 +3673,7 @@ namespace Jvedio
             DownloadActorPopup.IsOpen = false;
             downLoadActress?.CancelDownload();
             HandyControl.Controls.Growl.Info(Jvedio.Language.Resources.Message_Stop, GrowlToken);
+            vieModel.ActorProgressBarVisibility = Visibility.Collapsed;
         }
 
         public void DownLoadSelectedActor(object sender, RoutedEventArgs e)
@@ -4006,6 +4016,35 @@ namespace Jvedio
                     SideBorder.Background = (SolidColorBrush)Application.Current.Resources["BackgroundSide"];
                     break;
             }
+
+            if (BackgroundImage != null)
+            {
+                SideBorder.Background = Brushes.Transparent;
+                TitleBorder.Background = Brushes.Transparent;
+                MainProgressBar.Background = Brushes.Transparent;
+                ActorProgressBar.Background = Brushes.Transparent;
+                foreach (Expander expander in ExpanderStackPanel.Children.OfType<Expander>().ToList())
+                {
+                    expander.Background= Brushes.Transparent;
+                    Border border = expander.Content as Border;
+                    border.Background = Brushes.Transparent;
+                }
+                BgImage.Source = BackgroundImage;
+            }
+            else
+            {
+                TitleBorder.Background = (SolidColorBrush)Application.Current.Resources["BackgroundTitle"];
+                MainProgressBar.Background = (SolidColorBrush)Application.Current.Resources["BackgroundSide"];
+                ActorProgressBar.Background = (SolidColorBrush)Application.Current.Resources["BackgroundSide"];
+                foreach (Expander expander in ExpanderStackPanel.Children.OfType<Expander>().ToList())
+                {
+                    expander.Background = (SolidColorBrush)Application.Current.Resources["BackgroundTitle"];
+                    Border border = expander.Content as Border;
+                    border.Background = (SolidColorBrush)Application.Current.Resources["BackgroundMain"];
+                }
+            }
+                
+
         }
 
         public void InitList()
@@ -4644,7 +4683,7 @@ namespace Jvedio
             }
             else if (this.WindowState == WindowState.Maximized)
             {
-                vieModel.MainGridThickness = new Thickness(0);
+                vieModel.MainGridThickness = new Thickness(5);
                 this.ResizeMode = ResizeMode.NoResize;
             }
             else
@@ -5431,7 +5470,7 @@ namespace Jvedio
         private void ActorProgressBar_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             if (vieModel == null) return;
-            if (vieModel.ActorProgressBarValue == 100)
+            if (vieModel.ActorProgressBarValue == 100 || vieModel.ActorProgressBarValue==0)
                 vieModel.ActorProgressBarVisibility = Visibility.Hidden;
             else
                 vieModel.ActorProgressBarVisibility = Visibility.Visible;

@@ -1447,7 +1447,7 @@
     <value>影片不透明度</value>
   </data>
   <data name="MoviePerPage" xml:space="preserve">
-    <value>每页影片数目</value>
+    <value>每页展示数目</value>
   </data>
   <data name="NumherEachFlow" xml:space="preserve">
     <value>每次滚动数目</value>
@@ -1688,5 +1688,8 @@
   </data>
   <data name="RestartToTakeEffect" xml:space="preserve">
     <value>部分效果重启后生效</value>
+  </data>
+  <data name="AllComics" xml:space="preserve">
+    <value>所有漫画</value>
   </data>
 </root>

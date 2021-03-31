@@ -2,9 +2,11 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:Jvedio"
                     xmlns:p="clr-namespace:Jvedio.Properties"
+                    xmlns:converter="clr-namespace:Jvedio.Utils.Converter;assembly=Jvedio.Utils"
+                    
                     >
 
-    <local:StringToUriStringConverterOther x:Key="StringToUriStringConverterOther" />
+    <converter:StringToUriStringConverter x:Key="StringToUriStringConverter" />
 
    
 
@@ -30,13 +32,13 @@
                     <TextBlock Text="{TemplateBinding Title }" Foreground="{DynamicResource ForegroundSearch}" FontSize="15"  VerticalAlignment="Center" HorizontalAlignment="Center" Height="auto" Width="auto" />
                     <StackPanel VerticalAlignment="Center" HorizontalAlignment="Right" Orientation="Horizontal">
                         <Button   Name="BorderMin"    Style="{StaticResource TitleButton}"  Width="40" Height="30" Margin="0" >
-                            <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=min,Converter={StaticResource StringToUriStringConverterOther}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"  />
+                            <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=min,Converter={StaticResource StringToUriStringConverter}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"  />
                         </Button>
                             <Button    Name="BorderMax"    Style="{StaticResource TitleButton}" Width="40" Height="30" Margin="0"  >
-                            <Image  Source="{Binding Themes, Mode=OneWay, ConverterParameter=max,Converter={StaticResource StringToUriStringConverterOther}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
+                            <Image  Source="{Binding Themes, Mode=OneWay, ConverterParameter=max,Converter={StaticResource StringToUriStringConverter}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
                         </Button>
                             <Button  Name="BorderClose"  Style="{StaticResource CloseButton}" Width="40" Height="30" Margin="0"  >
-                            <Image   Source="{Binding Themes, Mode=OneWay, ConverterParameter=close,Converter={StaticResource StringToUriStringConverterOther}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
+                            <Image   Source="{Binding Themes, Mode=OneWay, ConverterParameter=close,Converter={StaticResource StringToUriStringConverter}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
                         </Button>
                     </StackPanel>
                 </Grid>

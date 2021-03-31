@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Xml;
 using static Jvedio.GlobalVariable;
+using Jvedio.Utils;
 
 namespace Jvedio
 {

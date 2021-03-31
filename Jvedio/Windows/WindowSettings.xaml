@@ -8,6 +8,7 @@
         xmlns:p="clr-namespace:Jvedio.Properties"
         xmlns:hc="https://handyorg.github.io/handycontrol"
         xmlns:lang="clr-namespace:Jvedio.Language;assembly=Jvedio.Language"
+        xmlns:converter="clr-namespace:Jvedio.Utils.Converter;assembly=Jvedio.Utils"
         x:Class="Jvedio.Settings"
         mc:Ignorable="d"
         Title="{x:Static lang:Resources.Settings}" 
@@ -26,19 +27,19 @@
 
 
         <local:CookieNothingConverter x:Key="CookieNothingConverter" />
-        <local:OppositeBooleanConverter x:Key="OppositeBooleanConverter" />
+        <converter:OppositeBooleanConverter x:Key="OppositeBooleanConverter" />
         <BooleanToVisibilityConverter x:Key="BoolToVis" />
-        <local:StringToUriStringConverterOther x:Key="StringToUriStringConverterOther" />
-        <local:SkinTypeEnumConverter x:Key="SkinTypeEnumConverter"/>
-        <local:LanguageTypeEnumConverter x:Key="LanguageTypeEnumConverter"/>
-        <local:MultiIntToMarginConverter x:Key="MultiIntToMarginConverter" />
-        <local:StringToCheckedConverter x:Key="StringToCheckedConverter"/>
-        <local:ColorToBrushConverter x:Key="ColorToBrushConverter" />
-        <local:FontFamilyToSelectedIndexConverter x:Key="FontFamilyToSelectedIndexConverter" />
-        <local:BoolToFontBoldConverter x:Key="BoolToFontBoldConverter" />
-        <local:BoolToFontItalicConverter x:Key="BoolToFontItalicConverter" />
-        <local:BoolToUnderLineConverter x:Key="BoolToUnderLineConverter" />
-        <local:FontFamilyConverter x:Key="FontFamilyConverter" />
+        <converter:StringToUriStringConverter x:Key="StringToUriStringConverter" />
+        <converter:SkinTypeEnumConverter x:Key="SkinTypeEnumConverter"/>
+        <converter:LanguageTypeEnumConverter x:Key="LanguageTypeEnumConverter"/>
+        <converter:MultiIntToMarginConverter x:Key="MultiIntToMarginConverter" />
+        <converter:StringToCheckedConverter x:Key="StringToCheckedConverter"/>
+        <converter:ColorToBrushConverter x:Key="ColorToBrushConverter" />
+        <converter:FontFamilyToSelectedIndexConverter x:Key="FontFamilyToSelectedIndexConverter" />
+        <converter:BoolToFontBoldConverter x:Key="BoolToFontBoldConverter" />
+        <converter:BoolToFontItalicConverter x:Key="BoolToFontItalicConverter" />
+        <converter:BoolToUnderLineConverter x:Key="BoolToUnderLineConverter" />
+        <converter:FontFamilyConverter x:Key="FontFamilyConverter" />
 
 
 
@@ -142,7 +143,7 @@
                     </WrapPanel>
 
                     <StackPanel Orientation="Horizontal" Margin="5 0" >
-                        <CheckBox Unchecked="CheckBox_Unchecked" Checked="CheckBox_Checked" IsChecked="{Binding HotKey_Enable, Mode=TwoWay, Source={x:Static p:Settings.Default}}"  Content="{x:Static lang:Resources.BossKey}"  VerticalContentAlignment="Center"/>
+                        <CheckBox Unchecked="Unregister_HotKey" Checked="CheckBox_Checked" IsChecked="{Binding HotKey_Enable, Mode=TwoWay, Source={x:Static p:Settings.Default}}"  Content="{x:Static lang:Resources.BossKey}"  VerticalContentAlignment="Center"/>
                         <hc:TextBox x:Name="hotkeyTextBox" Text="{Binding HotKey_String,Mode=OneWay,Source={x:Static p:Settings.Default}}" IsReadOnly="True" ContextMenu="{x:Null}" PreviewKeyUp="hotkeyTextBox_PreviewKeyUp" PreviewKeyDown="hotkeyTextBox_PreviewKeyDown" Style="{StaticResource BaseHcTextBox}"  />
                         <Button Style="{StaticResource ButtonStyleFill}" Click="ApplyHotKey" Content="{x:Static lang:Resources.Apply}"   />
                     </StackPanel>
@@ -278,13 +279,13 @@
 
                             <StackPanel Orientation="Horizontal" Margin="0 10" HorizontalAlignment="Left">
                                 <Button  Height="27" Width="27" Margin="5 0"   Style="{StaticResource RoundTitleButton}" Click="AddPath">
-                                    <Image Source="{Binding Themes, ConverterParameter=openfolder, Converter={StaticResource StringToUriStringConverterOther}, Mode=OneWay, Source={x:Static p:Settings.Default}}" Height="20" Width="20"  />
+                                    <Image Source="{Binding Themes, ConverterParameter=openfolder, Converter={StaticResource StringToUriStringConverter}, Mode=OneWay, Source={x:Static p:Settings.Default}}" Height="20" Width="20"  />
                                 </Button>
                                 <Button  Height="27" Width="27" Margin="5 0"   Style="{StaticResource RoundTitleButton}" Click="DelPath">
-                                    <Image Source="{Binding Themes, ConverterParameter=min, Converter={StaticResource StringToUriStringConverterOther}, Mode=OneWay, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
+                                    <Image Source="{Binding Themes, ConverterParameter=min, Converter={StaticResource StringToUriStringConverter}, Mode=OneWay, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
                                 </Button>
                                 <Button  Height="27" Width="27" Margin="5 0"  Style="{StaticResource RoundCloseButton}" Click="ClearPath">
-                                    <Image Source="{Binding Themes, ConverterParameter=clear, Converter={StaticResource StringToUriStringConverterOther}, Mode=OneWay, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
+                                    <Image Source="{Binding Themes, ConverterParameter=clear, Converter={StaticResource StringToUriStringConverter}, Mode=OneWay, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
                                 </Button>
                             </StackPanel>
 
@@ -629,12 +630,14 @@
                     <CheckBox Visibility="Collapsed" Margin="20 5" HorizontalAlignment="Left" IsChecked="{Binding ScreenShotToExtraPicPath, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Content="{x:Static lang:Resources.ScreenShotToPreviewDir}"  VerticalContentAlignment="Center"/>
 
                     <StackPanel Orientation="Horizontal" Margin="20 5">
-                        <TextBlock Text="{x:Static lang:Resources.FFmpegPath}" Style="{StaticResource BaseTextBlock}"   />
-                        <hc:TextBox    Style="{StaticResource BaseHcTextBox}"  Text="{Binding FFMPEG_Path, Mode=TwoWay, Source={x:Static p:Settings.Default}}"  />
-                        <Button Style="{StaticResource ButtonStyleFill}" Content="{x:Static lang:Resources.ChooseFFmpeg}"  Click="SetFFMPEGPath" />
+                        <TextBlock Text="{x:Static lang:Resources.FFmpegPath}" Style="{StaticResource BaseTextBlock}" Margin="10 5"   />
                         <Border MouseLeftButtonUp="CopyFFmpegUrl" HorizontalAlignment="Center" VerticalAlignment="Center" Panel.ZIndex="5" Margin="0" Style="{StaticResource BorderStyle}" Cursor="Hand" CornerRadius="5">
                             <Image Source="pack://application:,,,/Resources/Picture/download.png" Margin="5"  Height="20"  />
                         </Border>
+                        <Button Style="{StaticResource ButtonStyleFill}" Content="{x:Static lang:Resources.ChooseFFmpeg}"  Click="SetFFMPEGPath"  Margin="10 5"/>
+
+                        <hc:TextBox    Style="{StaticResource BaseHcTextBox}"  Text="{Binding FFMPEG_Path, Mode=TwoWay, Source={x:Static p:Settings.Default}}"    />
+
 
                     </StackPanel>
 
@@ -719,17 +722,18 @@
 
                     <WrapPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="20 5">
                         <Label Content="{x:Static lang:Resources.MovieOpacity}" Style="{StaticResource InfoLabel}"    />
-                        <Slider x:Name="MovieBorderOpacitySlider" IsSnapToTickEnabled="True" Width="200" VerticalAlignment="Center" Margin="5 0" Value="{Binding MovieOpacity, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Maximum="1" Minimum="0" SmallChange="0.05" LargeChange="0.1" TickFrequency="0.05" Cursor="Hand" TickPlacement="None"  />
-                        <Label Content="{Binding Value, ElementName=MovieBorderOpacitySlider}" Style="{StaticResource InfoLabel}"  />
+                        <Slider  IsSnapToTickEnabled="True" Width="200" VerticalAlignment="Center" Margin="5 0" Value="{Binding MovieOpacity, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Maximum="1" Minimum="0" SmallChange="0.05" LargeChange="0.1" TickFrequency="0.05" Cursor="Hand" TickPlacement="None"  />
+                        <Label Content="{Binding MovieOpacity, Mode=OneWay, Source={x:Static p:Settings.Default}}" Style="{StaticResource InfoLabel}"  />
 
                     </WrapPanel>
 
 
                     <StackPanel Orientation="Horizontal" Margin="20 5">
                         <Label Content="{x:Static lang:Resources.BackgroundImage}" Style="{StaticResource InfoLabel}"  />
-                        <hc:TextBox   Style="{StaticResource BaseHcTextBox}"  Text="{Binding BackgroundImage, Mode=TwoWay, Source={x:Static p:Settings.Default}}"  />
                         <Button Style="{StaticResource ButtonStyleFill}" Content="{x:Static lang:Resources.Choose}" Click="SetBackgroundImage"/>
-                    </StackPanel>
+
+                        <hc:TextBox   Style="{StaticResource BaseHcTextBox}"  Text="{Binding BackgroundImage, Mode=TwoWay, Source={x:Static p:Settings.Default}}"  />
+                        </StackPanel>
                 </StackPanel>
 
             </TabItem>
@@ -826,9 +830,9 @@
         </TabControl>
 
         <Grid Grid.Row="1" Background="{DynamicResource BackgroundTitle}"   >
-            <Button  Content="{x:Static lang:Resources.Restore}"   Style="{StaticResource ButtonStyleFill}" HorizontalAlignment="Left"  Click="Button_Click_1"/>
+            <Button  Content="{x:Static lang:Resources.Restore}"   Style="{StaticResource ButtonStyleFill}" HorizontalAlignment="Left"  Click="Restore"/>
 
-            <Button Content="{x:Static lang:Resources.Save}" Style="{StaticResource ButtonStyleFill}" HorizontalAlignment="Right"  Click="Button_Click"/>
+            <Button Content="{x:Static lang:Resources.Save}" Style="{StaticResource ButtonStyleFill}" HorizontalAlignment="Right"  Click="SaveSettings"/>
         </Grid>
 
     </Grid>

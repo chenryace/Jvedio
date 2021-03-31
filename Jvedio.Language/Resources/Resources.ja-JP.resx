@@ -1447,7 +1447,7 @@
     <value>ビデオの不透明度</value>
   </data>
   <data name="MoviePerPage" xml:space="preserve">
-    <value>1ページあたりの動画数</value>
+    <value>1ページあたりの表示数</value>
   </data>
   <data name="NumherEachFlow" xml:space="preserve">
     <value>一度に巻物の数</value>
@@ -1688,5 +1688,8 @@
   </data>
   <data name="RestartToTakeEffect" xml:space="preserve">
     <value>一部の効果は再起動後に有効になります</value>
+  </data>
+  <data name="AllComics" xml:space="preserve">
+    <value>漫画全般</value>
   </data>
 </root>

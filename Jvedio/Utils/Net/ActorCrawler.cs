@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static Jvedio.Net;
+using Jvedio.Utils;
 using static Jvedio.GlobalVariable;
 using System.IO;
 using System.Net;

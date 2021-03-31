@@ -11,6 +11,7 @@ using System.Windows.Media.Imaging;
 using System.IO;
 using static Jvedio.GlobalVariable;
 using static Jvedio.FileProcess;
+using Jvedio.Utils;
 
 namespace Jvedio.ViewModel
 {

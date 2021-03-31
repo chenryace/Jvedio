@@ -6,6 +6,7 @@
         xmlns:fa="http://schemas.fontawesome.io/icons/"
         xmlns:lang="clr-namespace:Jvedio.Language;assembly=Jvedio.Language"
         xmlns:local="clr-namespace:Jvedio"
+        xmlns:converter="clr-namespace:Jvedio.Utils.Converter;assembly=Jvedio.Utils"
         x:Class="Jvedio.Dialog_SelectActor"
         mc:Ignorable="d"
         Title="{x:Static lang:Resources.ChooseActor}" 
@@ -19,7 +20,7 @@
 
     <Window.Resources>
 
-        <local:IntConverter x:Key="IntConverter"/>
+        <converter:IntConverter x:Key="IntConverter"/>
 
         <Style x:Key="ActorInfoTextBox" TargetType="{x:Type TextBox}">
             <Setter Property="Background" Value="Transparent"/>

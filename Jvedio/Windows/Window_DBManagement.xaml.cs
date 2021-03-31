@@ -1,4 +1,5 @@
 ﻿using Jvedio.Plot.Bar;
+using Jvedio.Utils;
 using Jvedio.ViewModel;
 using LiveCharts;
 using LiveCharts.Wpf;
@@ -244,10 +245,8 @@ namespace Jvedio
         {
             System.Windows.Forms.OpenFileDialog OpenFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             OpenFileDialog1.Title = Jvedio.Language.Resources.ChooseDataBase;
-            OpenFileDialog1.InitialDirectory = AppDomain.CurrentDomain.BaseDirectory;
             OpenFileDialog1.Filter = $"Sqlite { Jvedio.Language.Resources.File}|*.sqlite";
             OpenFileDialog1.Multiselect = true;
-            OpenFileDialog1.RestoreDirectory = true;
             if (OpenFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 string[] names = OpenFileDialog1.FileNames;

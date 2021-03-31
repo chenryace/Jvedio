@@ -1447,7 +1447,7 @@
     <value>Video opacity</value>
   </data>
   <data name="MoviePerPage" xml:space="preserve">
-    <value>Number of videos per page</value>
+    <value>Number of presentations per page</value>
   </data>
   <data name="NumherEachFlow" xml:space="preserve">
     <value>Number of scrolls at a time</value>
@@ -1688,5 +1688,8 @@
   </data>
   <data name="RestartToTakeEffect" xml:space="preserve">
     <value>Restart To Take Effect</value>
+  </data>
+  <data name="AllComics" xml:space="preserve">
+    <value>All Comics</value>
   </data>
 </root>

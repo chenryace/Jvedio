@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:fa="http://schemas.fontawesome.io/icons/"
         xmlns:lang="clr-namespace:Jvedio.Language;assembly=Jvedio.Language"
+        xmlns:converter="clr-namespace:Jvedio.Utils.Converter;assembly=Jvedio.Utils"
         xmlns:local="clr-namespace:Jvedio"
     xmlns:hc="https://handyorg.github.io/handycontrol"
         x:Class="Jvedio.Dialog_LoadPage"
@@ -16,8 +17,7 @@
         >
 
     <Window.Resources>
-
-        <local:IntConverter x:Key="IntConverter"/>
+        <converter:IntConverter x:Key="IntConverter"/>
     </Window.Resources>
 
 

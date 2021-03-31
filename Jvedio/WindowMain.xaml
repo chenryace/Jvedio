@@ -5,6 +5,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:local="clr-namespace:Jvedio"
+    xmlns:converter="clr-namespace:Jvedio.Utils.Converter;assembly=Jvedio.Utils"
     xmlns:JvedioControls="clr-namespace:Jvedio.Controls"
     xmlns:wpftk="clr-namespace:WpfToolkit.Controls;assembly=VirtualizingWrapPanel"
     xmlns:p="clr-namespace:Jvedio.Properties"
@@ -41,37 +42,36 @@
 
         <!--Converter-->
 
-        <local:favoritesConverter x:Key="favoritesConverter" />
-        <local:IntToVisibilityConverter x:Key="IntToVisibilityConverter" />
-        <local:BoolToOppositeVisibilityConverter x:Key="BoolToOppositeVisibilityConverter" />
-        <local:SmallerThicknessConverter x:Key="SmallerThicknessConverter" />
-        <local:OppositeBooleanConverter x:Key="OppositeBooleanConverter" />
-        <local:WidthConverter x:Key="WidthConverter" />
-        <local:BiggerWidthConverter x:Key="BiggerWidthConverter" />
-        <local:BoolToImageStretchConverter x:Key="BoolToImageStretchConverter" />
-        <local:BitToGBConverter x:Key="BitToGBConverter" />
-        <local:WidthToMarginConverter x:Key="WidthToMarginConverter" />
+        <converter:IntToVisibilityConverter x:Key="IntToVisibilityConverter" />
+        <converter:BoolToOppositeVisibilityConverter x:Key="BoolToOppositeVisibilityConverter" />
+        <converter:SmallerThicknessConverter x:Key="SmallerThicknessConverter" />
+        <converter:OppositeBooleanConverter x:Key="OppositeBooleanConverter" />
+        <converter:WidthConverter x:Key="WidthConverter" />
+        <converter:BiggerWidthConverter x:Key="BiggerWidthConverter" />
+        <converter:BoolToImageStretchConverter x:Key="BoolToImageStretchConverter" />
+        <converter:BitToGBConverter x:Key="BitToGBConverter" />
+        <converter:WidthToMarginConverter x:Key="WidthToMarginConverter" />
         <BooleanToVisibilityConverter x:Key="BoolToVis" />
-        <local:StringToUriStringConverterMain x:Key="StringToUriStringConverterMain" />
+        <converter:StringToUriStringConverter x:Key="StringToUriStringConverter" />
         <local:MovieStampTypeToVisibilityConverter x:Key="MovieStampTypeToVisibilityConverter" />
-        <local:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
-        <local:StringToVisibilityConverter x:Key="StringToVisibilityConverter" />
-        <local:ImageTypeEnumConverter x:Key="ImageTypeEnumConverter" />
-        <local:ViewTypeEnumConverter x:Key="ViewTypeEnumConverter" />
-        <local:IntToCheckedConverter x:Key="IntToCheckedConverter"/>
+        <converter:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+        <converter:StringToVisibilityConverter x:Key="StringToVisibilityConverter" />
+        <converter:ImageTypeEnumConverter x:Key="ImageTypeEnumConverter" />
+        <converter:ViewTypeEnumConverter x:Key="ViewTypeEnumConverter" />
+        <converter:IntToCheckedConverter x:Key="IntToCheckedConverter"/>
 
         <!--高清、中字、流出-->
         <local:TagStampsConverter x:Key="TagStampsConverter"/>
-        <local:MultiIntToMarginConverter x:Key="MultiIntToMarginConverter" />
+        <converter:MultiIntToMarginConverter x:Key="MultiIntToMarginConverter" />
 
 
         <!--字体-->
-        <local:BoolToFontBoldConverter x:Key="BoolToFontBoldConverter" />
-        <local:BoolToFontItalicConverter x:Key="BoolToFontItalicConverter" />
-        <local:BoolToUnderLineConverter x:Key="BoolToUnderLineConverter" />
-        <local:FontFamilyConverter x:Key="FontFamilyConverter" />
-        <local:LabelToListConverter x:Key="LabelToListConverter" />
-        <local:PlusToVisibilityConverter x:Key="PlusToVisibilityConverter" />
+        <converter:BoolToFontBoldConverter x:Key="BoolToFontBoldConverter" />
+        <converter:BoolToFontItalicConverter x:Key="BoolToFontItalicConverter" />
+        <converter:BoolToUnderLineConverter x:Key="BoolToUnderLineConverter" />
+        <converter:FontFamilyConverter x:Key="FontFamilyConverter" />
+        <converter:LabelToListConverter x:Key="LabelToListConverter" />
+        <converter:PlusToVisibilityConverter x:Key="PlusToVisibilityConverter" />
         <BooleanToVisibilityConverter x:Key="bool2VisibilityConverter"/>
 
 
@@ -357,7 +357,7 @@
         <Style x:Key="GenTitle" TargetType="{x:Type TextBlock}">
             <Setter Property="Width" Value="auto" />
             <Setter Property="Height" Value="auto" />
-            <Setter Property="Background" Value="{DynamicResource BackgroundSide}" />
+            <Setter Property="Background" Value="Transparent" />
             <Setter Property="Padding" Value="5"/>
             <Setter Property="Margin" Value="5"/>
             <Setter Property="TextAlignment" Value="Center" />
@@ -763,14 +763,14 @@
         <Grid  Visibility="{Binding CmdVisibility,FallbackValue=Hidden}" Panel.ZIndex="5">
             <TextBox ContextMenu="{StaticResource TextBoxContextMenu}"    Text="{Binding CmdText}" TextChanged="CmdTextChanged" Padding="10" TextWrapping="WrapWithOverflow"  DockPanel.Dock="Top" Background="{DynamicResource BackgroundMenu}" Opacity="0.8" Foreground="{DynamicResource ForegroundSearch}" Height="auto" Margin="50 100" Width="auto" HorizontalAlignment="Right" VerticalAlignment="Bottom" />
             <Border     Height="27" Width="27" Margin="20 100" CornerRadius="3" Style="{StaticResource CloseBorderStyle}" MouseLeftButtonUp="Border_MouseLeftButtonUp" HorizontalAlignment="Right" VerticalAlignment="Bottom">
-                <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=close,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
+                <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=close,Converter={StaticResource StringToUriStringConverter}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
             </Border>
         </Grid>
 
         <!--显示侧边栏-->
         <Grid  Visibility="{Binding HideSide,Converter={StaticResource BoolToVisibilityConverter}}" Panel.ZIndex="10"  HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10 50"   >
             <ToggleButton Cursor="Hand" Padding="0" Height="27" Width="27"  Background="Transparent" IsChecked="{Binding HideSide,Mode=TwoWay}" BorderThickness="2"  >
-                <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=hide,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="20" Width="20" RenderTransformOrigin=".5,.5"  >
+                <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=hide,Converter={StaticResource StringToUriStringConverter}, Source={x:Static p:Settings.Default}}" Height="20" Width="20" RenderTransformOrigin=".5,.5"  >
                     <Image.RenderTransform>
                         <RotateTransform Angle="180" />
                     </Image.RenderTransform>
@@ -779,13 +779,16 @@
         </Grid>
 
 
+        <!--背景-->
+        <Image x:Name="BgImage"  Margin="{Binding MainGridThickness,Converter={StaticResource SmallerThicknessConverter},ConverterParameter=-5,FallbackValue=5}"    Source="{Binding BackgroundImage}" Stretch="UniformToFill"></Image>
+        
         <Grid Margin="{Binding MainGridThickness,Converter={StaticResource SmallerThicknessConverter},ConverterParameter=-5,FallbackValue=5}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="30"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-            <Border PreviewMouseLeftButtonDown="TopBorder_MouseLeftButtonUp" Grid.Row="0"  Background="{DynamicResource BackgroundTitle}"   BorderThickness="0"  MouseMove="MoveWindow"  >
+            <Border x:Name="TitleBorder" PreviewMouseLeftButtonDown="TopBorder_MouseLeftButtonUp" Grid.Row="0"  Background="{DynamicResource BackgroundTitle}"   BorderThickness="0"  MouseMove="MoveWindow"  >
                 <Grid Panel.ZIndex="50" >
                     <Image   VerticalAlignment="Center" Height="20" Source="/Resources/Picture/Jvedio.png" HorizontalAlignment="Left" Margin="10 0"/>
 
@@ -795,13 +798,13 @@
  
                     <StackPanel Panel.ZIndex="5" Orientation="Horizontal" HorizontalAlignment="Right">
                         <Button     Style="{StaticResource TitleButton}" Click="MinWindow" Height="30" Width="40"  Margin="0" >
-                            <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=min,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"  />
+                            <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=min,Converter={StaticResource StringToUriStringConverter}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"  />
                         </Button>
                         <Button   Style="{StaticResource TitleButton}" Click="MaxWindow" Height="30" Width="40"  Margin="0" >
-                            <Image    Source="{Binding Themes, Mode=OneWay, ConverterParameter=max,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
+                            <Image    Source="{Binding Themes, Mode=OneWay, ConverterParameter=max,Converter={StaticResource StringToUriStringConverter}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
                         </Button>
                         <Button    Style="{StaticResource CloseButton}" Click="CloseWindow" Height="30" Width="40" Margin="0" >
-                            <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=close,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
+                            <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=close,Converter={StaticResource StringToUriStringConverter}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
                         </Button>
                     </StackPanel>
                 </Grid>
@@ -813,6 +816,7 @@
                 <JvedioControls:WaitingPanel NoticeText="{x:Static lang:Resources.Wait}"   ShowCancelButton="Visible" ShowProgressBar="Collapsed" Visibility="{Binding IsScanning,Converter={StaticResource BoolToVisibilityConverter}, FallbackValue=Hidden}"      Panel.ZIndex="5" Cancel="WaitingPanel_Cancel"  ></JvedioControls:WaitingPanel>
 
                 <JvedioControls:WaitingPanel  x:Name="LoadSearchWaitingPanel"  NoticeText="{x:Static lang:Resources.Wait}"     ShowCancelButton="Visible" ShowProgressBar="Visible" Visibility="Hidden"  Panel.ZIndex="5" Cancel="CancelLoadActor"    ></JvedioControls:WaitingPanel>
+
 
 
                 <!--主界面-->
@@ -842,7 +846,7 @@
                                 <ComboBox SelectedIndex="{Binding DatabaseSelectedIndex,FallbackValue=0}" Grid.Column="0" FontSize="16"  Style="{StaticResource SideComboBoxStyle}"  Margin="5"  SelectionChanged="DatabaseComboBox_SelectionChanged"  ItemsSource="{Binding DataBases}"   MinWidth="150"  Height="30"  ToolTip="{Binding RelativeSource={RelativeSource Mode=Self},Path=Text}" HorizontalAlignment="Stretch" />
 
                                 <Border ContextMenu="{StaticResource SettingsContextMenu}" Grid.Column="1"  ToolTip="{x:Static lang:Resources.Settings}"   Width="27" Height="27"  Margin="5 0"  CornerRadius="3" Style="{StaticResource BorderStyle}"  MouseUp="ShowSettingsPopup">
-                                    <Image  Source="{Binding Themes, Mode=OneWay, ConverterParameter=menu,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}"  Margin="4"    />
+                                    <Image  Source="{Binding Themes, Mode=OneWay, ConverterParameter=menu,Converter={StaticResource StringToUriStringConverter}, Source={x:Static p:Settings.Default}}"  Margin="4"    />
                                 </Border>
 
 
@@ -853,26 +857,26 @@
 
 
                                 <Grid>
-                                    <Image  Source="{Binding Themes, Mode=OneWay, ConverterParameter=all,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="22" HorizontalAlignment="Left" Panel.ZIndex="2" Margin="10 0"    />
+                                    <Image  Source="{Binding Themes, Mode=OneWay, ConverterParameter=all,Converter={StaticResource StringToUriStringConverter}, Source={x:Static p:Settings.Default}}" Height="22" HorizontalAlignment="Left" Panel.ZIndex="2" Margin="10 0"    />
                                     <RadioButton x:Name="AllRadioButton"  IsChecked="True"  Padding="20 0"     Style="{StaticResource SideRadioButtonStyle}"  Command="{Binding ResetCommand}" Content="{x:Static lang:Resources.AllVideo}"      />
                                     <TextBlock Text="{Binding AllVedioCount}" Style="{StaticResource BaseTextBlock}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10 0" Foreground="{DynamicResource ForegroundGlobal}"/>
                                 </Grid>
 
                                 <Grid>
-                                    <Image  Source="{Binding Themes, Mode=OneWay, ConverterParameter=like,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="22" HorizontalAlignment="Left" Panel.ZIndex="2" Margin="10 0"    />
+                                    <Image  Source="{Binding Themes, Mode=OneWay, ConverterParameter=like,Converter={StaticResource StringToUriStringConverter}, Source={x:Static p:Settings.Default}}" Height="22" HorizontalAlignment="Left" Panel.ZIndex="2" Margin="10 0"    />
                                     <RadioButton   Padding="20 0"   Style="{StaticResource SideRadioButtonStyle}" Command="{Binding FavoritesCommand}" Content="{x:Static lang:Resources.Favorites}"    />
                                     <TextBlock Text="{Binding FavoriteVedioCount}" Style="{StaticResource BaseTextBlock}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10 0" Foreground="{DynamicResource ForegroundGlobal}"/>
 
                                 </Grid>
 
                                 <Grid>
-                                    <Image  Source="{Binding Themes, Mode=OneWay, ConverterParameter=create,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="20" HorizontalAlignment="Left" Panel.ZIndex="2" Margin="10 0"    />
+                                    <Image  Source="{Binding Themes, Mode=OneWay, ConverterParameter=create,Converter={StaticResource StringToUriStringConverter}, Source={x:Static p:Settings.Default}}" Height="20" HorizontalAlignment="Left" Panel.ZIndex="2" Margin="10 0"    />
                                     <RadioButton Padding="20 0"   Style="{StaticResource SideRadioButtonStyle}" Command="{Binding RecentCommand}" Content="{x:Static lang:Resources.RecentCreate}"    />
                                     <TextBlock Text="{Binding RecentVedioCount}" Style="{StaticResource BaseTextBlock}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10 0" Foreground="{DynamicResource ForegroundGlobal}"/>
                                 </Grid>
 
                                 <Grid>
-                                    <Image  Source="{Binding Themes, Mode=OneWay, ConverterParameter=recent,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="22" HorizontalAlignment="Left" Panel.ZIndex="2" Margin="10 0"    />
+                                    <Image  Source="{Binding Themes, Mode=OneWay, ConverterParameter=recent,Converter={StaticResource StringToUriStringConverter}, Source={x:Static p:Settings.Default}}" Height="22" HorizontalAlignment="Left" Panel.ZIndex="2" Margin="10 0"    />
                                     <RadioButton  Padding="20 0"   Style="{StaticResource SideRadioButtonStyle}" Command="{Binding RecentWatchCommand}" Content="{x:Static lang:Resources.RecentPlay}"  >
                                         <RadioButton.ContextMenu>
                                             <ContextMenu>
@@ -884,7 +888,7 @@
                                 </Grid>
 
                                 <Grid  >
-                                    <Image  Source="{Binding Themes, Mode=OneWay, ConverterParameter=classify,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="20" HorizontalAlignment="Left" Panel.ZIndex="2" Margin="10 0"    />
+                                    <Image  Source="{Binding Themes, Mode=OneWay, ConverterParameter=classify,Converter={StaticResource StringToUriStringConverter}, Source={x:Static p:Settings.Default}}" Height="20" HorizontalAlignment="Left" Panel.ZIndex="2" Margin="10 0"    />
                                     <RadioButton Click="ShowClassifyGrid"   Background="Transparent"  Cursor="Hand"    Padding="20 0"   Style="{StaticResource SideRadioButtonStyle}"  Content="{x:Static lang:Resources.AutoClassification}"    />
                                 </Grid>
                             </StackPanel>
@@ -902,7 +906,7 @@
                                     <TextBlock Grid.Column="0" Text="{x:Static lang:Resources.MyList}" Style="{StaticResource BaseTextBlock }" Foreground="{DynamicResource ForegroundGlobal}" HorizontalAlignment="Left" Margin="20 5"/>
                                     <ToggleButton Name="HideListToggleButton" Click="HideListScrollViewer" Margin="5 0" HorizontalAlignment="Right"  Padding="0" Grid.Column="1"  Content="{x:Static lang:Resources.Hide}" Background="Transparent" BorderThickness="0" Foreground="{DynamicResource ForegroundGlobal}"/>
                                     <Button Click="AddListItem" HorizontalAlignment="Right"       Style="{StaticResource TitleButton}" Grid.Column="2">
-                                        <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=add,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="15" Width="15"   />
+                                        <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=add,Converter={StaticResource StringToUriStringConverter}, Source={x:Static p:Settings.Default}}" Height="15" Width="15"   />
                                     </Button>
 
                                 </Grid>
@@ -945,7 +949,7 @@
 
 
 
-                            <StackPanel Width="auto" Margin="5" Grid.Row="3"       Visibility="{Binding ShowFilter,Source={x:Static p:Settings.Default},Converter={StaticResource bool2VisibilityConverter},Mode=OneWay}">
+                            <StackPanel x:Name="ExpanderStackPanel" Width="auto" Margin="5" Grid.Row="3"       Visibility="{Binding ShowFilter,Source={x:Static p:Settings.Default},Converter={StaticResource bool2VisibilityConverter},Mode=OneWay}">
                                 <Expander   Margin="0 5 0 0"    Header="{x:Static lang:Resources.ReleaseYear}"  Foreground="{DynamicResource ForegroundGlobal}" Background="{DynamicResource BackgroundTitle}"  >
                                     <Border     BorderThickness="0"   Background="{DynamicResource BackgroundMain}" CornerRadius="0,0,4,4">
                                         <ScrollViewer MaxHeight="200">
@@ -1043,7 +1047,7 @@
 
                             <Grid Cursor="Hand"  Grid.Row="4"  HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0 0 10 10"   >
                                 <ToggleButton Padding="0" Height="27" Width="27"  Background="Transparent" IsChecked="{Binding HideSide,Mode=TwoWay}" BorderThickness="2" >
-                                    <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=hide,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"  />
+                                    <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=hide,Converter={StaticResource StringToUriStringConverter}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"  />
                                 </ToggleButton>
                             </Grid>
 
@@ -1052,6 +1056,8 @@
 
                     <!--左右调节-->
                     <Rectangle   MouseDown="DragRectangle_MouseDown" MouseUp="DragRectangle_MouseUp"  MouseMove="DragRectangle_MouseMove"  Panel.ZIndex="5"  Stroke="{x:Null}" Fill="Transparent"  HorizontalAlignment="Right" Width="6"  Margin="0 0 -3 0" />
+
+
 
 
                     <TabControl  FocusVisualStyle="{x:Null}" SelectedIndex="{Binding TabSelectedIndex,FallbackValue=0}" Grid.Column="1" Background="Transparent" Style="{DynamicResource TabControlStyle1}"  >
@@ -1067,7 +1073,7 @@
 
 
                                 <!--工具栏-->
-                                <Grid IsEnabled="{Binding IsLoadingMovie,Converter={StaticResource OppositeBooleanConverter}}" Background="{DynamicResource BackgroundMain}" MouseLeftButtonDown="ToolsGrid_MouseLeftButtonDown"   Grid.Row="0"   Panel.ZIndex="4"  Visibility="{Binding DisplayFunBar, Converter={StaticResource BoolToVis}, Mode=TwoWay, Source={x:Static p:Settings.Default}}">
+                                <Grid IsEnabled="{Binding IsLoadingMovie,Converter={StaticResource OppositeBooleanConverter}}" Background="Transparent" MouseLeftButtonDown="ToolsGrid_MouseLeftButtonDown"   Grid.Row="0"   Panel.ZIndex="4"  Visibility="{Binding DisplayFunBar, Converter={StaticResource BoolToVis}, Mode=TwoWay, Source={x:Static p:Settings.Default}}">
 
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="auto"/>
@@ -1088,7 +1094,7 @@
 
 
                                                 <Grid  VerticalAlignment="Center"  Width="25" Panel.ZIndex="3" HorizontalAlignment="Left" Margin="10 0 0 0" MouseUp="ShowSearchMenu" Cursor="Hand">
-                                                    <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=up,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"  RenderTransformOrigin=".5,.5"   >
+                                                    <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=up,Converter={StaticResource StringToUriStringConverter}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"  RenderTransformOrigin=".5,.5"   >
                                                         <Image.RenderTransform>
                                                             <RotateTransform Angle="180" />
                                                         </Image.RenderTransform>
@@ -1130,7 +1136,7 @@
                                                                     <StackPanel Orientation="Horizontal" >
                                                                         <TextBlock Margin="5" VerticalAlignment="Center" Height="auto"  Style="{StaticResource BaseTextBlock}" Text="{x:Static lang:Resources.SearchHistory}" HorizontalAlignment="Left" FontSize="12"/>
                                                                         <Border     Height="20" Width="20" Margin="5 0" CornerRadius="3" Style="{StaticResource CloseBorderStyle}" MouseLeftButtonDown="ClearSearchHistory">
-                                                                            <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=clear,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="15" Width="15"   />
+                                                                            <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=clear,Converter={StaticResource StringToUriStringConverter}, Source={x:Static p:Settings.Default}}" Height="15" Width="15"   />
                                                                         </Border>
                                                                     </StackPanel>
 
@@ -1198,7 +1204,7 @@
                                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
 
                                             <Border   ToolTip="{x:Static lang:Resources.ImageType}" Style="{StaticResource ToolsBarBorderStyle}" MouseLeftButtonUp="ShowImagePopup">
-                                                <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=image,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
+                                                <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=image,Converter={StaticResource StringToUriStringConverter}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
                                             </Border>
                                             <Border    ToolTip="{x:Static lang:Resources.Sorting}"      Style="{StaticResource ToolsBarBorderStyle}" MouseLeftButtonUp="ShowSortPopup">
                                                 <Image   Height="20" Width="20"   >
@@ -1217,7 +1223,7 @@
                                                 </Image>
                                             </Border>
                                             <Border  ToolTip="{x:Static lang:Resources.SyncInfo}"     Style="{StaticResource ToolsBarBorderStyle}" MouseLeftButtonUp="ShowDownloadPopup">
-                                                <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=download,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
+                                                <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=download,Converter={StaticResource StringToUriStringConverter}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
                                             </Border>
 
 
@@ -1547,8 +1553,6 @@
 
                                 </Grid>
 
-                                <!--背景-->
-                                <Image Grid.Row="1" Source="{Binding BackgroundImage}" Stretch="UniformToFill"></Image>
 
 
                                 <!--等待-->
@@ -1629,7 +1633,7 @@
 
 
                                         <Border HorizontalAlignment="Right" VerticalAlignment="Top"     Height="27" Width="27" Margin="5" CornerRadius="20"  Style="{StaticResource CloseBorderStyle}" MouseLeftButtonUp="HideActressGrid" Panel.ZIndex="5">
-                                            <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=close,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
+                                            <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=close,Converter={StaticResource StringToUriStringConverter}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
                                         </Border>
 
                                         <Grid Margin="10">
@@ -2109,7 +2113,7 @@
                                         <!--返回顶部-->
                                         <Canvas Panel.ZIndex="5" MouseLeftButtonUp="GotoTop" Visibility="{Binding GoToTopCanvas}" Cursor="Hand" Width="20" Height="20"  VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0 0 70 40"  >
                                             <Ellipse Style="{StaticResource Ellipse2}"  Width="40" Height="40"  VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0 0 5 5" />
-                                            <Image  Source="{Binding Themes, Mode=OneWay, ConverterParameter=up,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="22" HorizontalAlignment="Left" Panel.ZIndex="2"  Canvas.Left="8" Canvas.Top="7"    />
+                                            <Image  Source="{Binding Themes, Mode=OneWay, ConverterParameter=up,Converter={StaticResource StringToUriStringConverter}, Source={x:Static p:Settings.Default}}" Height="22" HorizontalAlignment="Left" Panel.ZIndex="2"  Canvas.Left="8" Canvas.Top="7"    />
                                         </Canvas>
                                     </Grid>
                                 </Grid>
@@ -2140,14 +2144,14 @@
                                             <ColumnDefinition Width="*"/>
                                             <ColumnDefinition Width="auto"/>
                                         </Grid.ColumnDefinitions>
-                                        <ProgressBar Grid.Column="0" Background="{DynamicResource BackgroundSide}"     Style="{StaticResource ProgressBarSuccessStripe}" MinWidth="100"   ValueChanged="ProgressBar_ValueChanged"  DockPanel.Dock="Bottom" IsVisibleChanged="ProgressBar_IsVisibleChanged"  Visibility="{Binding ProgressBarVisibility}"  Value="{Binding ProgressBarValue,FallbackValue=20}"   Height="15" Margin="20 0 5 0"   VerticalAlignment="Center"  HorizontalAlignment="Stretch" Width="auto"  Maximum="100" Minimum="0"  />
+                                        <ProgressBar x:Name="MainProgressBar" Grid.Column="0" Background="{DynamicResource BackgroundSide}"     Style="{StaticResource ProgressBarSuccessStripe}" MinWidth="100"   ValueChanged="ProgressBar_ValueChanged"  DockPanel.Dock="Bottom" IsVisibleChanged="ProgressBar_IsVisibleChanged"  Visibility="{Binding ProgressBarVisibility}"  Value="{Binding ProgressBarValue,FallbackValue=20}"   Height="15" Margin="20 0 5 0"   VerticalAlignment="Center"  HorizontalAlignment="Stretch" Width="auto"  Maximum="100" Minimum="0"  />
                                         <TextBlock Text="{Binding ProgressBarValue,StringFormat={}{0}%,FallbackValue=20%}" VerticalAlignment="Center"  Grid.Column="1"  Visibility="{Binding ProgressBarVisibility}" Style="{StaticResource BaseTextBlock}" Margin="5 0"/>
                                     </Grid>
 
 
                                     <!--当前页信息-->
                                     <StackPanel  Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right"  >
-                                        <Image   Source="{Binding Themes, Mode=OneWay, ConverterParameter=info,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" HorizontalAlignment="Left" Height="27" Margin="5"/>
+                                        <Image   Source="{Binding Themes, Mode=OneWay, ConverterParameter=info,Converter={StaticResource StringToUriStringConverter}, Source={x:Static p:Settings.Default}}" HorizontalAlignment="Left" Height="27" Margin="5"/>
                                         <TextBlock Margin="10 0"   Text="{Binding TextType}" Foreground="{DynamicResource ForegroundSearch}" Height="auto" VerticalAlignment="Center" Width="auto" HorizontalAlignment="Left" TextAlignment="Center"/>
                                         <TextBlock   Margin="10 0" Foreground="{DynamicResource ForegroundSearch}" Height="auto" VerticalAlignment="Center" Width="auto" HorizontalAlignment="Left" TextAlignment="Center">
                                             <TextBlock.Text>
@@ -2163,19 +2167,19 @@
                                     <StackPanel IsEnabled="{Binding IsLoadingMovie,Converter={StaticResource OppositeBooleanConverter}}" Visibility="Visible" Grid.Column="3" Orientation="Horizontal"  VerticalAlignment="Center" HorizontalAlignment="Right"  Background="Transparent" Height="40" Width="auto"  >
 
                                         <Border  Cursor="Hand"  PreviewMouseLeftButtonDown="PreviousPage"    Padding="3" VerticalAlignment="Center" BorderThickness="0" BorderBrush="{DynamicResource BackgroundSide}" ToolTip="{x:Static lang:Resources.PreviewPage}"     Margin="5 0" CornerRadius="3" Style="{StaticResource BorderStyle}" >
-                                            <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=left,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
+                                            <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=left,Converter={StaticResource StringToUriStringConverter}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
                                         </Border>
 
 
 
 
                                         <StackPanel  Orientation="Horizontal" Height="40" Width="auto">
-                                            <TextBox GotFocus="TextBox_GotFocus" PreviewKeyDown="GoToPage"  Style="{StaticResource BaseTextBox}"  Padding="10 0"   BorderThickness="0"  Text="{Binding CurrentPage}"  VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="10 1 10 1"/>
+                                            <TextBox GotFocus="TextBox_GotFocus" PreviewKeyDown="GoToPage"  Style="{StaticResource BaseTextBox}"  Padding="10 0" Background="Transparent"     BorderThickness="0"  Text="{Binding CurrentPage}"  VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="10 1 10 1"/>
                                             <TextBlock Foreground="{DynamicResource ForegroundSearch}" Padding="10 0"  Text="{Binding TotalPage, StringFormat=/\{0\}}" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="10 1 10 1"/>
                                         </StackPanel>
 
                                         <Border  Cursor="Hand"  PreviewMouseLeftButtonDown="NextPage"  HorizontalAlignment="Left"   Padding="3" VerticalAlignment="Center" BorderThickness="0" BorderBrush="{DynamicResource BackgroundSide}" ToolTip="{x:Static lang:Resources.NextPage}"     Margin="5 0" CornerRadius="3" Style="{StaticResource BorderStyle}" >
-                                            <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=right,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   Visibility="Visible" />
+                                            <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=right,Converter={StaticResource StringToUriStringConverter}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   Visibility="Visible" />
                                         </Border>
 
                                     </StackPanel>
@@ -2228,11 +2232,11 @@
                                 </Grid>
 
                                 <!--工具栏-->
-                                <Grid IsEnabled="{Binding IsLoadingClassify,Converter={StaticResource OppositeBooleanConverter}}" Background="{DynamicResource BackgroundMain}"   Grid.Row="0"   Panel.ZIndex="4"  Visibility="{Binding DisplayFunBar, Converter={StaticResource BoolToVis}, Mode=TwoWay, Source={x:Static p:Settings.Default}}">
+                                <Grid IsEnabled="{Binding IsLoadingClassify,Converter={StaticResource OppositeBooleanConverter}}" Background="Transparent"   Grid.Row="0"   Panel.ZIndex="4"  Visibility="{Binding DisplayFunBar, Converter={StaticResource BoolToVis}, Mode=TwoWay, Source={x:Static p:Settings.Default}}">
 
                                     <StackPanel  Orientation="Horizontal">
 
-                                        <Border Background="{DynamicResource BackgroundSide}" CornerRadius="5" >
+                                        <Border Background="Transparent" CornerRadius="5" >
                                             <StackPanel x:Name="ClassifyVedioTypeStackPanel" Orientation="Horizontal" Margin="5">
                                                 <RadioButton GroupName="VedioTypeRadioButton" IsChecked="True"   Content="{x:Static lang:Resources.All}" Style="{StaticResource FlatRadioButton}"/>
                                                 <RadioButton GroupName="VedioTypeRadioButton"   Content="{x:Static lang:Resources.Uncensored}" Style="{StaticResource FlatRadioButton}"/>
@@ -2243,7 +2247,7 @@
 
                                         <StackPanel Visibility="{Binding ShowActorTools,Converter={StaticResource BoolToVisibilityConverter}}"   Orientation="Horizontal"   Margin="5 0"  >
                                             <Border   ToolTip="{x:Static lang:Resources.SyncInfo}"     Style="{StaticResource ToolsBarBorderStyle}" MouseLeftButtonUp="ShowDownloadActorMenu">
-                                                <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=download,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
+                                                <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=download,Converter={StaticResource StringToUriStringConverter}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
                                             </Border>
                                             <CheckBox Click="ActorCheckBox_Click" Foreground="{DynamicResource ForegroundGlobal}"  IsChecked="{Binding ActorEditMode, Mode=TwoWay, Source={x:Static p:Settings.Default}}"  Height="30" Content="{x:Static lang:Resources.MultiSelect}"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="5 0" HorizontalAlignment="Left" />
                                             <CheckBox x:Name="LoveCheckBox"   Content="{x:Static lang:Resources.ShowFavoriteActor}" IsChecked="False" Checked="ShowLoveActors" Unchecked="CheckBox_Unchecked"/>
@@ -2271,6 +2275,7 @@
 
                                     </StackPanel>
                                 </Grid>
+
 
 
 
@@ -2575,7 +2580,7 @@
 
 
                                 <!--底部-->
-                                <Grid  Grid.Row="2"    >
+                                <Grid  Grid.Row="2"  Visibility="{Binding ShowActorTools,Converter={StaticResource BoolToVisibilityConverter}}"   >
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*"/>
                                         <ColumnDefinition Width="auto"/>
@@ -2591,14 +2596,14 @@
                                             <ColumnDefinition Width="*"/>
                                             <ColumnDefinition Width="auto"/>
                                         </Grid.ColumnDefinitions>
-                                        <ProgressBar  Grid.Column="0" Background="{DynamicResource BackgroundSide}" ValueChanged="ActorProgressBar_ValueChanged"     Style="{StaticResource ProgressBarSuccessStripe}" MinWidth="100"    Visibility="{Binding ActorProgressBarVisibility}"  Value="{Binding ActorProgressBarValue,FallbackValue=20}"    Height="15" Margin="20 0 5 0"   VerticalAlignment="Center"    Maximum="100" Minimum="0"  />
-                                        <TextBlock     Grid.Column="1" Text="{Binding ActorProgressBarValue,StringFormat={}{0}%,FallbackValue=20%}" Visibility="{Binding ActorProgressBarVisibility}" Style="{StaticResource BaseTextBlock}" VerticalAlignment="Center" Margin="5 0"/>
+                                        <ProgressBar x:Name="ActorProgressBar"  Grid.Column="0" Background="{DynamicResource BackgroundSide}" ValueChanged="ActorProgressBar_ValueChanged"     Style="{StaticResource ProgressBarSuccessStripe}" MinWidth="100"    Visibility="{Binding ActorProgressBarVisibility,FallbackValue=Collapsed}"  Value="{Binding ActorProgressBarValue,FallbackValue=0}"    Height="15" Margin="20 0 5 0"   VerticalAlignment="Center"    Maximum="100" Minimum="0"  />
+                                        <TextBlock     Grid.Column="1" Text="{Binding ActorProgressBarValue,StringFormat={}{0}%,FallbackValue=20%}" Visibility="{Binding ElementName=ActorProgressBar,Path=Visibility}" Style="{StaticResource BaseTextBlock}" VerticalAlignment="Center" Margin="5 0"/>
                                     </Grid>
 
 
                                     <!--当前页信息-->
                                     <StackPanel Visibility="{Binding ShowActorTools,Converter={StaticResource BoolToVisibilityConverter}}" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right"  >
-                                        <Image   Source="{Binding Themes, Mode=OneWay, ConverterParameter=info,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" HorizontalAlignment="Left" Height="27" Margin="5"/>
+                                        <Image   Source="{Binding Themes, Mode=OneWay, ConverterParameter=info,Converter={StaticResource StringToUriStringConverter}, Source={x:Static p:Settings.Default}}" HorizontalAlignment="Left" Height="27" Margin="5"/>
                                         <TextBlock   Margin="10 0" Foreground="{DynamicResource ForegroundSearch}" Height="auto" VerticalAlignment="Center" Width="auto" HorizontalAlignment="Left" TextAlignment="Center">
                                             <TextBlock.Text>
                                                 <MultiBinding StringFormat="{}{0}/{1} ">
@@ -2610,18 +2615,18 @@
                                     </StackPanel>
 
                                     <!--页码-->
-                                    <StackPanel IsEnabled="{Binding IsLoadingClassify,Converter={StaticResource OppositeBooleanConverter},FallbackValue=False}"  Grid.Column="2"  Visibility="{Binding ShowActorTools,Converter={StaticResource BoolToVisibilityConverter}}" Orientation="Horizontal"  VerticalAlignment="Center" HorizontalAlignment="Right"  Background="Transparent" Height="40" Width="auto"  >
+                                    <StackPanel IsEnabled="{Binding IsLoadingClassify,Converter={StaticResource OppositeBooleanConverter},FallbackValue=False}"  Grid.Column="2"   Orientation="Horizontal"  VerticalAlignment="Center" HorizontalAlignment="Right"  Background="Transparent" Height="40" Width="auto"  >
 
-                                        <Border  Cursor="Hand"  PreviewMouseLeftButtonDown="PreviousActorPage"    Padding="3" VerticalAlignment="Center" BorderThickness="2" BorderBrush="{DynamicResource BackgroundSide}" ToolTip="{x:Static lang:Resources.PreviewPage}"     Margin="5 0" CornerRadius="3" Style="{StaticResource BorderStyle}" >
-                                            <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=left,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
+                                        <Border  Cursor="Hand"  PreviewMouseLeftButtonDown="PreviousActorPage"    Padding="3" VerticalAlignment="Center" BorderThickness="0" BorderBrush="{DynamicResource BackgroundSide}" ToolTip="{x:Static lang:Resources.PreviewPage}"     Margin="5 0" CornerRadius="3" Style="{StaticResource BorderStyle}" >
+                                            <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=left,Converter={StaticResource StringToUriStringConverter}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
                                         </Border>
                                         <StackPanel  Orientation="Horizontal" Height="40" Width="auto">
-                                            <TextBox ContextMenu="{StaticResource TextBoxContextMenu}" GotFocus="TextBox_GotFocus" PreviewKeyDown="GoToActorPage"  Style="{StaticResource BaseTextBox}"  Padding="10 0"   BorderThickness="0"  Text="{Binding CurrentActorPage}"  VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="10 1 10 1"/>
+                                            <TextBox ContextMenu="{StaticResource TextBoxContextMenu}" GotFocus="TextBox_GotFocus" PreviewKeyDown="GoToActorPage"  Style="{StaticResource BaseTextBox}"  Padding="10 0"   BorderThickness="0"  Text="{Binding CurrentActorPage}" Background="Transparent"  VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="10 1 10 1"/>
                                             <TextBlock Foreground="{DynamicResource ForegroundSearch}" Padding="10 0"  Text="{Binding TotalActorPage, StringFormat=/\{0\}}" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="10 1 10 1"/>
                                         </StackPanel>
 
-                                        <Border  Cursor="Hand"  PreviewMouseLeftButtonDown="NextActorPage"  HorizontalAlignment="Left"   Padding="3" VerticalAlignment="Center" BorderThickness="2" BorderBrush="{DynamicResource BackgroundSide}" ToolTip="{x:Static lang:Resources.NextPage}"     Margin="5 0" CornerRadius="3" Style="{StaticResource BorderStyle}" >
-                                            <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=right,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   Visibility="Visible" />
+                                        <Border  Cursor="Hand"  PreviewMouseLeftButtonDown="NextActorPage"  HorizontalAlignment="Left"   Padding="3" VerticalAlignment="Center" BorderThickness="0" BorderBrush="{DynamicResource BackgroundSide}" ToolTip="{x:Static lang:Resources.NextPage}"     Margin="5 0" CornerRadius="3" Style="{StaticResource BorderStyle}" >
+                                            <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=right,Converter={StaticResource StringToUriStringConverter}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   Visibility="Visible" />
                                         </Border>
 
                                     </StackPanel>
@@ -2673,7 +2678,7 @@
                                 </Style.Triggers>
                             </Style>
                         </Border.Style>
-                        <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=close,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
+                        <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=close,Converter={StaticResource StringToUriStringConverter}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
                     </Border>
 
                 </Grid>
@@ -2695,7 +2700,7 @@
                     </Border>
 
                     <Border  PreviewMouseLeftButtonUp="HideGrid"   Style="{StaticResource GridCloseBorderStyle}" >
-                        <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=close,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
+                        <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=close,Converter={StaticResource StringToUriStringConverter}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
                     </Border>
 
                     <TextBlock Text="{x:Static lang:Resources.Choose}" Style="{StaticResource BaseTextBlock}" Margin="20" Height="auto" VerticalAlignment="Top" HorizontalAlignment="Center"/>
@@ -2751,7 +2756,7 @@
                     </Border>
 
                     <Border  PreviewMouseLeftButtonUp="HideGrid"   Style="{StaticResource GridCloseBorderStyle}" >
-                        <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=close,Converter={StaticResource StringToUriStringConverterMain}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
+                        <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=close,Converter={StaticResource StringToUriStringConverter}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
                     </Border>
 
                     <TextBlock Text="{x:Static lang:Resources.Menu_LabelManagement}" Style="{StaticResource BaseTextBlock}" Margin="20" Height="auto" VerticalAlignment="Top" HorizontalAlignment="Center"/>

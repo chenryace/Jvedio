@@ -10,7 +10,7 @@ using System.Windows.Shapes;
 using System.Windows.Interop;
 using System.Runtime.InteropServices;
 using System.Windows.Media.Animation;
-
+using Jvedio.Utils;
 namespace Jvedio
 {
 
@@ -178,7 +178,7 @@ namespace Jvedio
 
         private void InitStyle()
         {
-            this.Style = (Style)App.Current.Resources["Jvedio_BaseWindowStyle"];
+            this.Style = (System.Windows.Style)App.Current.Resources["Jvedio_BaseWindowStyle"];
         }
 
         private void InitEvent()

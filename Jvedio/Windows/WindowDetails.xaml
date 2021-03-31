@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Jvedio"
+        xmlns:converter="clr-namespace:Jvedio.Utils.Converter;assembly=Jvedio.Utils"
         xmlns:p="clr-namespace:Jvedio.Properties"
         xmlns:lang="clr-namespace:Jvedio.Language;assembly=Jvedio.Language"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
@@ -24,12 +25,12 @@
 
 
         <local:TagStampsConverter x:Key="TagStampsConverter"/>
-        <local:StringToUriStringConverterOther x:Key="StringToUriStringConverterOther"/>
-        <local:PlotToVisibilityConverter x:Key="PlotToVisibilityConverter"/>
-        <local:IntToCheckedConverter x:Key="IntToCheckedConverter"/>
-        <local:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+        <converter:StringToUriStringConverter x:Key="StringToUriStringConverter"/>
+        <converter:PlotToVisibilityConverter x:Key="PlotToVisibilityConverter"/>
+        <converter:IntToCheckedConverter x:Key="IntToCheckedConverter"/>
+        <converter:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
         <local:IntToVedioTypeConverter x:Key="IntToVedioTypeConverter" />
-        <local:SmallerValueConverter x:Key="SmallerValueConverter" />
+        <converter:SmallerValueConverter x:Key="SmallerValueConverter" />
 
 
         <Style x:Key="ExtraPic" TargetType="Image">
@@ -209,7 +210,7 @@
                             </Style>
                         </Border.Style>
 
-                        <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=left,Converter={StaticResource StringToUriStringConverterOther}, Source={x:Static p:Settings.Default}}" Height="20" Width="20" Canvas.Left="9" Canvas.Top="11" Cursor="Hand"/>
+                        <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=left,Converter={StaticResource StringToUriStringConverter}, Source={x:Static p:Settings.Default}}" Height="20" Width="20" Canvas.Left="9" Canvas.Top="11" Cursor="Hand"/>
                     </Border>
 
                     <StackPanel x:Name="ImageChangeStackPanel" Orientation="Vertical" VerticalAlignment="Bottom" Margin="0 20">
@@ -249,7 +250,7 @@
 
 
                             <Button     Style="{StaticResource RoundCloseButton}" Click="CloseWindow" >
-                                <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=close,Converter={StaticResource StringToUriStringConverterOther}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
+                                <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=close,Converter={StaticResource StringToUriStringConverter}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
                             </Button>
                         </StackPanel>
 
@@ -277,7 +278,7 @@
                             <StackPanel Margin="20" Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Right"    Panel.ZIndex="10"     >
                                 <Canvas Width="40" Height="40" VerticalAlignment="Center"  MouseLeftButtonUp="PlayVedio">
                                     <Ellipse Style="{StaticResource Ellipse}" Width="40" Height="40"  Canvas.Left="3" Canvas.Top="3" />
-                                    <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=triangle,Converter={StaticResource StringToUriStringConverterOther}, Source={x:Static p:Settings.Default}}" Height="28" Canvas.Left="11" Canvas.Top="38" Cursor="Hand"   >
+                                    <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=triangle,Converter={StaticResource StringToUriStringConverter}, Source={x:Static p:Settings.Default}}" Height="28" Canvas.Left="11" Canvas.Top="38" Cursor="Hand"   >
                                         <Image.RenderTransform>
                                             <RotateTransform x:Name="rotateTransform" Angle="-90" />
                                         </Image.RenderTransform>
@@ -482,7 +483,7 @@
                                                     <TextBox   FontSize="14"  VerticalAlignment="Center" Style="{StaticResource ViewTextBox}"   Text="{Binding DetailMovie.releasedate}" ></TextBox>
 
                                                     <StackPanel Orientation="Horizontal" Margin="10 0">
-                                                        <Image VerticalAlignment="Center" Source="{Binding Themes, Mode=OneWay, ConverterParameter=runtime,Converter={StaticResource StringToUriStringConverterOther}, Source={x:Static p:Settings.Default}}" />
+                                                        <Image VerticalAlignment="Center" Source="{Binding Themes, Mode=OneWay, ConverterParameter=runtime,Converter={StaticResource StringToUriStringConverter}, Source={x:Static p:Settings.Default}}" />
                                                         <TextBox Margin="5 0" FontSize="14" VerticalAlignment="Center" Style="{StaticResource ViewTextBox}"   Text="{Binding  DetailMovie.runtime , StringFormat='\{0} min'}" ></TextBox>
                                                     </StackPanel>
 
@@ -609,18 +610,18 @@
                                                         <ItemsControl  x:Name="LabelListItemsControl" Grid.Column="2" ItemsSource="{Binding DetailMovie.labellist,Mode=OneWay}"  Height="auto"  VerticalAlignment="Top"  Background="Transparent">
                                                             <ItemsControl.ItemsPanel>
                                                                 <ItemsPanelTemplate>
-                                                                    <hc:TagPanel  ShowAddButton="True"    TagMargin="20"    Orientation="Horizontal" MaxWidth="400" VerticalAlignment="Top" >
+                                                                    <!--<hc:TagContainer  ShowAddButton="True"    TagMargin="20"    Orientation="Horizontal" MaxWidth="400" VerticalAlignment="Top" >
 
-                                                                    </hc:TagPanel>
+                                                                    </hc:TagContainer>-->
                                                                 </ItemsPanelTemplate>
                                                             </ItemsControl.ItemsPanel>
 
                                                             <ItemsControl.ItemTemplate>
                                                                 <DataTemplate>
                                                                     <Border >
-                                                                        <hc:TagPanel >
+                                                                        <hc:TagContainer >
                                                                             <hc:Tag Closing="Tag_Closing"  MouseLeftButtonUp="ShowSameLabel" Cursor="Hand"  Background="{DynamicResource BackgroundSide}" Foreground="{DynamicResource ForegroundSearch}" FontSize="16" ShowCloseButton="True" Selectable="False"  Content="{Binding}"/>
-                                                                        </hc:TagPanel>
+                                                                        </hc:TagContainer>
                                                                     </Border>
                                                                 </DataTemplate>
                                                             </ItemsControl.ItemTemplate>
@@ -785,7 +786,7 @@
                                         </Style>
                                     </Border.Style>
 
-                                    <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=right,Converter={StaticResource StringToUriStringConverterOther}, Source={x:Static p:Settings.Default}}" Height="20" Canvas.Left="11" Canvas.Top="11" Cursor="Hand"/>
+                                    <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=right,Converter={StaticResource StringToUriStringConverter}, Source={x:Static p:Settings.Default}}" Height="20" Canvas.Left="11" Canvas.Top="11" Cursor="Hand"/>
                                 </Border>
                             </Grid>
                         </Grid>
@@ -805,7 +806,7 @@
             </Border>
 
             <Border  PreviewMouseLeftButtonUp="HideGrid"   Style="{StaticResource GridCloseBorderStyle}" >
-                <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=close,Converter={StaticResource StringToUriStringConverterOther}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
+                <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=close,Converter={StaticResource StringToUriStringConverter}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
             </Border>
 
             <TextBox Text="{x:Static lang:Resources.Menu_LabelManage1}" Style="{StaticResource ViewTextBox}" Margin="20" Height="auto" VerticalAlignment="Top" HorizontalAlignment="Center"/>

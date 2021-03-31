@@ -1,4 +1,5 @@
-﻿using Jvedio.ViewModel;
+﻿using Jvedio.Utils;
+using Jvedio.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -52,8 +53,6 @@ namespace Jvedio
             OpenFileDialog1.FileName = "";
             OpenFileDialog1.Filter = $"Access {Jvedio.Language.Resources.File}(*.mdb)| *.mdb";
             OpenFileDialog1.FilterIndex = 1;
-            OpenFileDialog1.InitialDirectory = Directory.Exists(AppDomain.CurrentDomain.BaseDirectory + "mdb") ? AppDomain.CurrentDomain.BaseDirectory + "mdb" : AppDomain.CurrentDomain.BaseDirectory;
-            OpenFileDialog1.RestoreDirectory = true;
             if (OpenFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 AccessPathTextBox.Text = OpenFileDialog1.FileName;
@@ -63,13 +62,10 @@ namespace Jvedio
 
         public void ShowUNCPath(object sender, RoutedEventArgs e)
         {
-            System.Windows.Forms.FolderBrowserDialog folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
-            folderBrowserDialog.Description = Jvedio.Language.Resources.ChooseDir;
-            folderBrowserDialog.ShowNewFolderButton = false;
-            //folderBrowserDialog.SelectedPath = @"D:\2020\VS Project\Jvedio\Jvedio(WPF)\Jvedio\Jvedio\bin\番号测试";
-            if (folderBrowserDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK & !string.IsNullOrWhiteSpace(folderBrowserDialog.SelectedPath))
+            var path = FileHelper.SelectPath(this);
+            if (Directory.Exists(path))
             {
-                UNCPathTextBox.Text = folderBrowserDialog.SelectedPath;
+                UNCPathTextBox.Text = path;
             }
         }
 
@@ -80,8 +76,6 @@ namespace Jvedio
             OpenFileDialog1.FileName = "";
             OpenFileDialog1.Filter = $"NFO {Jvedio.Language.Resources.File}(*.nfo)| *.nfo";
             OpenFileDialog1.FilterIndex = 1;
-            OpenFileDialog1.InitialDirectory = Directory.Exists(AppDomain.CurrentDomain.BaseDirectory + "Download\\NFO") ? AppDomain.CurrentDomain.BaseDirectory + "Download\\NFO" : AppDomain.CurrentDomain.BaseDirectory;
-            OpenFileDialog1.RestoreDirectory = true;
             if (OpenFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 NFOPathTextBox.Text = OpenFileDialog1.FileName;
@@ -92,14 +86,12 @@ namespace Jvedio
 
         public void AddPath(object sender, RoutedEventArgs e)
         {
-            System.Windows.Forms.FolderBrowserDialog folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
-            folderBrowserDialog.Description = Jvedio.Language.Resources.ChooseDir;
-            folderBrowserDialog.ShowNewFolderButton = false;
-            if (folderBrowserDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK & !string.IsNullOrWhiteSpace(folderBrowserDialog.SelectedPath))
+            var path = FileHelper.SelectPath(this);
+            if (Directory.Exists(path))
             {
-                if (!vieModel.ScanPath.Contains(folderBrowserDialog.SelectedPath) && !vieModel.ScanPath.IsIntersectWith(folderBrowserDialog.SelectedPath))
+                if (!vieModel.ScanPath.Contains(path) && !vieModel.ScanPath.IsIntersectWith(path))
                 {
-                    vieModel.ScanPath.Add(folderBrowserDialog.SelectedPath);
+                    vieModel.ScanPath.Add(path);
                 }
                 else
                 {
@@ -135,14 +127,12 @@ namespace Jvedio
 
         public void AddEuPath(object sender, RoutedEventArgs e)
         {
-            System.Windows.Forms.FolderBrowserDialog folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
-            folderBrowserDialog.Description = Jvedio.Language.Resources.ChooseDir;
-            folderBrowserDialog.ShowNewFolderButton = true;
-            if (folderBrowserDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK & !string.IsNullOrWhiteSpace(folderBrowserDialog.SelectedPath))
+            var path = FileHelper.SelectPath(this);
+            if (Directory.Exists(path))
             {
-                if (!vieModel.ScanEuPath.Contains(folderBrowserDialog.SelectedPath) && !vieModel.ScanEuPath.IsIntersectWith(folderBrowserDialog.SelectedPath))
+                if (!vieModel.ScanEuPath.Contains(path) && !vieModel.ScanEuPath.IsIntersectWith(path))
                 {
-                    vieModel.ScanEuPath.Add(folderBrowserDialog.SelectedPath);
+                    vieModel.ScanEuPath.Add(path);
                 }
                 else
                 {
@@ -179,15 +169,13 @@ namespace Jvedio
 
         public void AddNFOPath(object sender, RoutedEventArgs e)
         {
-            System.Windows.Forms.FolderBrowserDialog folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
-            folderBrowserDialog.Description = Jvedio.Language.Resources.ChooseDir;
-            folderBrowserDialog.ShowNewFolderButton = true;
-            folderBrowserDialog.SelectedPath = Directory.Exists(AppDomain.CurrentDomain.BaseDirectory + "DownLoad\\NFO") ? AppDomain.CurrentDomain.BaseDirectory + "DownLoad\\NFO" : AppDomain.CurrentDomain.BaseDirectory;
-            if (folderBrowserDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK & !string.IsNullOrWhiteSpace(folderBrowserDialog.SelectedPath))
+            var path = FileHelper.SelectPath(this);
+            path = Directory.Exists(AppDomain.CurrentDomain.BaseDirectory + "DownLoad\\NFO") ? AppDomain.CurrentDomain.BaseDirectory + "DownLoad\\NFO" : AppDomain.CurrentDomain.BaseDirectory;
+            if (Directory.Exists(path))
             {
-                if (!vieModel.NFOScanPath.Contains(folderBrowserDialog.SelectedPath) && !vieModel.NFOScanPath.IsIntersectWith(folderBrowserDialog.SelectedPath))
+                if (!vieModel.NFOScanPath.Contains(path) && !vieModel.NFOScanPath.IsIntersectWith(path))
                 {
-                    vieModel.NFOScanPath.Add(folderBrowserDialog.SelectedPath);
+                    vieModel.NFOScanPath.Add(path);
                 }
                 else
                 {
