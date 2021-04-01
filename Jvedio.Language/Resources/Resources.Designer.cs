@@ -601,6 +601,15 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 选择漫画库 的本地化字符串。
+        /// </summary>
+        public static string ChooseComicsLibrary {
+            get {
+                return ResourceManager.GetString("ChooseComicsLibrary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 选择视频库 的本地化字符串。
         /// </summary>
         public static string ChooseDataBase {
@@ -1542,6 +1551,15 @@ namespace Jvedio.Language {
         public static string ImportFile {
             get {
                 return ResourceManager.GetString("ImportFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 导入库文件 的本地化字符串。
+        /// </summary>
+        public static string ImportLibrary {
+            get {
+                return ResourceManager.GetString("ImportLibrary", resourceCulture);
             }
         }
         
@@ -2559,6 +2577,15 @@ namespace Jvedio.Language {
         public static string MultiSelect {
             get {
                 return ResourceManager.GetString("MultiSelect", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 我的漫画 的本地化字符串。
+        /// </summary>
+        public static string MyComics {
+            get {
+                return ResourceManager.GetString("MyComics", resourceCulture);
             }
         }
         

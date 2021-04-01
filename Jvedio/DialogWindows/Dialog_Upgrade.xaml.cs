@@ -16,7 +16,8 @@ using System.Xml;
 using static Jvedio.GlobalVariable;
 using static Jvedio.FileProcess;
 using System.Windows.Documents;
-using Jvedio.Library.Encrypt;
+using Jvedio.Utils.Encrypt;
+using Jvedio.Utils.Encrypt;
 using Jvedio.Utils.Net;
 
 namespace Jvedio

@@ -61,9 +61,52 @@
     <SolidColorBrush x:Key="ForegroundGlobal"  Color="{DynamicResource Color_ForegroundGlobal}" />
     <SolidColorBrush x:Key="ForegroundSearch"  Color="{DynamicResource Color_ForegroundSearch}" />
     <SolidColorBrush x:Key= "BorderBursh"  Color="{DynamicResource Color_BorderBursh}" />
-    
-    
 
+    <Style x:Key="Ellipse" TargetType="{x:Type Ellipse}">
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource AncestorType={x:Type Canvas}, Mode=FindAncestor}}" Value="True">
+                <Setter Property="Fill" Value="{DynamicResource ForegroundSearch}"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource AncestorType={x:Type Canvas}, Mode=FindAncestor}}" Value="False">
+                <Setter Property="Fill" Value="{DynamicResource ForegroundSearch}"/>
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+
+
+    <Style x:Key="Ellipse2" TargetType="{x:Type Ellipse}">
+        <Setter Property="Cursor" Value="Hand"/>
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource AncestorType={x:Type Canvas}, Mode=FindAncestor}}" Value="True">
+                <Setter Property="Fill" Value="#AD744C"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource AncestorType={x:Type Canvas}, Mode=FindAncestor}}" Value="False">
+                <Setter Property="Fill" Value="#DD744C"/>
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style x:Key="BaseFilterTextBlock" TargetType="{x:Type TextBlock}">
+        <Setter Property="TextWrapping" Value="Wrap"/>
+        <Setter Property="HorizontalAlignment" Value="Left"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="TextAlignment" Value="Left"/>
+        <Setter Property="FontFamily" Value="微软雅黑"/>
+        <Setter Property="FontSize" Value="15"/>
+        <!--<Setter Property="MinWidth" Value="100"/>-->
+        <Setter Property="Margin" Value="10 5"/>
+        <Setter Property="Foreground" Value="{DynamicResource ForegroundSearch}"/>
+    </Style>
+
+    <Style x:Key="SearchCandidateTextBlock" TargetType="{x:Type TextBlock}">
+        <Setter Property="TextWrapping" Value="Wrap"/>
+        <Setter Property="TextAlignment" Value="Left"/>
+        <Setter Property="Margin" Value="0,5,0,5"/>
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Margin" Value="10 0"/>
+        <Setter Property="Foreground" Value="{DynamicResource ForegroundSearch}"/>
+    </Style>
 
     <Style x:Key="ToolsBarBorderStyle" TargetType="Border">
         <Setter Property="Margin" Value="5"/>

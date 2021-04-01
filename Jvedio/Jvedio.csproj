@@ -260,7 +260,6 @@
     <Compile Include="Utils\Net\DetailDownLoad.cs" />
     <Compile Include="Utils\Net\Upgrade.cs" />
     <Compile Include="Utils\Other\SampleMovies.cs" />
-    <Compile Include="Utils\Encrypt\Encrypt.cs" />
     <Compile Include="Utils\FileProcess\FileProcess.cs" />
     <Compile Include="Utils\ImageAndVedio\MediaParse.cs" />
     <Compile Include="Utils\Config\RecentWatchedConfig.cs" />

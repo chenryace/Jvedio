@@ -155,7 +155,7 @@
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="auto"/>
                                 </Grid.ColumnDefinitions>
-                                <ComboBox SelectedIndex="{Binding DatabaseSelectedIndex,FallbackValue=0}" Grid.Column="0" FontSize="16"  Style="{StaticResource SideComboBoxStyle}"  Margin="5"     ItemsSource="{Binding DataBases}"   MinWidth="150"  Height="30"  ToolTip="{Binding RelativeSource={RelativeSource Mode=Self},Path=Text}" HorizontalAlignment="Stretch" />
+                                <ComboBox SelectedIndex="{Binding DatabaseSelectedIndex,FallbackValue=0}" Grid.Column="0" FontSize="16"  Style="{StaticResource SideComboBoxStyle}"  Margin="5" SelectionChanged="ComboBox_SelectionChanged"     ItemsSource="{Binding DataBases}"   MinWidth="150"  Height="30"  ToolTip="{Binding RelativeSource={RelativeSource Mode=Self},Path=Text}" HorizontalAlignment="Stretch" />
 
                                 <Border ContextMenu="{StaticResource SettingsContextMenu}"  Grid.Column="1"  ToolTip="{x:Static lang:Resources.Settings}"   Width="27" Height="27"  Margin="5 0"  CornerRadius="3" Style="{StaticResource BorderStyle}" MouseUp="ShowSettingsPopup"   >
                                     <Image  Source="{Binding Themes, Mode=OneWay, ConverterParameter=menu,Converter={StaticResource StringToUriStringConverter}, Source={x:Static p:Settings.Default}}"  Margin="4"    />
@@ -191,6 +191,7 @@
                                     <Image  Source="{Binding Themes, Mode=OneWay, ConverterParameter=classify,Converter={StaticResource StringToUriStringConverter}, Source={x:Static p:Settings.Default}}" Height="20" HorizontalAlignment="Left" Panel.ZIndex="2" Margin="10 0"    />
                                     <RadioButton   Background="Transparent"  Cursor="Hand"    Padding="20 0"   Style="{StaticResource SideRadioButtonStyle}"  Content="{x:Static lang:Resources.AutoClassification}"    />
                                 </Grid>
+                                <Button Style="{StaticResource ButtonPrimary}" Content="测试" Click="Test"/>
                             </StackPanel>
 
 
@@ -206,6 +207,248 @@
 
                     <!--左右调节-->
                     <Rectangle   MouseDown="DragRectangle_MouseDown" MouseUp="DragRectangle_MouseUp"  MouseMove="DragRectangle_MouseMove"  Panel.ZIndex="5"  Stroke="{x:Null}" Fill="Transparent"  HorizontalAlignment="Right" Width="6"  Margin="0 0 -3 0" />
+
+                    <TabControl  FocusVisualStyle="{x:Null}" SelectedIndex="{Binding TabSelectedIndex,FallbackValue=0}" Grid.Column="1" Background="Transparent" Style="{DynamicResource HeaderHideTabControlStyle}"  >
+                        <TabItem  Background="Transparent"  >
+                            <!--影片-->
+                            <Grid      MouseUp="DragRectangle_MouseUp"  MouseMove="DragRectangle_MouseMove" >
+
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="auto"/>
+                                </Grid.RowDefinitions>
+
+
+                                <!--工具栏-->
+                                <Grid IsEnabled="{Binding IsLoadingMovie,Converter={StaticResource OppositeBooleanConverter}}" Background="Transparent" MouseLeftButtonDown="ToolsGrid_MouseLeftButtonDown"   Grid.Row="0"   Panel.ZIndex="4"  Visibility="{Binding DisplayFunBar, Converter={StaticResource BoolToVis}, Mode=TwoWay, Source={x:Static p:Settings.Default}}">
+
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="auto"/>
+                                        <RowDefinition Height="auto"/>
+                                    </Grid.RowDefinitions>
+
+
+
+
+                                    <Grid Grid.Row="0">
+
+                                        <!--搜索-->
+                                        <StackPanel Orientation="Horizontal">
+                                            <Grid Focusable="True"  HorizontalAlignment="Left"   Height="40"  Width="300" Margin="10 5"   >
+                                                <Border       CornerRadius="2"   Background="Transparent" BorderBrush="{DynamicResource BackgroundSide}"  BorderThickness="2" >
+
+                                                </Border>
+
+
+                                                <Grid  VerticalAlignment="Center"  Width="25" Panel.ZIndex="3" HorizontalAlignment="Left" Margin="10 0 0 0" MouseUp="ShowSearchMenu" Cursor="Hand">
+                                                    <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=up,Converter={StaticResource StringToUriStringConverter}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"  RenderTransformOrigin=".5,.5"   >
+                                                        <Image.RenderTransform>
+                                                            <RotateTransform Angle="180" />
+                                                        </Image.RenderTransform>
+                                                    </Image>
+                                                    <Popup  VerticalOffset="5" HorizontalOffset="-15" x:Name="SearchOptionPopup" Placement="Bottom" PopupAnimation="Fade"  AllowsTransparency="True" StaysOpen="False" IsOpen="False">
+
+
+
+                                                        <Grid    Margin="5"   >
+                                                            <Border     Background="{DynamicResource BackgroundMenu}" CornerRadius="5" Margin="5"  >
+                                                                <Border.Effect>
+                                                                    <DropShadowEffect BlurRadius="10" Direction="-90"  RenderingBias="Quality" ShadowDepth="0"/>
+                                                                </Border.Effect>
+                                                            </Border>
+                                                            <StackPanel Margin="5">
+                                                                <RadioButton Click="SaveAllSearchType" IsChecked="True"  Content="{x:Static lang:Resources.ID}" Style="{StaticResource RadioButtonStyle}"  GroupName="SearchTypeRadioButton" Template="{DynamicResource RadioButtonControlTemplate1}"/>
+                                                                <RadioButton Click="SaveAllSearchType"      Content="{x:Static lang:Resources.Title}" Style="{StaticResource RadioButtonStyle}" GroupName="SearchTypeRadioButton" Template="{DynamicResource RadioButtonControlTemplate1}"/>
+                                                                <RadioButton Click="SaveAllSearchType"      Content="{x:Static lang:Resources.Actor}" Style="{StaticResource RadioButtonStyle}" GroupName="SearchTypeRadioButton" Template="{DynamicResource RadioButtonControlTemplate1}"/>
+                                                                <CheckBox   Margin="5 0" IsChecked="{Binding SearchInCurrent,Mode=TwoWay}" Content="{x:Static lang:Resources.SearchCurrent}" Style="{StaticResource CheckBoxStyle1}"/>
+                                                            </StackPanel>
+                                                        </Grid>
+                                                    </Popup>
+                                                </Grid>
+
+                                                <hc:SearchBar x:Name="SearchBar" ContextMenu="{StaticResource TextBoxContextMenu}"  Focusable="True" LostFocus="SearchBar_LostFocus" GotFocus="SearchBar_GotFocus"  PreviewKeyUp="SearchBar_PreviewKeyUp"    TextChanged="RefreshCandiadte" PreviewMouseLeftButtonDown="ShowSearchPopup" BorderThickness="0" Padding="35 0" ShowClearButton="True"  hc:InfoElement.TitleWidth="140" CaretBrush="{DynamicResource ForegroundSearch}" Foreground="{DynamicResource ForegroundSearch}" hc:InfoElement.Placeholder="{Binding SearchHint}" Margin="5 5 5 5" Background="Transparent"  hc:InfoElement.Title="" Style="{StaticResource SearchBarPlus}"  />
+
+                                                <Popup  Focusable="True" IsOpen="{Binding ShowSearchPopup,FallbackValue=False}"  VerticalOffset="2"  HorizontalOffset="0"      Width="{Binding  RelativeSource={RelativeSource AncestorType={x:Type Grid},Mode=FindAncestor},Path=ActualWidth}" Visibility="Visible"  AllowsTransparency="True" Placement="Bottom"  StaysOpen="True" >
+                                                    <Grid    Margin="5"   >
+                                                        <Border Name="SearchBorder"    Background="{DynamicResource BackgroundMenu}" CornerRadius="5" Margin="5"  >
+                                                            <Border.Effect>
+                                                                <DropShadowEffect BlurRadius="10" Direction="-90"  RenderingBias="Quality" ShadowDepth="0"/>
+                                                            </Border.Effect>
+                                                        </Border>
+
+                                                        <ScrollViewer Margin="10" Background="Transparent"    Width="auto" Height="auto"   Canvas.Top="40" Panel.ZIndex="4"         HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden">
+                                                            <StackPanel>
+                                                                <StackPanel x:Name="SearchHistoryStackPanel">
+
+                                                                    <StackPanel Orientation="Horizontal" >
+                                                                        <TextBlock Margin="5" VerticalAlignment="Center" Height="auto"  Style="{StaticResource BaseTextBlock}" Text="{x:Static lang:Resources.SearchHistory}" HorizontalAlignment="Left" FontSize="12"/>
+                                                                        <Border     Height="20" Width="20" Margin="5 0" CornerRadius="3" Style="{StaticResource CloseBorderStyle}" MouseLeftButtonDown="ClearSearchHistory">
+                                                                            <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=clear,Converter={StaticResource StringToUriStringConverter}, Source={x:Static p:Settings.Default}}" Height="15" Width="15"   />
+                                                                        </Border>
+                                                                    </StackPanel>
+
+                                                                    <ItemsControl Margin="5 0" Width="{Binding ElementName=SearchBorder,Path=ActualWidth,Converter={StaticResource WidthConverter},ConverterParameter=-20,Mode=OneWay}" HorizontalAlignment="Left"  Background="Transparent"   ItemsSource="{Binding SearchHistory,Mode=OneWay}" ScrollViewer.VerticalScrollBarVisibility="Disabled"  >
+                                                                        <ItemsControl.ItemsPanel>
+                                                                            <ItemsPanelTemplate>
+                                                                                <WrapPanel   Orientation="Horizontal" >
+
+                                                                                </WrapPanel>
+                                                                            </ItemsPanelTemplate>
+                                                                        </ItemsControl.ItemsPanel>
+
+                                                                        <ItemsControl.ItemTemplate>
+                                                                            <DataTemplate>
+
+                                                                                <Border    CornerRadius="3" Style="{StaticResource BorderStyle}" >
+                                                                                    <TextBlock  PreviewMouseLeftButtonDown="SetSearchValue"  TextWrapping="NoWrap" FontSize="15" Width="auto" ToolTip="{Binding Path=Text,RelativeSource={RelativeSource Mode=Self}}" Padding="2" Margin="10 5"    Text="{Binding }"    Style="{StaticResource SearchCandidateTextBlock }" />
+                                                                                </Border>
+
+                                                                            </DataTemplate>
+                                                                        </ItemsControl.ItemTemplate>
+                                                                    </ItemsControl>
+                                                                </StackPanel>
+
+                                                                <TextBlock  Margin="5"  Grid.Row="0" Style="{StaticResource BaseTextBlock}" Text="{x:Static lang:Resources.SearchResult}" HorizontalAlignment="Left" FontSize="12"/>
+
+                                                                <ItemsControl Background="Transparent" x:Name="SearchItemsControl"   ItemsSource="{Binding CurrentSearchCandidate}" ScrollViewer.VerticalScrollBarVisibility="Disabled"  >
+                                                                    <ItemsControl.ItemsPanel>
+                                                                        <ItemsPanelTemplate>
+                                                                            <StackPanel   Orientation="Vertical" >
+
+                                                                            </StackPanel>
+                                                                        </ItemsPanelTemplate>
+                                                                    </ItemsControl.ItemsPanel>
+
+                                                                    <ItemsControl.ItemTemplate>
+                                                                        <DataTemplate>
+                                                                            <StackPanel  Name="SearchStackPanel"  >
+
+                                                                                <Border    CornerRadius="3" Style="{StaticResource BorderStyle}" >
+                                                                                    <TextBlock  PreviewMouseLeftButtonDown="SetSearchValue"  TextWrapping="NoWrap" FontSize="15" Width="auto" ToolTip="{Binding Path=Text,RelativeSource={RelativeSource Mode=Self}}" Padding="2" Margin="10 5"    Text="{Binding }"    Style="{StaticResource SearchCandidateTextBlock }" />
+
+                                                                                </Border>
+
+                                                                            </StackPanel>
+                                                                        </DataTemplate>
+                                                                    </ItemsControl.ItemTemplate>
+                                                                </ItemsControl>
+
+                                                            </StackPanel>
+                                                        </ScrollViewer>
+                                                    </Grid>
+                                                </Popup>
+                                            </Grid>
+                                            <CheckBox Content="{x:Static lang:Resources.MultiSelect}" IsChecked="{Binding EditMode, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Click="SetSelectMode"/>
+                                        </StackPanel>
+
+
+
+                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+
+                                            <Border    ToolTip="{x:Static lang:Resources.Sorting}"      Style="{StaticResource ToolsBarBorderStyle}" MouseLeftButtonUp="ShowSortPopup">
+                                                <Image   Height="20" Width="20"   >
+                                                    <Image.Style>
+                                                        <Style TargetType="Image">
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding SortDescending}" Value="True">
+                                                                    <Setter Property="Source" Value="pack://Application:,,,/Jvedio;;;Component/Resources/Picture/sort_down.png"/>
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding SortDescending}" Value="False">
+                                                                    <Setter Property="Source" Value="pack://Application:,,,/Jvedio;;;Component/Resources/Picture/sort_up.png"/>
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </Image.Style>
+                                                </Image>
+                                            </Border>
+
+
+                                            <Border  ToolTip="{x:Static lang:Resources.ToolTip_RandomShow}"  Style="{StaticResource ToolsBarBorderStyle}" MouseLeftButtonUp="RandomDisplay" >
+                                                <Image Source="pack://Application:,,,/Jvedio;;;Component/Resources/Picture/随机.png" Height="20" Width="20"   />
+                                            </Border>
+
+                                            <Border ToolTip="{x:Static lang:Resources.ToolTip_Filter}" Style="{StaticResource ToolsBarBorderStyle}" MouseLeftButtonUp="ShowFilterGrid"  >
+                                                <Image Source="pack://Application:,,,/Jvedio;;;Component/Resources/Picture/筛选.png" Height="20" Width="20"    />
+                                            </Border>
+
+
+                                            <Button Visibility="Collapsed" Click="Test" Content="Test" Style="{StaticResource FlatButton}" />
+
+                                        </StackPanel>
+
+
+
+                                        <Popup  HorizontalOffset="-50" x:Name="SortPopup" PopupAnimation="Fade"  Placement="Mouse"   AllowsTransparency="True" StaysOpen="False" IsOpen="False">
+                                            <Grid  Margin="5"   >
+                                                <Border     Background="{DynamicResource BackgroundMenu}" CornerRadius="5" Margin="5"  >
+                                                    <Border.Effect>
+                                                        <DropShadowEffect BlurRadius="10" Direction="-90"  RenderingBias="Quality" ShadowDepth="0"/>
+                                                    </Border.Effect>
+                                                </Border>
+                                                <StackPanel x:Name="SortStackPanel"   Panel.ZIndex="7" Background="Transparent" Orientation="Vertical" Margin="5" Width="auto">
+                                                    <RadioButton Margin="5 5 10 5"    Style="{StaticResource RadioButtonStyle}" Content="{x:Static lang:Resources.ID}" HorizontalContentAlignment="Center"  GroupName="RBSort" Template="{DynamicResource RadioButtonControlTemplate1}" />
+                                                    <RadioButton  Margin="5 0 10 5"  Style="{StaticResource RadioButtonStyle}"  Content="{x:Static lang:Resources.FileSize}" HorizontalContentAlignment="Center" GroupName="RBSort" Template="{DynamicResource RadioButtonControlTemplate1}" />
+                                                    <RadioButton  Margin="5 0 10 5"    Style="{StaticResource RadioButtonStyle}" Content="{x:Static lang:Resources.CreatedDate}" HorizontalContentAlignment="Center" GroupName="RBSort" Template="{DynamicResource RadioButtonControlTemplate1}" />
+                                                    <RadioButton  Margin="5 0 10 5"    Style="{StaticResource RadioButtonStyle}" Content="{x:Static lang:Resources.ImportDate}" HorizontalContentAlignment="Center" GroupName="RBSort" Template="{DynamicResource RadioButtonControlTemplate1}" />
+                                                    <RadioButton  Margin="5 0 10 5"   Style="{StaticResource RadioButtonStyle}"  Content="{x:Static lang:Resources.Favorites}" HorizontalContentAlignment="Center" GroupName="RBSort" Template="{DynamicResource RadioButtonControlTemplate1}" />
+                                                    <RadioButton  Margin="5 0 10 5"   Style="{StaticResource RadioButtonStyle}"  Content="{x:Static lang:Resources.Title}" HorizontalContentAlignment="Center" GroupName="RBSort" Template="{DynamicResource RadioButtonControlTemplate1}" />
+                                                    <RadioButton  Margin="5 0 10 5"   Style="{StaticResource RadioButtonStyle}"  Content="{x:Static lang:Resources.ViewNumber}" HorizontalContentAlignment="Center" GroupName="RBSort" Template="{DynamicResource RadioButtonControlTemplate1}" />
+                                                    <RadioButton  Margin="5 0 10 5"   Style="{StaticResource RadioButtonStyle}"  Content="{x:Static lang:Resources.ReleaseDate}" HorizontalContentAlignment="Center" GroupName="RBSort" Template="{DynamicResource RadioButtonControlTemplate1}" />
+                                                    <RadioButton  Margin="5 0 10 5"   Style="{StaticResource RadioButtonStyle}"  Content="{x:Static lang:Resources.Rating}" HorizontalContentAlignment="Center" GroupName="RBSort" Template="{DynamicResource RadioButtonControlTemplate1}" />
+                                                    <RadioButton  Margin="5 0 10 5"   Style="{StaticResource RadioButtonStyle}"  Content="{x:Static lang:Resources.Duration}" HorizontalContentAlignment="Center" GroupName="RBSort" Template="{DynamicResource RadioButtonControlTemplate1}" />
+                                                    <RadioButton  Margin="5 0 10 5"   Style="{StaticResource RadioButtonStyle}"  Content="{x:Static lang:Resources.Actor}" HorizontalContentAlignment="Center" GroupName="RBSort" Template="{DynamicResource RadioButtonControlTemplate1}" />
+                                                </StackPanel>
+                                            </Grid>
+                                        </Popup>
+
+
+
+                                    </Grid>
+
+
+
+                                </Grid>
+
+
+
+                                <!--等待-->
+                                <Grid Grid.Row="1" Visibility="{Binding IsLoadingMovie,Converter={StaticResource BoolToVisibilityConverter},FallbackValue=Visible}"  Panel.ZIndex="10" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                    <Grid MinWidth="150" MaxWidth="250"   >
+                                        <Border   CornerRadius="5" Background="{DynamicResource ForegroundGlobal}" Margin="5"  >
+                                            <Border.Effect>
+                                                <BlurEffect Radius="4" KernelType="Box"  RenderingBias="Quality"/>
+                                            </Border.Effect>
+                                        </Border>
+
+                                        <Border  CornerRadius="5" Background="{DynamicResource BackgroundMain}" Margin="5"  >
+
+                                            <Grid Margin="5">
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="*"/>
+                                                    <RowDefinition Height="auto"/>
+                                                </Grid.RowDefinitions>
+                                                <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center"  >
+                                                    <hc:LoadingCircle Foreground="{DynamicResource ForegroundGlobal}" Height="30"/>
+                                                    <TextBlock Background="Transparent" Margin="10"   MaxHeight="300" Grid.Row="0"    Style="{StaticResource BaseTextBlock}"    VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="18" Foreground="{DynamicResource ForegroundSearch}" Text="{x:Static lang:Resources.Loading}" />
+
+                                                </StackPanel >
+
+
+                                            </Grid>
+
+
+                                        </Border>
+                                    </Grid>
+
+                                </Grid>
+
+
+
+                            </Grid>
+
+                        </TabItem>
+                    </TabControl>
 
 
 

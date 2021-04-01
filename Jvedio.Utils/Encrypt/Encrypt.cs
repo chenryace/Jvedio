@@ -6,7 +6,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Jvedio.Library.Encrypt
+namespace Jvedio.Utils.Encrypt
 {
 
 
@@ -88,6 +88,33 @@ namespace Jvedio.Library.Encrypt
                     return BitConverter.ToString(md5.ComputeHash(stream)).Replace("-", "").ToLower();
                 }
             }
+        }
+
+
+        /// <summary>
+        /// 计算所有文件的MD5
+        /// </summary>
+        /// <param name="files"></param>
+        /// <returns></returns>
+        public static string GetFilesMD5(string[] files)
+        {
+            var total = "";
+            foreach (var item in files)
+            {
+                total += GetFileMD5(item).Substring(0,5);
+            }
+            return CalculateMD5Hash(total);
+        }
+
+        public static long GetDirectorySize(string folderPath)
+        {
+            DirectoryInfo di = new DirectoryInfo(folderPath);
+            return di.EnumerateFiles("*.*", SearchOption.AllDirectories).Sum(fi => fi.Length);
+        }
+
+        public static string GetDirectoryMD5(string folderPath)
+        {
+            return CalculateMD5Hash(Path.GetDirectoryName(folderPath) + GetDirectorySize(folderPath));
         }
     }
 }

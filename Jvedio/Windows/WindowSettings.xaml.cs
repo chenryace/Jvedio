@@ -25,7 +25,7 @@ using System.Windows.Interop;
 using System.Runtime.InteropServices;
 using System.Reflection;
 using System.Text.RegularExpressions;
-using Jvedio.Library.Encrypt;
+using Jvedio.Utils.Encrypt;
 using Jvedio.Utils;
 using Jvedio.Style;
 using Jvedio.Utils.Net;

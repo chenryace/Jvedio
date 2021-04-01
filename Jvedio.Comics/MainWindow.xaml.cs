@@ -20,6 +20,9 @@ using System.Windows.Threading;
 using static Jvedio.GlobalVariable;
 using Jvedio.Utils;
 using Jvedio.Utils.Net;
+using System.IO;
+using System.Diagnostics;
+using Jvedio.Utils.Encrypt;
 
 namespace Jvedio.Comics
 {
@@ -43,6 +46,7 @@ namespace Jvedio.Comics
 
             vieModel = new VieModel_Main();
             this.DataContext = vieModel;
+
             ResizingTimer.Interval = TimeSpan.FromSeconds(0.5);
             ResizingTimer.Tick += new EventHandler(ResizingTimer_Tick);
             Properties.Settings.Default.FirstRun = false;
@@ -463,6 +467,116 @@ namespace Jvedio.Comics
         private void Window_ContentRendered(object sender, EventArgs e)
         {
             SetSkin();
+            vieModel.LoadDataBaseList();
+            //设置当前数据库
+            for (int i = 0; i < vieModel.DataBases.Count; i++)
+            {
+                if (vieModel.DataBases[i].ToLower() == System.IO.Path.GetFileNameWithoutExtension(Properties.Settings.Default.DataBasePath).ToLower())
+                {
+                    vieModel.DatabaseSelectedIndex = i;
+                    break;
+                }
+            }
+            
+
+        }
+
+        private void Test(object sender, RoutedEventArgs e)
+        {
+            var sw = new Stopwatch();
+            sw.Start();
+            string path = @"F:\Jvedio\Pic\BigPic";
+            //var files = Directory.GetFiles(path, "*.*", SearchOption.TopDirectoryOnly);
+            Console.WriteLine(Encrypt.GetDirectoryMD5(path));
+            sw.Stop();
+            Console.WriteLine(sw.ElapsedMilliseconds + "ms");
+        }
+
+        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (e.AddedItems.Count == 0) return;
+            string name = e.AddedItems[0].ToString().ToLower();
+            if (name != System.IO.Path.GetFileNameWithoutExtension(Properties.Settings.Default.DataBasePath).ToLower())
+            {
+                Properties.Settings.Default.DataBasePath = AppDomain.CurrentDomain.BaseDirectory + $"DataBase\\Comics\\{name}.sqlite";
+                //切换数据库
+                //vieModel.IsRefresh = true;
+                //vieModel.Reset();
+                //vieModel.InitLettersNavigation();
+                //vieModel.GetFilterInfo();
+            }
+        }
+
+        private void ClearSearchHistory(object sender, MouseButtonEventArgs e)
+        {
+            vieModel.SearchHistory.Clear();
+            vieModel.SaveSearchHistory();
+            SearchHistoryStackPanel.Visibility = Visibility.Collapsed;
+        }
+
+        private void RandomDisplay(object sender, MouseButtonEventArgs e)
+        {
+
+        }
+
+        private void SearchBar_LostFocus(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void SearchBar_GotFocus(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void SearchBar_PreviewKeyUp(object sender, KeyEventArgs e)
+        {
+
+        }
+
+        private void RefreshCandiadte(object sender, TextChangedEventArgs e)
+        {
+
+        }
+
+        private void ShowSearchPopup(object sender, MouseButtonEventArgs e)
+        {
+
+        }
+
+        private void SaveAllSearchType(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void SetSearchValue(object sender, MouseButtonEventArgs e)
+        {
+
+        }
+
+        private void SetSelectMode(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ShowFilterGrid(object sender, MouseButtonEventArgs e)
+        {
+
+        }
+
+        private void ShowSearchMenu(object sender, MouseButtonEventArgs e)
+        {
+
+        }
+
+        private void ShowSortPopup(object sender, MouseButtonEventArgs e)
+        {
+
+        }
+
+        private void ToolsGrid_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+
         }
     }
 }

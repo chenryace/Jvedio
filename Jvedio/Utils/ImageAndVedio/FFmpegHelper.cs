@@ -35,46 +35,6 @@ namespace Jvedio.Utils.ImageAndVedio
                 process.StartInfo.RedirectStandardOutput = true;
                 process.StartInfo.RedirectStandardError = true;
                 process.StartInfo.RedirectStandardInput = true;//接受来自调用程序的输入信息
-                                                               //StringBuilder output = new StringBuilder();
-                                                               //StringBuilder error = new StringBuilder();
-
-                //using (AutoResetEvent outputWaitHandle = new AutoResetEvent(false))
-                //{
-                //    using (AutoResetEvent errorWaitHandle = new AutoResetEvent(false))
-                //    {
-                //process.OutputDataReceived += (sender, e) =>
-                //{
-                //    if (e.Data == null)
-                //    {
-                //        try
-                //        {
-                //            errorWaitHandle.Set();
-                //        }
-                //        catch (ObjectDisposedException ex)
-                //        {
-                //            Console.WriteLine(ex.Message);
-                //        }
-                //    }
-                //    else
-                //        output.AppendLine(e.Data);
-                //};
-                //process.ErrorDataReceived += (sender, e) =>
-                //{
-                //    if (e.Data == null)
-                //    {
-                //        try
-                //        {
-                //            errorWaitHandle.Set();
-                //        }
-                //        catch (ObjectDisposedException ex)
-                //        {
-                //            Console.WriteLine(ex.Message);
-                //        }
-                //    }
-                //    else
-                //        error.AppendLine(e.Data);
-                //};
-
                 process.Start();
                 process.StandardInput.WriteLine(ProcessParameters);
                 process.StandardInput.AutoFlush = true;
@@ -89,19 +49,6 @@ namespace Jvedio.Utils.ImageAndVedio
                 {
                     return "失败";
                 }
-
-                //if (process.WaitForExit(Timeout) && outputWaitHandle.WaitOne(Timeout) && errorWaitHandle.WaitOne(Timeout))
-                //{
-                //    // Process completed. Check process.ExitCode here.
-                //    process.Close();
-                //}
-                //else
-                //{
-                //    // Timed out.
-                //    error.AppendLine(Jvedio.Language.Resources.TimeOut_Process);
-                //}
-                //    }
-                //}
             }
 
         }

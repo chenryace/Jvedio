@@ -1692,4 +1692,13 @@
   <data name="AllComics" xml:space="preserve">
     <value>All Comics</value>
   </data>
+  <data name="MyComics" xml:space="preserve">
+    <value>My Comics</value>
+  </data>
+  <data name="ChooseComicsLibrary" xml:space="preserve">
+    <value>Choose Comics Library</value>
+  </data>
+  <data name="ImportLibrary" xml:space="preserve">
+    <value>Import Library</value>
+  </data>
 </root>

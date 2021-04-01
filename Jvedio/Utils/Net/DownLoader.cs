@@ -1,5 +1,5 @@
 ﻿using DynamicData.Annotations;
-using Jvedio.Library.Encrypt;
+using Jvedio.Utils.Encrypt;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;

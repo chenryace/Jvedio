@@ -17,16 +17,13 @@ namespace Jvedio.Comics
 {
     public static class SqliteHelper
     {
-        public static string SQLITETABLE_MOVIE = "create table if not exists movie (id VARCHAR(50) PRIMARY KEY , title TEXT , filesize DOUBLE DEFAULT 0 , filepath TEXT , subsection TEXT , vediotype INT , scandate VARCHAR(30) , releasedate VARCHAR(10) DEFAULT '1900-01-01', visits INT  DEFAULT 0, director VARCHAR(50) , genre TEXT , tag TEXT , actor TEXT , actorid TEXT ,studio VARCHAR(50) , rating FLOAT  DEFAULT 0, chinesetitle TEXT , favorites INT  DEFAULT 0, label TEXT , plot TEXT , outline TEXT , year INT  DEFAULT 1900, runtime INT  DEFAULT 0, country VARCHAR(50) , countrycode INT DEFAULT 0 ,otherinfo TEXT, sourceurl TEXT, source VARCHAR(10),actressimageurl TEXT,smallimageurl TEXT,bigimageurl TEXT,extraimageurl TEXT)";
-        public static string SQLITETABLE_ACTRESS = "create table if not exists actress ( id VARCHAR(50) PRIMARY KEY, name VARCHAR(50) ,birthday VARCHAR(10) ,age INT ,height INT ,cup VARCHAR(1), chest INT ,waist INT ,hipline INT ,birthplace VARCHAR(50) ,hobby TEXT, sourceurl TEXT, source VARCHAR(10),imageurl TEXT)";
-        public static string SQLITETABLE_ACTRESS_LOVE = "create table if not exists actresslove ( name VARCHAR(50) PRIMARY KEY,islove INT )";
-        public static string SQLITETABLE_LIBRARY = "create table if not exists library ( id VARCHAR(50) PRIMARY KEY, code VARCHAR(50))";
-        public static string SQLITETABLE_JAVDB = "create table if not exists javdb ( id VARCHAR(50) PRIMARY KEY, code VARCHAR(50))";
-        public static string SQLITETABLE_BAIDUAI = "create table if not exists baidu (id VARCHAR(50) PRIMARY KEY , age INT DEFAULT 0 , beauty FLOAT DEFAULT 0 , expression VARCHAR(20), face_shape VARCHAR(20), gender VARCHAR(20), glasses VARCHAR(20), race VARCHAR(20), emotion VARCHAR(20), mask VARCHAR(20))";
-        public static string SQLITETABLE_BAIDUTRANSLATE = "create table if not exists baidu (id VARCHAR(50) PRIMARY KEY , title TEXT , translate_title TEXT, plot TEXT, translate_plot TEXT)";
-        public static string SQLITETABLE_YOUDAO = "create table if not exists youdao (id VARCHAR(50) PRIMARY KEY , title TEXT , translate_title TEXT, plot TEXT, translate_plot TEXT)";
-        public static string SQLITETABLE_MAGNETS = "create table if not exists magnets (link VARCHAR(60) PRIMARY KEY, id VARCHAR(50) , title TEXT , size  DOUBLE DEFAULT 0 , releasedate VARCHAR(10) DEFAULT '1900-01-01', tag TEXT)";
-
+        /// <summary>
+        /// id 是文件夹的哈希值
+        /// </summary>
+        public static string SQLITETABLE_COMICS = "create table if not exists comics (id VARCHAR(32) PRIMARY KEY , foldername TEXT , " +
+            "foldersize DOUBLE DEFAULT 0 , linkid INT , title TEXT , series TEXT , label TEXT , " +
+            "author TEXT, imagetype VARCHAR(50), language VARCHAR(50) , " +
+            "classification VARCHAR(50) , roles TEXT , imagecount int , uploaddate VARCHAR(19) ,imageurls TEXT)";
 
         public static string SqlitePath { get; set; }
 

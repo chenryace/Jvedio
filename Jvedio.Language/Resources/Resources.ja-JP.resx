@@ -1692,4 +1692,13 @@
   <data name="AllComics" xml:space="preserve">
     <value>漫画全般</value>
   </data>
+  <data name="MyComics" xml:space="preserve">
+    <value>私の漫画</value>
+  </data>
+  <data name="ChooseComicsLibrary" xml:space="preserve">
+    <value>マンガ文庫を選ぶ</value>
+  </data>
+  <data name="ImportLibrary" xml:space="preserve">
+    <value>ライブラリファイルの導入</value>
+  </data>
 </root>

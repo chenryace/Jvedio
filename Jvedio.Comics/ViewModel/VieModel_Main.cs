@@ -33,10 +33,7 @@ namespace Jvedio.Comics
     public class VieModel_Main : ViewModelBase
     {
         public event EventHandler CurrentMovieListHideOrChanged;
-        public event EventHandler CurrentActorListHideOrChanged;
-        public event EventHandler MovieFlipOverCompleted;
-        public event EventHandler ActorFlipOverCompleted;
-        public event EventHandler OnCurrentMovieListRemove;
+
 
         public bool IsFlipOvering = false;
         public VedioType CurrentVedioType = VedioType.所有;
@@ -66,7 +63,7 @@ namespace Jvedio.Comics
         public VieModel_Main()
         {
             CurrentMovieList = new ObservableCollection<Movie>();
-
+            
         }
 
 
@@ -524,7 +521,6 @@ namespace Jvedio.Comics
             {
                 _CurrentActorList = value;
                 RaisePropertyChanged();
-                CurrentActorListHideOrChanged?.Invoke(this, EventArgs.Empty);
             }
         }
 
@@ -1179,6 +1175,73 @@ namespace Jvedio.Comics
         #endregion
 
 
+
+        public void LoadDataBaseList()
+        {
+            DataBases = new ObservableCollection<string>();
+            try
+            {
+                var fiels = Directory.GetFiles("DataBase\\Comics", "*.sqlite", SearchOption.TopDirectoryOnly).ToList();
+                fiels.ForEach(arg => DataBases.Add(Path.GetFileNameWithoutExtension(arg).ToLower()));
+            }
+            catch { }
+        }
+
+        public void SaveSearchHistory()
+        {
+
+            try
+            {
+                if (SearchHistory.Count <= 0)
+                {
+                    File.Delete("SearchHistory");
+                    ((MainWindow)GetWindowByName("MainWindow")).SearchHistoryStackPanel.Visibility = Visibility.Collapsed;
+                }
+                else
+                {
+                    using (StreamWriter sw = new StreamWriter("SearchHistory"))
+                    {
+                        sw.Write(string.Join("'", SearchHistory));
+                    }
+                        ((MainWindow)GetWindowByName("MainWindow")).SearchHistoryStackPanel.Visibility = Visibility.Visible;
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.LogF(ex);
+            }
+        }
+
+        public void LoadSearchHistory()
+        {
+            SearchHistory = new ObservableCollection<string>();
+            if (!File.Exists("SearchHistory")) return;
+            string content = "";
+            try
+            {
+                using (StreamReader sr = new StreamReader("SearchHistory"))
+                {
+                    content = sr.ReadToEnd();
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.LogF(ex);
+            }
+
+            if (content != "" && content.IndexOf("'") >= 0)
+            {
+                foreach (var item in content.Split('\''))
+                {
+                    if (!SearchHistory.Contains(item) && !string.IsNullOrEmpty(item)) SearchHistory.Add(item);
+                }
+            }
+            else if (content.Length > 0)
+            {
+                SearchHistory.Add(content);
+            }
+
+        }
 
 
 

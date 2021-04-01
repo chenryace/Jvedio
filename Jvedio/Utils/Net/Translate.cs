@@ -1,5 +1,5 @@
 ﻿
-using Jvedio.Library.Encrypt;
+using Jvedio.Utils.Encrypt;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;

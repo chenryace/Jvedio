@@ -35,7 +35,7 @@ using static Jvedio.ImageProcess;
 using System.Windows.Media.Effects;
 using System.Text;
 using System.Security.Cryptography;
-using Jvedio.Library.Encrypt;
+using Jvedio.Utils.Encrypt;
 using Jvedio.Utils;
 using WpfAnimatedGif;
 using HtmlAgilityPack;
