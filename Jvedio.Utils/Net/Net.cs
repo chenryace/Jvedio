@@ -169,6 +169,14 @@ namespace Jvedio.Utils.Net
                         catch (WebException e)
                         {
                             Log($" {Jvedio.Language.Resources.Url}：{Url}， {Jvedio.Language.Resources.Reason}：{e.Message}");
+
+                            httpResult = new HttpResult()
+                            {
+                                Error = e.Message,
+                                Success = false,
+                                SourceCode=""
+                            };
+
                             if (e.Status == WebExceptionStatus.Timeout)
                                 trynum++;
                             else

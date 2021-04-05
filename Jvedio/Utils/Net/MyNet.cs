@@ -321,7 +321,7 @@ namespace Jvedio
             }
 
             Movie newMovie = DataBase.SelectMovieByID(movie.id);
-            if (newMovie != null && newMovie.title != "" && httpResult != null) httpResult.Success = true;
+            if (newMovie != null && newMovie.title != "" && httpResult != null && httpResult.Error=="") httpResult.Success = true;
             if (httpResult == null && message != "") httpResult = new HttpResult() { Error = message, Success = false };
             return httpResult;
         }

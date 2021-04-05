@@ -81,7 +81,7 @@ namespace Jvedio
             httpResult = await new MyNet().Http(Url,headers);
             if (httpResult != null && httpResult.StatusCode == HttpStatusCode.OK && httpResult.SourceCode != null)
             {
-                FileProcess.SaveInfo(GetInfo(), ID);
+                FileProcess.SaveInfo(GetInfo(), ID,(int)VedioType);
                 httpResult.Success = true;
                 ParseCookies(httpResult.Headers.SetCookie);
                 Movie movie = DataBase.SelectMovieByID(ID);

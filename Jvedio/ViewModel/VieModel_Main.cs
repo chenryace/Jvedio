@@ -1522,7 +1522,7 @@ namespace Jvedio.ViewModel
 
             CurrentMovieListHideOrChanged?.Invoke(this, EventArgs.Empty); //停止下载
             int DisPlayNum = Properties.Settings.Default.DisplayNumber;//每页展示数目
-            int SetFlowNum = Properties.Settings.Default.FlowNum;//流动数目
+            int SetFlowNum = Properties.Settings.Default.DisplayNumber;//流动数目
             Movies = new List<Movie>();
             int min = (CurrentPage - 1) * DisPlayNum + FlowNum * SetFlowNum;
             int max = (CurrentPage - 1) * DisPlayNum + (FlowNum + 1) * SetFlowNum;
@@ -1750,7 +1750,7 @@ namespace Jvedio.ViewModel
 
                TotalPage = (int)Math.Ceiling((double)FilterMovieList.Count / Properties.Settings.Default.DisplayNumber);
                int DisPlayNum = Properties.Settings.Default.DisplayNumber;
-               int FlowNum = Properties.Settings.Default.FlowNum;
+               int FlowNum = Properties.Settings.Default.DisplayNumber;
 
                Movies = new List<Movie>();
                //从 FilterMovieList 中添加影片到 临时 Movies 中

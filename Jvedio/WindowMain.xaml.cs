@@ -30,7 +30,6 @@ using System.Windows.Shapes;
 using System.Windows.Threading;
 using static Jvedio.FileProcess;
 using static Jvedio.GlobalVariable;
-using static Jvedio.FileProcess;
 using static Jvedio.ImageProcess;
 using System.Windows.Media.Effects;
 using System.Text;
@@ -465,8 +464,27 @@ namespace Jvedio
                     else if (Properties.Settings.Default.ShowImageMode == "3") AsyncLoadGif();
                     else AsyncLoadImage();
                     SetLoadingStatus(false);
-                    //vieModel.CurrentMovieList.RaiseListChangedEvents = true;
-                    //vieModel.CurrentMovieList.ResetBindings();
+                    //滚动到指定位置
+                    if (autoScroll)
+                    {
+                        DoubleAnimation verticalAnimation = new DoubleAnimation();
+                        verticalAnimation.From = 0;
+                        verticalAnimation.To = VieModel_Main.PreviousOffset;
+                        verticalAnimation.Duration = TimeSpan.FromMilliseconds(500);
+                        Storyboard storyboard = new Storyboard();
+                        storyboard.Children.Add(verticalAnimation);
+
+                        if (Properties.Settings.Default.EasyMode)
+                            Storyboard.SetTarget(verticalAnimation, SimpleMovieScrollViewer);
+                        else
+                            Storyboard.SetTarget(verticalAnimation, MovieScrollViewer);
+
+                        Storyboard.SetTargetProperty(verticalAnimation, new PropertyPath(ScrollViewerBehavior.VerticalOffsetProperty));
+                        storyboard.Begin();
+                        autoScroll = false;
+                    }
+
+
                 }, DispatcherPriority.ContextIdle, null);
                 };
 
@@ -661,14 +679,13 @@ namespace Jvedio
                     if (item.id.IndexOf("FC2") >= 0) { moviesFC2.Add(item); } else { movies.Add(item); }
                 }
             }
+            double totalcount = moviesFC2.Count + movies.Count;
+            Console.WriteLine(totalcount);
+            if (totalcount == 0) return;
 
             //添加到下载列表
             DownLoader?.CancelDownload();
             DownLoader = new DownLoader(movies, moviesFC2, true);
-            DownLoader.StartThread();
-            double totalcount = moviesFC2.Count + movies.Count;
-            Console.WriteLine(totalcount);
-            if (totalcount == 0) return;
             //UI更新
             DownLoader.InfoUpdate += (s, e) =>
             {
@@ -692,7 +709,7 @@ namespace Jvedio
                 if (eventArgs != null) HandyControl.Controls.Growl.Error(eventArgs.Message, GrowlToken);
             };
 
-
+            DownLoader.StartThread();
         }
 
         public async void RefreshCurrentPage(object sender, RoutedEventArgs e)
@@ -1674,8 +1691,8 @@ namespace Jvedio
             return (result, idx);
         }
 
-        public int idx1;
-        public int idx2;
+        public int firstidx=-1;
+        public int secondidx=-1;
         WindowDetails wd;
         private void ShowDetails(object sender, MouseButtonEventArgs e)
         {
@@ -1688,11 +1705,49 @@ namespace Jvedio
             if (Properties.Settings.Default.EditMode)
             {
                 (Movie movie, int selectIdx) = GetMovieFromCurrentMovie(id);
-                if (vieModel.SelectedMovie.Contains(movie))
-                    vieModel.SelectedMovie.Remove(movie);
+                if (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift))
+                {
+                    if (firstidx == -1)
+                        firstidx = selectIdx;
+                    else
+                        secondidx = selectIdx;
+                }
+
+
+                Console.WriteLine("firstidx="+firstidx);
+                Console.WriteLine("secondidx=" + secondidx);
+                if(firstidx>=0 && secondidx >= 0  )
+                {
+                    if (  firstidx > secondidx)
+                    {
+                        //交换一下顺序
+                        int temp = firstidx;
+                        firstidx = secondidx - 1;
+                        secondidx = temp - 1;
+                    }
+
+                    for (int i = firstidx+1; i <=secondidx; i++)
+                    {
+                        var m = vieModel.CurrentMovieList[i];
+                        if (vieModel.SelectedMovie.Contains(m))
+                            vieModel.SelectedMovie.Remove(m);
+                        else
+                            vieModel.SelectedMovie.Add(m);
+                    }
+                    firstidx = -1;
+                    secondidx = -1;
+                }
                 else
-                    vieModel.SelectedMovie.Add(movie);
+                {
+                    if (vieModel.SelectedMovie.Contains(movie))
+                        vieModel.SelectedMovie.Remove(movie);
+                    else
+                        vieModel.SelectedMovie.Add(movie);
+                }
+
+
                 SetSelected();
+
             }
             else
             {
@@ -1702,6 +1757,10 @@ namespace Jvedio
                 wd.Show();
                 VieModel_Main.PreviousPage = vieModel.CurrentPage;
 
+                if(Properties.Settings.Default.EasyMode)
+                    VieModel_Main.PreviousOffset = SimpleMovieScrollViewer.VerticalOffset;
+                else
+                    VieModel_Main.PreviousOffset = MovieScrollViewer.VerticalOffset;
             }
             canShowDetails = false;
         }
@@ -2159,7 +2218,7 @@ namespace Jvedio
                 vieModel.GoToTopCanvas = Visibility.Hidden;
 
 
-            VieModel_Main.PreviousOffset = sv.VerticalOffset;
+
 
             if (!IsFlowing && sv.ScrollableHeight - sv.VerticalOffset <= 10 && sv.VerticalOffset != 0)
             {
@@ -4666,8 +4725,15 @@ namespace Jvedio
 
         private  void Test(object sender, RoutedEventArgs e)
         {
-            string s = "abc";
-            Console.WriteLine(s.Split(';').Length);
+            DoubleAnimation verticalAnimation = new DoubleAnimation();
+            verticalAnimation.From = 0;
+            verticalAnimation.To = 200;
+            verticalAnimation.Duration = FadeInterval;
+            Storyboard storyboard = new Storyboard();
+            storyboard.Children.Add(verticalAnimation);
+            Storyboard.SetTarget(verticalAnimation, MovieScrollViewer);
+            Storyboard.SetTargetProperty(verticalAnimation, new PropertyPath(ScrollViewerBehavior.VerticalOffsetProperty));
+            storyboard.Begin();
 
         }
 
@@ -6191,13 +6257,40 @@ namespace Jvedio
 
         }
 
+        private bool autoScroll = false;
         private void BackTo(object sender, RoutedEventArgs e)
         {
             (sender as Button).Visibility = Visibility.Collapsed;
+            autoScroll = true;
             HideActressGrid(this,null);
             vieModel.ExecutiveSqlCommand(0, vieModel.TextType, VieModel_Main.PreviousSql, istorecord: false,flip:false);
             //TODO
             //流动模式
+        }
+    }
+    public class ScrollViewerBehavior
+    {
+        public static DependencyProperty VerticalOffsetProperty =
+            DependencyProperty.RegisterAttached("VerticalOffset",
+                                                typeof(double),
+                                                typeof(ScrollViewerBehavior),
+                                                new UIPropertyMetadata(0.0, OnVerticalOffsetChanged));
+
+        public static void SetVerticalOffset(FrameworkElement target, double value)
+        {
+            target.SetValue(VerticalOffsetProperty, value);
+        }
+        public static double GetVerticalOffset(FrameworkElement target)
+        {
+            return (double)target.GetValue(VerticalOffsetProperty);
+        }
+        private static void OnVerticalOffsetChanged(DependencyObject target, DependencyPropertyChangedEventArgs e)
+        {
+            ScrollViewer scrollViewer = target as ScrollViewer;
+            if (scrollViewer != null)
+            {
+                scrollViewer.ScrollToVerticalOffset((double)e.NewValue);
+            }
         }
     }
 

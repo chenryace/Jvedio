@@ -85,10 +85,11 @@ namespace Jvedio
         }
 
 
-        public static void SaveInfo(Dictionary<string, string> Info,string id)
+        public static void SaveInfo(Dictionary<string, string> Info,string id,int vt=1)
         {
             //保存信息
             if (!Info.ContainsKey("id")) Info.Add("id", id);
+            if (!Info.ContainsKey("vediotype")) Info.Add("vediotype", vt.ToString());
             DataBase.UpdateInfoFromNet(Info);
             DetailMovie detailMovie = DataBase.SelectDetailMovieById(id);
             SaveNfo(detailMovie);
