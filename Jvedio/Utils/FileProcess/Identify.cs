@@ -278,8 +278,22 @@ namespace Jvedio
             Fanhao = GetFanhaoByRegExp(FileName, @"\d+-[A-Za-z]+");
             if (Fanhao != "") return GetFanhaoByRegExp(Fanhao, @"\d+-[A-Za-z]+")  ;
 
-            //TODO
+            //C-1234
+            Fanhao = GetFanhaoByRegExp(FileName, @"C-\d+");
+            if (Fanhao != "") return GetFanhaoByRegExp(Fanhao, @"C-\d+");
+
             //自定义增加正则
+            if (Properties.Settings.Default.ScanRe != "")
+            {
+                foreach (var item in Properties.Settings.Default.ScanRe.Split(';'))
+                {
+                    if (item!=null &&  item.Length > 0)
+                    {
+                        Fanhao = GetFanhaoByRegExp(FileName, item);
+                        if (Fanhao != "") return GetFanhaoByRegExp(Fanhao, item);
+                    }
+                }
+            }
 
             return "";
         }

@@ -1310,7 +1310,7 @@ namespace Jvedio
 
         private void Grid_PreviewKeyUp(object sender, KeyEventArgs e)
         {
-
+            Console.WriteLine(e.Key );
             if (e.Key == Key.Escape)
                 this.Close();
             else if (e.Key == Key.Left)

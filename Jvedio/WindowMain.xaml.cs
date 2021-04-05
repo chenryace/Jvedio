@@ -4661,15 +4661,8 @@ namespace Jvedio
 
         private  void Test(object sender, RoutedEventArgs e)
         {
-            using (StreamReader sr = new StreamReader(@"D:\1.txt"))
-            {
-                string sourceCode = sr.ReadToEnd();
-
-                var result = JavDBParse.GetMoviesFromPage(sourceCode);
-
-
-                Console.WriteLine(result.ToString());
-            }
+            string s = "abc";
+            Console.WriteLine(s.Split(';').Length);
 
         }
 

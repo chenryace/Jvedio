@@ -45,9 +45,6 @@ namespace Jvedio.ViewModel
 
 
 
-        public int SideIdx = 0;
-
-
 
         #region "RelayCommand"
         public RelayCommand ResetCommand { get; set; }
@@ -1355,11 +1352,17 @@ namespace Jvedio.ViewModel
             List<string> result = new List<string>();
             foreach (var item in str.Split(new string[] { System.Environment.NewLine }, StringSplitOptions.None))
             {
-                string id = "";
+                string id = item;
+                if (AutoAddPrefix && Prefix != "")
+                    id = Prefix + id;
+
+
                 if (vedioType == VedioType.欧美)
-                    id = item.Replace(" ", "");
+                    id = id.Replace(" ", "");
                 else
-                    id = item.ToUpper().Replace(" ", "");
+                    id = id.ToUpper().Replace(" ", "");
+
+
 
                 if (!string.IsNullOrEmpty(id) && !result.Contains(id)) result.Add(id);
             }
@@ -2131,20 +2134,16 @@ namespace Jvedio.ViewModel
 
         public void Reset()
         {
-            SideIdx = 0;
             ExecutiveSqlCommand(0, Jvedio.Language.Resources.AllVideo, "SELECT * FROM movie");
-            
         }
 
         public void GetFavoritesMovie()
         {
-            SideIdx = 1;
             ExecutiveSqlCommand(1, Jvedio.Language.Resources.Favorites, "SELECT * from movie where favorites>0 and favorites<=5");
         }
 
         public void GetRecentMovie()
         {
-            SideIdx = 2;
             string date1 = DateTime.Now.AddDays(-1 * Properties.Settings.Default.RecentDays).Date.ToString("yyyy-MM-dd");
             string date2 = DateTime.Now.ToString("yyyy-MM-dd");
             ExecutiveSqlCommand(2, $"{Jvedio.Language.Resources.RecentCreate} ({Properties.Settings.Default.RecentDays})", $"SELECT * from movie WHERE scandate BETWEEN '{date1}' AND '{date2}'");
@@ -2153,7 +2152,6 @@ namespace Jvedio.ViewModel
         public void GetRecentWatch(bool add = true)
         {
             IsLoadingMovie = true;
-            SideIdx = 3;
             List<Movie> movies = new List<Movie>();
             foreach (var keyValuePair in RecentWatched)
             {

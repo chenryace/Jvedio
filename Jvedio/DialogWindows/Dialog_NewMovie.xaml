@@ -35,6 +35,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
             <TextBox    x:Name="AddMovieTextBox" FontSize="15" MinHeight="200"  hc:InfoElement.Placeholder="{x:Static lang:Resources.EnterSplit}" Grid.Row="0" Margin="10" VerticalContentAlignment="Top"  Padding="10" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto"  CaretBrush="{DynamicResource ForegroundSearch}" BorderBrush="{DynamicResource ForegroundGlobal}" Background="{DynamicResource BackgroundSide}" Foreground="{DynamicResource ForegroundSearch}"  hc:InfoElement.Title="" Style="{StaticResource TextBoxExtend}" ContextMenu="{StaticResource TextBoxContextMenu}"   />
 
@@ -42,15 +43,19 @@
             <WrapPanel Grid.Row="1">
                 <Label Background="Transparent"  Content="{x:Static lang:Resources.VedioType}"  Foreground="{DynamicResource ForegroundSearch}"  Style="{StaticResource LabelPrimary}" Margin="20 10" />
                 <StackPanel x:Name="RadioButtonStackPanel"  Orientation="Horizontal" >
-                    <RadioButton FontSize="15"  Foreground="{DynamicResource ForegroundSearch}" IsChecked="True"    Content="{x:Static lang:Resources.Uncensored}"  Style="{StaticResource FlatRadioButton}"/>
-                    <RadioButton FontSize="15"  Foreground="{DynamicResource ForegroundSearch}"     Content="{x:Static lang:Resources.Censored}"  Style="{StaticResource FlatRadioButton}"/>
-                    <RadioButton FontSize="15"  Foreground="{DynamicResource ForegroundSearch}"      Content="{x:Static lang:Resources.Europe}"  Style="{StaticResource FlatRadioButton}"/>
+                    <RadioButton Click="SetNewMovieType" FontSize="15"  Foreground="{DynamicResource ForegroundSearch}"     Content="{x:Static lang:Resources.Uncensored}"  Style="{StaticResource FlatRadioButton}"/>
+                    <RadioButton Click="SetNewMovieType" FontSize="15"  Foreground="{DynamicResource ForegroundSearch}"     Content="{x:Static lang:Resources.Censored}"  Style="{StaticResource FlatRadioButton}"/>
+                    <RadioButton Click="SetNewMovieType" FontSize="15"  Foreground="{DynamicResource ForegroundSearch}"      Content="{x:Static lang:Resources.Europe}"  Style="{StaticResource FlatRadioButton}"/>
                 </StackPanel>
 
                 <Label Background="Transparent"   Content="{x:Static lang:Resources.Or}"  Style="{StaticResource LabelPrimary}" Margin="20 10" />
                 <Button  Style="{StaticResource ButtonStyleFill}" Content="{x:Static lang:Resources.Scan}" Click="Button_Click"/>
 
             </WrapPanel>
+            <StackPanel Orientation="Horizontal"  Grid.Row="2">
+                <CheckBox x:Name="FC2Checked"  Content="自动添加前缀" Margin="20 5" Click="SetFc2Checked" HorizontalAlignment="Left"/>
+                <TextBox x:Name="PrefixTextBox" TextChanged="PrefixTextBox_TextChanged" LostFocus="PrefixTextBox_LostFocus" Text="FC2-" Style="{StaticResource BaseTextBox}" MinWidth="100" Padding="10 0"/>
+            </StackPanel>
 
         </Grid>
 

@@ -1701,4 +1701,19 @@
   <data name="ImportLibrary" xml:space="preserve">
     <value>Import Library</value>
   </data>
+  <data name="AutoAddPrefix" xml:space="preserve">
+    <value>Auto Prefix</value>
+  </data>
+  <data name="ScanRe" xml:space="preserve">
+    <value>Extra regular expression</value>
+  </data>
+  <data name="UseSemToSplitRe" xml:space="preserve">
+    <value>Split each regular expression with a semicolon</value>
+  </data>
+  <data name="ErrorToShutdown" xml:space="preserve">
+    <value>Program fatal error, will terminate!</value>
+  </data>
+  <data name="JvedioIsRunning" xml:space="preserve">
+    <value>Jvedio is already running!</value>
+  </data>
 </root>

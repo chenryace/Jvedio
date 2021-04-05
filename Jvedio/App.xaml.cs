@@ -30,18 +30,18 @@ namespace Jvedio
             ProgramStarted = new EventWaitHandle(false, EventResetMode.AutoReset, "Jvedio", out createNew);
             if (!createNew)
             {
-                MessageBox.Show("Jvedio已经在运行！");
+                MessageBox.Show(Jvedio.Language.Resources.JvedioIsRunning);
                 App.Current.Shutdown();
                 Environment.Exit(0);
             }
 
 
-            ////UI线程未捕获异常处理事件
-            //this.DispatcherUnhandledException += new DispatcherUnhandledExceptionEventHandler(App_DispatcherUnhandledException);
-            ////Task线程内未捕获异常处理事件　　　　　
-            //TaskScheduler.UnobservedTaskException += TaskScheduler_UnobservedTaskException;
-            ////非UI线程未捕获异常处理事件
-            //AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
+            //UI线程未捕获异常处理事件
+            this.DispatcherUnhandledException += new DispatcherUnhandledExceptionEventHandler(App_DispatcherUnhandledException);
+            //Task线程内未捕获异常处理事件　　　　　
+            TaskScheduler.UnobservedTaskException += TaskScheduler_UnobservedTaskException;
+            //非UI线程未捕获异常处理事件
+            AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
             SetLanguageDictionary();
             base.OnStartup(e);
         }
@@ -97,7 +97,7 @@ namespace Jvedio
         {
             try
             {
-                e.Handled = true; //把 Handled 属性设为true，表示此异常已处理，程序可以继续运行，不会强制退出      
+                //e.Handled = true; //把 Handled 属性设为true，表示此异常已处理，程序可以继续运行，不会强制退出      
                 Console.WriteLine(e.Exception.StackTrace);
                 Console.WriteLine(e.Exception.Message);
                 Logger.LogE(e.Exception);
@@ -107,7 +107,7 @@ namespace Jvedio
                 //此时程序出现严重异常，将强制结束退出
                 Console.WriteLine(e.Exception.StackTrace);
                 Console.WriteLine(e.Exception.Message);
-                MessageBox.Show("程序发生致命错误，将终止!");
+                MessageBox.Show(Jvedio.Language.Resources.ErrorToShutdown);
             }
 
         }

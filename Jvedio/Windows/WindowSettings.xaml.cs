@@ -1229,6 +1229,12 @@ namespace Jvedio
                 vieModel_Settings.Servers[CurrentRowIndex].Cookie = textBox.Text;
             }
         }
+
+
+        private void SetScanRe(object sender, RoutedEventArgs e)
+        {
+            Properties.Settings.Default.ScanRe = (sender as TextBox).Text.Replace("；",";");
+        }
     }
 
 

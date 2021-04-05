@@ -1701,4 +1701,19 @@
   <data name="ImportLibrary" xml:space="preserve">
     <value>ライブラリファイルの導入</value>
   </data>
+  <data name="AutoAddPrefix" xml:space="preserve">
+    <value>接頭辞を自動的に追加する</value>
+  </data>
+  <data name="ScanRe" xml:space="preserve">
+    <value>追加の正規表現</value>
+  </data>
+  <data name="UseSemToSplitRe" xml:space="preserve">
+    <value>各正規表現をセミコロンで分割します</value>
+  </data>
+  <data name="ErrorToShutdown" xml:space="preserve">
+    <value>プログラムに致命的なエラーが発生し、終了します!</value>
+  </data>
+  <data name="JvedioIsRunning" xml:space="preserve">
+    <value>Jvedio はすでに動いている!</value>
+  </data>
 </root>

@@ -30,6 +30,9 @@ namespace Jvedio
         public Dialog_NewMovie(Window owner) : base(owner)
         {
             InitializeComponent();
+            RadioButtonStackPanel.Children.OfType<RadioButton>().ToList()[DefaultNewMovieType].IsChecked = true;
+            FC2Checked.IsChecked = AutoAddPrefix;
+            PrefixTextBox.Text = Prefix;
         }
 
         protected override void Confirm(object sender, RoutedEventArgs e)
@@ -53,6 +56,35 @@ namespace Jvedio
         private void BaseDialog_ContentRendered(object sender, EventArgs e)
         {
             AddMovieTextBox.Focus();
+
+        }
+
+        private void SetFc2Checked(object sender, RoutedEventArgs e)
+        {
+            AutoAddPrefix = (bool) (sender as CheckBox).IsChecked;
+        }
+
+        private void SetNewMovieType(object sender, RoutedEventArgs e)
+        {
+            var r = RadioButtonStackPanel.Children.OfType<RadioButton>().ToList();
+            for (int i = 0; i < r.Count; i++)
+            {
+                if ((bool)r[i].IsChecked)
+                {
+                    DefaultNewMovieType = i;
+                    break;
+                }
+            }
+        }
+
+        private void PrefixTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            //Prefix = (sender as TextBox).Text;
+        }
+
+        private void PrefixTextBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            Prefix = (sender as TextBox).Text;
         }
     }
 

@@ -340,6 +340,15 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 自动添加前缀 的本地化字符串。
+        /// </summary>
+        public static string AutoAddPrefix {
+            get {
+                return ResourceManager.GetString("AutoAddPrefix", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 自动添加中字标签戳 的本地化字符串。
         /// </summary>
         public static string AutoAddStamp {
@@ -1105,6 +1114,15 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 程序发生致命错误，将终止！ 的本地化字符串。
+        /// </summary>
+        public static string ErrorToShutdown {
+            get {
+                return ResourceManager.GetString("ErrorToShutdown", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 网址错误 的本地化字符串。
         /// </summary>
         public static string ErrorUrl {
@@ -1758,6 +1776,15 @@ namespace Jvedio.Language {
         public static string IsUsing {
             get {
                 return ResourceManager.GetString("IsUsing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Jvedio已经在运行！ 的本地化字符串。
+        /// </summary>
+        public static string JvedioIsRunning {
+            get {
+                return ResourceManager.GetString("JvedioIsRunning", resourceCulture);
             }
         }
         
@@ -3436,6 +3463,15 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 额外正则表达式 的本地化字符串。
+        /// </summary>
+        public static string ScanRe {
+            get {
+                return ResourceManager.GetString("ScanRe", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 扫描出视频个数 的本地化字符串。
         /// </summary>
         public static string ScanVideo {
@@ -4647,6 +4683,15 @@ namespace Jvedio.Language {
         public static string UrlNotSet {
             get {
                 return ResourceManager.GetString("UrlNotSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 以分号分割每一个正则表达式 的本地化字符串。
+        /// </summary>
+        public static string UseSemToSplitRe {
+            get {
+                return ResourceManager.GetString("UseSemToSplitRe", resourceCulture);
             }
         }
         

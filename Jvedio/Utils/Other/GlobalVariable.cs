@@ -88,6 +88,10 @@ namespace Jvedio
 
         public static bool showSecret = false;//限制级内容
 
+        public static bool AutoAddPrefix = false;
+        public static string Prefix = "FC2-";
+        public static int DefaultNewMovieType = 0;
+
         #region "热键"
         [DllImport("user32.dll")]
         public static extern bool RegisterHotKey(IntPtr hWnd, int id, uint fsModifiers, uint vk);

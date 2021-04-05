@@ -1701,4 +1701,19 @@
   <data name="ImportLibrary" xml:space="preserve">
     <value>导入库文件</value>
   </data>
+  <data name="AutoAddPrefix" xml:space="preserve">
+    <value>自动添加前缀</value>
+  </data>
+  <data name="ScanRe" xml:space="preserve">
+    <value>额外正则表达式</value>
+  </data>
+  <data name="UseSemToSplitRe" xml:space="preserve">
+    <value>以分号分割每一个正则表达式</value>
+  </data>
+  <data name="ErrorToShutdown" xml:space="preserve">
+    <value>程序发生致命错误，将终止！</value>
+  </data>
+  <data name="JvedioIsRunning" xml:space="preserve">
+    <value>Jvedio已经在运行！</value>
+  </data>
 </root>

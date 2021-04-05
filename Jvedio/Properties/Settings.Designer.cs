@@ -1810,5 +1810,17 @@ namespace Jvedio.Properties {
                 this["ShowFilter"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string ScanRe {
+            get {
+                return ((string)(this["ScanRe"]));
+            }
+            set {
+                this["ScanRe"] = value;
+            }
+        }
     }
 }

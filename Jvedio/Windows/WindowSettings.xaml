@@ -249,6 +249,11 @@
                         <hc:TextBox Style="{StaticResource BaseHcTextBox}"  TextChanged="ScanMinFileSizeTextBox_TextChanged"  Text="{Binding ScanMinFileSize, Mode=OneWay, Source={x:Static p:Settings.Default}}"   ToolTip="[0-2000]"/>
                         <Label  Style="{StaticResource InfoLabel}"   Content="MB"  />
                     </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="20 5" Visibility="Visible">
+                        <Label Style="{StaticResource InfoLabel}" Content="{x:Static lang:Resources.ScanRe}"   ToolTip="[0-2000]"/>
+                        <TextBox FontSize="15" Foreground="{DynamicResource ForegroundSearch}" Background="{DynamicResource BackgroundTitle}" LostFocus="SetScanRe" BorderThickness="0" MinWidth="400" CaretBrush="{DynamicResource ForegroundSearch}" Width="380" Text="{Binding ScanRe, Source={x:Static p:Settings.Default},Mode=OneWay}" hc:InfoElement.TitleWidth="140" hc:InfoElement.Placeholder="{x:Static lang:Resources.UseSemToSplitRe}"  hc:InfoElement.Title="" hc:InfoElement.Necessary="True" Style="{StaticResource TextBoxExtend}" Margin="10 0"/>
+                    </StackPanel>
+                    
                     <StackPanel  Orientation="Horizontal"  Margin="20 5" Visibility="Collapsed">
                         <Label Style="{StaticResource InfoLabel}" Content="{x:Static lang:Resources.SubsectionSpiltChar}"   />
                         <hc:TextBox   Style="{StaticResource BaseHcTextBox}"  Text="{Binding SubSectionFeature, Mode=TwoWay, Source={x:Static p:Settings.Default}}" />
