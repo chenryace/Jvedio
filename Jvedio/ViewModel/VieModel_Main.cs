@@ -43,6 +43,9 @@ namespace Jvedio.ViewModel
         public bool IsFlipOvering = false;
         public VedioType CurrentVedioType = VedioType.所有;
 
+        public static string PreviousSql = "";
+        public static double PreviousOffset = 0;
+        public static int PreviousPage = 1;
 
 
 
@@ -711,7 +714,7 @@ namespace Jvedio.ViewModel
             }
         }
 
-        
+
 
 
         private Sort _SortType = 0;
@@ -850,7 +853,7 @@ namespace Jvedio.ViewModel
         public string movieCount = "总计 0 个";
 
 
-        public int currentpage = 1;
+        private int currentpage = 1;
         public int CurrentPage
         {
             get { return currentpage; }
@@ -1219,7 +1222,7 @@ namespace Jvedio.ViewModel
             Rating.AddRange(Filters[6]);
             IsLoadingFilter = false;
 
-            
+
 
             Main main = GetWindowByName("Main") as Main;
             main.GenreItemsControl.ItemsSource = null;
@@ -1234,7 +1237,7 @@ namespace Jvedio.ViewModel
 
             //他妈的必须要强制指定，Expander 搞毛啊
             main.SideFilterYear.ItemsSource = null;
-            main.SideFilterYear.ItemsSource = Year.OrderByDescending(arg=>arg).ToList();
+            main.SideFilterYear.ItemsSource = Year.OrderByDescending(arg => arg).ToList();
 
             main.SideFilterFileSize.ItemsSource = null;
             main.SideFilterFileSize.ItemsSource = FileSize;
@@ -1453,7 +1456,7 @@ namespace Jvedio.ViewModel
 
         public void SaveSearchHistory()
         {
-            
+
             try
             {
                 if (SearchHistory.Count <= 0)
@@ -1499,7 +1502,8 @@ namespace Jvedio.ViewModel
                 {
                     if (!SearchHistory.Contains(item) && !string.IsNullOrEmpty(item)) SearchHistory.Add(item);
                 }
-            }else if (content.Length > 0)
+            }
+            else if (content.Length > 0)
             {
                 SearchHistory.Add(content);
             }
@@ -1574,9 +1578,10 @@ namespace Jvedio.ViewModel
             //    });
             //});
 
-            
 
-            await App.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, (Action)delegate {
+
+            await App.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, (Action)delegate
+            {
                 //CurrentMovieList.RaiseListChangedEvents = false;
                 for (int i = CurrentMovieList.Count - 1; i >= 0; i--)
                 {
@@ -1589,7 +1594,8 @@ namespace Jvedio.ViewModel
 
 
 
-            await App.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, (Action)delegate {
+            await App.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, (Action)delegate
+            {
                 Main main = (Main)GetWindowByName("Main");
                 CurrentMovieList.Clear();
                 CurrentMovieList = new ObservableCollection<Movie>();
@@ -1602,12 +1608,12 @@ namespace Jvedio.ViewModel
                     }
                     main.ImageSlides.Clear();
                 }
-                if(Properties.Settings.Default.EasyMode)
+                if (Properties.Settings.Default.EasyMode)
                     main.SimpleMovieItemsControl.ItemsSource = CurrentMovieList;
                 else
                     main.MovieItemsControl.ItemsSource = CurrentMovieList;
             });
-            
+
             return true;
         }
 
@@ -1720,7 +1726,7 @@ namespace Jvedio.ViewModel
         /// <summary>
         /// 翻页：加载图片以及其他
         /// </summary>
-        public bool FlipOver()
+        public bool FlipOver(int page=-1)
         {
             TabSelectedIndex = 0;
             if (MovieList == null) return false;
@@ -1730,17 +1736,18 @@ namespace Jvedio.ViewModel
                 ((Main)GetWindowByName("Main")).MovieScrollViewer.ScrollToTop();//滚到顶部
             });
 
-            if(!Properties.Settings.Default.RandomDisplay) Sort(); //随机展示不排序，否则排序
+            if (!Properties.Settings.Default.RandomDisplay) Sort(); //随机展示不排序，否则排序
 
             int number = 0;
             if (FilterMovieList != null) number = FilterMovieList.Count;
             FilterMovieList = FileProcess.FilterMovie(MovieList);   //筛选影片
-            if (FilterMovieList.Count < number) CurrentPage = 1;                // FilterMovieList 如果改变了，则回到第一页
+            if (page<=0 && FilterMovieList.Count < number) CurrentPage = 1;                // FilterMovieList 如果改变了，则回到第一页
+            if (page > 0) CurrentPage = page;
             Task.Run(async () =>
            {
-               
+
                await ClearCurrentMovieList();//动态清除当前影片
-               
+
                TotalPage = (int)Math.Ceiling((double)FilterMovieList.Count / Properties.Settings.Default.DisplayNumber);
                int DisPlayNum = Properties.Settings.Default.DisplayNumber;
                int FlowNum = Properties.Settings.Default.FlowNum;
@@ -1761,23 +1768,23 @@ namespace Jvedio.ViewModel
 
                //添加标签戳
                for (int i = 0; i < Movies.Count; i++)
-               {                      
-                    if (Identify.IsHDV(Movies[i].filepath) || Movies[i].genre?.IndexOfAnyString(TagStrings_HD) >= 0 || Movies[i].tag?.IndexOfAnyString(TagStrings_HD) >= 0 || Movies[i].label?.IndexOfAnyString(TagStrings_HD) >= 0) Movies[i].tagstamps += Jvedio.Language.Resources.HD;
+               {
+                   if (Identify.IsHDV(Movies[i].filepath) || Movies[i].genre?.IndexOfAnyString(TagStrings_HD) >= 0 || Movies[i].tag?.IndexOfAnyString(TagStrings_HD) >= 0 || Movies[i].label?.IndexOfAnyString(TagStrings_HD) >= 0) Movies[i].tagstamps += Jvedio.Language.Resources.HD;
                    if (Identify.IsCHS(Movies[i].filepath) || Movies[i].genre?.IndexOfAnyString(TagStrings_Translated) >= 0 || Movies[i].tag?.IndexOfAnyString(TagStrings_Translated) >= 0 || Movies[i].label?.IndexOfAnyString(TagStrings_Translated) >= 0) Movies[i].tagstamps += Jvedio.Language.Resources.Translated;
                    if (Identify.IsFlowOut(Movies[i].filepath) || Movies[i].genre?.IndexOfAnyString(TagStrings_FlowOut) >= 0 || Movies[i].tag?.IndexOfAnyString(TagStrings_FlowOut) >= 0 || Movies[i].label?.IndexOfAnyString(TagStrings_FlowOut) >= 0) Movies[i].tagstamps += Jvedio.Language.Resources.FlowOut;
                }
 
                //根据标签戳筛选
-               if (ShowStampType>=1)
-                   Movies=Movies.Where(arg => arg.tagstamps.IndexOf(ShowStampType.ToString().ToTagString()) >= 0).ToList();
+               if (ShowStampType >= 1)
+                   Movies = Movies.Where(arg => arg.tagstamps.IndexOf(ShowStampType.ToString().ToTagString()) >= 0).ToList();
 
-               
+
 
 
                foreach (Movie item in Movies)
                {
                    Movie movie = item;
-                   if(!Properties.Settings.Default.EasyMode) SetImage(ref movie);
+                   if (!Properties.Settings.Default.EasyMode) SetImage(ref movie);
                    await App.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new LoadItemDelegate(LoadMovie), movie);
                }
 
@@ -1986,12 +1993,12 @@ namespace Jvedio.ViewModel
                     MovieList = oldMovieList.Where(arg => arg.id.IndexOf(searchContent) >= 0).ToList();
                 else
                 {
-                    if(SearchFirstLetter)
-                        MovieList = DataBase.SelectPartialInfo($"SELECT * FROM movie where id like '%{searchContent}%'").Where(arg=>arg.id.ToUpper()[0]==searchContent.ToUpper()[0]).ToList();
+                    if (SearchFirstLetter)
+                        MovieList = DataBase.SelectPartialInfo($"SELECT * FROM movie where id like '%{searchContent}%'").Where(arg => arg.id.ToUpper()[0] == searchContent.ToUpper()[0]).ToList();
                     else
                         MovieList = DataBase.SelectPartialInfo($"SELECT * FROM movie where id like '%{searchContent}%'");
                 }
-                    
+
 
 
             }
@@ -2032,8 +2039,9 @@ namespace Jvedio.ViewModel
 
 
 
-        public void ExecutiveSqlCommand(int sideIndex, string textType, string sql, string dbName = "")
+        public void ExecutiveSqlCommand(int sideIndex, string textType, string sql, string dbName = "",bool istorecord=true,bool flip=true)
         {
+            if (sql.Length <= 0) return;
             IsLoadingMovie = true;
             TabSelectedIndex = 0;
             Dictionary<string, string> sqlInfo = new Dictionary<string, string>
@@ -2043,7 +2051,26 @@ namespace Jvedio.ViewModel
                 { "SqlCommand", sql }
             };
 
-            TextType = textType;
+            //记录每次执行的 sql
+            string[] ignoresql = new[] { " studio = ", "director =", "like" };
+            bool record = TextType == Jvedio.Language.Resources.Filter;
+            if (!record)
+            {
+                
+                for (int i = 0; i < ignoresql.Length; i++)
+                {
+                    if (sql.IndexOf(ignoresql[i]) >= 0)
+                    {
+                        record = false;
+                        break;
+                    }
+                    record = true;
+                }
+            }
+            if (record && istorecord) PreviousSql = sql;
+
+
+             TextType = textType;
 
             string viewText = "";
             int.TryParse(Properties.Settings.Default.ShowViewMode, out int vm);
@@ -2064,7 +2091,12 @@ namespace Jvedio.ViewModel
             {
                 MovieList = DataBase.SelectMoviesBySql(sql, dbName);
                 Statistic();
-                FlipOver();
+                if (flip)
+                    FlipOver();
+                else
+                {
+                  FlipOver(PreviousPage);
+                }
             });
             InitLettersNavigation();
 

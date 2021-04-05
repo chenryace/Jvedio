@@ -642,7 +642,7 @@
 
 
                             <StackPanel x:Name="ExpanderStackPanel" Width="auto" Margin="5" Grid.Row="3"       Visibility="{Binding ShowFilter,Source={x:Static p:Settings.Default},Converter={StaticResource bool2VisibilityConverter},Mode=OneWay}">
-                                <Expander   Margin="0 5 0 0"    Header="{x:Static lang:Resources.ReleaseYear}"  Foreground="{DynamicResource ForegroundGlobal}" Background="{DynamicResource BackgroundTitle}"  >
+                                <Expander   Margin="0 5 0 0" BorderThickness="0"    Header="{x:Static lang:Resources.ReleaseYear}"  Foreground="{DynamicResource ForegroundGlobal}" Background="{DynamicResource BackgroundTitle}"  >
                                     <Border     BorderThickness="0"   Background="{DynamicResource BackgroundMain}" CornerRadius="0,0,4,4">
                                         <ScrollViewer MaxHeight="200">
                                             
@@ -664,7 +664,7 @@
                                     </Border>
 
                                 </Expander>
-                                <Expander Margin="0 5 0 0" Header="{x:Static lang:Resources.FileSize}"   Foreground="{DynamicResource ForegroundGlobal}" Background="{DynamicResource BackgroundTitle}" >
+                                <Expander Margin="0 5 0 0" BorderThickness="0" Header="{x:Static lang:Resources.FileSize}"   Foreground="{DynamicResource ForegroundGlobal}" Background="{DynamicResource BackgroundTitle}" >
                                     <Border   BorderThickness="0"   Background="{DynamicResource BackgroundMain}" CornerRadius="0,0,4,4">
                                         <ItemsControl  x:Name="SideFilterFileSize" >
                                             <ItemsControl.ItemsPanel>
@@ -681,7 +681,7 @@
                                     </Border>
 
                                 </Expander>
-                                <Expander Margin="0 5 0 0" Header="{x:Static lang:Resources.VedioDuration}"  Foreground="{DynamicResource ForegroundGlobal}" Background="{DynamicResource BackgroundTitle}" >
+                                <Expander Margin="0 5 0 0" BorderThickness="0" Header="{x:Static lang:Resources.VedioDuration}"  Foreground="{DynamicResource ForegroundGlobal}" Background="{DynamicResource BackgroundTitle}" >
                                     <Border  BorderThickness="0"   Background="{DynamicResource BackgroundMain}" CornerRadius="0,0,4,4">
                                         <ItemsControl x:Name="SideFilterRuntime">
                                             <ItemsControl.ItemsPanel>
@@ -697,7 +697,7 @@
                                         </ItemsControl>
                                     </Border>
                                 </Expander>
-                                <Expander Margin="0 5 0 0" Header="{x:Static lang:Resources.MovieRating}"  Foreground="{DynamicResource ForegroundGlobal}" Background="{DynamicResource BackgroundTitle}" >
+                                <Expander Margin="0 5 0 0" BorderThickness="0" Header="{x:Static lang:Resources.MovieRating}"  Foreground="{DynamicResource ForegroundGlobal}" Background="{DynamicResource BackgroundTitle}" >
                                     <Border  BorderThickness="0"   Background="{DynamicResource BackgroundMain}" CornerRadius="0,0,4,4">
                                         <ItemsControl x:Name="SideFilterRating">
                                             <ItemsControl.ItemsPanel>
@@ -713,7 +713,7 @@
                                         </ItemsControl>
                                     </Border>
                                 </Expander>
-                                <Expander  Margin="0 5 0 0" Header="{x:Static lang:Resources.MovieLabels}"  Foreground="{DynamicResource ForegroundGlobal}" Background="{DynamicResource BackgroundTitle}">
+                                <Expander  Margin="0 5 0 0" BorderThickness="0" Header="{x:Static lang:Resources.MovieLabels}"  Foreground="{DynamicResource ForegroundGlobal}" Background="{DynamicResource BackgroundTitle}">
                                     <Border  BorderThickness="0"   Background="{DynamicResource BackgroundMain}" CornerRadius="0,0,4,4">
                                         <ScrollViewer MaxHeight="200"  >
                                         <ItemsControl x:Name="SideFilterLabel">
@@ -779,6 +779,9 @@
 
                                         <!--搜索-->
                                         <StackPanel Orientation="Horizontal">
+
+                                            <Button x:Name="BackBtn" Visibility="Collapsed" Click="BackTo"  Style="{StaticResource ButtonStyleFill}" Content="返回" Margin="10 0"/>
+
                                             <Grid Focusable="True"  HorizontalAlignment="Left"   Height="40"  Width="300" Margin="10 5"   >
                                                 <Border       CornerRadius="2"   Background="Transparent" BorderBrush="{DynamicResource BackgroundSide}"  BorderThickness="2" >
 
@@ -928,7 +931,7 @@
                                             </Border>
 
 
-                                            <Button Visibility="Visible" Click="Test" Content="Test" Style="{StaticResource FlatButton}" />
+                                            <Button Visibility="Collapsed" Click="Test" Content="Test" Style="{StaticResource FlatButton}" />
 
                                         </StackPanel>
 
@@ -1244,6 +1247,8 @@
 
 
                                 </Grid>
+                                
+                                
 
 
 
@@ -1315,7 +1320,7 @@
 
 
                                     <!--演员-->
-                                    <Grid Grid.Column="0" Visibility="{Binding ActorInfoGrid,FallbackValue=Collapsed}"    Margin="10">
+                                    <Grid x:Name="ActorInfoGrid" Grid.Column="0" Visibility="{Binding ActorInfoGrid,FallbackValue=Collapsed}"    Margin="10">
                                         <Border   Background="{DynamicResource BackgroundTitle}" CornerRadius="5" Margin="5"  >
                                             <Border.Effect>
                                                 <DropShadowEffect BlurRadius="20" Direction="-90"  RenderingBias="Quality" ShadowDepth="0"/>
@@ -1374,26 +1379,7 @@
                                             <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Visible" Margin="0 5">
                                                 <StackPanel x:Name="ActorInfoStackPanel"  >
                                                     <TextBox Text="{Binding Actress.id}" Style="{StaticResource InfoTextBox}" Visibility="Collapsed"  />
-                                                    <!--<StackPanel Orientation="Horizontal" Margin="0 5">
-                                                        <TextBlock Text="脸蛋：" Style="{StaticResource ActorInfoTextBlock}"/>
-                                                        <hc:Rate  AllowClear="True" Value="{Binding DetailMovie.favorites,Mode=TwoWay}" Background="{DynamicResource BackgroundMain}" Foreground="#FF7B3B"   ValueChanged="Rate_ValueChanged" DefaultValue="0" VerticalAlignment="Center"/>
-                                                    </StackPanel>
-
-                                                    <StackPanel Orientation="Horizontal" Margin="0 5">
-                                                        <TextBlock Text="身材：" Style="{StaticResource ActorInfoTextBlock}"/>
-                                                        <hc:Rate  AllowClear="True" Value="{Binding DetailMovie.favorites,Mode=TwoWay}" Background="{DynamicResource BackgroundMain}" Foreground="#FF7B3B"   ValueChanged="Rate_ValueChanged" DefaultValue="0" VerticalAlignment="Center"/>
-                                                    </StackPanel>
-
-                                                    <StackPanel Orientation="Horizontal" Margin="0 5">
-                                                        <TextBlock Text="乳房：" Style="{StaticResource ActorInfoTextBlock}"/>
-                                                        <hc:Rate  AllowClear="True" Value="{Binding DetailMovie.favorites,Mode=TwoWay}" Background="{DynamicResource BackgroundMain}" Foreground="#FF7B3B"   ValueChanged="Rate_ValueChanged" DefaultValue="0" VerticalAlignment="Center"/>
-                                                    </StackPanel>
-
-                                                    <StackPanel Orientation="Horizontal" Margin="0 5">
-                                                        <TextBlock Text="私处：" Style="{StaticResource ActorInfoTextBlock}"/>
-                                                        <hc:Rate  AllowClear="True" Value="{Binding DetailMovie.favorites,Mode=TwoWay}" Background="{DynamicResource BackgroundMain}" Foreground="#FF7B3B"   ValueChanged="Rate_ValueChanged" DefaultValue="0" VerticalAlignment="Center"/>
-                                                    </StackPanel>-->
-
+                                                  
 
                                                     <StackPanel Orientation="Horizontal">
                                                         <TextBlock Text="{x:Static lang:Resources.Actress_Birthday}"  Style="{StaticResource ActorInfoTextBlock}" />

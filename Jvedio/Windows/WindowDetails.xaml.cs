@@ -45,6 +45,10 @@ namespace Jvedio
         public string MovieID = "";
         Microsoft.WindowsAPICodePack.Taskbar.TaskbarManager taskbarInstance = null;
         HandyControl.Controls.Screenshot Screenshot;
+
+        private static int SortIndex = 1;//根据数量排序
+        private static bool SortDescend = true;//数量降序
+
         public WindowDetails(string movieid = "")
         {
             //movieid = "IPX-163";
@@ -467,6 +471,7 @@ namespace Jvedio
             string genretext = ((TextBlock)sender).Text;
             if (string.IsNullOrEmpty(genretext)) return;
             windowMain.Genre_MouseDown(sender, e);
+            windowMain.BackBtn.Visibility = Visibility.Visible;
             this.Close();
 
 
@@ -483,6 +488,7 @@ namespace Jvedio
             {
                 actress.id = "";
                 windowMain.ShowActorMovieFromDetailWindow(actress);
+                windowMain.BackBtn.Visibility = Visibility.Visible;
                 this.Close();
             }
 
@@ -523,6 +529,7 @@ namespace Jvedio
             else
             {
                 windowMain.Label_MouseDown(sender, e);
+                windowMain.BackBtn.Visibility = Visibility.Visible;
                 this.Close();
             }
         }
@@ -533,6 +540,7 @@ namespace Jvedio
             string genretext = ((Label)sender).Content.ToString();
             if (string.IsNullOrEmpty(genretext)) return;
             windowMain.Director_MouseDown(sender, e);
+            windowMain.BackBtn.Visibility = Visibility.Visible;
             this.Close();
 
 
@@ -544,6 +552,7 @@ namespace Jvedio
             string genretext = ((Label)sender).Content.ToString();
             if (string.IsNullOrEmpty(genretext)) return;
             windowMain.Studio_MouseDown(sender, e);
+            windowMain.BackBtn.Visibility = Visibility.Visible;
             this.Close();
 
 
@@ -555,6 +564,7 @@ namespace Jvedio
             string genretext = ((Label)sender).Content.ToString();
             if (string.IsNullOrEmpty(genretext)) return;
             windowMain.Tag_MouseDown(sender, e);
+            windowMain.BackBtn.Visibility = Visibility.Visible;
             this.Close();
 
         }
@@ -2049,8 +2059,7 @@ namespace Jvedio
 
         private void HideGrid(object sender, MouseButtonEventArgs e)
         {
-            Grid grid = ((Border)sender).Parent as Grid;
-            grid.Visibility = Visibility.Hidden;
+            LabelGrid.Visibility = Visibility.Hidden;
 
         }
 
@@ -2142,6 +2151,45 @@ namespace Jvedio
 
         private void DownLoadMagnets(object sender, RoutedEventArgs e)
         {
+
+        }
+
+        private void SortByLetter(object sender, RoutedEventArgs e)
+        {
+            if (SortIndex == 0)
+                SortDescend = !SortDescend;
+            else
+                SortIndex = 0;
+
+            List<string> result = null;
+            if (SortDescend)
+                result = vieModel.LabelList.OrderByDescending(arg => arg).ToList();
+            else
+                result = vieModel.LabelList.OrderBy(arg => arg).ToList();
+            vieModel.LabelList = new ObservableCollection<string>();
+            foreach (var item in result)
+            {
+                vieModel.LabelList.Add(item);
+            }
+        }
+
+        private void SortByCount(object sender, RoutedEventArgs e)
+        {
+            if (SortIndex == 1)
+                SortDescend = !SortDescend;
+            else
+                SortIndex = 1;
+
+            List<string> result = null;
+            if (SortDescend)
+                result = vieModel.LabelList.OrderByDescending(arg => int.Parse(arg.Split('(').Last().Replace(" ", "").Replace(")", ""))).ToList();
+            else
+                result = vieModel.LabelList.OrderBy(arg => int.Parse(arg.Split('(').Last().Replace(" ", "").Replace(")", ""))).ToList();
+            vieModel.LabelList = new ObservableCollection<string>();
+            foreach (var item in result)
+            {
+                vieModel.LabelList.Add(item);
+            }
 
         }
     }

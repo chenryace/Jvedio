@@ -1700,6 +1700,8 @@ namespace Jvedio
                 wd?.Close();
                 wd = new WindowDetails(id);
                 wd.Show();
+                VieModel_Main.PreviousPage = vieModel.CurrentPage;
+
             }
             canShowDetails = false;
         }
@@ -2155,6 +2157,9 @@ namespace Jvedio
                 vieModel.GoToTopCanvas = Visibility.Visible;
             else
                 vieModel.GoToTopCanvas = Visibility.Hidden;
+
+
+            VieModel_Main.PreviousOffset = sv.VerticalOffset;
 
             if (!IsFlowing && sv.ScrollableHeight - sv.VerticalOffset <= 10 && sv.VerticalOffset != 0)
             {
@@ -5037,7 +5042,7 @@ namespace Jvedio
 
             sql = sql.Substring(0, sql.Length - 5);
             Console.WriteLine(sql);
-            vieModel.ExecutiveSqlCommand(0, "筛选", sql);
+            vieModel.ExecutiveSqlCommand(0, Jvedio.Language.Resources.Filter, sql);
         }
 
         private List<string> GetFilterFromItemsControl(ItemsControl itemsControl)
@@ -5448,11 +5453,9 @@ namespace Jvedio
 
         private void HideActressGrid(object sender, MouseButtonEventArgs e)
         {
-            Border border = (Border)sender;
-            Grid grid = border.Parent as Grid;
             var anim = new DoubleAnimation(1, 0, (Duration)FadeInterval, FillBehavior.Stop);
             anim.Completed += (s, _) => vieModel.ActorInfoGrid = Visibility.Collapsed; ;
-            grid.BeginAnimation(UIElement.OpacityProperty, anim);
+            ActorInfoGrid.BeginAnimation(UIElement.OpacityProperty, anim);
 
         }
 
@@ -6184,11 +6187,18 @@ namespace Jvedio
             }
             sql = sql.Substring(0, sql.Length - 5);
             Console.WriteLine(sql);
-            vieModel.ExecutiveSqlCommand(0, "筛选", sql);
+            vieModel.ExecutiveSqlCommand(0, Jvedio.Language.Resources.Filter, sql);
 
         }
 
-
+        private void BackTo(object sender, RoutedEventArgs e)
+        {
+            (sender as Button).Visibility = Visibility.Collapsed;
+            HideActressGrid(this,null);
+            vieModel.ExecutiveSqlCommand(0, vieModel.TextType, VieModel_Main.PreviousSql, istorecord: false,flip:false);
+            //TODO
+            //流动模式
+        }
     }
 
 
