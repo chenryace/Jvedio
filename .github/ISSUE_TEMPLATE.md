@@ -8,6 +8,7 @@
 详细说明前因后果、操作步骤：如，当我点“所有视频”去浏览作品时，我点开某个作品的详情页，这个时候我再点演员，会转到这个演员所有的作品目录，然后我没办法返回到原来的浏览进度了，这个可以做一个优化吗？
 
 # 日志文件：
+请将对应的日志复制到此处，无则可不填
 
-日志文件位于软件目录下的 Log 文件夹，包含四个文件夹 DataBase, File, NetWork, scanlog，具体介绍请看 [软件设置](https://github.com/hitchao/Jvedio/wiki/Introduction_3) ，请将对应的日志复制到此处，无则可不填
+日志文件位于软件目录下的 Log 文件夹，具体介绍请看  https://github.com/hitchao/Jvedio/wiki/Introduction_3 
 
