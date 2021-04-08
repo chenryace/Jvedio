@@ -309,14 +309,12 @@ namespace Jvedio
         public List<string> genrelist { get; set; }
         public List<Actress> actorlist { get; set; }
 
-        public List<string> _labellist;
+        private List<string> _labellist;
         public List<string> labellist
         {
             get
             {
-
                 return _labellist;
-
             }
             set
             {

@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Jvedio"
         xmlns:converter="clr-namespace:Jvedio.Utils.Converter;assembly=Jvedio.Utils"
+        xmlns:usercontrol="clr-namespace:Jvedio.Style.UserControls;assembly=Jvedio.Style"
         xmlns:p="clr-namespace:Jvedio.Properties"
         xmlns:lang="clr-namespace:Jvedio.Language;assembly=Jvedio.Language"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
@@ -166,6 +167,8 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
+        
+
     </Window.Resources>
 
 
@@ -177,7 +180,7 @@
             </Border.Effect>
             <Image Grid.Row="1" x:Name="BackGroundImage"  Stretch="UniformToFill"></Image>
         </Border>
-        
+
 
 
 
@@ -337,8 +340,8 @@
                                 <Grid.ContextMenu>
                                     <ContextMenu Opacity="0.8"  PreviewKeyUp="ContextMenu_PreviewKeyUp" >
                                         <MenuItem Header="{x:Static lang:Resources.Menu_SyncInfo}" Click="DownLoad"/>
-                                        <MenuItem x:Name="ExtraSync"  Header="{x:Static lang:Resources.Menu_SyncExtra}"   Visibility="Collapsed"  >
-                                            <MenuItem Header="{x:Static lang:Resources.SyncMagnets}" Click="DownLoadMagnets"   ></MenuItem>
+                                        <MenuItem    Header="{x:Static lang:Resources.Menu_SyncExtra}"   Visibility="{Binding ShowSecret,Source={x:Static p:Settings.Default},Mode=OneWay,Converter={StaticResource bool2VisibilityConverter}}"   >
+                                            <MenuItem Header="{x:Static lang:Resources.SyncMagnets}" Click="DownLoadMagnets"    ></MenuItem>
                                         </MenuItem>
                                         <MenuItem Header="{x:Static lang:Resources.Menu_Advance}"   >
                                             <MenuItem Header="{x:Static lang:Resources.Menu_Translate}" Click="TranslateMovie"  />
@@ -365,12 +368,10 @@
 
                                         <MenuItem Header="{x:Static lang:Resources.Menu_OpenWebSite}" Click="OpenWeb" Icon="pack://application:,,,/Resources/menuitem/openwebsite.png" ></MenuItem>
                                         <MenuItem x:Name="OpenOtherUrlMenuItem"  Header="{x:Static lang:Resources.OpenOtherUrl}"  >
-                                            
+
                                         </MenuItem>
 
-                                        <MenuItem  x:Name="CopyMagnetsMenuItem"  Visibility="Collapsed" Header="{x:Static lang:Resources.CopyMagnets}"  Icon="pack://application:,,,/Resources/menuitem/magnet.png"    >
-                                            
-                                        </MenuItem>
+                                        <MenuItem x:Name="CopyMagnetsMenuItem"     Visibility="{Binding ShowSecret,Source={x:Static p:Settings.Default},Mode=OneWay,Converter={StaticResource bool2VisibilityConverter}}"  Header="{x:Static lang:Resources.CopyMagnets}"  Icon="pack://application:,,,/Resources/menuitem/magnet.png"   />
 
                                         <MenuItem Header="{x:Static lang:Resources.Menu_CopyFile}" Click="CopyFile" />
                                         <MenuItem Header="{x:Static lang:Resources.Menu_ClearInfo}"  Click="DeleteInfo"   />
@@ -384,7 +385,7 @@
 
                             <!--预览图-->
                             <Grid Grid.Row="1" x:Name="ThumbGrid"      >
-                                <ProgressBar Background="{DynamicResource BackgroundSide}"     Style="{StaticResource ProgressBarSuccessStripe}" IsVisibleChanged="ProgressBar_IsVisibleChanged"  x:Name="ProgressBar" ValueChanged="ProgressBar_ValueChanged" Visibility="Visible"    Height="10" Margin="10 -6"  Value="20"  VerticalAlignment="Top"  HorizontalAlignment="Stretch" Width="auto" Maximum="100" Minimum="0"  />
+                                <ProgressBar Background="Transparent"      Style="{StaticResource ProgressBarSuccessStripe}" IsVisibleChanged="ProgressBar_IsVisibleChanged"  x:Name="ProgressBar" ValueChanged="ProgressBar_ValueChanged" Visibility="Visible"    Height="10" Margin="10 -6"  Value="20"  VerticalAlignment="Top"  HorizontalAlignment="Stretch" Width="auto" Maximum="100" Minimum="0"  />
 
                                 <Border x:Name="ExtraImageBorder" FocusVisualStyle="{x:Null}" Visibility="Visible" Margin="0 10" AllowDrop="True" DragOver="Border_DragOver" Drop="Border_Drop"   Background="{DynamicResource BackgroundSide}" CornerRadius="10" >
                                     <ScrollViewer FocusVisualStyle="{x:Null}" Margin="5" VerticalContentAlignment="Center"   PreviewMouseWheel="scrollViewer_PreviewMouseWheel"   x:Name="scrollViewer"      HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Hidden">
@@ -413,7 +414,7 @@
                                                                     </ContextMenu>
                                                                 </Border.ContextMenu>
                                                             </Border>
-                                                             <Image VerticalAlignment="Center"   Height="{Binding ElementName=scrollViewer,Path=ActualHeight,Converter={StaticResource SmallerValueConverter},ConverterParameter=20,Mode=OneWay}" Width="auto" Style="{StaticResource ExtraPic}"  />
+                                                            <Image VerticalAlignment="Center"   Height="{Binding ElementName=scrollViewer,Path=ActualHeight,Converter={StaticResource SmallerValueConverter},ConverterParameter=20,Mode=OneWay}" Width="auto" Style="{StaticResource ExtraPic}"  />
                                                         </Grid>
                                                     </StackPanel>
                                                 </DataTemplate>
@@ -473,7 +474,7 @@
                                                     <Button Click="CopyID" Cursor="Hand" Visibility="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type StackPanel}},Path=IsMouseOver,Converter={StaticResource BoolToVisibilityConverter},Mode=OneWay}" Content="{x:Static lang:Resources.Copy}" Style="{StaticResource ButtonPrimary}"/>
 
                                                 </StackPanel>
-                                               <StackPanel  x:Name="TagStampsStackPanel"    Visibility="{Binding Path=DisplayStamp,Converter={StaticResource BoolToVisibilityConverter}, Source={x:Static p:Settings.Default}}"  Grid.Column="1"  Orientation="Horizontal"  HorizontalAlignment="Left" Margin="0 5 0 10" >
+                                                <StackPanel  x:Name="TagStampsStackPanel"    Visibility="{Binding Path=DisplayStamp,Converter={StaticResource BoolToVisibilityConverter}, Source={x:Static p:Settings.Default}}"  Grid.Column="1"  Orientation="Horizontal"  HorizontalAlignment="Left" Margin="0 5 0 10" >
                                                     <Label Margin="0 0 5 0"  BorderThickness="0" Visibility="{Binding DetailMovie.tagstamps, Converter={StaticResource TagStampsConverter},ConverterParameter=0,Mode=OneWay}" Background="#9A58B7" Content="{x:Static lang:Resources.HD}" Foreground="{DynamicResource ForegroundSearch}"/>
                                                     <Label Margin="5 0"   BorderThickness="0"  Visibility="{Binding DetailMovie.tagstamps,Converter={StaticResource TagStampsConverter},ConverterParameter=1,Mode=OneWay}"  Background="YellowGreen"   Content="{x:Static lang:Resources.Translated}" Foreground="{DynamicResource ForegroundSearch}" />
                                                     <Label Margin="5 0"   BorderThickness="0"  Visibility="{Binding DetailMovie.tagstamps,Converter={StaticResource TagStampsConverter},ConverterParameter=2,Mode=OneWay}" Background="#00B0F0" Content="{x:Static lang:Resources.FlowOut}" Foreground="{DynamicResource ForegroundSearch}" />
@@ -594,8 +595,6 @@
                                                             </ItemsControl.ItemTemplate>
                                                         </ItemsControl>
                                                     </Grid>
-                                                    
-                                                    <Button Click="AddNewLabel" Grid.Column="2" Cursor="Hand" Margin="5 5 0 0"    Content="{x:Static lang:Resources.Menu_LabelManage1}" HorizontalAlignment="Left" Style="{StaticResource ButtonPrimary}"  VerticalAlignment="Top"  />
 
                                                     <!--标签-->
                                                     <Grid  >
@@ -607,26 +606,9 @@
                                                         <TextBlock Grid.Column="0" Text="{x:Static lang:Resources.Label}" Style="{StaticResource BaseTextBlock}" VerticalAlignment="Top" Margin="0 10 0 0" />
                                                         <TextBlock Grid.Column="1"  Text="：" Style="{StaticResource BaseTextBlock}"  VerticalAlignment="Top" Margin="0 10 0 0" />
 
-                                                        <ItemsControl  x:Name="LabelListItemsControl" Grid.Column="2" ItemsSource="{Binding DetailMovie.labellist,Mode=OneWay}"  Height="auto"  VerticalAlignment="Top"  Background="Transparent">
-                                                            <ItemsControl.ItemsPanel>
-                                                                <ItemsPanelTemplate>
-                                                                    <!--<hc:TagContainer  ShowAddButton="True"    TagMargin="20"    Orientation="Horizontal" MaxWidth="400" VerticalAlignment="Top" >
+                                                        <usercontrol:TagPanel x:Name="tagPanel" Grid.Column="2" TagList="{Binding DetailMovie.labellist,Mode=OneWay}" Margin="5" />
 
-                                                                    </hc:TagContainer>-->
-                                                                </ItemsPanelTemplate>
-                                                            </ItemsControl.ItemsPanel>
-
-                                                            <ItemsControl.ItemTemplate>
-                                                                <DataTemplate>
-                                                                    <Border >
-                                                                        <hc:TagContainer >
-                                                                            <hc:Tag Closing="Tag_Closing"  MouseLeftButtonUp="ShowSameLabel" Cursor="Hand"  Background="{DynamicResource BackgroundSide}" Foreground="{DynamicResource ForegroundSearch}" FontSize="16" ShowCloseButton="True" Selectable="False"  Content="{Binding}"/>
-                                                                        </hc:TagContainer>
-                                                                    </Border>
-                                                                </DataTemplate>
-                                                            </ItemsControl.ItemTemplate>
-                                                        </ItemsControl>
-                                                    </Grid>
+                                                </Grid>
 
 
                                                     <!--摘要-->
@@ -655,8 +637,8 @@
                                                             <Button x:Name="tlBtn" Cursor="Hand" Margin="5 10"    Content="{x:Static lang:Resources.Translate}" HorizontalAlignment="Left" Style="{StaticResource ButtonPrimary}" Click="TranslateMovie" VerticalAlignment="Top"  />
                                                             <TextBox Margin="5 0"  Style="{StaticResource ViewTextBox}" Text="{Binding DetailMovie.plot}"  Height="auto" TextWrapping="Wrap"  ></TextBox>
                                                         </StackPanel>
-                                                        
-                                                        </Grid>
+
+                                                    </Grid>
 
                                                 </StackPanel>
                                             </ScrollViewer>
@@ -798,7 +780,7 @@
 
         <!--标签-->
 
-        <Grid x:Name="LabelGrid"  Visibility="Collapsed" Background="Transparent" VerticalAlignment="Center" HorizontalAlignment="Center" MaxHeight="500" MinHeight="200" Width="800"  >
+        <Grid x:Name="LabelGrid"  Visibility="Collapsed" Background="Transparent" VerticalAlignment="Center" HorizontalAlignment="Center" MaxHeight="500" MinHeight="500" Width="800"  >
             <Border Background="{DynamicResource BackgroundMain}" CornerRadius="0" Margin="2"  >
                 <Border.Effect>
                     <DropShadowEffect BlurRadius="15" Direction="-90" RenderingBias="Quality" ShadowDepth="2"/>
@@ -814,20 +796,23 @@
             <TextBox Text="{x:Static lang:Resources.Menu_LabelManage1}" Style="{StaticResource ViewTextBox}" Margin="20" Height="auto" VerticalAlignment="Top" HorizontalAlignment="Center"/>
 
             <!--排序-->
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="20" VerticalAlignment="Top">
-                <Button    Style="{StaticResource RoundTitleButton}" Click="SortByLetter"   Height="25" Width="25"   Margin="3"  HorizontalContentAlignment="Left" VerticalContentAlignment="Top" HorizontalAlignment="Right" VerticalAlignment="Top">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="20 10" VerticalAlignment="Top">
+                <Button VerticalAlignment="Center"    Style="{StaticResource RoundTitleButton}" Click="SortByLetter"   Height="25" Width="25"   Margin="3"  HorizontalContentAlignment="Left" VerticalContentAlignment="Top" HorizontalAlignment="Right"  >
                     <Viewbox   Width="18" Height="auto" Margin="0 -2 0 0"        >
                         <Path VerticalAlignment="Center" HorizontalAlignment="Center"      Fill="{DynamicResource ForegroundGlobal}" Data="M275.2 393.6h118.4l28.8 86.4h70.4L371.2 172.8v-3.2h-73.6L176 480h67.2l32-86.4z m16-48l12.8-35.2c12.8-32 22.4-60.8 28.8-89.6l3.2 6.4c9.6 25.6 19.2 54.4 28.8 80l12.8 35.2h-86.4z m169.6 252.8V560H217.6v51.2h160l-176 224v35.2h259.2v-48h-176z m86.4-259.2l83.2-83.2v592l54.4 22.4 163.2-160-22.4-22.4-22.4-22.4-108.8 105.6v-592L640 156.8 502.4 294.4l22.4 22.4z" />
                     </Viewbox>
                 </Button>
-                <Button    Style="{StaticResource RoundTitleButton}" Click="SortByCount"    Height="25" Width="25"   Margin="3"  HorizontalContentAlignment="Left" VerticalContentAlignment="Top" HorizontalAlignment="Right" VerticalAlignment="Top">
+                <Button    Style="{StaticResource RoundTitleButton}" Click="SortByCount"    Height="25" Width="25"   Margin="3"  HorizontalContentAlignment="Left" VerticalContentAlignment="Top" HorizontalAlignment="Right" VerticalAlignment="Center">
                     <Viewbox   Width="18" Height="auto" Margin="0 0 0 0"        >
                         <Path VerticalAlignment="Center" HorizontalAlignment="Center"      Fill="{DynamicResource ForegroundGlobal}" Data="M965.248 919.466667c25.344 0 46.037333 20.693333 46.037333 46.037333 0 25.301333-20.693333 45.994667-46.037333 45.994667H63.616A46.08 46.08 0 0 1 17.578667 965.546667a46.08 46.08 0 0 1 46.037333-46.037334h901.632zM167.893333 307.626667c50.602667 0 92.032 41.386667 92.032 92.032v350.72a92.330667 92.330667 0 0 1-85.504 91.818666l-6.528 0.213334a92.288 92.288 0 0 1-92.032-92.032v-350.72c0-50.645333 41.386667-92.032 92.032-92.032z m346.538667-192.298667c50.602667 0 92.032 41.386667 92.032 92.032v543.018667a92.330667 92.330667 0 0 1-85.504 91.818666l-6.528 0.213334A92.288 92.288 0 0 1 422.4 750.378667V207.36c0-50.602667 41.386667-92.032 92.032-92.032z m346.538667-97.706667c50.602667 0 92.032 41.386667 92.032 91.989334v640.768a92.330667 92.330667 0 0 1-85.504 91.818666l-6.528 0.213334a92.288 92.288 0 0 1-92.032-92.032V109.610667c0-50.602667 41.386667-92.032 92.032-92.032z" />
                     </Viewbox>
                 </Button>
+
+                <hc:SearchBar x:Name="SearchBar" SearchStarted="SearchBar_SearchStarted" MouseEnter="SearchBar_MouseEnter" MouseLeave="SearchBar_MouseLeave" ContextMenu="{StaticResource TextBoxContextMenu}" BorderThickness="2" TextChanged="SearchBar_TextChanged"  BorderBrush="Transparent"   Focusable="True"        Padding="5" Width="200" ShowClearButton="True"  hc:InfoElement.TitleWidth="140" CaretBrush="{DynamicResource ForegroundSearch}" Foreground="{DynamicResource ForegroundSearch}" hc:InfoElement.Placeholder="{x:Static lang:Resources.Search}" Margin="5 5 5 5" Background="Transparent"  hc:InfoElement.Title="" Style="{StaticResource SearchBarPlus}"  />
+
             </StackPanel>
-            
-            
+
+
             <Grid   Margin="20 50 20 5" >
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>

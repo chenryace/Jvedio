@@ -455,7 +455,7 @@ namespace Jvedio
                         if (!result.Contains(item)) result.Add(item);
                 }
             }
-            else { if (label.Length > 0) result.Add(label.Replace(" ", "")); }
+            else { if (label.Length > 0 && label.IndexOf(' ')<0) result.Add(label.Replace(" ", "")); }
             return result;
         }
 

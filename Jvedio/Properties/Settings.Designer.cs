@@ -1822,5 +1822,29 @@ namespace Jvedio.Properties {
                 this["ScanRe"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ShowSecret {
+            get {
+                return ((bool)(this["ShowSecret"]));
+            }
+            set {
+                this["ShowSecret"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string WebSiteList {
+            get {
+                return ((string)(this["WebSiteList"]));
+            }
+            set {
+                this["WebSiteList"] = value;
+            }
+        }
     }
 }

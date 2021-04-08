@@ -64,6 +64,9 @@
     <Compile Include="UserControls\OutputPanel.xaml.cs">
       <DependentUpon>OutputPanel.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\TagPanel.xaml.cs">
+      <DependentUpon>TagPanel.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\WaitingPanel.xaml.cs">
       <DependentUpon>WaitingPanel.xaml</DependentUpon>
     </Compile>
@@ -114,6 +117,10 @@
     <Page Include="UserControls\OutputPanel.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\TagPanel.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="UserControls\WaitingPanel.xaml">
       <SubType>Designer</SubType>

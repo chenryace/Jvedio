@@ -8,9 +8,7 @@ using GalaSoft.MvvmLight.CommandWpf;
 using System.Collections.ObjectModel;
 using System.Windows.Media.Imaging;
 using System.IO;
-using static Jvedio.GlobalVariable;
-using LiveCharts;
-using LiveCharts.Wpf;
+
 
 namespace Jvedio.ViewModel
 {

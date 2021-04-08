@@ -814,7 +814,7 @@
                                                     </Popup>
                                                 </Grid>
 
-                                                <hc:SearchBar x:Name="SearchBar" ContextMenu="{StaticResource TextBoxContextMenu}"  Focusable="True" LostFocus="SearchBar_LostFocus" GotFocus="SearchBar_GotFocus"  PreviewKeyUp="SearchBar_PreviewKeyUp"    TextChanged="RefreshCandiadte" PreviewMouseLeftButtonDown="ShowSearchPopup" BorderThickness="0" Padding="35 0" ShowClearButton="True"  hc:InfoElement.TitleWidth="140" CaretBrush="{DynamicResource ForegroundSearch}" Foreground="{DynamicResource ForegroundSearch}" hc:InfoElement.Placeholder="{Binding SearchHint}" Margin="5 5 5 5" Background="Transparent"  hc:InfoElement.Title="" Style="{StaticResource SearchBarPlus}"  />
+                                                <hc:SearchBar x:Name="SearchBar" SearchStarted="SearchBar_SearchStarted" ContextMenu="{StaticResource TextBoxContextMenu}"  Focusable="True" LostFocus="SearchBar_LostFocus" GotFocus="SearchBar_GotFocus"  PreviewKeyUp="SearchBar_PreviewKeyUp"    TextChanged="RefreshCandiadte" PreviewMouseLeftButtonDown="ShowSearchPopup" BorderThickness="0" Padding="35 0" ShowClearButton="True"  hc:InfoElement.TitleWidth="140" CaretBrush="{DynamicResource ForegroundSearch}" Foreground="{DynamicResource ForegroundSearch}" hc:InfoElement.Placeholder="{Binding SearchHint}" Margin="5 5 5 5" Background="Transparent"  hc:InfoElement.Title="" Style="{StaticResource SearchBarPlus}"  />
 
                                                 <Popup  Focusable="True" IsOpen="{Binding ShowSearchPopup,FallbackValue=False}"  VerticalOffset="2"  HorizontalOffset="0"      Width="{Binding  RelativeSource={RelativeSource AncestorType={x:Type Grid},Mode=FindAncestor},Path=ActualWidth}" Visibility="Visible"  AllowsTransparency="True" Placement="Bottom"  StaysOpen="True" >
                                                     <Grid    Margin="5"   >
@@ -886,7 +886,7 @@
                                                     </Grid>
                                                 </Popup>
                                             </Grid>
-                                            <Button x:Name="HideButton" VerticalAlignment="Center" Style="{StaticResource FlatButton}"  Content="{x:Static lang:Resources.LoadFromNet}" Margin="5 0" Click="LoadFromPage"   HorizontalAlignment="Stretch" Visibility="Collapsed"   />
+                                            <Button  VerticalAlignment="Center" Style="{StaticResource FlatButton}"  Content="{x:Static lang:Resources.LoadFromNet}" Margin="5 0" Click="LoadFromPage"   HorizontalAlignment="Stretch" Visibility="{Binding ShowSecret,Source={x:Static p:Settings.Default},Mode=OneWay,Converter={StaticResource bool2VisibilityConverter}}"   />
 
                                             <CheckBox Content="{x:Static lang:Resources.MultiSelect}" IsChecked="{Binding EditMode, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Click="SetSelectMode"/>
 

@@ -129,11 +129,7 @@ namespace Jvedio.ViewModel
 
         public void SaveLabel()
         {
-            List<string> labels = new List<string>();
-            labels.AddRange(DetailMovie.labellist);
-            labels.Remove("+");
-            DataBase.UpdateMovieByID(DetailMovie.id, "label", string.Join(" ", labels), "string");
-            
+            DataBase.UpdateMovieByID(DetailMovie.id, "label", string.Join(" ", DetailMovie.labellist), "string");
         }
 
 
@@ -196,11 +192,6 @@ namespace Jvedio.ViewModel
                 }
                 db.CloseDB();
 
-                //显示新增按钮
-                List<string> labels = detailMovie.labellist;
-                detailMovie.labellist = new List<string>();
-                detailMovie.labellist.Add("+");
-                detailMovie.labellist.AddRange(labels);
                 DetailMovie = detailMovie;
                 detailMovie.tagstamps = "";
                 FileProcess.addTag(ref detailMovie);

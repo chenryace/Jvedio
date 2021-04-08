@@ -36,7 +36,6 @@ using System.Text;
 using System.Security.Cryptography;
 using Jvedio.Utils.Encrypt;
 using Jvedio.Utils;
-using WpfAnimatedGif;
 using HtmlAgilityPack;
 using System.Net;
 using Jvedio.Style;
@@ -107,8 +106,6 @@ namespace Jvedio
             BindingEvent();
 
             if (Microsoft.WindowsAPICodePack.Taskbar.TaskbarManager.IsPlatformSupported) taskbarInstance = Microsoft.WindowsAPICodePack.Taskbar.TaskbarManager.Instance;
-
-
             #region "改变窗体大小"
             //https://www.cnblogs.com/yang-fei/p/4737308.html
 
@@ -1291,7 +1288,7 @@ namespace Jvedio
             vieModel.Search = SearchBar.Text;
         }
 
-        private void SearchBar_GotFocus(object sender, RoutedEventArgs e)
+        public void SearchBar_GotFocus(object sender, RoutedEventArgs e)
         {
             HandyControl.Controls.SearchBar searchBar = sender as HandyControl.Controls.SearchBar;
             Border border = ((Grid)searchBar.Parent).Children[0] as Border;
@@ -1302,7 +1299,7 @@ namespace Jvedio
             border.BorderBrush.BeginAnimation(SolidColorBrush.ColorProperty, colorAnimation);
         }
 
-        private void SearchBar_LostFocus(object sender, RoutedEventArgs e)
+        public void SearchBar_LostFocus(object sender, RoutedEventArgs e)
         {
             vieModel.ShowSearchPopup = false;
             HandyControl.Controls.SearchBar searchBar = sender as HandyControl.Controls.SearchBar;
@@ -1325,11 +1322,6 @@ namespace Jvedio
 
         }
 
-        private void ShowHideContent()
-        {
-            showSecret = true;
-            HideButton.Visibility = Visibility.Visible;
-        }
 
 
         private int SearchSelectIdex = -1;
@@ -1338,21 +1330,7 @@ namespace Jvedio
         {
             if (e.Key == Key.Enter)
             {
-                vieModel.SearchFirstLetter = false;
-                if (vieModel.CurrentSearchCandidate != null && (SearchSelectIdex >= 0 & SearchSelectIdex < vieModel.CurrentSearchCandidate.Count))
-                    SearchBar.Text = vieModel.CurrentSearchCandidate[SearchSelectIdex];
-                if (SearchBar.Text == "") return;
-                if (SearchBar.Text.ToUpper() == "JVEDIO")
-                {
-                    ShowHideContent();
-                }
-                else
-                {
-                    vieModel.Search = SearchBar.Text;
-                    vieModel.ShowSearchPopup = false;
-                }
-
-
+                //SearchBar_SearchStarted(null, null);
             }
             else if (e.Key == Key.Down)
             {
@@ -1454,10 +1432,10 @@ namespace Jvedio
                 TabItem tabItem = ActorTabControl.SelectedItem as TabItem;
                 vieModel.GetMoviebyLabel(label, tabItem.Header.ToString().ToSqlString());
             }
-            else if (type == "HandyControl.Controls.Tag")
+            else if (type == "System.Windows.Controls.TextBox")
             {
-                HandyControl.Controls.Tag Tag = (HandyControl.Controls.Tag)sender;
-                label = Tag.Content.ToString();
+                TextBox textBox = (TextBox)sender;
+                label = textBox.Text;
                 vieModel.GetMoviebyLabel(label);
             }
 
@@ -6266,6 +6244,23 @@ namespace Jvedio
             vieModel.ExecutiveSqlCommand(0, vieModel.TextType, VieModel_Main.PreviousSql, istorecord: false,flip:false);
             //TODO
             //流动模式
+        }
+
+        private void SearchBar_SearchStarted(object sender, HandyControl.Data.FunctionEventArgs<string> e)
+        {
+            vieModel.SearchFirstLetter = false;
+            if (vieModel.CurrentSearchCandidate != null && (SearchSelectIdex >= 0 & SearchSelectIdex < vieModel.CurrentSearchCandidate.Count))
+                SearchBar.Text = vieModel.CurrentSearchCandidate[SearchSelectIdex];
+            if (SearchBar.Text == "") return;
+            if (SearchBar.Text.ToUpper() == "JVEDIO")
+            {
+                Properties.Settings.Default.ShowSecret = true;
+            }
+            else
+            {
+                vieModel.Search = SearchBar.Text;
+                vieModel.ShowSearchPopup = false;
+            }
         }
     }
     public class ScrollViewerBehavior
