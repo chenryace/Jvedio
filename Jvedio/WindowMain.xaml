@@ -38,50 +38,11 @@
 
     <Window.Resources>
 
-
-        <!--Converter-->
-
-        <converter:IntToVisibilityConverter x:Key="IntToVisibilityConverter" />
-        <converter:BoolToOppositeVisibilityConverter x:Key="BoolToOppositeVisibilityConverter" />
-        <converter:SmallerThicknessConverter x:Key="SmallerThicknessConverter" />
-        <converter:OppositeBooleanConverter x:Key="OppositeBooleanConverter" />
-        <converter:WidthConverter x:Key="WidthConverter" />
-        <converter:BiggerWidthConverter x:Key="BiggerWidthConverter" />
-        <converter:BoolToImageStretchConverter x:Key="BoolToImageStretchConverter" />
-        <converter:BitToGBConverter x:Key="BitToGBConverter" />
-        <converter:WidthToMarginConverter x:Key="WidthToMarginConverter" />
-        <BooleanToVisibilityConverter x:Key="BoolToVis" />
-        <converter:StringToUriStringConverter x:Key="StringToUriStringConverter" />
-        <local:MovieStampTypeToVisibilityConverter x:Key="MovieStampTypeToVisibilityConverter" />
-        <converter:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
-        <converter:StringToVisibilityConverter x:Key="StringToVisibilityConverter" />
-        <converter:ImageTypeEnumConverter x:Key="ImageTypeEnumConverter" />
-        <converter:ViewTypeEnumConverter x:Key="ViewTypeEnumConverter" />
-        <converter:IntToCheckedConverter x:Key="IntToCheckedConverter"/>
-
         <!--高清、中字、流出-->
         <local:TagStampsConverter x:Key="TagStampsConverter"/>
-        <converter:MultiIntToMarginConverter x:Key="MultiIntToMarginConverter" />
+        <local:MovieStampTypeToVisibilityConverter x:Key="MovieStampTypeToVisibilityConverter" />
 
-
-        <!--字体-->
-        <converter:BoolToFontBoldConverter x:Key="BoolToFontBoldConverter" />
-        <converter:BoolToFontItalicConverter x:Key="BoolToFontItalicConverter" />
-        <converter:BoolToUnderLineConverter x:Key="BoolToUnderLineConverter" />
-        <converter:FontFamilyConverter x:Key="FontFamilyConverter" />
-        <converter:LabelToListConverter x:Key="LabelToListConverter" />
-        <converter:PlusToVisibilityConverter x:Key="PlusToVisibilityConverter" />
-        <BooleanToVisibilityConverter x:Key="bool2VisibilityConverter"/>
-
-
-
-        <!--动画-->
-
-
-        <DoubleAnimation x:Key="shrinkBlurRadius"   From="40" To="10" Duration="00:00:1"  Storyboard.TargetProperty="(Border.Effect).(DropShadowEffect.BlurRadius)"/>
-        <DoubleAnimation x:Key="expandBlurRadius"    From="10" To="40" Duration="00:00:2"  Storyboard.TargetProperty="(Border.Effect).(DropShadowEffect.BlurRadius)"/>
-
-
+        <!--ContextMenu-->
         <ContextMenu x:Key="SettingsContextMenu"  HorizontalOffset="-45" VerticalOffset="-5"    Panel.ZIndex="7" Background="Transparent"   Margin="10 5" Width="auto">
             <MenuItem   Header="{x:Static lang:Resources.Settings}" Click="OpenSet_MouseDown"  />
             <MenuItem   Header="{x:Static lang:Resources.Tools}"  Click="OpenTools"    />
@@ -107,87 +68,18 @@
 
         </ContextMenu>
 
-        <Style x:Key="ActorInfoTextBlock" TargetType="{x:Type TextBlock}">
+        <Style x:Key="ActorInfoTextBlock" TargetType="{x:Type TextBlock}" BasedOn="{StaticResource BaseTextBlock}">
             <Setter Property="Margin" Value="10 10"/>
-            <Setter Property="FontSize" Value="15"/>
-            <Setter Property="Foreground" Value="{DynamicResource ForegroundGlobal}"/>
-        </Style>
-
-        <Style x:Key="ActorImage" TargetType="{x:Type Image}">
-            <Setter Property="Cursor" Value="Hand"/>
-            <Setter Property="AllowDrop" Value="True"/>
-            <Setter Property="Height" Value="125"/>
-            <Setter Property="Width" Value="125"/>
-            <Setter Property="VerticalAlignment" Value="Top"/>
-            <Setter Property="Margin" Value="0 0 0 10"/>
-            <Setter Property="Source" Value="{Binding smallimage}" />
-            <Style.Triggers>
-                <DataTrigger  Binding="{Binding smallimage}"  Value="{x:Null}">
-                    <Setter Property="Source" Value="Resources/Picture/NoPrinting_A.png" />
-                </DataTrigger>
-            </Style.Triggers>
-        </Style>
-
-        <Style x:Key="ActorInfoTextBox" TargetType="{x:Type TextBox}">
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="IsReadOnly" Value="True"/>
-            <Setter Property="TextWrapping" Value="Wrap"/>
-            <Setter Property="TextAlignment" Value="Center"/>
-            <Setter Property="Padding" Value="5"/>
-            <Setter Property="ContextMenu" Value="{StaticResource CopyContextMenu}"/>
-        </Style>
-
-
-        <Style x:Key="ActorInfoImage" TargetType="{x:Type Image}">
-            <Setter Property="Width" Value="120"/>
-            <Setter Property="VerticalAlignment" Value="Top"/>
-            <Setter Property="Margin" Value="0 20"/>
-            <Setter Property="Source" Value="{Binding Actress.smallimage}" />
-            <Style.Triggers>
-                <DataTrigger  Binding="{Binding Actress.smallimage}"  Value="{x:Null}">
-                    <Setter Property="Source" Value="Resources/Picture/NoPrinting_A.png" />
-                </DataTrigger>
-            </Style.Triggers>
         </Style>
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        <Style x:Key="InfoTextBox" TargetType="{x:Type TextBox}">
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="IsReadOnly" Value="True"/>
-            <Setter Property="TextWrapping" Value="NoWrap"/>
-            <Setter Property="TextAlignment" Value="Left"/>
-            <Setter Property="ContextMenu" Value="{StaticResource TextBoxContextMenu}"/>
-        </Style>
-
-        <Style x:Key="ActorTextBox" TargetType="{x:Type TextBox}">
+        <Style x:Key="ActorTextBox" TargetType="{x:Type TextBox}" BasedOn="{StaticResource ReadOnlyWrapTextBox}">
             <Setter Property="Width" Value="100"/>
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="IsReadOnly" Value="True"/>
-            <Setter Property="TextWrapping" Value="Wrap"/>
             <Setter Property="TextAlignment" Value="Left"/>
             <Setter Property="FontSize" Value="15"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="Foreground" Value="{DynamicResource ForegroundSearch}"/>
             <Setter Property="ContextMenu" Value="{StaticResource TextBoxContextMenu}"/>
-
             <Style.Triggers>
                 <DataTrigger Binding="{Binding EnableEditActress}" Value="True">
                     <Setter Property="Background" Value="{DynamicResource BackgroundSide}"/>
@@ -196,155 +88,40 @@
             </Style.Triggers>
         </Style>
 
-
-
-        <Style x:Key="SetButton" TargetType="{x:Type Button}">
-
-            <Setter Property="FontFamily" Value="微软雅黑"/>
-            <Setter Property="FontSize" Value="16"/>
-            <Setter Property="Width" Value="auto"/>
+        <Style x:Key="MenuButton" TargetType="{x:Type Button}" BasedOn="{StaticResource HoverButton}">
             <Setter Property="Height" Value="40"/>
-            <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="Foreground" Value="{DynamicResource ForegroundSearch}"/>
-
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type Button}">
-                        <Border Background="{TemplateBinding Background}" BorderBrush="Transparent" BorderThickness="0">
-                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-
-
-            <Style.Triggers>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="{DynamicResource BackgroundSearch}"/>
-                </Trigger>
-            </Style.Triggers>
-
         </Style>
 
 
-        <Style x:Key="ViewBorder" TargetType="{x:Type Border}">
-            <Setter Property="Width" Value="auto"/>
-            <Setter Property="Height" Value="auto"/>
-            <Setter Property="BorderThickness" Value="2"/>
-            <Setter Property="BorderBrush" Value="Transparent"/>
 
-            <!--<Style.Triggers>
-                <DataTrigger Binding="{Binding favorites,Converter={StaticResource favoritesConverter},Mode=OneWay}" Value="True">
-                    <DataTrigger.EnterActions>
-                        <BeginStoryboard>
-                            <Storyboard>
-                                <StaticResource ResourceKey="shrinkBlurRadius"/>
-                            </Storyboard>
-                        </BeginStoryboard>
-                    </DataTrigger.EnterActions>
-                    <DataTrigger.ExitActions>
-                        <BeginStoryboard>
-                            <Storyboard>
-                                <StaticResource ResourceKey="expandBlurRadius"/>
-                            </Storyboard>
-                        </BeginStoryboard>
-                    </DataTrigger.ExitActions>
-                </DataTrigger>
-            </Style.Triggers>-->
-
-
-
-        </Style>
 
 
 
         <Style x:Key="ViewImage" TargetType="{x:Type Image}">
             <Style.Triggers>
-                <MultiDataTrigger>
-                    <MultiDataTrigger.Conditions>
-                        <Condition Binding="{Binding ShowImageMode, Mode=OneWay, Source={x:Static p:Settings.Default}}"  Value="0"/>
-                    </MultiDataTrigger.Conditions>
+                <DataTrigger Binding="{Binding ShowImageMode, Mode=OneWay, Source={x:Static p:Settings.Default}}" Value="0">
                     <Setter Property="Source" Value="{Binding smallimage,Mode=OneWay}" />
                     <Setter Property="Width" Value="{Binding SmallImage_Width,Source={x:Static p:Settings.Default},Mode=OneWay}"/>
                     <Setter Property="Height" Value="{Binding SmallImage_Height,Source={x:Static p:Settings.Default},Mode=OneWay}"/>
+                </DataTrigger>
 
-                </MultiDataTrigger>
-
-
-                <MultiDataTrigger>
-                    <MultiDataTrigger.Conditions>
-                        <Condition Binding="{Binding ShowImageMode, Mode=OneWay, Source={x:Static p:Settings.Default}}"  Value="1"/>
-                    </MultiDataTrigger.Conditions>
+                <DataTrigger Binding="{Binding ShowImageMode, Mode=OneWay, Source={x:Static p:Settings.Default}}" Value="1">
                     <Setter Property="Source" Value="{Binding bigimage,Mode=OneWay}" />
                     <Setter Property="Width" Value="{Binding BigImage_Width,Source={x:Static p:Settings.Default},Mode=OneWay}"/>
                     <Setter Property="Height" Value="{Binding BigImage_Height,Source={x:Static p:Settings.Default},Mode=OneWay}"/>
-                </MultiDataTrigger>
-            </Style.Triggers>
-        </Style>
-
-
-
-
-        <Style x:Key="Line" TargetType="{x:Type Line}">
-            <Style.Triggers>
-                <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource AncestorType={x:Type Canvas}, Mode=FindAncestor}}" Value="True">
-                    <Setter Property="Stroke" Value="{DynamicResource ForegroundSearch}"/>
-                </DataTrigger>
-                <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource AncestorType={x:Type Canvas}, Mode=FindAncestor}}" Value="False">
-                    <Setter Property="Stroke" Value="{DynamicResource ForegroundSearch}"/>
                 </DataTrigger>
             </Style.Triggers>
         </Style>
 
-        <Style x:Key="SearchTextBox" TargetType="{x:Type TextBox}">
-
-            <Style.Triggers>
-                <Trigger Property="IsFocused" Value="True">
-                    <Setter Property="Foreground" Value="{DynamicResource ForegroundSearch}"/>
-                    <Setter Property="FontStyle" Value="Normal"/>
-                </Trigger>
-                <Trigger Property="IsFocused" Value="False">
-                    <Setter Property="Foreground" Value="{DynamicResource ForegroundGlobal}"/>
-                    <Setter Property="FontStyle" Value="Italic"/>
-                </Trigger>
-            </Style.Triggers>
-
-        </Style>
-
-
-        <Style x:Key="GenTitle" TargetType="{x:Type TextBlock}">
-            <Setter Property="Width" Value="auto" />
-            <Setter Property="Height" Value="auto" />
-            <Setter Property="Background" Value="Transparent" />
+        <Style x:Key="CenterTextBlock" TargetType="{x:Type TextBlock}" BasedOn="{StaticResource BaseTextBlock}">
             <Setter Property="Padding" Value="5"/>
             <Setter Property="Margin" Value="5"/>
             <Setter Property="TextAlignment" Value="Center" />
-            <Setter Property="Foreground" Value="{DynamicResource ForegroundGlobal}"/>
             <Setter Property="FontSize" Value="20"/>
-            <Setter Property="FontFamily" Value="微软雅黑"/>
         </Style>
 
 
-        <Style x:Key="GenLabel" TargetType="{x:Type Label}">
-            <Setter Property="HorizontalAlignment" Value="Stretch" />
-            <Setter Property="Width" Value="auto" />
-            <Setter Property="Height" Value="50" />
-            <Setter Property="Background" Value="Transparent" />
-            <Setter Property="VerticalContentAlignment" Value="Center" />
-            <Setter Property="HorizontalContentAlignment" Value="Center" />
-            <Setter Property="Foreground" Value="{DynamicResource ForegroundGlobal}"/>
-            <Setter Property="FontSize" Value="16"/>
-            <Setter Property="FontFamily" Value="微软雅黑"/>
-            <Setter Property="Margin" Value="5 2 5 2"/>
-        </Style>
-
-        <Style x:Key="ActorBorder" TargetType="{x:Type Border}">
-            <Setter Property="Margin" Value="0"/>
-            <Setter Property="BorderThickness" Value="2"/>
-            <Setter Property="BorderBrush" Value="Transparent"/>
-
-            <!--编辑模式-->
+        <Style x:Key="ActorBorder" TargetType="{x:Type Border}" BasedOn="{StaticResource SimpleBorder}">
             <Style.Triggers>
                 <MultiDataTrigger>
                     <MultiDataTrigger.Conditions>
@@ -356,44 +133,9 @@
             </Style.Triggers>
         </Style>
 
-        <Style x:Key="GenBorder" TargetType="{x:Type Border}">
-            <Setter Property="Width" Value="auto" />
-            <Setter Property="Height" Value="auto" />
-            <Setter Property="Background" Value="{DynamicResource BackgroundSide}" />
-            <Setter Property="Cursor" Value="Hand"/>
-            <Setter Property="Margin" Value="10"/>
-            <Setter Property="CornerRadius" Value="5"/>
-            <Style.Triggers>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="{DynamicResource BackgroundTitle}" />
-                </Trigger>
-            </Style.Triggers>
-        </Style>
-
-        <Style x:Key="BaseLabel" TargetType="{x:Type Label}">
-            <Setter Property="Background" Value="Transparent" />
-            <Setter Property="Cursor" Value="Arrow"/>
-            <Setter Property="Margin" Value="0"/>
-            <Setter Property="Height" Value="auto"/>
-            <Setter Property="Padding" Value="0"/>
-            <Setter Property="Foreground" Value="{DynamicResource ForegroundSearch}"/>
-            <Style.Triggers>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="{DynamicResource BackgroundSearch}" />
-                </Trigger>
-            </Style.Triggers>
-
-
-        </Style>
-
-
-        <Style x:Key="PlayButton" TargetType="{x:Type Canvas}">
-
+        <Style x:Key="HoverCanvas" TargetType="{x:Type Canvas}">
             <Setter Property="Visibility" Value="Hidden"/>
-
-
             <Style.Triggers>
-
                 <MultiDataTrigger>
                     <MultiDataTrigger.Conditions>
                         <Condition Binding="{Binding EditMode, Mode=TwoWay, Source={x:Static p:Settings.Default}}"  Value="False"/>
@@ -401,21 +143,11 @@
                     </MultiDataTrigger.Conditions>
                     <Setter Property="Visibility" Value="Visible"/>
                 </MultiDataTrigger>
-
                 <DataTrigger Binding="{Binding EditMode, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Value="True">
                     <Setter Property="Visibility" Value="Hidden"/>
                 </DataTrigger>
-                <!--<DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource AncestorType={x:Type Grid}, Mode=FindAncestor}}" Value="False">
-                    <Setter Property="Visibility" Value="Hidden"/>
-                </DataTrigger>-->
             </Style.Triggers>
         </Style>
-
-
-
-
-
-
     </Window.Resources>
 
 
@@ -425,8 +157,6 @@
                 <DropShadowEffect BlurRadius="20" Direction="-90"   RenderingBias="Quality" ShadowDepth="0"/>
             </Rectangle.Effect>
         </Rectangle>
-
-
 
         <!--消息提示框-->
         <ScrollViewer Height="auto" Background="Transparent" Panel.ZIndex="6" Width="auto" VerticalScrollBarVisibility="Hidden" VerticalAlignment="Bottom" HorizontalAlignment="Right"  Margin="10 120 30 80">
@@ -443,7 +173,7 @@
             </hc:NotifyIcon.ContextMenu>
         </hc:NotifyIcon>
 
-        <TextBox  Text="" Name="FocusTextBox" Visibility="Visible" Width="10" Height="20" Panel.ZIndex="-1" Style="{StaticResource  InfoTextBox}" Foreground="White"/>
+        <TextBox  Text="" Name="FocusTextBox" Visibility="Visible" Width="10" Height="20" Panel.ZIndex="-1" Foreground="White"/>
 
 
         <Grid  Visibility="{Binding CmdVisibility,FallbackValue=Hidden}" Panel.ZIndex="5">
@@ -984,8 +714,8 @@
                                                     </Border.Effect>
                                                 </Border>
                                                 <StackPanel  Panel.ZIndex="7" Background="Transparent" Orientation="Vertical" MinWidth="100" Height="auto" Margin="15" >
-                                                    <Button  Style="{StaticResource SetButton}" Content="{x:Static lang:Resources.SyncInfo}" Click="Button_StartDownload" />
-                                                    <Button  Style="{StaticResource SetButton}"  Content="{x:Static lang:Resources.StopSync}"  Click="Button_StopDownload"    />
+                                                    <Button  Style="{StaticResource MenuButton}" Content="{x:Static lang:Resources.SyncInfo}" Click="Button_StartDownload" />
+                                                    <Button  Style="{StaticResource MenuButton}"  Content="{x:Static lang:Resources.StopSync}"  Click="Button_StopDownload"    />
                                                 </StackPanel>
                                             </Grid>
                                         </Popup>
@@ -1341,9 +1071,9 @@
                                             </Grid.RowDefinitions>
 
 
-
+                                            
                                             <StackPanel Grid.Row="0">
-                                                <Image  Style="{StaticResource ActorInfoImage}" DragOver="Image_DragOver" Drop="Image_Drop"  AllowDrop="True"   >
+                                                <Image Source="{Binding Actress.smallimage}" Width="120" VerticalAlignment="Top" Margin="0 20"  DragOver="Image_DragOver" Drop="Image_Drop"  AllowDrop="True"   >
                                                     <Image.ContextMenu>
                                                         <ContextMenu>
                                                             <MenuItem Header="{x:Static lang:Resources.OpenPath}" Click="OpenActorPath"/>
@@ -1352,7 +1082,7 @@
                                                         </ContextMenu>
                                                     </Image.ContextMenu>
                                                 </Image>
-                                                <TextBox Background="Transparent" TextAlignment="Center" IsReadOnly="True" ContextMenu="{StaticResource CopyContextMenu}" Width="auto" MaxWidth="200" Text="{Binding Actress.name,Mode=OneWay}"  FontSize="20" HorizontalAlignment="Center" Foreground="{DynamicResource ForegroundSearch}" FontWeight="Normal" Style="{StaticResource ActorTextBox}" />
+                                                <TextBox Background="Transparent" MaxHeight="50" TextAlignment="Center" IsReadOnly="True" ContextMenu="{StaticResource CopyContextMenu}" Width="auto" MaxWidth="200" Text="{Binding Actress.name,Mode=OneWay}"  FontSize="20" HorizontalAlignment="Center" Foreground="{DynamicResource ForegroundSearch}" FontWeight="Normal" Style="{StaticResource ActorTextBox}" />
 
 
                                             </StackPanel>
@@ -1378,7 +1108,7 @@
 
                                             <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Visible" Margin="0 5">
                                                 <StackPanel x:Name="ActorInfoStackPanel"  >
-                                                    <TextBox Text="{Binding Actress.id}" Style="{StaticResource InfoTextBox}" Visibility="Collapsed"  />
+                                                    <TextBox Text="{Binding Actress.id}"  Visibility="Collapsed"  />
                                                   
 
                                                     <StackPanel Orientation="Horizontal">
@@ -1486,10 +1216,9 @@
                                                                 </EventTrigger>
                                                             </DataTemplate.Triggers>
 
-                                                            <!--自定义影片展示格式-->
                                                             <WrapPanel Name="MovieWrapPanel"  >
                                                                 <Grid Margin="5">
-                                                                    <Border MinWidth="200" Opacity="{Binding MovieOpacity, Mode=OneWay, Source={x:Static p:Settings.Default}}" Name="MovieBorder"    CornerRadius="3" Background="{DynamicResource BackgroundSide}" Style="{StaticResource ViewBorder}"   >
+                                                                    <Border MinWidth="200" Opacity="{Binding MovieOpacity, Mode=OneWay, Source={x:Static p:Settings.Default}}" Name="MovieBorder"    CornerRadius="3" Background="{DynamicResource BackgroundSide}" Style="{StaticResource SimpleBorder}"   >
                                                                         <Border.Effect>
                                                                             <DropShadowEffect BlurRadius="10" Color="SkyBlue" Direction="-90"  RenderingBias="Quality" ShadowDepth="0"/>
                                                                         </Border.Effect>
@@ -1572,7 +1301,7 @@
 
 
                                                                             <!--播放按钮-->
-                                                                            <Canvas ToolTip="{Binding id,Mode=OneWay}" Margin="10 0 10 0" Opacity="0.5"  Style="{StaticResource PlayButton}" MouseLeftButtonUp="PlayVedio"  Cursor="Hand" Width="40" Height="40"  VerticalAlignment="Center" HorizontalAlignment="Center"  >
+                                                                            <Canvas ToolTip="{Binding id,Mode=OneWay}" Margin="10 0 10 0" Opacity="0.5"  Style="{StaticResource HoverCanvas}" MouseLeftButtonUp="PlayVedio"  Cursor="Hand" Width="40" Height="40"  VerticalAlignment="Center" HorizontalAlignment="Center"  >
                                                                                 <Ellipse Fill="#DD744C"  Width="40" Height="40" Canvas.Left="3" Canvas.Top="3"  />
                                                                                 <Polygon Points="15,38 35,25 15,10" Stroke="{DynamicResource BackgroundMenu}" Fill="#F6F7F7"  Cursor="Hand" />
                                                                             </Canvas>
@@ -1617,7 +1346,7 @@
                                                             <!--自定义影片展示格式-->
                                                             <WrapPanel  Name="MovieWrapPanel">
                                                                 <Grid Margin="5" >
-                                                                    <Border MinWidth="200" Opacity="{Binding MovieOpacity, Mode=OneWay, Source={x:Static p:Settings.Default}}" Name="MovieBorder"    CornerRadius="3" Background="{DynamicResource BackgroundSide}" Style="{StaticResource ViewBorder}"   >
+                                                                    <Border MinWidth="200" Opacity="{Binding MovieOpacity, Mode=OneWay, Source={x:Static p:Settings.Default}}" Name="MovieBorder"    CornerRadius="3" Background="{DynamicResource BackgroundSide}" Style="{StaticResource SimpleBorder}"   >
                                                                         <Border.Effect>
                                                                             <DropShadowEffect x:Name="blurEffect" BlurRadius="10" Color="SkyBlue" Direction="-90"  RenderingBias="Quality" ShadowDepth="0"/>
                                                                         </Border.Effect>
@@ -1699,7 +1428,7 @@
                                                                                 <Image Source="/Resources/Picture/subsection1.png" Height="20" Width="20"  />
                                                                             </Button>
                                                                             <!--播放按钮-->
-                                                                            <Canvas ToolTip="{Binding id,Mode=OneWay}"     Margin="10 0 10 0" Opacity="0.5"  Style="{StaticResource PlayButton}" MouseLeftButtonUp="PlayVedio"  Cursor="Hand" Width="40" Height="40"  VerticalAlignment="Center" HorizontalAlignment="Center"  >
+                                                                            <Canvas ToolTip="{Binding id,Mode=OneWay}"     Margin="10 0 10 0" Opacity="0.5"  Style="{StaticResource HoverCanvas}" MouseLeftButtonUp="PlayVedio"  Cursor="Hand" Width="40" Height="40"  VerticalAlignment="Center" HorizontalAlignment="Center"  >
                                                                                 <Ellipse Fill="#DD744C"  Width="40" Height="40" Canvas.Left="3" Canvas.Top="3"  />
                                                                                 <Polygon Points="15,38 35,25 15,10" Stroke="{DynamicResource BackgroundMenu}" Fill="#F6F7F7"  Cursor="Hand" />
                                                                             </Canvas>
@@ -1938,8 +1667,8 @@
                                                         </Border.Effect>
                                                     </Border>
                                                     <StackPanel  Panel.ZIndex="7" Background="Transparent" Orientation="Vertical" MinWidth="100" Height="auto" Margin="15" >
-                                                        <Button  Style="{StaticResource SetButton}" Content="{x:Static lang:Resources.SyncInfo}" Click="StartDownLoadActress" />
-                                                        <Button  Style="{StaticResource SetButton}"  Content="{x:Static lang:Resources.StopSync}"  Click="StopDownLoadActress"    />
+                                                        <Button  Style="{StaticResource MenuButton}" Content="{x:Static lang:Resources.SyncInfo}" Click="StartDownLoadActress" />
+                                                        <Button  Style="{StaticResource MenuButton}"  Content="{x:Static lang:Resources.StopSync}"  Click="StopDownLoadActress"    />
                                                     </StackPanel>
                                                 </Grid>
                                             </Popup>
@@ -1994,8 +1723,9 @@
                                                                             <MenuItem Header="{x:Static lang:Resources.AddToFavorites}" Icon="pack://application:,,,/Resources/menuitem/like.png" Click="LikeSelectedActor" />
                                                                         </ContextMenu>
                                                                     </StackPanel.ContextMenu>
-                                                                    <Image Stretch="UniformToFill" MouseLeftButtonUp="ShowSameActor" MouseEnter="ActorBorderMouseEnter" MouseLeave="ActorBorderMouseLeave"  Style="{StaticResource ActorImage}"  DragOver="ActorImage_DragOver"  Drop="ActorImage_Drop"  />
-                                                                    <TextBox  Name="ActorNameTextBox" ToolTip="{Binding RelativeSource={RelativeSource Mode=Self},Path=Text}" MaxHeight="60"  Width="125" TextWrapping="Wrap" TextAlignment="Center"  Margin="0" Foreground="{DynamicResource ForegroundSearch}" Opacity="0.7" FontSize="18"  Style="{StaticResource ActorInfoTextBox}" >
+
+                                                                    <Image FocusVisualStyle="{x:Null}" Cursor="Hand" AllowDrop="True" Height="125" Width="125" VerticalAlignment="Top" Margin="0 0 0 10" Source="{Binding smallimage}"  Stretch="UniformToFill" MouseLeftButtonUp="ShowSameActor" MouseEnter="ActorBorderMouseEnter" MouseLeave="ActorBorderMouseLeave"    DragOver="ActorImage_DragOver"  Drop="ActorImage_Drop"  />
+                                                                    <TextBox  Name="ActorNameTextBox" ToolTip="{Binding RelativeSource={RelativeSource Mode=Self},Path=Text}" MaxHeight="60"  Width="125"   Margin="0" Foreground="{DynamicResource ForegroundSearch}" Opacity="0.7" FontSize="18"  Style="{StaticResource ReadOnlyWrapTextBox}" >
                                                                         <TextBox.Text>
                                                                             <MultiBinding StringFormat="{}{0}({1})">
                                                                                 <Binding Path="name" />
@@ -2025,7 +1755,7 @@
                                                 <ItemsControl.ItemTemplate>
                                                     <DataTemplate>
                                                         <StackPanel>
-                                                            <TextBlock Style="{StaticResource GenTitle}" Text="{x:Static lang:Resources.Theme}" />
+                                                            <TextBlock Style="{StaticResource CenterTextBlock}" Text="{x:Static lang:Resources.Theme}" />
                                                             <ItemsControl ItemsSource="{Binding theme}" ScrollViewer.VerticalScrollBarVisibility="Auto" Margin="5 5 5 5" Background="Transparent">
                                                                 <ItemsControl.ItemsPanel>
                                                                     <ItemsPanelTemplate>
@@ -2040,7 +1770,7 @@
                                                                     </DataTemplate>
                                                                 </ItemsControl.ItemTemplate>
                                                             </ItemsControl>
-                                                            <TextBlock Style="{StaticResource GenTitle}" Text="{x:Static lang:Resources.Role}" />
+                                                            <TextBlock Style="{StaticResource CenterTextBlock}" Text="{x:Static lang:Resources.Role}" />
                                                             <ItemsControl ItemsSource="{Binding role}" ScrollViewer.VerticalScrollBarVisibility="Auto" Margin="5 5 5 5" Background="Transparent">
                                                                 <ItemsControl.ItemsPanel>
                                                                     <ItemsPanelTemplate>
@@ -2055,7 +1785,7 @@
                                                                     </DataTemplate>
                                                                 </ItemsControl.ItemTemplate>
                                                             </ItemsControl>
-                                                            <TextBlock Style="{StaticResource GenTitle}" Text="{x:Static lang:Resources.Clothing}" />
+                                                            <TextBlock Style="{StaticResource CenterTextBlock}" Text="{x:Static lang:Resources.Clothing}" />
                                                             <ItemsControl ItemsSource="{Binding clothing}" ScrollViewer.VerticalScrollBarVisibility="Auto" Margin="5 5 5 5" Background="Transparent">
                                                                 <ItemsControl.ItemsPanel>
                                                                     <ItemsPanelTemplate>
@@ -2070,7 +1800,7 @@
                                                                     </DataTemplate>
                                                                 </ItemsControl.ItemTemplate>
                                                             </ItemsControl>
-                                                            <TextBlock Style="{StaticResource GenTitle}" Text="{x:Static lang:Resources.Body}" />
+                                                            <TextBlock Style="{StaticResource CenterTextBlock}" Text="{x:Static lang:Resources.Body}" />
                                                             <ItemsControl ItemsSource="{Binding body}" ScrollViewer.VerticalScrollBarVisibility="Auto" Margin="5 5 5 5" Background="Transparent">
                                                                 <ItemsControl.ItemsPanel>
                                                                     <ItemsPanelTemplate>
@@ -2085,7 +1815,7 @@
                                                                     </DataTemplate>
                                                                 </ItemsControl.ItemTemplate>
                                                             </ItemsControl>
-                                                            <TextBlock Style="{StaticResource GenTitle}" Text="{x:Static lang:Resources.Behaviour}" />
+                                                            <TextBlock Style="{StaticResource CenterTextBlock}" Text="{x:Static lang:Resources.Behaviour}" />
                                                             <ItemsControl ItemsSource="{Binding behavior}" ScrollViewer.VerticalScrollBarVisibility="Auto" Margin="5 5 5 5" Background="Transparent">
                                                                 <ItemsControl.ItemsPanel>
                                                                     <ItemsPanelTemplate>
@@ -2100,7 +1830,7 @@
                                                                     </DataTemplate>
                                                                 </ItemsControl.ItemTemplate>
                                                             </ItemsControl>
-                                                            <TextBlock Style="{StaticResource GenTitle}" Text="{x:Static lang:Resources.Play}" />
+                                                            <TextBlock Style="{StaticResource CenterTextBlock}" Text="{x:Static lang:Resources.Play}" />
                                                             <ItemsControl ItemsSource="{Binding playmethod}" ScrollViewer.VerticalScrollBarVisibility="Auto" Margin="5 5 5 5" Background="Transparent">
                                                                 <ItemsControl.ItemsPanel>
                                                                     <ItemsPanelTemplate>
@@ -2115,7 +1845,7 @@
                                                                     </DataTemplate>
                                                                 </ItemsControl.ItemTemplate>
                                                             </ItemsControl>
-                                                            <TextBlock Style="{StaticResource GenTitle}" Text="{x:Static lang:Resources.Scene}" />
+                                                            <TextBlock Style="{StaticResource CenterTextBlock}" Text="{x:Static lang:Resources.Scene}" />
                                                             <ItemsControl ItemsSource="{Binding scene}" ScrollViewer.VerticalScrollBarVisibility="Auto" Margin="5 5 5 5" Background="Transparent">
                                                                 <ItemsControl.ItemsPanel>
                                                                     <ItemsPanelTemplate>
@@ -2130,7 +1860,7 @@
                                                                     </DataTemplate>
                                                                 </ItemsControl.ItemTemplate>
                                                             </ItemsControl>
-                                                            <TextBlock Style="{StaticResource GenTitle}" Text="{x:Static lang:Resources.Other}" />
+                                                            <TextBlock Style="{StaticResource CenterTextBlock}" Text="{x:Static lang:Resources.Other}" />
                                                             <ItemsControl ItemsSource="{Binding other}" ScrollViewer.VerticalScrollBarVisibility="Auto" Margin="5 5 5 5" Background="Transparent">
                                                                 <ItemsControl.ItemsPanel>
                                                                     <ItemsPanelTemplate>
