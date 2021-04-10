@@ -13,6 +13,9 @@ using static Jvedio.GlobalVariable;
 
 namespace Jvedio
 {
+    /// <summary>
+    /// 校验MD5并复制文件
+    /// </summary>
     public class Upgrade
     {
         public event EventHandler UpgradeCompleted;

@@ -6,8 +6,8 @@
         xmlns:style="clr-namespace:Jvedio.Style;assembly=Jvedio.Style"
         xmlns:hc="https://handyorg.github.io/handycontrol"
         xmlns:lang="clr-namespace:Jvedio.Language;assembly=Jvedio.Language"
-        xmlns:local="clr-namespace:Jvedio"
-        x:Class="Jvedio.Dialog_Upgrade"
+        xmlns:local="clr-namespace:Jvedio" xmlns:converter="clr-namespace:Jvedio.Utils.Converter;assembly=Jvedio.Utils"
+    x:Class="Jvedio.Dialog_Upgrade"
         mc:Ignorable="d"
         Title="{x:Static lang:Resources.Upgrade}" 
     
@@ -18,6 +18,10 @@
     ContentRendered="BaseDialog_ContentRendered"
     
         >
+    <Window.Resources>
+        <converter:BoolToOppositeVisibilityConverter x:Key="BoolToOppositeVisibilityConverter" />
+        <converter:OppositeBooleanConverter x:Key="OppositeBooleanConverter" />
+    </Window.Resources>
 
 
 
@@ -44,9 +48,9 @@
                         <Image Source="/Resources/Picture/升级.png"/>
                         <TextBlock FontSize="20"  Text="{x:Static lang:Resources.CheckUpgrade}" TextAlignment="Center" Foreground="{DynamicResource ForegroundSearch}" Margin="10" FontWeight="Bold"/>
 
-                        <Button Style="{StaticResource FlatButton}" Cursor="Hand" Content="{x:Static lang:Resources.CheckUpgrade}" Click="Button_Click"/>
+                        <Button IsEnabled="{Binding IsChecking,Converter={StaticResource BoolToOppositeVisibilityConverter},Mode=OneWay}" Style="{StaticResource FlatButton}" Cursor="Hand" Content="{x:Static lang:Resources.CheckUpgrade}" Click="CheckUpgrade"/>
 
-                        <hc:LoadingCircle x:Name="UpgradeLoadingCircle" Foreground="{DynamicResource ForegroundGlobal}" Height="30"/>
+                        <hc:LoadingCircle x:Name="UpgradeLoadingCircle" Foreground="{DynamicResource ForegroundGlobal}" Height="30" Visibility="{Binding IsChecking,Converter={StaticResource bool2VisibilityConverter},Mode=OneWay}"/>
 
                     </StackPanel>
 
@@ -60,17 +64,15 @@
 
 
                 <StackPanel   Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Right"  VerticalAlignment="Center">
-                    <Button  Margin="0 10"  Style="{StaticResource ButtonStyleFill}" Content="{x:Static lang:Resources.BeginUpgrade}" MinWidth="120"  FontSize="15" Click="BeginUpgrade" />
+                    <Button IsEnabled="{Binding IsChecking,Converter={StaticResource OppositeBooleanConverter}}"  Margin="0 10"  Style="{StaticResource ButtonStyleFill}" Content="{x:Static lang:Resources.BeginUpgrade}" MinWidth="120"  FontSize="15" Click="BeginUpgrade" />
                     <Button Margin="0 10"  Style="{StaticResource ButtonPrimary}" Content="{x:Static lang:Resources.DownLoadFromUrl}" MinWidth="120"  FontSize="15" Cursor="Hand" Click="GotoDownloadUrl" />
                 </StackPanel>
 
             </Grid>
 
-            <StackPanel x:Name="UpgradeProgressStackPanel"   Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <StackPanel  Visibility="{Binding IsUpgrading,Converter={StaticResource bool2VisibilityConverter},Mode=OneWay}"    Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
                 <ProgressBar x:Name="UpgradeProgressBar" Style="{StaticResource ProgressBarSuccessStripe}" Width="300" Value="50"  Maximum="100" Minimum="0"  />
-
                 <TextBlock x:Name="progressText" Margin="20 0" Style="{StaticResource BaseTextBlock}" Text="{Binding ElementName=UpgradeProgressBar,Path=Value,StringFormat='{}{0}%'}"/>
-
             </StackPanel>
 
             <Grid x:Name="UpgradeInfoGrid" Grid.Row="2" HorizontalAlignment="Stretch" Width="auto"   Margin="50 10"  >

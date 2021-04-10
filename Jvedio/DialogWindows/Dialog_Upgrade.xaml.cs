@@ -1,47 +1,83 @@
-﻿using Jvedio.ViewModel;
-using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Diagnostics;
-using System.Globalization;
+﻿using System;
+using System.ComponentModel;
 using System.IO;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
+using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Input;
-using System.Xml;
 using static Jvedio.GlobalVariable;
-using static Jvedio.FileProcess;
-using System.Windows.Documents;
-using Jvedio.Utils.Encrypt;
-using Jvedio.Utils.Encrypt;
-using Jvedio.Utils.Net;
 
 namespace Jvedio
 {
-    /// <summary>
-    /// Settings.xaml 的交互逻辑
-    /// </summary>
-    public partial class Dialog_Upgrade : Jvedio.Style.BaseDialog
+    //https://docs.microsoft.com/en-us/dotnet/api/system.componentmodel.inotifypropertychanged?view=net-5.0
+    public partial class Dialog_Upgrade : Jvedio.Style.BaseDialog,System.ComponentModel.INotifyPropertyChanged
     {
-
-
         private string remote = "";
         private string log = "";
+        private Upgrade upgrade;
+
+        private bool IsClosed = false;
+        private bool isChecking = false;
+        private bool isUpgrading = false;
+
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        public bool IsUpgrading { get => isUpgrading; 
+            set
+            {
+                if (value != isUpgrading)
+                {
+                    isUpgrading = value;
+                    if (value) IsChecking = true;
+                    else IsChecking = false;
+                    NotifyPropertyChanged();
+                }
+            }
+        
+        }
+
+        public bool IsChecking
+        {
+            get => isChecking;
+            set
+            {
+                if (value != isChecking)
+                {
+                    isChecking = value;
+                    NotifyPropertyChanged();
+                }
+            }
+
+        }
+
         public Dialog_Upgrade(Window owner,bool showbutton,string remote,string log) : base(owner, showbutton)
         {
             InitializeComponent();
             this.remote = remote;
             this.log = log;
+            this.DataContext = this;
+        }
+
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            //取消更新操作
+            upgrade?.Stop();
+            IsUpgrading = false;
+            IsChecking = false;
+            IsClosed = true;
+            base.OnClosing(e);
         }
 
 
-        Upgrade upgrade;
+        
         private void BeginUpgrade(object sender, RoutedEventArgs e)
         {
+            if (IsChecking || IsUpgrading) return;
+            
             Button button = (Button)sender;
             string text = button.Content.ToString();
             if (text == Jvedio.Language.Resources.BeginUpgrade)
@@ -50,11 +86,8 @@ namespace Jvedio
                 upgrade = new Upgrade();
                 upgrade.UpgradeCompleted += (s, _) =>
                 {
-                    UpgradeLoadingCircle.Visibility = Visibility.Hidden;
+                    IsUpgrading = false;
                     //执行命令
-                    // 我对这个命令有点无语，xcopy直接复制同目录的文件夹竟然不成功，原因是父目录有空格，但是下面这个命令里没有涉及到父目录啊？！
-                    // xcopy /y/e Temp %cd%&TIMEOUT /T 1&start \"\" \"jvedio.exe\" &exit
-                    // 没办法只能修改成绝对路径了，而且如果放在C盘，也不知道是否需要权限
                     string arg = $"xcopy /y/e \"{Path.Combine(AppDomain.CurrentDomain.BaseDirectory,"Temp")}\" \"{AppDomain.CurrentDomain.BaseDirectory}\"&TIMEOUT /T 1&start \"\" \"jvedio.exe\" &exit";
                     using (StreamWriter sw = new StreamWriter("upgrade.bat"))
                     {
@@ -67,26 +100,22 @@ namespace Jvedio
                 upgrade.onProgressChanged += (s, _) =>
                 {
                     ProgressBUpdateEventArgs ev = _ as ProgressBUpdateEventArgs;
-                    UpgradeProgressStackPanel.Visibility = Visibility;
+                    IsUpgrading = true;
                     if (ev.maximum != 0)
                     {
                         UpgradeProgressBar.Value = (int)(ev.value / ev.maximum * 100);
                     }
-
                 };
                 button.Style = (System.Windows.Style)App.Current.Resources["ButtonDanger"];
-                UpgradeProgressBar.Value = 0;
-                UpgradeLoadingCircle.Visibility = Visibility.Visible;
                 upgrade.Start();
-                UpgradeProgressStackPanel.Visibility = Visibility.Visible;
             }
             else
             {
                 button.Content = Jvedio.Language.Resources.BeginUpgrade;
                 button.Style = (System.Windows.Style)App.Current.Resources["ButtonStyleFill"];
                 upgrade?.Stop();
-                UpgradeProgressStackPanel.Visibility = Visibility.Collapsed;
-                UpgradeLoadingCircle.Visibility = Visibility.Collapsed;
+                IsUpgrading = false;
+                IsChecking = false;
             }
 
 
@@ -104,45 +133,40 @@ namespace Jvedio
 
         private async void BaseDialog_ContentRendered(object sender, EventArgs e)
         {
-            UpgradeProgressStackPanel.Visibility = Visibility.Collapsed;
             UpgradeSourceTextBlock.Text = $"{Jvedio.Language.Resources.UpgradeSource}：{GlobalVariable.UpgradeSource}";
             LocalVersionTextBlock.Text = $"{Jvedio.Language.Resources.CurrentVersion}：{System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString()}";
             if (remote != "")
             {
                 RemoteVersionTextBlock.Text = $"{Jvedio.Language.Resources.LatestVersion}：{remote}";
                 UpdateContentTextBox.Text = GetContentByLanguage(log);
-                UpgradeLoadingCircle.Visibility = Visibility.Hidden;
             }
             else
             {
-
+                //TODO
+                IsChecking = true;
                 (bool success, string remote, string updateContent) = await new MyNet().CheckUpdate(UpdateUrl);
                 string local = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
-                if (success )
+                if (success && !IsClosed)
                 {
                     RemoteVersionTextBlock.Text = $"{Jvedio.Language.Resources.LatestVersion}：{remote}";
                     UpdateContentTextBox.Text = GetContentByLanguage(updateContent);
                 }
-                UpgradeLoadingCircle.Visibility = Visibility.Hidden;
+                IsChecking = false;
             }
         }
 
-        private async void Button_Click(object sender, RoutedEventArgs e)
+        private async void CheckUpgrade(object sender, RoutedEventArgs e)
         {
-            Button button = (Button)sender;
-            button.IsEnabled = false;
-
-            UpgradeLoadingCircle.Visibility = Visibility.Visible;
+            if (IsChecking || IsUpgrading) return;
+            IsChecking = true;
             (bool success, string remote, string updateContent) = await new MyNet().CheckUpdate(UpdateUrl);
             string local = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
-            if (success)
+            if (success && !IsClosed)
             {
                 RemoteVersionTextBlock.Text = $"{Jvedio.Language.Resources.LatestVersion}：{remote}";
                 UpdateContentTextBox.Text = GetContentByLanguage(updateContent);
             }
-            UpgradeLoadingCircle.Visibility = Visibility.Hidden;
-
-            button.IsEnabled = true;
+            IsChecking = false;
         }
 
         private string GetContentByLanguage(string content)
