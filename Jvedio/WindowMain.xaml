@@ -5,10 +5,8 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:local="clr-namespace:Jvedio"
-    xmlns:converter="clr-namespace:Jvedio.Utils.Converter;assembly=Jvedio.Utils"
     xmlns:usercontrol="clr-namespace:Jvedio.Style.UserControls;assembly=Jvedio.Style"
     xmlns:p="clr-namespace:Jvedio.Properties"
-    xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero"
     xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:lang="clr-namespace:Jvedio.Language;assembly=Jvedio.Language"
     x:Class="Jvedio.Main"
@@ -25,13 +23,11 @@
     Icon="pack://application:,,,/Resources/Jvedio.ico"
     Closed="Window_Closed"
     Closing="Window_Closing"
-
     ContentRendered="Window_ContentRendered"
     PreviewKeyUp="Window_PreviewKeyUp"
     SizeChanged="Window_SizeChanged"
     PreviewKeyDown="Window_PreviewKeyDown"
     Deactivated="Window_Deactivated"
-    
     >
 
 
@@ -92,11 +88,6 @@
             <Setter Property="Height" Value="40"/>
         </Style>
 
-
-
-
-
-
         <Style x:Key="ViewImage" TargetType="{x:Type Image}">
             <Style.Triggers>
                 <DataTrigger Binding="{Binding ShowImageMode, Mode=OneWay, Source={x:Static p:Settings.Default}}" Value="0">
@@ -152,11 +143,7 @@
 
 
     <Grid  AllowDrop="True" Margin="{Binding MainGridThickness,FallbackValue=10}"   >
-        <Rectangle   Fill="{DynamicResource BackgroundMain}"  Margin="{Binding MainGridThickness,Converter={StaticResource SmallerThicknessConverter},ConverterParameter=-5,FallbackValue=5}"  >
-            <Rectangle.Effect>
-                <DropShadowEffect BlurRadius="20" Direction="-90"   RenderingBias="Quality" ShadowDepth="0"/>
-            </Rectangle.Effect>
-        </Rectangle>
+        <Rectangle   Fill="{DynamicResource BackgroundMain}"  Margin="{Binding MainGridThickness,Converter={StaticResource SmallerThicknessConverter},ConverterParameter=-5,FallbackValue=5}" Effect="{StaticResource NormalDropShadowEffect}" />
 
         <!--消息提示框-->
         <ScrollViewer Height="auto" Background="Transparent" Panel.ZIndex="6" Width="auto" VerticalScrollBarVisibility="Hidden" VerticalAlignment="Bottom" HorizontalAlignment="Right"  Margin="10 120 30 80">
@@ -525,15 +512,8 @@
                                                         </Image.RenderTransform>
                                                     </Image>
                                                     <Popup  VerticalOffset="5" HorizontalOffset="-15" x:Name="SearchOptionPopup" Placement="Bottom" PopupAnimation="Fade"  AllowsTransparency="True" StaysOpen="False" IsOpen="False">
-
-
-
                                                         <Grid    Margin="5"   >
-                                                            <Border     Background="{DynamicResource BackgroundMenu}" CornerRadius="5" Margin="5"  >
-                                                                <Border.Effect>
-                                                                    <DropShadowEffect BlurRadius="10" Direction="-90"  RenderingBias="Quality" ShadowDepth="0"/>
-                                                                </Border.Effect>
-                                                            </Border>
+                                                            <Border     Background="{DynamicResource BackgroundMenu}" CornerRadius="5" Margin="5" Effect="{StaticResource PopupDropShadowEffect}" />
                                                             <StackPanel Margin="5">
                                                                 <RadioButton Click="SaveAllSearchType" IsChecked="True"  Content="{x:Static lang:Resources.ID}" Style="{StaticResource RadioButtonStyle}"  GroupName="SearchTypeRadioButton" Template="{DynamicResource RadioButtonControlTemplate1}"/>
                                                                 <RadioButton Click="SaveAllSearchType"      Content="{x:Static lang:Resources.Title}" Style="{StaticResource RadioButtonStyle}" GroupName="SearchTypeRadioButton" Template="{DynamicResource RadioButtonControlTemplate1}"/>
@@ -548,11 +528,7 @@
 
                                                 <Popup  Focusable="True" IsOpen="{Binding ShowSearchPopup,FallbackValue=False}"  VerticalOffset="2"  HorizontalOffset="0"      Width="{Binding  RelativeSource={RelativeSource AncestorType={x:Type Grid},Mode=FindAncestor},Path=ActualWidth}" Visibility="Visible"  AllowsTransparency="True" Placement="Bottom"  StaysOpen="True" >
                                                     <Grid    Margin="5"   >
-                                                        <Border Name="SearchBorder"    Background="{DynamicResource BackgroundMenu}" CornerRadius="5" Margin="5"  >
-                                                            <Border.Effect>
-                                                                <DropShadowEffect BlurRadius="10" Direction="-90"  RenderingBias="Quality" ShadowDepth="0"/>
-                                                            </Border.Effect>
-                                                        </Border>
+                                                        <Border Name="SearchBorder"    Background="{DynamicResource BackgroundMenu}" CornerRadius="5" Margin="5" Effect="{StaticResource PopupDropShadowEffect}"  />
 
                                                         <ScrollViewer Margin="10" Background="Transparent"    Width="auto" Height="auto"   Canvas.Top="40" Panel.ZIndex="4"         HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden">
                                                             <StackPanel>
@@ -667,11 +643,7 @@
 
                                         <Popup VerticalOffset="0" HorizontalOffset="-50" x:Name="ImageSortPopup" Placement="Mouse" PopupAnimation="Fade"   AllowsTransparency="True" StaysOpen="False" IsOpen="False">
                                             <Grid    Margin="5"   >
-                                                <Border     Background="{DynamicResource BackgroundMenu}" CornerRadius="5" Margin="5"  >
-                                                    <Border.Effect>
-                                                        <DropShadowEffect BlurRadius="10" Direction="-90"  RenderingBias="Quality" ShadowDepth="0"/>
-                                                    </Border.Effect>
-                                                </Border>
+                                                <Border     Background="{DynamicResource BackgroundMenu}" CornerRadius="5" Margin="5"  Effect="{StaticResource PopupDropShadowEffect}"/>
                                                 <StackPanel x:Name="ImageTypeStackPanel"   Panel.ZIndex="7" Background="Transparent" Orientation="Vertical" Margin="10 5" Width="auto">
                                                     <RadioButton  Content="{x:Static lang:Resources.Thumbnail}" Style="{StaticResource RadioButtonStyle}"  GroupName="RB2" Template="{DynamicResource RadioButtonControlTemplate1}"/>
                                                     <RadioButton      Content="{x:Static lang:Resources.Poster}" Style="{StaticResource RadioButtonStyle}" GroupName="RB2" Template="{DynamicResource RadioButtonControlTemplate1}"/>
@@ -684,11 +656,7 @@
 
                                         <Popup  HorizontalOffset="-50" x:Name="SortPopup" PopupAnimation="Fade"  Placement="Mouse"   AllowsTransparency="True" StaysOpen="False" IsOpen="False">
                                             <Grid  Margin="5"   >
-                                                <Border     Background="{DynamicResource BackgroundMenu}" CornerRadius="5" Margin="5"  >
-                                                    <Border.Effect>
-                                                        <DropShadowEffect BlurRadius="10" Direction="-90"  RenderingBias="Quality" ShadowDepth="0"/>
-                                                    </Border.Effect>
-                                                </Border>
+                                                <Border     Background="{DynamicResource BackgroundMenu}" CornerRadius="5" Margin="5"  Effect="{StaticResource PopupDropShadowEffect}"/>
                                                 <StackPanel x:Name="SortStackPanel"   Panel.ZIndex="7" Background="Transparent" Orientation="Vertical" Margin="5" Width="auto">
                                                     <RadioButton Margin="5 5 10 5"    Style="{StaticResource RadioButtonStyle}" Content="{x:Static lang:Resources.ID}" HorizontalContentAlignment="Center"  GroupName="RBSort" Template="{DynamicResource RadioButtonControlTemplate1}" />
                                                     <RadioButton  Margin="5 0 10 5"  Style="{StaticResource RadioButtonStyle}"  Content="{x:Static lang:Resources.FileSize}" HorizontalContentAlignment="Center" GroupName="RBSort" Template="{DynamicResource RadioButtonControlTemplate1}" />
@@ -708,11 +676,7 @@
 
                                         <Popup HorizontalOffset="-40" x:Name="DownloadPopup" Placement="Mouse" PopupAnimation="Fade"   AllowsTransparency="True" StaysOpen="False" IsOpen="False">
                                             <Grid    Margin="5"   >
-                                                <Border     Background="{DynamicResource BackgroundMenu}" CornerRadius="5" Margin="5"  >
-                                                    <Border.Effect>
-                                                        <DropShadowEffect BlurRadius="10" Direction="-90"  RenderingBias="Quality" ShadowDepth="0"/>
-                                                    </Border.Effect>
-                                                </Border>
+                                                <Border     Background="{DynamicResource BackgroundMenu}" CornerRadius="5" Margin="5"  Effect="{StaticResource PopupDropShadowEffect}"/>
                                                 <StackPanel  Panel.ZIndex="7" Background="Transparent" Orientation="Vertical" MinWidth="100" Height="auto" Margin="15" >
                                                     <Button  Style="{StaticResource MenuButton}" Content="{x:Static lang:Resources.SyncInfo}" Click="Button_StartDownload" />
                                                     <Button  Style="{StaticResource MenuButton}"  Content="{x:Static lang:Resources.StopSync}"  Click="Button_StopDownload"    />
@@ -738,11 +702,7 @@
                                         <!--等待-->
                                         <Grid  Visibility="{Binding IsLoadingFilter,Converter={StaticResource BoolToVisibilityConverter},FallbackValue=Visible}"  Panel.ZIndex="10" VerticalAlignment="Center" HorizontalAlignment="Center">
                                             <Grid MinWidth="150" MaxWidth="250"   >
-                                                <Border   CornerRadius="5" Background="{DynamicResource ForegroundGlobal}" Margin="5"  >
-                                                    <Border.Effect>
-                                                        <BlurEffect Radius="4" KernelType="Box"  RenderingBias="Quality"/>
-                                                    </Border.Effect>
-                                                </Border>
+                                                <Border   CornerRadius="5" Background="{DynamicResource ForegroundGlobal}" Margin="5"  Effect="{StaticResource NormalBlurEffect}"/>
 
                                                 <Border  CornerRadius="5" Background="{DynamicResource BackgroundMain}" Margin="5"  >
 
@@ -985,11 +945,7 @@
                                 <!--等待-->
                                 <Grid Grid.Row="1" Visibility="{Binding IsLoadingMovie,Converter={StaticResource BoolToVisibilityConverter},FallbackValue=Visible}"  Panel.ZIndex="10" VerticalAlignment="Center" HorizontalAlignment="Center">
                                     <Grid MinWidth="150" MaxWidth="250"   >
-                                        <Border   CornerRadius="5" Background="{DynamicResource ForegroundGlobal}" Margin="5"  >
-                                            <Border.Effect>
-                                                <BlurEffect Radius="4" KernelType="Box"  RenderingBias="Quality"/>
-                                            </Border.Effect>
-                                        </Border>
+                                        <Border   CornerRadius="5" Background="{DynamicResource ForegroundGlobal}" Margin="5"  Effect="{StaticResource NormalBlurEffect}"/>
 
                                         <Border  CornerRadius="5" Background="{DynamicResource BackgroundMain}" Margin="5"  >
 
@@ -1015,11 +971,7 @@
 
                                 <!--导航栏-->
                                 <Grid Visibility="{Binding DisplayNavigation,Source={x:Static p:Settings.Default},Converter={StaticResource BoolToVisibilityConverter},FallbackValue=Visible}" Grid.Row="1"   Panel.ZIndex="4"  VerticalAlignment="Center" HorizontalAlignment="Right" MinWidth="40" Margin="20" MinHeight="50">
-                                    <Rectangle Opacity="0.5"  RadiusX="2" RadiusY="2"  Fill="{DynamicResource BackgroundSide}" Stroke="#5AC6FC" StrokeThickness="1"  Margin="{Binding MainGridThickness,Converter={StaticResource SmallerThicknessConverter},ConverterParameter=-5,FallbackValue=5}"  >
-                                        <Rectangle.Effect>
-                                            <DropShadowEffect BlurRadius="0" Direction="-90"   RenderingBias="Quality" ShadowDepth="0"/>
-                                        </Rectangle.Effect>
-                                    </Rectangle>
+                                    <Rectangle Opacity="0.5"  RadiusX="2" RadiusY="2"  Fill="{DynamicResource BackgroundSide}" Stroke="#5AC6FC" StrokeThickness="1"  Margin="{Binding MainGridThickness,Converter={StaticResource SmallerThicknessConverter},ConverterParameter=-5,FallbackValue=5}"  Effect="{StaticResource ZeroShadowEffect}"/>
                                     <ScrollViewer VerticalScrollBarVisibility="Hidden"  Margin="0 10">
                                         <ItemsControl ItemsSource="{Binding LettersNavigation}" HorizontalAlignment="Center">
                                             <ItemsControl.ItemsPanel>
@@ -1051,12 +1003,7 @@
 
                                     <!--演员-->
                                     <Grid x:Name="ActorInfoGrid" Grid.Column="0" Visibility="{Binding ActorInfoGrid,FallbackValue=Collapsed}"    Margin="10">
-                                        <Border   Background="{DynamicResource BackgroundTitle}" CornerRadius="5" Margin="5"  >
-                                            <Border.Effect>
-                                                <DropShadowEffect BlurRadius="20" Direction="-90"  RenderingBias="Quality" ShadowDepth="0"/>
-                                            </Border.Effect>
-
-                                        </Border>
+                                        <Border   Background="{DynamicResource BackgroundTitle}" CornerRadius="5" Margin="5"  Effect="{StaticResource NormalDropShadowEffect}"/>
 
 
                                         <Border HorizontalAlignment="Right" VerticalAlignment="Top"     Height="27" Width="27" Margin="5" CornerRadius="20"  Style="{StaticResource CloseBorderStyle}" MouseLeftButtonUp="HideActressGrid" Panel.ZIndex="5">
@@ -1218,11 +1165,7 @@
 
                                                             <WrapPanel Name="MovieWrapPanel"  >
                                                                 <Grid Margin="5">
-                                                                    <Border MinWidth="200" Opacity="{Binding MovieOpacity, Mode=OneWay, Source={x:Static p:Settings.Default}}" Name="MovieBorder"    CornerRadius="3" Background="{DynamicResource BackgroundSide}" Style="{StaticResource SimpleBorder}"   >
-                                                                        <Border.Effect>
-                                                                            <DropShadowEffect BlurRadius="10" Color="SkyBlue" Direction="-90"  RenderingBias="Quality" ShadowDepth="0"/>
-                                                                        </Border.Effect>
-                                                                    </Border>
+                                                                    <Border MinWidth="200"  Opacity="{Binding MovieOpacity, Mode=OneWay, Source={x:Static p:Settings.Default}}" Name="MovieBorder"    CornerRadius="3" Background="{DynamicResource BackgroundSide}" Style="{StaticResource SimpleBorder}"   Effect="{StaticResource BlueDropShadowEffect}" />
                                                                     <StackPanel     ContextMenuOpening="ContextMenu_ContextMenuOpening"   Tag="{Binding id,Mode=OneWay}" >
                                                                         <!--影片右键菜单-->
                                                                         <StackPanel.ContextMenu  >
@@ -1282,7 +1225,7 @@
                                                                                    Style="{StaticResource ViewImage}" MouseLeftButtonDown="CanShowDetails" MouseLeftButtonUp="ShowDetails"  
                                                                                    HorizontalAlignment="Center"  VerticalAlignment="Center" />
                                                                             <!--预览图-->
-                                                                            <Canvas Tag="{Binding RelativeSource={RelativeSource Mode=TemplatedParent},Path=(ItemsControl.AlternationIndex)}" Margin="2" ToolTip="{Binding id,Mode=OneWay}" Cursor="Hand"  MouseLeftButtonDown="CanShowDetails"  MouseLeftButtonUp="ShowDetails"   Background="Transparent"  Height="{Binding Path=ExtraImage_Height,Mode=OneWay, Source={x:Static p:Settings.Default}}" Width="{Binding Path=ExtraImage_Width,Mode=OneWay, Source={x:Static p:Settings.Default}}" MouseLeave="Canvas_MouseLeave" MouseEnter="Canvas_MouseEnter"  Visibility="{Binding ShowImageMode,Converter={StaticResource IntToVisibilityConverter},ConverterParameter=2,Source={x:Static p:Settings.Default},Mode=OneWay}">
+                                                                            <Canvas  Tag="{Binding RelativeSource={RelativeSource Mode=TemplatedParent},Path=(ItemsControl.AlternationIndex)}" Margin="2" ToolTip="{Binding id,Mode=OneWay}" Cursor="Hand"  MouseLeftButtonDown="CanShowDetails"  MouseLeftButtonUp="ShowDetails"   Background="Transparent"  Height="{Binding Path=ExtraImage_Height,Mode=OneWay, Source={x:Static p:Settings.Default}}" Width="{Binding Path=ExtraImage_Width,Mode=OneWay, Source={x:Static p:Settings.Default}}" MouseLeave="Canvas_MouseLeave" MouseEnter="Canvas_MouseEnter"  Visibility="{Binding ShowImageMode,Converter={StaticResource IntToVisibilityConverter},ConverterParameter=2,Source={x:Static p:Settings.Default},Mode=OneWay}">
                                                                                 <Image Stretch="{Binding Path=MainImageAutoMode,Source={x:Static p:Settings.Default},Converter={StaticResource BoolToImageStretchConverter},Mode=OneWay}" Tag="{Binding id,Mode=OneWay}"  Name="myImage" RenderTransformOrigin="0.5,0.5" Height="{Binding Path=ExtraImage_Height,Mode=OneWay, Source={x:Static p:Settings.Default}}" Width="{Binding Path=ExtraImage_Width,Mode=OneWay, Source={x:Static p:Settings.Default}}"/>
                                                                                 <Image Stretch="{Binding Path=MainImageAutoMode,Source={x:Static p:Settings.Default},Converter={StaticResource BoolToImageStretchConverter},Mode=OneWay}"   Name="myImage2"   RenderTransformOrigin="0.5,0.5" Height="{Binding Path=ExtraImage_Height,Mode=OneWay, Source={x:Static p:Settings.Default}}" Width="{Binding Path=ExtraImage_Width,Mode=OneWay, Source={x:Static p:Settings.Default}}"/>
                                                                             </Canvas>
@@ -1346,13 +1289,7 @@
                                                             <!--自定义影片展示格式-->
                                                             <WrapPanel  Name="MovieWrapPanel">
                                                                 <Grid Margin="5" >
-                                                                    <Border MinWidth="200" Opacity="{Binding MovieOpacity, Mode=OneWay, Source={x:Static p:Settings.Default}}" Name="MovieBorder"    CornerRadius="3" Background="{DynamicResource BackgroundSide}" Style="{StaticResource SimpleBorder}"   >
-                                                                        <Border.Effect>
-                                                                            <DropShadowEffect x:Name="blurEffect" BlurRadius="10" Color="SkyBlue" Direction="-90"  RenderingBias="Quality" ShadowDepth="0"/>
-                                                                        </Border.Effect>
-
-
-                                                                    </Border>
+                                                                    <Border MinWidth="200" Opacity="{Binding MovieOpacity, Mode=OneWay, Source={x:Static p:Settings.Default}}" Name="MovieBorder"    CornerRadius="3" Background="{DynamicResource BackgroundSide}" Style="{StaticResource SimpleBorder}"  Effect="{StaticResource BlueDropShadowEffect}" />
                                                                     <StackPanel Tag="{Binding id,Mode=OneWay}"    ContextMenuOpening="ContextMenu_ContextMenuOpening"   >
                                                                         <!--影片右键菜单-->
                                                                         <StackPanel.ContextMenu  >
@@ -1610,11 +1547,7 @@
                                 <!--等待-->
                                 <Grid Grid.Row="1"  Visibility="{Binding IsLoadingClassify,Converter={StaticResource BoolToVisibilityConverter}}" Panel.ZIndex="10" VerticalAlignment="Center" HorizontalAlignment="Center">
                                     <Grid MinWidth="150" MaxWidth="250"   >
-                                        <Border   CornerRadius="5" Background="{DynamicResource ForegroundGlobal}" Margin="5"  >
-                                            <Border.Effect>
-                                                <BlurEffect Radius="4" KernelType="Box"  RenderingBias="Quality"/>
-                                            </Border.Effect>
-                                        </Border>
+                                        <Border   CornerRadius="5" Background="{DynamicResource ForegroundGlobal}" Margin="5"  Effect="{StaticResource NormalBlurEffect}"/>
 
                                         <Border CornerRadius="5" Background="{DynamicResource BackgroundMain}" Margin="5"  >
 
@@ -1661,11 +1594,7 @@
 
                                             <Popup   HorizontalOffset="-50" x:Name="DownloadActorPopup" Placement="Mouse" PopupAnimation="Fade"   AllowsTransparency="True" StaysOpen="False" IsOpen="False">
                                                 <Grid    Margin="5"   >
-                                                    <Border     Background="{DynamicResource BackgroundMenu}" CornerRadius="5" Margin="5"  >
-                                                        <Border.Effect>
-                                                            <DropShadowEffect BlurRadius="10" Direction="-90"  RenderingBias="Quality" ShadowDepth="0"/>
-                                                        </Border.Effect>
-                                                    </Border>
+                                                    <Border     Background="{DynamicResource BackgroundMenu}" CornerRadius="5" Margin="5"  Effect="{StaticResource PopupDropShadowEffect}"/>
                                                     <StackPanel  Panel.ZIndex="7" Background="Transparent" Orientation="Vertical" MinWidth="100" Height="auto" Margin="15" >
                                                         <Button  Style="{StaticResource MenuButton}" Content="{x:Static lang:Resources.SyncInfo}" Click="StartDownLoadActress" />
                                                         <Button  Style="{StaticResource MenuButton}"  Content="{x:Static lang:Resources.StopSync}"  Click="StopDownLoadActress"    />
@@ -1711,11 +1640,7 @@
                                                     <DataTemplate>
                                                         <WrapPanel  Name="ActorWrapPanel" Orientation="Horizontal">
                                                             <Grid Margin="5" Height="200" >
-                                                                <Border  Style="{StaticResource ActorBorder}" Background="{DynamicResource BackgroundSide}"  CornerRadius="0"  >
-                                                                    <Border.Effect>
-                                                                        <DropShadowEffect BlurRadius="10" Color="SkyBlue" Direction="-90"  RenderingBias="Quality" ShadowDepth="0"/>
-                                                                    </Border.Effect>
-                                                                </Border>
+                                                                <Border  Style="{StaticResource ActorBorder}" Background="{DynamicResource BackgroundSide}"  CornerRadius="0"  Effect="{StaticResource BlueDropShadowEffect}"/>
                                                                 <StackPanel Tag="{Binding name,Mode=OneWay}" Orientation="Vertical" Margin="2">
                                                                     <StackPanel.ContextMenu>
                                                                         <ContextMenu>
@@ -2058,11 +1983,7 @@
                 <!--首次运行-->
                 <Grid   Grid.Row="1" Visibility="{Binding ShowFirstRun,FallbackValue=Hidden}" Panel.ZIndex="10" VerticalAlignment="Center" HorizontalAlignment="Center">
                     <Grid    >
-                        <Border   CornerRadius="5" Background="{DynamicResource ForegroundGlobal}" Margin="5"  >
-                            <Border.Effect>
-                                <BlurEffect Radius="4" KernelType="Box"  RenderingBias="Quality"/>
-                            </Border.Effect>
-                        </Border>
+                        <Border   CornerRadius="5" Background="{DynamicResource ForegroundGlobal}" Margin="5"  Effect="{StaticResource NormalBlurEffect}"/>
 
                         <Border  CornerRadius="5" Background="{DynamicResource BackgroundMain}" Margin="5"  >
 
@@ -2101,11 +2022,7 @@
                 <!--标签-->
 
                 <Grid x:Name="LabelGrid"  Visibility="Collapsed"  Background="Transparent" VerticalAlignment="Center" HorizontalAlignment="Center" Height="300" Width="500">
-                    <Border Background="{DynamicResource BackgroundMain}" CornerRadius="5" Margin="2"  >
-                        <Border.Effect>
-                            <DropShadowEffect BlurRadius="15" Direction="-90" RenderingBias="Quality" ShadowDepth="2"/>
-                        </Border.Effect>
-                    </Border>
+                    <Border Background="{DynamicResource BackgroundMain}" CornerRadius="5" Margin="2"  Effect="{StaticResource NormalDropShadowEffect}"/>
 
                     <Border  PreviewMouseLeftButtonUp="HideGrid"   Style="{StaticResource GridCloseBorderStyle}" >
                         <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=close,Converter={StaticResource StringToUriStringConverter}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
@@ -2157,11 +2074,7 @@
                 <!--删除标签-->
 
                 <Grid x:Name="LabelDelGrid" Visibility="Collapsed" Background="Transparent" VerticalAlignment="Center" HorizontalAlignment="Center" Height="300" Width="500"  >
-                    <Border Background="{DynamicResource BackgroundMain}" CornerRadius="5" Margin="2"  >
-                        <Border.Effect>
-                            <DropShadowEffect BlurRadius="15" Direction="-90" RenderingBias="Quality" ShadowDepth="2"/>
-                        </Border.Effect>
-                    </Border>
+                    <Border Background="{DynamicResource BackgroundMain}" CornerRadius="5" Margin="2"  Effect="{StaticResource NormalDropShadowEffect}"/>
 
                     <Border  PreviewMouseLeftButtonUp="HideGrid"   Style="{StaticResource GridCloseBorderStyle}" >
                         <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=close,Converter={StaticResource StringToUriStringConverter}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />

@@ -90,6 +90,13 @@
     <SolidColorBrush x:Key= "BorderBursh"  Color="{DynamicResource Color_BorderBursh}" />
 
 
+    <DropShadowEffect x:Key="NormalDropShadowEffect" BlurRadius="20" Direction="-90" RenderingBias="Quality" ShadowDepth="0"/>
+    <DropShadowEffect x:Key="PopupDropShadowEffect" BlurRadius="10" Direction="-90" RenderingBias="Quality" ShadowDepth="0"/>
+    <DropShadowEffect x:Key="BlueDropShadowEffect" Color="SkyBlue" BlurRadius="10" Direction="-90" RenderingBias="Quality" ShadowDepth="0"/>
+
+    <DropShadowEffect x:Key="ZeroShadowEffect" BlurRadius="0" Direction="-90"   RenderingBias="Quality" ShadowDepth="0"/>
+    <BlurEffect x:Key="NormalBlurEffect" Radius="4" KernelType="Box"  RenderingBias="Quality"/>
+
     <Style x:Key="Ellipse" TargetType="{x:Type Ellipse}">
         <Style.Triggers>
             <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource AncestorType={x:Type Canvas}, Mode=FindAncestor}}" Value="True">

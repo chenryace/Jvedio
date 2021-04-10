@@ -62,6 +62,7 @@ namespace Jvedio
             //加载数据库
             StackPanel stackPanel = sender as StackPanel;
             TextBox TextBox = stackPanel.Children[1] as TextBox;
+            if (!TextBox.IsReadOnly) return;
 
             string name = TextBox.Text;
             if (name == Jvedio.Language.Resources.NewLibrary)

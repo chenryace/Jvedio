@@ -3,11 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:p="clr-namespace:Jvedio.Properties"
         xmlns:lang="clr-namespace:Jvedio.Language;assembly=Jvedio.Language"
-        xmlns:local="clr-namespace:Jvedio" xmlns:hc="https://handyorg.github.io/handycontrol"
-        xmlns:converter="clr-namespace:Jvedio.Utils.Converter;assembly=Jvedio.Utils"
-                    
+        xmlns:hc="https://handyorg.github.io/handycontrol"      
         mc:Ignorable="d"
         Title="Jvedio"         
          Height="400" Width="700"
@@ -19,15 +16,15 @@
         Icon="pack://application:,,,/Resources/Jvedio.ico"
         Loaded="Window_Loaded"
         Topmost="False"
-        
         >
 
     <Window.Resources>
 
-        <converter:StringToUriStringConverter x:Key="StringToUriStringConverter"/>
+
 
         <!--如果是 新建视频库 则隐藏-->
         <Style x:Key="OptionBorderStyle" TargetType="Border">
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
             <Setter Property="Visibility" Value="Visible"/>
             <Style.Triggers>
                 <DataTrigger Binding="{Binding Path=Children[0].Children[1].Text,RelativeSource={RelativeSource AncestorType={x:Type Grid},Mode=FindAncestor}}" Value="{x:Static lang:Resources.NewLibrary}">
@@ -39,52 +36,28 @@
 
         <!--更改图片-->
         <Style x:Key="ImageStyle" TargetType="Image">
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
             <Setter Property="Source" Value="pack://application:,,,/Resources/Image/StartUp/库.png"/>
             <Setter Property="Width" Value="30"/>
-
             <Style.Triggers>
                 <DataTrigger Binding="{Binding Path=Children[1].Text,RelativeSource={RelativeSource AncestorType={x:Type StackPanel},Mode=FindAncestor}}" Value="{x:Static lang:Resources.NewLibrary}">
                     <Setter Property="Source" Value="pack://application:,,,/Resources/Image/StartUp/新建.png"/>
                 </DataTrigger>
             </Style.Triggers>
-
-
         </Style>
 
 
         <!--选项弹出框-->
-        <Style x:Key="SetButton" TargetType="{x:Type Button}">
-            <Setter Property="HorizontalAlignment" Value="Left"/>
-            <Setter Property="Margin" Value="10 0"/>
-            <Setter Property="FontFamily" Value="微软雅黑"/>
-            <Setter Property="FontSize" Value="16"/>
+        <Style x:Key="SetButton" TargetType="{x:Type Button}" BasedOn="{StaticResource HoverButton}">
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="10 0"/>
             <Setter Property="Width" Value="120"/>
             <Setter Property="Height" Value="30"/>
-            <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="Foreground" Value="{DynamicResource ForegroundSearch}"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type Button}">
-                        <Border Background="{TemplateBinding Background}" BorderBrush="Transparent" BorderThickness="0">
-                            <ContentPresenter Margin="5 0" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-            <Style.Triggers>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="{DynamicResource BackgroundSearch}"/>
-                </Trigger>
-            </Style.Triggers>
         </Style>
 
-
-
-
-
-
         <Style x:Key="DBBorder" TargetType="{x:Type Border}">
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
             <Setter Property="Background" Value="{DynamicResource BackgroundSide}"/>
             <Setter Property="BorderThickness" Value="2"/>
             <Setter Property="BorderBrush" Value="{DynamicResource BackgroundSide}"/>
@@ -97,11 +70,9 @@
         </Style>
 
 
-        <Style x:Key="BaseTextBlock" TargetType="{x:Type TextBlock}">
+        <Style x:Key="TitleTextBlock" TargetType="{x:Type TextBlock}" BasedOn="{StaticResource BaseTextBlock}">
             <Setter Property="TextWrapping" Value="Wrap"/>
             <Setter Property="TextAlignment" Value="Center"/>
-            <Setter Property="FontFamily" Value="微软雅黑"/>
-            <Setter Property="FontSize" Value="15"/>
             <Setter Property="Margin" Value="0,5,0,5"/>
             <Setter Property="Foreground" Value="{DynamicResource ForegroundSearch}"/>
         </Style>
@@ -109,34 +80,32 @@
 
 
     <Grid Margin="10">
-        <Border  x:Name="MainBorder"   Background="{DynamicResource BackgroundMain}" CornerRadius="5" Margin="5"  >
-            <Border.Effect>
-                <DropShadowEffect BlurRadius="20" Direction="-90" RenderingBias="Quality" ShadowDepth="0"/>
-            </Border.Effect>
-        </Border>
+        <Border Background="{DynamicResource BackgroundMain}"   Margin="5" Effect="{StaticResource NormalDropShadowEffect}"  />
         <Grid Margin="5">
 
 
             <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
                 <Image HorizontalAlignment="Center" Height="80" VerticalAlignment="Center" Width="80" Source="/Resources/Picture/Jvedio.png"/>
-                <Image ToolTip="Jvedio" Margin="0 10 0 10" HorizontalAlignment="Center" Height="40"  VerticalAlignment="Center"  Source="Resources/Picture/Title.png"/>
+                <Image ToolTip="Jvedio" Margin="0 10 0 10" HorizontalAlignment="Center" Height="40"  VerticalAlignment="Center"  Source="/Resources/Picture/Title.png"/>
                 <TextBlock x:Name="statusText" Margin="10 2" TextAlignment="Center" FontSize="20" Foreground="{DynamicResource ForegroundSearch}" Text="{x:Static lang:Resources.Loading}"/>
                 <hc:LoadingCircle Foreground="{DynamicResource ForegroundGlobal}" Margin="0 10"/>
             </StackPanel>
 
-            <Border x:Name="SelectDbBorder" Visibility="Hidden" CornerRadius="5" Background="{DynamicResource BackgroundMain}" BorderBrush="Gray" BorderThickness="0"  >
+            <Border x:Name="SelectDbBorder" Visibility="Collapsed" CornerRadius="5" Background="{DynamicResource BackgroundMain}" BorderBrush="Gray" BorderThickness="0"  >
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="100*"/>
-                        <RowDefinition Height="900*"/>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
-                    <Border CornerRadius="5 5 0 0" Grid.Row="0" Background="{DynamicResource BackgroundTitle}" MouseMove="MoveWindow">
+                    <Border   Grid.Row="0" Background="{DynamicResource BackgroundTitle}" MouseMove="MoveWindow">
                         <Grid >
-                            <TextBlock    Text="{x:Static lang:Resources.ChooseDataBase}" Style="{StaticResource BaseTextBlock}" VerticalAlignment="Center"  HorizontalAlignment="Center"/>
-                            <Border Height="30" Width="30" Margin="10 0" HorizontalAlignment="Right"  VerticalAlignment="Center" PreviewMouseLeftButtonUp="Border_PreviewMouseLeftButtonUp"   CornerRadius="3" Style="{StaticResource CloseBorderStyle}" >
-                                <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=close,Converter={StaticResource StringToUriStringConverter}, Source={x:Static p:Settings.Default}}" Height="20" Width="20"   />
-                            </Border>
+                            <TextBlock    Text="{x:Static lang:Resources.ChooseDataBase}" Style="{StaticResource TitleTextBlock}" VerticalAlignment="Center"  HorizontalAlignment="Center"/>
+                            <Button Height="30" Margin="0"   HorizontalAlignment="Right"  VerticalAlignment="Center" PreviewMouseLeftButtonUp="Border_PreviewMouseLeftButtonUp"   Style="{StaticResource CloseButton}" Width="40"  HorizontalContentAlignment="Left" VerticalContentAlignment="Top" >
+                                <Viewbox   Width="12" Height="auto" Margin="14 9 0 0"        >
+                                    <Path VerticalAlignment="Center" HorizontalAlignment="Center"      Fill="{DynamicResource ForegroundGlobal}" Data="M610.218667 505.6l398.08-387.413333a49.664 49.664 0 0 0 0-71.338667l-2.133334-2.133333a52.992 52.992 0 0 0-73.301333 0L534.784 432.64 136.704 44.373333a52.992 52.992 0 0 0-73.386667 0L61.269333 46.592a48.810667 48.810667 0 0 0 0 71.338667l398.165334 387.669333-398.165334 387.498667a49.664 49.664 0 0 0 0 71.253333l2.218667 2.133333c20.48 19.626667 52.821333 19.626667 73.301333 0l398.08-387.413333 398.08 387.413333c20.48 19.626667 52.906667 19.626667 73.386667 0l2.048-2.133333a49.664 49.664 0 0 0 0-71.253333l-398.08-387.413334z" />
+                                </Viewbox>
+                            </Button>
 
                         </Grid>
 
@@ -157,11 +126,7 @@
 
                         <Popup IsOpen="False" VerticalOffset="-20" HorizontalOffset="-20" x:Name="OptionPopup" Placement="Mouse" PopupAnimation="Fade"  AllowsTransparency="True" StaysOpen="False" >
                             <Grid    Margin="5"   >
-                                <Border     Background="{DynamicResource BackgroundMenu}" CornerRadius="5" Margin="5"  >
-                                    <Border.Effect>
-                                        <DropShadowEffect BlurRadius="10" Direction="-90"  RenderingBias="Quality" ShadowDepth="0"/>
-                                    </Border.Effect>
-                                </Border>
+                                <Border     Background="{DynamicResource BackgroundMenu}" CornerRadius="5" Margin="5" Effect="{StaticResource PopupDropShadowEffect}" />
                                 <StackPanel   Panel.ZIndex="7" Background="Transparent" Orientation="Vertical" Margin="10" Width="auto">
                                     <Button Style="{StaticResource SetButton}"    Content="{x:Static lang:Resources.Delete}" Click="DelSqlite"  />
                                     <Button  Style="{StaticResource SetButton}"   Content="{x:Static lang:Resources.Rename}"   Click="RenameSqlite"   />
@@ -195,7 +160,7 @@
                                                 </Grid.ColumnDefinitions>
                                                 <StackPanel Grid.Column="0"  Orientation="Horizontal" Margin="5 5" PreviewMouseLeftButtonUp="LoadDataBase" Cursor="Hand">
                                                     <Image Style="{StaticResource ImageStyle}" Margin="10 2"  />
-                                                    <TextBox ContextMenu="{StaticResource TextBoxContextMenu}" Cursor="Hand" TextAlignment="Left" Width="180" Height="auto"  KeyUp="TextBox_KeyUp" LostFocus="TextBox_LostFocus"  IsReadOnly="True" Text="{Binding .,Mode=TwoWay}" Margin="5" Grid.Row="1" Style="{StaticResource BaseTextBox}" VerticalAlignment="Center" FontSize="20" ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=Text}"/>
+                                                    <TextBox ContextMenu="{StaticResource TextBoxContextMenu}" Cursor="Hand" TextAlignment="Left" Width="180" Height="auto"  KeyUp="TextBox_KeyUp" LostFocus="TextBox_LostFocus"  IsReadOnly="True" Text="{Binding .,Mode=TwoWay}" Margin="5" Grid.Row="1" Style="{StaticResource ReadWriteTextBox}" VerticalAlignment="Center" FontSize="20" ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=Text}"/>
                                                 </StackPanel>
                                                 <Border  Grid.Column="1"  Style="{StaticResource OptionBorderStyle}" Background="{DynamicResource BackgroundSide}"  Height="20"  Width="auto" Margin="4 0"  VerticalAlignment="Top" Cursor="Hand" MouseLeftButtonUp="Image_MouseLeftButtonUp">
                                                     <Image x:Name="optionImage" Source="pack://application:,,,/Resources/Image/StartUp/选项.png" Width="15" Margin="2"  />

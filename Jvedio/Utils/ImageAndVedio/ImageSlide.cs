@@ -115,7 +115,7 @@ namespace Jvedio
 		{
 			try
 			{
-				if (Images.Count == 0)
+				if (Images.Count <=1)
 					return;
 				var oldCtrlIndex = CurrentCtrlIndex;
 				CurrentCtrlIndex = (CurrentCtrlIndex + 1) % 2;

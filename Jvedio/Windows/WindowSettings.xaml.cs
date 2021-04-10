@@ -539,10 +539,7 @@ namespace Jvedio
         private void SetBasePicPath(object sender, RoutedEventArgs e)
         {
             var path = FileHelper.SelectPath(this);
-            if (Directory.Exists(AppDomain.CurrentDomain.BaseDirectory + "Pic\\")) path = AppDomain.CurrentDomain.BaseDirectory + "Pic\\";
-            //dialog.ShowNewFolderButton = true;
-            // TODO
-            if (Directory.Exists(path))
+             if (Directory.Exists(path))
             {
                 if (path.Substring(path.Length - 1, 1) != "\\") { path = path + "\\"; }
                 Properties.Settings.Default.BasePicPath = path;
