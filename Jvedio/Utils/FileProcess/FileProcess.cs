@@ -85,7 +85,7 @@ namespace Jvedio
         }
 
 
-        public static void SaveInfo(Dictionary<string, string> Info,string id,int vt=1)
+        public static void SaveInfo(Dictionary<string, string> Info, string id, int vt = 1)
         {
             //保存信息
             if (!Info.ContainsKey("id")) Info.Add("id", id);
@@ -95,7 +95,7 @@ namespace Jvedio
             SaveNfo(detailMovie);
         }
 
-        public static void SavePartialInfo(Dictionary<string, string> Info,string key, string id)
+        public static void SavePartialInfo(Dictionary<string, string> Info, string key, string id)
         {
             //保存信息
             if (!Info.ContainsKey("id")) Info.Add("id", id);
@@ -131,7 +131,7 @@ namespace Jvedio
                 if (File.Exists(path))
                 {
                     string savepath = Path.Combine(new FileInfo(path).DirectoryName, $"{detailMovie.id}.nfo");
-                    if(!File.Exists(savepath))
+                    if (!File.Exists(savepath))
                         NFOHelper.SaveToNFO(detailMovie, savepath);
                     else if (Properties.Settings.Default.OverriteNFO)
                         NFOHelper.SaveToNFO(detailMovie, savepath);
@@ -145,8 +145,9 @@ namespace Jvedio
         /// 清除最近的观看记录
         /// </summary>
         /// <param name="dateTime"></param>
-        public static void ClearDateBefore(DateTime dateTime)
+        public static void ClearDateBefore(int day)
         {
+            DateTime dateTime = DateTime.Now.AddDays(day);
             if (!File.Exists("RecentWatch")) return;
             RecentWatchedConfig recentWatchedConfig = new RecentWatchedConfig();
             for (int i = 1; i < 60; i++)
@@ -162,7 +163,7 @@ namespace Jvedio
         /// </summary>
         /// <param name="movies"></param>
         /// <returns></returns>
-        public static List<Movie> FilterMovie(List<Movie> movies )
+        public static List<Movie> FilterMovie(List<Movie> movies)
         {
             List<Movie> result = new List<Movie>();
             result.AddRange(movies);
@@ -207,7 +208,7 @@ namespace Jvedio
             List<Movie> result = new List<Movie>();
             result.AddRange(originMovies);
 
-            
+
             int.TryParse(Properties.Settings.Default.ShowViewMode, out int idx);
             ViewType ShowViewMode = (ViewType)idx;
             MyImageType ShowImageMode = MyImageType.缩略图;
@@ -312,10 +313,11 @@ namespace Jvedio
             {
                 doc.Load(path);
             }
-            catch(Exception ex) {
+            catch (Exception ex)
+            {
                 Logger.LogE(ex);
                 Console.WriteLine(ex.Message);
-                return null; 
+                return null;
             }
             XmlNode rootNode = doc.SelectSingleNode("movie");
             if (rootNode == null) return null;
@@ -351,7 +353,7 @@ namespace Jvedio
                     continue;
                 }
             }
-            if (string.IsNullOrEmpty( movie.id )) return null; 
+            if (string.IsNullOrEmpty(movie.id)) return null;
 
             //视频类型
             movie.vediotype = (int)Identify.GetVideoType(movie.id);
@@ -395,12 +397,12 @@ namespace Jvedio
             {
                 foreach (XmlNode item in tagNodes)
                 {
-                    if (item.InnerText != "") { tags .Add( item.InnerText.Replace(" ","")); }
+                    if (item.InnerText != "") { tags.Add(item.InnerText.Replace(" ", "")); }
                 }
-                    if (movie.id.IndexOf("FC2") >= 0)
-                        movie.genre = string.Join(" ", tags);
-                    else
-                        movie.tag = string.Join(" ", tags);
+                if (movie.id.IndexOf("FC2") >= 0)
+                    movie.genre = string.Join(" ", tags);
+                else
+                    movie.tag = string.Join(" ", tags);
             }
 
             //genre
@@ -410,7 +412,7 @@ namespace Jvedio
             {
                 foreach (XmlNode item in genreNodes)
                 {
-                    if (item.InnerText != "") { genres.Add( item.InnerText ); }
+                    if (item.InnerText != "") { genres.Add(item.InnerText); }
 
                 }
                 movie.genre = string.Join(" ", genres);
@@ -423,10 +425,10 @@ namespace Jvedio
             {
                 foreach (XmlNode item in actorNodes)
                 {
-                    if (item.InnerText != "") { actors.Add( item.InnerText ); }
+                    if (item.InnerText != "") { actors.Add(item.InnerText); }
                 }
-                 movie.actor = string.Join(" ", actors);
-                }
+                movie.actor = string.Join(" ", actors);
+            }
 
             //fanart
             XmlNodeList fanartNodes = doc.SelectNodes("/movie/fanart/thumb");
@@ -435,10 +437,10 @@ namespace Jvedio
             {
                 foreach (XmlNode item in fanartNodes)
                 {
-                    if (item.InnerText != "") { extraimageurls.Add( item.InnerText ); }
+                    if (item.InnerText != "") { extraimageurls.Add(item.InnerText); }
                 }
-                 movie.extraimageurl = string.Join(" ", extraimageurls);
-                }
+                movie.extraimageurl = string.Join(" ", extraimageurls);
+            }
             return movie;
         }
 
@@ -455,7 +457,7 @@ namespace Jvedio
                         if (!result.Contains(item)) result.Add(item);
                 }
             }
-            else { if (label.Length > 0 && label.IndexOf(' ')<0) result.Add(label.Replace(" ", "")); }
+            else { if (label.Length > 0 && label.IndexOf(' ') < 0) result.Add(label.Replace(" ", "")); }
             return result;
         }
 
@@ -479,7 +481,7 @@ namespace Jvedio
         {
             //添加标签戳
             if (movie == null) return;
-            if (Identify.IsHDV(movie.filepath) || movie.genre?.IndexOfAnyString(TagStrings_HD) >= 0 || movie.tag?.IndexOfAnyString(TagStrings_HD) >= 0 || movie.label?.IndexOfAnyString(TagStrings_HD) >= 0) movie.tagstamps +=Jvedio.Language.Resources.HD;
+            if (Identify.IsHDV(movie.filepath) || movie.genre?.IndexOfAnyString(TagStrings_HD) >= 0 || movie.tag?.IndexOfAnyString(TagStrings_HD) >= 0 || movie.label?.IndexOfAnyString(TagStrings_HD) >= 0) movie.tagstamps += Jvedio.Language.Resources.HD;
             if (Identify.IsCHS(movie.filepath) || movie.genre?.IndexOfAnyString(TagStrings_Translated) >= 0 || movie.tag?.IndexOfAnyString(TagStrings_Translated) >= 0 || movie.label?.IndexOfAnyString(TagStrings_Translated) >= 0) movie.tagstamps += Jvedio.Language.Resources.Translated;
             if (Identify.IsFlowOut(movie.filepath) || movie.genre?.IndexOfAnyString(TagStrings_FlowOut) >= 0 || movie.tag?.IndexOfAnyString(TagStrings_FlowOut) >= 0 || movie.label?.IndexOfAnyString(TagStrings_FlowOut) >= 0) movie.tagstamps += Jvedio.Language.Resources.FlowOut;
         }

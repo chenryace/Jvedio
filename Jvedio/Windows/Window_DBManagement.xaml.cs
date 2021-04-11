@@ -22,7 +22,7 @@ namespace Jvedio
     /// <summary>
     /// Window_DBManagement.xaml 的交互逻辑
     /// </summary>
-    public partial class Window_DBManagement :  BaseWindow
+    public partial class Window_DBManagement : BaseWindow
     {
 
         public static string GrowlToken = "DBManageGrowl";
@@ -319,7 +319,7 @@ namespace Jvedio
                 db.DeleteTable("movie");
                 db.CreateTable(DataBase.SQLITETABLE_MOVIE);
                 //清空最近播放和最近创建
-                ClearDateBefore(DateTime.Now);
+                ClearDateBefore(0);
                 db.Vacuum();
                 HandyControl.Controls.Growl.Success(Jvedio.Language.Resources.Message_Success, GrowlToken);
             }
@@ -377,7 +377,7 @@ namespace Jvedio
                                 db.DeleteByField("movie", "id", movies[i].id);
                                 num++;
                             }
-                            if (movies.Count > 0) vieModel_DBManagement.ProgressBarValue = (int)((double)(i+1) / (double)movies.Count * 100);
+                            if (movies.Count > 0) vieModel_DBManagement.ProgressBarValue = (int)((double)(i + 1) / (double)movies.Count * 100);
                         }
 
                         db.Vacuum();
@@ -513,11 +513,11 @@ namespace Jvedio
                 cts?.Cancel();
                 cts_copy?.Cancel();
             }
-            catch(ObjectDisposedException ex)
+            catch (ObjectDisposedException ex)
             {
                 Console.WriteLine(ex.Message);
             }
-            
+
         }
 
         private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -527,14 +527,14 @@ namespace Jvedio
             TextBlock tb = sp.Children.OfType<TextBlock>().First();
             StackPanel topsp = sp.Parent as StackPanel;
             TextBlock textBlock = topsp.Children.OfType<TextBlock>().First();
-            string path =Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "DataBase" ,e.AddedItems[0].ToString() + ".sqlite");
+            string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "DataBase", e.AddedItems[0].ToString() + ".sqlite");
             double count = 0;
             long length = 0;
             if (File.Exists(path))
             {
-                using (MySqlite sqlite = new MySqlite(path,true))
+                using (MySqlite sqlite = new MySqlite(path, true))
                 {
-                    count= sqlite.SelectCountByTable("movie");
+                    count = sqlite.SelectCountByTable("movie");
                 }
                 length = new FileInfo(path).Length;
             }
@@ -543,7 +543,8 @@ namespace Jvedio
             if (tb.Text == Jvedio.Language.Resources.Source)
                 src = path;
             else
-                dst = path;        }
+                dst = path;
+        }
 
 
 
@@ -562,11 +563,14 @@ namespace Jvedio
             ct_copy = cts_copy.Token;
             CopyButton.IsEnabled = false;
             bool skipnulltitle = (bool)SkipNullTitle.IsChecked;
-            Task.Run(() => {
+            Task.Run(() =>
+            {
                 try
                 {
-                    DataBase.CopyDatabaseInfo(src, dst, ct_copy, (value) => {
-                        Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Background, (Action)delegate {
+                    DataBase.CopyDatabaseInfo(src, dst, ct_copy, (value) =>
+                    {
+                        Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Background, (Action)delegate
+                        {
                             CopyProgressBar.Value = value;
                             if (value == 100)
                             {
@@ -576,7 +580,8 @@ namespace Jvedio
                             }
                         });
                     }, skipnulltitle);
-                }catch(OperationCanceledException ex)
+                }
+                catch (OperationCanceledException ex)
                 {
                     Console.WriteLine(ex.Message);
                 }
@@ -596,10 +601,10 @@ namespace Jvedio
 
         private void OpenPath(object sender, RoutedEventArgs e)
         {
-            Button button  = (Button)sender;
+            Button button = (Button)sender;
             StackPanel sp = button.Parent as StackPanel;
             ComboBox comboBox = sp.Children.OfType<ComboBox>().First();
-            string path =Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "DataBase" , comboBox.Text + ".sqlite");
+            string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "DataBase", comboBox.Text + ".sqlite");
             FileHelper.TryOpenSelectPath(path, GrowlToken);
         }
     }

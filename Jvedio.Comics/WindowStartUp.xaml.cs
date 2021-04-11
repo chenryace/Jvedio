@@ -81,7 +81,7 @@ namespace Jvedio.Comics
         public static string TranslateDataBasePath = AppDomain.CurrentDomain.BaseDirectory + "Translate-Comics.sqlite";
 
 
-        public  void LoadDataBase(object sender, MouseButtonEventArgs e)
+        public void LoadDataBase(object sender, MouseButtonEventArgs e)
         {
             //加载数据库
             StackPanel stackPanel = sender as StackPanel;
@@ -196,7 +196,7 @@ namespace Jvedio.Comics
             try
             {
                 statusText.Text = Jvedio.Language.Resources.Status_ClearRecentWatch;
-                ClearDateBefore(DateTime.Now.AddDays(-10));
+                ClearDateBefore(-10);
                 statusText.Text = Jvedio.Language.Resources.Status_ClearLog;
                 ClearLogBefore(DateTime.Now.AddDays(-10), AppDomain.CurrentDomain.BaseDirectory + "log");
                 ClearLogBefore(DateTime.Now.AddDays(-10), AppDomain.CurrentDomain.BaseDirectory + "log\\NetWork");

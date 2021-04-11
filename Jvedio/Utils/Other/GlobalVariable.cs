@@ -18,7 +18,7 @@ namespace Jvedio
     {
         public static readonly string ReleaseUrl = "https://github.com/hitchao/Jvedio/releases";
         public static readonly string YoudaoUrl = "https://github.com/hitchao/Jvedio/wiki/HowToSetYoudaoTranslation";
-        public static readonly string BaiduUrl= "https://github.com/hitchao/Jvedio/wiki/HowToSetBaiduAI";
+        public static readonly string BaiduUrl = "https://github.com/hitchao/Jvedio/wiki/HowToSetBaiduAI";
         public static readonly string UpgradeSource = "https://hitchao.github.io";
         public static readonly string UpdateUrl = "https://hitchao.github.io/jvedioupdate/Version";
         public static readonly string UpdateExeVersionUrl = "https://hitchao.github.io/jvedioupdate/update";
@@ -30,6 +30,11 @@ namespace Jvedio
 
 
 
+        public static string BasePicPath = Directory.Exists(Properties.Settings.Default.BasePicPath) ?
+            Properties.Settings.Default.BasePicPath : AppDomain.CurrentDomain.BaseDirectory + "Pic\\";
+        public static string[] InitDirs = new[] { "log", "DataBase", "BackUp", "Pic" };//初始化文件夹
+        public static string[] PicPaths = new[] { "ScreenShot", "SmallPic", "BigPic", "ExtraPic", "Actresses", "Gif" };
+
 
 
         public static int MaxProcessWaitingSecond = 5; //ffmpeg 超时等待时间
@@ -39,9 +44,9 @@ namespace Jvedio
 
         //禁止的文件名符号
         //https://docs.microsoft.com/zh-cn/previous-versions/s6feh8zw(v=vs.110)?redirectedfrom=MSDN
-        public static readonly char[] BANFILECHAR = { '\\', '#', '%', '&', '*', '|', ':', '"', '<', '>', '?', '/', '.' }; 
+        public static readonly char[] BANFILECHAR = { '\\', '#', '%', '&', '*', '|', ':', '"', '<', '>', '?', '/', '.' };
 
-        public static string BasePicPath;
+
         public static Servers JvedioServers;
         public static Dictionary<string, string> UrlCookies;// key 网址 value 对应的 cookie
 
@@ -49,7 +54,7 @@ namespace Jvedio
         public static List<string> Censored = new List<string>();
         public static List<string> Uncensored = new List<string>();
 
-        
+
         public static double MinHDVFileSize = 2;//多少 GB 视为高清
 
         // jav321 转换规则
@@ -65,12 +70,12 @@ namespace Jvedio
         public static Dictionary<int, char[]> actorSplitDict = new Dictionary<int, char[]>();//key 分别是 123 骑兵步兵欧美
 
         //如果包含以下文本，则显示对应的标签戳
-        public static string[] TagStrings_HD = new string[] {"hd","高清" };
-        public static string[] TagStrings_Translated = new string[] { "中文", "日本語", "Translated","English" };
+        public static string[] TagStrings_HD = new string[] { "hd", "高清" };
+        public static string[] TagStrings_Translated = new string[] { "中文", "日本語", "Translated", "English" };
         public static string[] TagStrings_FlowOut = new string[] { "流出", "FlowOut" };
 
         //最近播放
-        public static Dictionary<DateTime, List<string>> RecentWatched =new Dictionary<DateTime, List<string>>();
+        public static Dictionary<DateTime, List<string>> RecentWatched = new Dictionary<DateTime, List<string>>();
 
         //默认图片
         public static BitmapSource BackgroundImage;
@@ -78,17 +83,20 @@ namespace Jvedio
         public static BitmapImage DefaultBigImage;
         public static BitmapImage DefaultActorImage;
 
-        
+
         public static TimeSpan FadeInterval = TimeSpan.FromMilliseconds(150);//淡入淡出时间
 
         //AES加密秘钥
         public static string[] EncryptKeys = new string[] { "ShS69pNGvLac6ZF+", "Yv4x4beWwe+vhFwg", "+C+bPEbF5W4v3/H0" };
 
-        public static string[] NeedCookie = new[] {"DB","DMM","MOO" };
+        public static string[] NeedCookie = new[] { "DB", "DMM", "MOO" };
 
         public static bool AutoAddPrefix = false;
         public static string Prefix = "FC2-";
         public static int DefaultNewMovieType = 0;
+
+        public static string AIDataBasePath = AppDomain.CurrentDomain.BaseDirectory + "AI.sqlite";
+        public static string TranslateDataBasePath = AppDomain.CurrentDomain.BaseDirectory + "Translate.sqlite";
 
         #region "热键"
         [DllImport("user32.dll")]
@@ -102,12 +110,12 @@ namespace Jvedio
         public static HwndSource _source;
         public static bool IsHide = false;
         public static List<string> OpeningWindows = new List<string>();
-        public static List<Key>  funcKeys = new List<Key>(); //功能键 [1,3] 个
+        public static List<Key> funcKeys = new List<Key>(); //功能键 [1,3] 个
         public static Key key = Key.None;//基础键 1 个
         public static List<Key> _funcKeys = new List<Key>();
         public static Key _key = Key.None;
 
-        public  enum Modifiers
+        public enum Modifiers
         {
             None = 0x0000,
             Alt = 0x0001,
@@ -138,18 +146,13 @@ namespace Jvedio
         {
             JvedioServers = ServerConfig.Instance.ReadAll();
 
-            if (Directory.Exists(Properties.Settings.Default.BasePicPath))
-                BasePicPath = Properties.Settings.Default.BasePicPath;
-            else
-                BasePicPath = AppDomain.CurrentDomain.BaseDirectory + "Pic\\";
-
             Properties.Settings.Default.Save();
 
             //每页数目
             //Properties.Settings.Default.DisplayNumber = 100;
             //Properties.Settings.Default.FlowNum = 20;
             //Properties.Settings.Default.ActorDisplayNum = 30;
-            Properties.Settings.Default.VedioType ="0";
+            Properties.Settings.Default.VedioType = "0";
             Properties.Settings.Default.ShowViewMode = "0";
             Properties.Settings.Default.OnlyShowPlay = false;
             Properties.Settings.Default.OnlyShowSubSection = false;
@@ -158,12 +161,12 @@ namespace Jvedio
             if (!actorSplitDict.ContainsKey(0)) actorSplitDict.Add(0, new char[] { ' ', '/' });
             if (!actorSplitDict.ContainsKey(1)) actorSplitDict.Add(1, new char[] { ' ', '/' });
             if (!actorSplitDict.ContainsKey(2)) actorSplitDict.Add(2, new char[] { ' ', '/' });
-            if (!actorSplitDict.ContainsKey(3)) actorSplitDict.Add(3, new char[] {'/' });//欧美
-
-            
+            if (!actorSplitDict.ContainsKey(3)) actorSplitDict.Add(3, new char[] { '/' });//欧美
 
 
-            
+
+
+
 
             GenreEurope[0] = Resource_String.GenreEurope.Split('|')[0];
             GenreEurope[1] = Resource_String.GenreEurope.Split('|')[1];
@@ -192,12 +195,12 @@ namespace Jvedio
             GenreUncensored[7] = Resource_String.GenreUncensored.Split('|')[7];
 
             //配置 ffmpeg 路径
-            if ( !File.Exists(Properties.Settings.Default.FFMPEG_Path) && File.Exists("ffmpeg.exe"))
+            if (!File.Exists(Properties.Settings.Default.FFMPEG_Path) && File.Exists("ffmpeg.exe"))
             {
                 Properties.Settings.Default.FFMPEG_Path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "ffmpeg.exe");
             }
 
-    }
+        }
 
 
 

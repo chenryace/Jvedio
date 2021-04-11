@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Jvedio
 {
-  
+
     /// <summary>
     /// 日志记录静态类
     /// </summary>
@@ -25,7 +25,7 @@ namespace Jvedio
             Console.WriteLine(e.Message);
             string path = AppDomain.CurrentDomain.BaseDirectory + "Log";
             if (!Directory.Exists(path)) { Directory.CreateDirectory(path); }
-            string filepath =Path.Combine( path , DateTime.Now.ToString("yyyy-MM-dd") , ".log");
+            string filepath = Path.Combine(path, DateTime.Now.ToString("yyyy-MM-dd") + ".log");
 
             string content;
             content = Environment.NewLine + "-----【" + DateTime.Now.ToString() + "】-----";
@@ -34,7 +34,7 @@ namespace Jvedio
 
             lock (ExceptionLock)
             {
-                using(StreamWriter sr = new StreamWriter(filepath, true))
+                using (StreamWriter sr = new StreamWriter(filepath, true))
                 {
                     try { sr.Write(content); } catch { }
                 }

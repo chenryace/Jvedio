@@ -10,6 +10,61 @@ namespace Jvedio
 {
     public static class FileHelper
     {
+
+        public static bool TryCreateDir(string path)
+        {
+            if (!Directory.Exists(path))
+            {
+                try
+                {
+                    Directory.CreateDirectory(path);
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    Logger.LogF(ex);
+                }
+            }
+            return false;
+        }
+
+
+
+
+        public static bool TryDeleteDir(string path)
+        {
+            if (Directory.Exists(path))
+            {
+                try
+                {
+                    Directory.Delete(path, true);
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    Logger.LogF(ex);
+                }
+            }
+            return false;
+        }
+
+        public static bool TryDeleteFile(string path)
+        {
+            if (File.Exists(path))
+            {
+                try
+                {
+                    File.Delete(path);
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    Logger.LogF(ex);
+                }
+            }
+            return false;
+        }
+
         public static string SelectPath(Window window)
         {
             var dialog = new CommonOpenFileDialog();
@@ -20,7 +75,7 @@ namespace Jvedio
             dialog.ShowHiddenItems = true;
             if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
             {
-                result= dialog.FileName;
+                result = dialog.FileName;
             }
             //这个窗口会将之前的窗口置底，所以要置顶回来
             window.Activate();
@@ -33,13 +88,14 @@ namespace Jvedio
 
 
 
-        public static bool TryCopyFile(string src,string target,bool overwrite = false)
+        public static bool TryCopyFile(string src, string target, bool overwrite = false)
         {
             try
             {
                 File.Copy(src, target, overwrite);
                 return true;
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 Logger.LogF(ex);
                 return false;
