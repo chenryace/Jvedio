@@ -5,20 +5,17 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:fa="http://schemas.fontawesome.io/icons/"
         xmlns:lang="clr-namespace:Jvedio.Language;assembly=Jvedio.Language"
-    xmlns:converter="clr-namespace:Jvedio.Utils.Converter;assembly=Jvedio.Utils"
-                    xmlns:style="clr-namespace:Jvedio.Style;assembly=Jvedio.Style"
+        xmlns:style="clr-namespace:Jvedio.Style;assembly=Jvedio.Style"
         xmlns:p="clr-namespace:Jvedio.Properties"
         xmlns:hc="https://handyorg.github.io/handycontrol"
         x:Class="Jvedio.WindowTools"
-    
         mc:Ignorable="d"
         Title="{x:Static lang:Resources.Tools}" 
         MinHeight="450"
         MinWidth="800"
         WindowStartupLocation="CenterScreen"
-    Closing="Jvedio_BaseWindow_Closing"
-    
-    
+        Closing="Jvedio_BaseWindow_Closing"
+
         >
 
     <Grid  Background="{DynamicResource BackgroundMain}"   >
