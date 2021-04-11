@@ -7,7 +7,6 @@
         xmlns:style="clr-namespace:Jvedio.Style;assembly=Jvedio.Style"
         xmlns:usercontrol="clr-namespace:Jvedio.Style.UserControls;assembly=Jvedio.Style"
         xmlns:hc="https://handyorg.github.io/handycontrol"
-        xmlns:converter="clr-namespace:Jvedio.Utils.Converter;assembly=Jvedio.Utils"
         xmlns:plot="clr-namespace:Jvedio.Plot.Bar"
         mc:Ignorable="d"
         Title="{x:Static lang:Resources.MovieManagement}"       
@@ -17,13 +16,11 @@
         Background="{DynamicResource BackgroundMain}"
         WindowStartupLocation="CenterScreen"
         ContentRendered="Jvedio_BaseWindow_ContentRendered"        
-                         Closing="Jvedio_BaseWindow_Closing"
+        Closing="Jvedio_BaseWindow_Closing"
         >
 
     <style:BaseWindow.Resources>
 
-        <converter:OppositeBooleanConverter x:Key="OppositeBooleanConverter" />
-        
         <Style x:Key="DBBorder" TargetType="{x:Type Border}">
             <Setter Property="Cursor" Value="Hand"/>
             <Style.Triggers>
@@ -33,89 +30,13 @@
             </Style.Triggers>
         </Style>
 
-
-        <Style x:Key="BaseTextBox" TargetType="{x:Type TextBox}">
-            <Setter Property="VerticalContentAlignment" Value="Center"/>
-            <Setter Property="Height" Value="40"/>
-            <Setter Property="FontFamily" Value="Times New Romans"/>
-            <Setter Property="FontSize" Value="15"/>
-            <Setter Property="Margin" Value="10 5 100 5"/>
-            <Setter Property="Foreground" Value="{DynamicResource ForegroundSearch}"/>
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="CaretBrush" Value="{DynamicResource ForegroundSearch}"/>
-            <Style.Triggers>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="{DynamicResource BackgroundMain}"/>
-                </Trigger>
-            </Style.Triggers>
-        </Style>
-
-
-
-        <Style x:Key="BaseTextBlock" TargetType="{x:Type TextBlock}">
-            <Setter Property="TextWrapping" Value="Wrap"/>
-            <Setter Property="TextAlignment" Value="Center"/>
-            <Setter Property="FontFamily" Value="微软雅黑"/>
-            <Setter Property="FontSize" Value="15"/>
-            <Setter Property="Margin" Value="20 5"/>
-            <Setter Property="Foreground" Value="{DynamicResource ForegroundSearch}"/>
-        </Style>
-
     </style:BaseWindow.Resources>
     <Grid Background="{DynamicResource BackgroundMain}">
-
         <usercontrol:WaitingPanel Visibility="Collapsed" ShowCancelButton="Visible" x:Name="WaitingPanel"  Panel.ZIndex="5" Cancel="WaitingPanel_Cancel" ></usercontrol:WaitingPanel>
-
         <!--消息提示框-->
-        <ScrollViewer Height="auto" Background="Transparent" Panel.ZIndex="6" Width="auto" VerticalScrollBarVisibility="Hidden" VerticalAlignment="Bottom" HorizontalAlignment="Right"  Margin="20">
+        <ScrollViewer Height="auto" Background="Transparent" Panel.ZIndex="6" Width="auto" VerticalScrollBarVisibility="Hidden" VerticalAlignment="Bottom" HorizontalAlignment="Right"  Margin="30 50">
             <StackPanel hc:Growl.Token="DBManageGrowl" VerticalAlignment="Bottom" Margin="0,10,10,10"/>
         </ScrollViewer>
-
-        <!--<Grid HorizontalAlignment="Center" VerticalAlignment="Center" >
-            <Border  x:Name="MainBorder"   Background="{DynamicResource BackgroundMain}" CornerRadius="5" Margin="5"  >
-                <Border.Effect>
-                    <DropShadowEffect BlurRadius="20" Direction="-90"  RenderingBias="Quality" ShadowDepth="0"/>
-                </Border.Effect>
-            </Border>
-            <Grid Margin="5" >
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="auto"/>
-                </Grid.RowDefinitions>
-
-
-
-                <Image Grid.Row="0" Source="pack://application:,,,/Resources/Picture/database.png" Height="50" Margin="10"/>
-                <TextBlock Text="{Binding }" Margin="5" Grid.Row="1" Style="{StaticResource BaseTextBlock}" VerticalAlignment="Center" FontSize="16" ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=Text}"/>
-                <Grid  Grid.Row="2" Background="{DynamicResource BackgroundTitle}" >
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="333*"/>
-                        <ColumnDefinition Width="333*"/>
-                        <ColumnDefinition Width="334*"/>
-                    </Grid.ColumnDefinitions>
-
-                    <Border  Grid.Column="0" Style="{StaticResource DBBorder}" MouseLeftButtonUp="LoadDataBase" ToolTip="装载" >
-                        <Image  Source="pack://application:,,,/Resources/Picture/loaddatabase.png" Height="32"/>
-                    </Border>
-                    <Border  Grid.Column="1" Style="{StaticResource DBBorder}"   MouseLeftButtonUp="EditDataBase"  ToolTip="编辑" >
-                        <Image Grid.Column="1" Source="pack://application:,,,/Resources/Picture/edit.png" Width="25"/>
-                    </Border>
-
-                    <Border Grid.Column="2"  Style="{StaticResource DBBorder}"  MouseLeftButtonUp="DelDataBase"  ToolTip="删除"  >
-                        <Image Grid.Column="2" Source="pack://application:,,,/Resources/Picture/delete.png" Width="32"/>
-                    </Border>
-
-
-
-
-
-                </Grid>
-
-            </Grid>
-        </Grid>-->
-
 
 
         <TabControl SelectionChanged="TabControl_SelectionChanged" SelectedIndex="0" Margin="5" BorderBrush="{DynamicResource BackgroundSearch}"  x:Name="TabControl" Grid.Row="0" Background="Transparent" TabStripPlacement="Top" Style="{DynamicResource BaseHcTabControlStyle}"  >
@@ -143,7 +64,7 @@
 
 
 
-                        <ScrollViewer  Grid.Column="1"       Panel.ZIndex="4" Background="Transparent"   x:Name="scrollViewer"     >
+                        <ScrollViewer  Grid.Column="1"       Panel.ZIndex="4"    x:Name="scrollViewer"     >
                             <ItemsControl   ItemsSource="{Binding DataBases}"  >
                                 <ItemsControl.ItemsPanel>
                                     <ItemsPanelTemplate>
@@ -182,11 +103,6 @@
                                                     <Border Grid.Column="2"  Style="{StaticResource DBBorder}"  MouseLeftButtonUp="DelDataBase"  ToolTip="删除"  >
                                                         <Image Grid.Column="2" Source="pack://application:,,,/Resources/Picture/delete.png" Width="32"/>
                                                     </Border>
-
-
-
-
-
                                                 </Grid>
 
                                             </Grid>
@@ -213,8 +129,8 @@
                                     <TextBlock Text="{x:Static lang:Resources.DataBase}" Style="{StaticResource BaseTextBlock}" Margin="5" VerticalAlignment="Center"/>
                                     <TextBlock Margin="5"  Text="{Binding CurrentDataBase}" Style="{StaticResource BaseTextBlock}" HorizontalAlignment="Left" />
                                 </StackPanel>
-                                
-                               
+
+
                             </Border>
 
 
@@ -231,21 +147,21 @@
                         </StackPanel>
 
 
-                        <StackPanel Grid.Row="1"  Orientation="Horizontal" >
+                        <Grid Grid.Row="1"   >
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="auto"/>
+                            </Grid.ColumnDefinitions>
+                            <ProgressBar Grid.Column="0" Background="{DynamicResource BackgroundSide}"     Style="{StaticResource ProgressBarSuccessStripe}" MinWidth="400"   ValueChanged="ProgressBar_ValueChanged"  DockPanel.Dock="Bottom" IsVisibleChanged="ProgressBar_IsVisibleChanged"    Value="{Binding ProgressBarValue,FallbackValue=50}"   Height="15" Margin="20 0 5 0"   VerticalAlignment="Center"  HorizontalAlignment="Stretch" Width="auto"  Maximum="100" Minimum="0"  />
+                            <TextBlock Grid.Column="1" Text="{Binding ProgressBarValue,StringFormat={}{0}%,FallbackValue=50%}"   Visibility="{Binding ProgressBarVisibility}" Style="{StaticResource BaseTextBlock}" VerticalAlignment="Center" Margin="0 0 50 0"/>
 
+                            <StackPanel Orientation="Horizontal" Grid.Column="2">
+                                <Button IsEnabled="{Binding ElementName=RunButton,Path=IsEnabled,Converter={StaticResource OppositeBooleanConverter}}" Style="{StaticResource ButtonDanger}"  Margin="5" Content="{x:Static lang:Resources.Cancel}" HorizontalAlignment="Left" MinWidth="80" Width="auto" Height="auto" Click="Button_Click_3"/>
+                                <Button Name="RunButton" Style="{StaticResource ButtonPrimary}" Margin="5" Content="{x:Static lang:Resources.Run}" HorizontalAlignment="Left" MinWidth="80" Width="auto" Height="auto" Click="Button_Click_2"/>
+                            </StackPanel>
 
-                            <Button Name="RunButton" Style="{StaticResource ButtonPrimary}" Margin="5" Content="{x:Static lang:Resources.Run}" HorizontalAlignment="Left" MinWidth="80" Width="auto" Height="auto" Click="Button_Click_2"/>
-                            <Button IsEnabled="{Binding ElementName=RunButton,Path=IsEnabled,Converter={StaticResource OppositeBooleanConverter}}" Style="{StaticResource ButtonDanger}"  Margin="5" Content="{x:Static lang:Resources.Cancel}" HorizontalAlignment="Left" MinWidth="80" Width="auto" Height="auto" Click="Button_Click_3"/>
-
-                            <Grid  >
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="auto"/>
-                                </Grid.ColumnDefinitions>
-                                <ProgressBar Grid.Column="0" Background="{DynamicResource BackgroundSide}"     Style="{StaticResource ProgressBarSuccessStripe}" MinWidth="400"   ValueChanged="ProgressBar_ValueChanged"  DockPanel.Dock="Bottom" IsVisibleChanged="ProgressBar_IsVisibleChanged"    Value="{Binding ProgressBarValue,FallbackValue=50}"   Height="15" Margin="20 0 5 0"   VerticalAlignment="Center"  HorizontalAlignment="Stretch" Width="auto"  Maximum="100" Minimum="0"  />
-                                <TextBox Text="{Binding ProgressBarValue,StringFormat={}{0}%,FallbackValue=50%}"  Grid.Column="1"  Visibility="{Binding ProgressBarVisibility}" Style="{StaticResource BaseTextBox}" Margin="5 0"/>
-                            </Grid>
-                        </StackPanel>
+                        </Grid>
 
 
 
@@ -329,7 +245,7 @@
                             </StackPanel>
 
                             <TextBlock Text="{x:Static lang:Resources.Number}" TextAlignment="Left" Style="{StaticResource BaseTextBlock}" HorizontalAlignment="Left"/>
-                            
+
                         </StackPanel>
 
                         <StackPanel Grid.Column="1">
@@ -342,21 +258,26 @@
                         </StackPanel>
 
                     </Grid>
-                    <StackPanel Grid.Row="2"  Orientation="Horizontal" >
+                    <Grid Grid.Row="2" >
 
 
-                        <Button Name="CopyButton" Style="{StaticResource ButtonPrimary}" Margin="5" Content="{x:Static lang:Resources.Run}" HorizontalAlignment="Left" MinWidth="80" Width="auto" Height="auto" Click="CopyButton_Click"/>
-                        <Button IsEnabled="{Binding ElementName=CopyButton,Path=IsEnabled,Converter={StaticResource OppositeBooleanConverter}}" Style="{StaticResource ButtonDanger}"  Margin="5" Content="{x:Static lang:Resources.Cancel}" HorizontalAlignment="Left" MinWidth="80" Width="auto" Height="auto" Click="Button_Click_4"/>
 
-                        <Grid  >
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="auto"/>
-                            </Grid.ColumnDefinitions>
-                            <ProgressBar x:Name="CopyProgressBar" Grid.Column="0" Background="{DynamicResource BackgroundSide}"     Style="{StaticResource ProgressBarSuccessStripe}" MinWidth="400"   ValueChanged="ProgressBar_ValueChanged"  DockPanel.Dock="Bottom" IsVisibleChanged="ProgressBar_IsVisibleChanged"    Value="{Binding ProgressBarValue,FallbackValue=50}"   Height="15" Margin="20 0 5 0"   VerticalAlignment="Center"  HorizontalAlignment="Stretch" Width="auto"  Maximum="100" Minimum="0"  />
-                            <TextBox Text="{Binding ElementName=CopyProgressBar,Path=Value,StringFormat={}{0}%}"  Grid.Column="1"  Visibility="{Binding ProgressBarVisibility}" Style="{StaticResource BaseTextBox}" Margin="5 0"/>
-                        </Grid>
-                    </StackPanel>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="auto"/>
+                        </Grid.ColumnDefinitions>
+                        <ProgressBar x:Name="CopyProgressBar" Grid.Column="0" Background="{DynamicResource BackgroundSide}"     Style="{StaticResource ProgressBarSuccessStripe}" MinWidth="400"   ValueChanged="ProgressBar_ValueChanged"  DockPanel.Dock="Bottom" IsVisibleChanged="ProgressBar_IsVisibleChanged"    Value="{Binding ProgressBarValue,FallbackValue=50}"   Height="15" Margin="20 0 5 0"   VerticalAlignment="Center"  HorizontalAlignment="Stretch" Width="auto"  Maximum="100" Minimum="0"  />
+                        <TextBlock Text="{Binding ElementName=CopyProgressBar,Path=Value,StringFormat={}{0}%}"  Grid.Column="1"  Visibility="{Binding ProgressBarVisibility}" Style="{StaticResource BaseTextBlock}" VerticalAlignment="Center" Margin="0 0 50 0"/>
+
+
+                        <StackPanel Grid.Column="2" Orientation="Horizontal">
+                            <Button IsEnabled="{Binding ElementName=CopyButton,Path=IsEnabled,Converter={StaticResource OppositeBooleanConverter}}" Style="{StaticResource ButtonDanger}"  Margin="5" Content="{x:Static lang:Resources.Cancel}" HorizontalAlignment="Left" MinWidth="80" Width="auto" Height="auto" Click="Button_Click_4"/>
+                            <Button Name="CopyButton" Style="{StaticResource ButtonPrimary}" Margin="5" Content="{x:Static lang:Resources.Run}" HorizontalAlignment="Left" MinWidth="80" Width="auto" Height="auto" Click="CopyButton_Click"/>
+
+                        </StackPanel>
+
+                    </Grid>
 
 
 

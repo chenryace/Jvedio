@@ -3,15 +3,21 @@
 >
 
     <Style x:Key="BaseTextBlock" TargetType="{x:Type TextBlock}">
-        <!--<Setter Property="FontFamily" Value="Times New Romans"/>-->
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="FontFamily" Value="微软雅黑"/>
         <Setter Property="TextWrapping" Value="Wrap"/>
         <Setter Property="TextAlignment" Value="Center"/>
         <Setter Property="FontSize" Value="15"/>
-        <Setter Property="Margin" Value="0,5,0,5"/>
+        <Setter Property="Margin" Value="5"/>
         <Setter Property="Foreground" Value="{DynamicResource ForegroundSearch}"/>
     </Style>
 
+    <Style x:Key="CenterTextBlock" TargetType="{x:Type TextBlock}">
+        <Setter Property="TextAlignment" Value="Center"/>
+    </Style>
+
     <Style x:Key="GenreTextBlock" TargetType="{x:Type TextBlock}">
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
         <Setter Property="TextAlignment" Value="Center"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
         <Setter Property="FontSize" Value="15"/>
@@ -27,6 +33,7 @@
     </Style>
 
     <Style x:Key="BaseTextBox" TargetType="{x:Type TextBox}">
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="Height" Value="40"/>
         <Setter Property="FontFamily" Value="Times New Romans"/>
@@ -45,6 +52,7 @@
     </Style>
 
     <Style x:Key="ReadWriteTextBox" TargetType="{x:Type TextBox}">
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="Height" Value="40"/>
         <Setter Property="FontFamily" Value="Times New Romans"/>
@@ -70,6 +78,7 @@
 
 
     <Style x:Key="ReadOnlyTextBox" TargetType="{x:Type TextBox}">
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="HorizontalAlignment" Value="Center"/>
         <Setter Property="Height" Value="auto"/>
@@ -82,11 +91,23 @@
         <Setter Property="ContextMenu" Value="{StaticResource CopyContextMenu}"/>
         <Setter Property="IsReadOnly" Value="True"/>
         <Setter Property="CaretBrush" Value="{DynamicResource ForegroundSearch}"/>
-        <Style.Triggers>
-            <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{DynamicResource BackgroundMain}"/>
-            </Trigger>
-        </Style.Triggers>
+    </Style>
+
+    <Style x:Key="ReadOnlyWrapTextBox" TargetType="{x:Type TextBox}">
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="{DynamicResource ForegroundSearch}"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="IsReadOnly" Value="True"/>
+        <Setter Property="TextWrapping" Value="Wrap"/>
+        <Setter Property="TextAlignment" Value="Center"/>
+        <Setter Property="Padding" Value="5"/>
+        <Setter Property="ContextMenu" Value="{StaticResource CopyContextMenu}"/>
+    </Style>
+
+    <Style x:Key="ReadOnlyNoWrapTextBox" TargetType="{x:Type TextBox}" BasedOn="{StaticResource ReadOnlyWrapTextBox}">
+        <Setter Property="TextWrapping" Value="NoWrap"/>
+        <Setter Property="TextAlignment" Value="Left"/>
     </Style>
 
 

@@ -36,12 +36,12 @@ namespace Jvedio
             }
 
 
-            //UI线程未捕获异常处理事件
-            this.DispatcherUnhandledException += new DispatcherUnhandledExceptionEventHandler(App_DispatcherUnhandledException);
-            //Task线程内未捕获异常处理事件　　　　　
-            TaskScheduler.UnobservedTaskException += TaskScheduler_UnobservedTaskException;
-            //非UI线程未捕获异常处理事件
-            AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
+            ////UI线程未捕获异常处理事件
+            //this.DispatcherUnhandledException += new DispatcherUnhandledExceptionEventHandler(App_DispatcherUnhandledException);
+            ////Task线程内未捕获异常处理事件　　　　　
+            //TaskScheduler.UnobservedTaskException += TaskScheduler_UnobservedTaskException;
+            ////非UI线程未捕获异常处理事件
+            //AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
             SetLanguageDictionary();
             base.OnStartup(e);
         }
@@ -49,7 +49,7 @@ namespace Jvedio
         private void SetLanguageDictionary()
         {
             //设置语言
-            string language=Jvedio.Properties.Settings.Default.Language;
+            string language = Jvedio.Properties.Settings.Default.Language;
             string lang = "en-US";
             switch (language)
             {
@@ -66,11 +66,12 @@ namespace Jvedio
                 default:
                     //根据地区获取语言
                     string name = System.Globalization.CultureInfo.CurrentCulture.Name.ToUpper();
-                    if(name== "ja-JP".ToUpper())
+                    if (name == "ja-JP".ToUpper())
                     {
                         lang = "ja-JP";
                         Jvedio.Properties.Settings.Default.Language = "日本語";
-                    }else if (name == "zh-CN".ToUpper())
+                    }
+                    else if (name == "zh-CN".ToUpper())
                     {
                         lang = "zh-CN";
                         Jvedio.Properties.Settings.Default.Language = "中文";
@@ -80,9 +81,9 @@ namespace Jvedio
                         lang = "en-US";
                         Jvedio.Properties.Settings.Default.Language = "English";
                     }
-                    else 
+                    else
                     {
-                        lang="en-US";
+                        lang = "en-US";
                         Jvedio.Properties.Settings.Default.Language = "English";
                     }
                     break;
@@ -102,7 +103,7 @@ namespace Jvedio
                 Console.WriteLine(e.Exception.Message);
                 Logger.LogE(e.Exception);
             }
-            catch 
+            catch
             {
                 //此时程序出现严重异常，将强制结束退出
                 Console.WriteLine(e.Exception.StackTrace);

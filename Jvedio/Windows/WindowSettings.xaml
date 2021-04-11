@@ -28,44 +28,17 @@
 
 
         <local:CookieNothingConverter x:Key="CookieNothingConverter" />
-        <converter:OppositeBooleanConverter x:Key="OppositeBooleanConverter" />
-        <BooleanToVisibilityConverter x:Key="BoolToVis" />
-        <converter:StringToUriStringConverter x:Key="StringToUriStringConverter" />
-        <converter:SkinTypeEnumConverter x:Key="SkinTypeEnumConverter"/>
-        <converter:LanguageTypeEnumConverter x:Key="LanguageTypeEnumConverter"/>
-        <converter:MultiIntToMarginConverter x:Key="MultiIntToMarginConverter" />
-        <converter:StringToCheckedConverter x:Key="StringToCheckedConverter"/>
-        <converter:ColorToBrushConverter x:Key="ColorToBrushConverter" />
-        <converter:FontFamilyToSelectedIndexConverter x:Key="FontFamilyToSelectedIndexConverter" />
-        <converter:BoolToFontBoldConverter x:Key="BoolToFontBoldConverter" />
-        <converter:BoolToFontItalicConverter x:Key="BoolToFontItalicConverter" />
-        <converter:BoolToUnderLineConverter x:Key="BoolToUnderLineConverter" />
-        <converter:FontFamilyConverter x:Key="FontFamilyConverter" />
 
 
 
 
-        <Style x:Key="InfoTextBox" TargetType="{x:Type TextBox}">
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="IsReadOnly" Value="True"/>
-            <Setter Property="TextWrapping" Value="Wrap"/>
-            <Setter Property="TextAlignment" Value="Center"/>
-        </Style>
-
-
-        <Style x:Key="BaseTextBlock" TargetType="{x:Type TextBlock}">
-            <Setter Property="TextWrapping" Value="Wrap"/>
-            <Setter Property="TextAlignment" Value="Center"/>
+        <Style x:Key="BaseTextBlock" TargetType="{x:Type TextBlock}" BasedOn="{StaticResource BaseTextBlock}">
             <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="FontFamily" Value="微软雅黑"/>
-            <Setter Property="FontSize" Value="15"/>
-            <Setter Property="Margin" Value="0,5,0,5"/>
-            <Setter Property="Foreground" Value="{DynamicResource ForegroundSearch}"/>
         </Style>
 
 
         <Style x:Key="TextBlockTitle" TargetType="{x:Type TextBlock}">
+            <Setter Property="FocusVisualStyle" Value="{x:Null}" />
             <Setter Property="HorizontalAlignment" Value="Stretch" />
             <Setter Property="Width" Value="auto" />
             <Setter Property="Height" Value="auto" />
@@ -108,11 +81,6 @@
             <Setter Property="Margin" Value="5 0"/>
             <Setter Property="CaretBrush" Value="{DynamicResource ForegroundSearch}"/>
         </Style>
-
-
-
-
-
     </style:BaseWindow.Resources>
 
     <Grid  Background="{DynamicResource BackgroundMain}"   >
@@ -253,7 +221,7 @@
                         <Label Style="{StaticResource InfoLabel}" Content="{x:Static lang:Resources.ScanRe}"   ToolTip="[0-2000]"/>
                         <TextBox FontSize="15" Foreground="{DynamicResource ForegroundSearch}" Background="{DynamicResource BackgroundTitle}" LostFocus="SetScanRe" BorderThickness="0" MinWidth="400" CaretBrush="{DynamicResource ForegroundSearch}" Width="380" Text="{Binding ScanRe, Source={x:Static p:Settings.Default},Mode=OneWay}" hc:InfoElement.TitleWidth="140" hc:InfoElement.Placeholder="{x:Static lang:Resources.UseSemToSplitRe}"  hc:InfoElement.Title="" hc:InfoElement.Necessary="True" Style="{StaticResource TextBoxExtend}" Margin="10 0"/>
                     </StackPanel>
-                    
+
                     <StackPanel  Orientation="Horizontal"  Margin="20 5" Visibility="Collapsed">
                         <Label Style="{StaticResource InfoLabel}" Content="{x:Static lang:Resources.SubsectionSpiltChar}"   />
                         <hc:TextBox   Style="{StaticResource BaseHcTextBox}"  Text="{Binding SubSectionFeature, Mode=TwoWay, Source={x:Static p:Settings.Default}}" />
@@ -310,7 +278,7 @@
                 <StackPanel >
 
 
-                        <Button Margin="20 10" HorizontalAlignment="Left"  Content="{x:Static lang:Resources.Add}" MinWidth="100" Style="{DynamicResource FlatButton}"  Click="NewServer" />
+                    <Button Margin="20 10" HorizontalAlignment="Left"  Content="{x:Static lang:Resources.Add}" MinWidth="100" Style="{DynamicResource FlatButton}"  Click="NewServer" />
 
                     <Border Margin="20 5" Style="{StaticResource BorderTipInfo}" Background="{DynamicResource BackgroundMenu}">
                         <TextBlock Text="{x:Static lang:Resources.Attention_UrlTest}" TextWrapping="Wrap" Foreground="{DynamicResource ForegroundGlobal}"/>
@@ -319,8 +287,8 @@
 
 
                     <DataGrid Visibility="Visible" IsSynchronizedWithCurrentItem="True" ItemsSource="{Binding Servers}" Background="{DynamicResource BackgroundMenu}" MinHeight="200"  ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Disabled"   PreviewMouseLeftButtonDown="DataGrid_PreviewMouseLeftButtonDown"  x:Name="ServersDataGrid" VerticalScrollBarVisibility="Disabled"   Foreground="{DynamicResource ForegroundSearch}" Margin="20 5" HorizontalGridLinesBrush="Transparent" VerticalGridLinesBrush="Transparent"  BorderThickness="0" CanUserResizeRows="False" CanUserResizeColumns="True"  AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="True" CanUserSortColumns="True"    Style="{DynamicResource DataGridStyle1}" ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}" CellStyle="{DynamicResource DataGridCellStyle1}"  RowHeaderStyle="{DynamicResource DataGridRowHeaderStyle1}" RowStyle="{DynamicResource DataGridRowStyle1}" DragIndicatorStyle="{DynamicResource DataGridColumnHeaderStyle2}" DropLocationIndicatorStyle="{DynamicResource DataGridStyle2}" ItemsPanel="{DynamicResource ItemsPanelTemplate1}">
- 
-                        
+
+
                         <DataGrid.Columns>
                             <DataGridTemplateColumn Header="{x:Static lang:Resources.Enable}" Width="auto" MinWidth="40"   >
                                 <DataGridTemplateColumn.CellTemplate>
@@ -356,7 +324,7 @@
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-                            
+
                             <DataGridTemplateColumn Header="{x:Static lang:Resources.Status}" Width="auto">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
@@ -418,7 +386,7 @@
 
 
                         <StackPanel Orientation="Horizontal" Visibility="{Binding SaveInfoToNFO, Converter={StaticResource BoolToVis}, Mode=OneWay, Source={x:Static p:Settings.Default}}">
-                        <!--<StackPanel Orientation="Horizontal" Visibility="Visible">-->
+                            <!--<StackPanel Orientation="Horizontal" Visibility="Visible">-->
                             <TextBox FontSize="15" Foreground="{DynamicResource ForegroundSearch}" Background="{DynamicResource BackgroundTitle}" BorderThickness="0" MinWidth="400" CaretBrush="{DynamicResource ForegroundSearch}" Width="380" Text="{Binding NFOSavePath, Source={x:Static p:Settings.Default}}" hc:InfoElement.TitleWidth="140" hc:InfoElement.Placeholder="{x:Static lang:Resources.ToolTip_SameAsVedio}"  hc:InfoElement.Title="" hc:InfoElement.Necessary="True" Style="{StaticResource TextBoxExtend}" Margin="10 0"/>
 
                             <Button Content="{x:Static lang:Resources.ChooseDir}" Style="{StaticResource ButtonStyleFill}" HorizontalAlignment="Left"  Click="Button_Click_3" />
@@ -512,7 +480,7 @@
                         <CheckBox IsChecked="{Binding PlotShowTranslate, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Content="{x:Static lang:Resources.ShowTranslate2}"  />
                         <CheckBox IsChecked="{Binding DetialWindowShowAllMovie, Mode=TwoWay, Source={x:Static p:Settings.Default}}" Content="{x:Static lang:Resources.DetailViewAll}"  />
                     </StackPanel>
-                    
+
                     <!--TODO-->
                     <!--ContextMenu-->
                     <WrapPanel Visibility="Visible" Orientation="Horizontal" Margin="20 0">
@@ -739,7 +707,7 @@
                         <Button Style="{StaticResource ButtonStyleFill}" Content="{x:Static lang:Resources.Choose}" Click="SetBackgroundImage"/>
 
                         <hc:TextBox   Style="{StaticResource BaseHcTextBox}"  Text="{Binding BackgroundImage, Mode=TwoWay, Source={x:Static p:Settings.Default}}"  />
-                        </StackPanel>
+                    </StackPanel>
                 </StackPanel>
 
             </TabItem>
@@ -811,7 +779,9 @@
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
                         <Label Grid.Column="0" MinWidth="100" Content="{x:Static lang:Resources.RenameRule}" Style="{StaticResource LabelPrimary}"/>
-                        <TextBox TextWrapping="Wrap" IsReadOnly="False"  TextChanged="TextBox_TextChanged"  Text="{Binding RenameFormat,Mode=TwoWay,Source={x:Static p:Settings.Default}}" Grid.Column="1" Width="auto" HorizontalAlignment="Stretch"  Margin="0" Style="{StaticResource InfoTextBox}" Padding="10 5" CaretBrush="{DynamicResource ForegroundSearch}"  Foreground="{DynamicResource ForegroundSearch}" TextAlignment="Left"  FontSize="18" />
+
+                        <hc:TextBox Margin="10 0" TextWrapping="Wrap" IsReadOnly="False"  TextChanged="TextBox_TextChanged"  Text="{Binding RenameFormat,Mode=TwoWay,Source={x:Static p:Settings.Default}}" Grid.Column="1" Width="auto" HorizontalAlignment="Stretch"    Padding="10 5" CaretBrush="{DynamicResource ForegroundSearch}"  Foreground="{DynamicResource ForegroundSearch}" TextAlignment="Left"  FontSize="18"   ContextMenu="{x:Null}" PreviewKeyUp="hotkeyTextBox_PreviewKeyUp" PreviewKeyDown="hotkeyTextBox_PreviewKeyDown" Style="{StaticResource BaseHcTextBox}"  />
+
                     </Grid>
 
 
@@ -825,7 +795,7 @@
                         <Label  Grid.Column="0"  MinWidth="100"  Content="{x:Static lang:Resources.RenamePreview}" Style="{StaticResource LabelPrimary}"/>
                         <TextBlock TextWrapping="Wrap" Text="{Binding ViewRenameFormat}"  TextAlignment="Left"  Grid.Column="1"  Width="auto" HorizontalAlignment="Stretch"  Margin="5 0"  Style="{StaticResource BaseTextBlock}" FontSize="18"  Padding="10 5"/>
                     </Grid>
-                 
+
                     <Border Margin="10 5" Style="{StaticResource BorderTipInfo}" Background="{DynamicResource BackgroundMenu}">
                         <TextBlock Text="{x:Static lang:Resources.Attention_Rename}" TextWrapping="Wrap" Foreground="{DynamicResource ForegroundGlobal}"/>
                     </Border>

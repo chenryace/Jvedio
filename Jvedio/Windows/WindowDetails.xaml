@@ -26,15 +26,23 @@
 
 
         <local:TagStampsConverter x:Key="TagStampsConverter"/>
-        <converter:StringToUriStringConverter x:Key="StringToUriStringConverter"/>
-        <converter:PlotToVisibilityConverter x:Key="PlotToVisibilityConverter"/>
-        <converter:IntToCheckedConverter x:Key="IntToCheckedConverter"/>
-        <converter:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
         <local:IntToVedioTypeConverter x:Key="IntToVedioTypeConverter" />
-        <converter:SmallerValueConverter x:Key="SmallerValueConverter" />
 
+
+        <ContextMenu x:Key="ImageContextMenu">
+            <MenuItem Header="{x:Static lang:Resources.OpenPath}" Click="OpenExtraImagePath" ></MenuItem>
+            <MenuItem Header="{x:Static lang:Resources.SetAs}" >
+                <MenuItem Header="{x:Static lang:Resources.ThumbnailAndPoster}" Click="SetToBigAndSmallPic" ></MenuItem>
+                <MenuItem Header="{x:Static lang:Resources.Thumbnail}"  Click="SetToSmallPic" ></MenuItem>
+                <MenuItem Header="{x:Static lang:Resources.Poster}" Click="SetToBigPic" ></MenuItem>
+            </MenuItem>
+            <MenuItem Header="{x:Static lang:Resources.DeleteImage}" Click="DeleteImage" ></MenuItem>
+        </ContextMenu>
 
         <Style x:Key="ExtraPic" TargetType="Image">
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Width" Value="auto" />
+            <Setter Property="Height" Value="{Binding ElementName=scrollViewer,Path=ActualHeight,Converter={StaticResource SmallerValueConverter},ConverterParameter=20,Mode=OneWay}" />
             <Setter Property="Source" Value="{Binding}" />
             <Style.Triggers>
                 <DataTrigger  Binding="{Binding}"  Value="{x:Null}">
@@ -57,22 +65,19 @@
         </Style>
 
 
-        <Style x:Key="ViewTextBox" TargetType="TextBox">
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="IsReadOnly" Value="True"/>
+        <Style x:Key="ViewTextBox" TargetType="TextBox" BasedOn="{StaticResource ReadOnlyWrapTextBox}">
             <Setter Property="FontSize" Value="16"/>
             <Setter Property="FontFamily" Value="微软雅黑"/>
             <Setter Property="Foreground" Value="{DynamicResource ForegroundGlobal}"/>
             <Setter Property="ContextMenu" Value="{StaticResource CopyContextMenu}"/>
             <Setter Property="Margin" Value="0 5"/>
             <Setter Property="Padding" Value="0"/>
-            <Setter Property="TextWrapping" Value="Wrap"/>
         </Style>
 
 
 
         <Style x:Key="BaseTextBlock" TargetType="TextBlock">
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
             <Setter Property="FontSize" Value="16"/>
             <Setter Property="FontFamily" Value="微软雅黑"/>
             <Setter Property="Foreground" Value="{DynamicResource ForegroundGlobal}"/>
@@ -83,79 +88,9 @@
             <Setter Property="VerticalAlignment" Value="Center"/>
         </Style>
 
-        <Style x:Key="GenLabel" TargetType="Label">
-            <Setter Property="ToolTip" Value="{Binding RelativeSource={RelativeSource Mode=Self},Path=Content}"/>
-            <Setter Property="Background" Value="Transparent" />
-            <Setter Property="VerticalContentAlignment" Value="Center" />
-            <Setter Property="HorizontalContentAlignment" Value="Center" />
-            <Setter Property="Foreground" Value="{DynamicResource ForegroundGlobal}"/>
-            <Setter Property="FontSize" Value="16"/>
-            <Setter Property="Cursor" Value="Hand"/>
-            <Setter Property="FontFamily" Value="微软雅黑"/>
-            <Setter Property="Margin" Value="2"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Label">
-                        <Border BorderBrush="Transparent" BorderThickness="0" Background="{TemplateBinding Background}" CornerRadius="3" Padding="4" SnapsToDevicePixels="True">
-                            <ContentPresenter ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" ContentStringFormat="{TemplateBinding ContentStringFormat}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-
-            <Style.Triggers>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="{DynamicResource BackgroundTitle}"/>
-                </Trigger>
-            </Style.Triggers>
-
-
-        </Style>
 
 
 
-        <Style x:Key="GenreBorder" TargetType="Border">
-            <Setter Property="CornerRadius" Value="3"/>
-            <Setter Property="Margin" Value="2"/>
-            <Setter Property="HorizontalAlignment" Value="Center"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="Cursor" Value="Hand"/>
-            <Style.Triggers>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="{DynamicResource BackgroundTitle}"/>
-                </Trigger>
-            </Style.Triggers>
-        </Style>
-
-        <Style x:Key="Ellipse" TargetType="Ellipse">
-            <Setter Property="Cursor" Value="Hand"/>
-            <Style.Triggers>
-                <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Canvas}},Path=IsMouseOver}" Value="True">
-                    <Setter Property="Fill" Value="#AD744C"/>
-                </DataTrigger>
-                <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Canvas}},Path=IsMouseOver}" Value="False">
-                    <Setter Property="Fill" Value="#E07C4A"/>
-                </DataTrigger>
-            </Style.Triggers>
-        </Style>
-
-        <Style x:Key="EditButton" TargetType="Button">
-            <Setter Property="Cursor" Value="Hand"/>
-            <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="FontSize" Value="16"/>
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="Foreground" Value="{DynamicResource ForegroundGlobal}"/>
-            <Style.Triggers>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Foreground" Value="{DynamicResource ForegroundSearch}"/>
-                </Trigger>
-                <Trigger Property="IsEnabled" Value="False">
-                    <Setter Property="Background" Value="Transparent"/>
-                    <Setter Property="Foreground" Value="Gray"/>
-                </Trigger>
-            </Style.Triggers>
-        </Style>
 
         <!--如果 tag 为空则不显示-->
         <Style x:Key="InfoStackPanel" TargetType="StackPanel">
@@ -167,17 +102,14 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
-        
+
 
     </Window.Resources>
 
 
 
     <Grid x:Name="FatherGrid" PreviewKeyUp="Grid_PreviewKeyUp"   Focusable="True" Margin="10">
-        <Border  x:Name="MainBorder" Background="{DynamicResource BackgroundMain}"    CornerRadius="5" Margin="5"  >
-            <Border.Effect>
-                <DropShadowEffect BlurRadius="20" Direction="-90" RenderingBias="Quality" ShadowDepth="0"/>
-            </Border.Effect>
+        <Border  x:Name="MainBorder" Background="{DynamicResource BackgroundMain}"    CornerRadius="5" Margin="5" Effect="{StaticResource NormalDropShadowEffect}"  >
             <Image Grid.Row="1" x:Name="BackGroundImage"  Stretch="UniformToFill"></Image>
         </Border>
 
@@ -280,7 +212,7 @@
 
                             <StackPanel Margin="20" Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Right"    Panel.ZIndex="10"     >
                                 <Canvas Width="40" Height="40" VerticalAlignment="Center"  MouseLeftButtonUp="PlayVedio">
-                                    <Ellipse Style="{StaticResource Ellipse}" Width="40" Height="40"  Canvas.Left="3" Canvas.Top="3" />
+                                    <Ellipse Style="{StaticResource OrangeEllipse}" Width="40" Height="40"  Canvas.Left="3" Canvas.Top="3" />
                                     <Image Source="{Binding Themes, Mode=OneWay, ConverterParameter=triangle,Converter={StaticResource StringToUriStringConverter}, Source={x:Static p:Settings.Default}}" Height="28" Canvas.Left="11" Canvas.Top="38" Cursor="Hand"   >
                                         <Image.RenderTransform>
                                             <RotateTransform x:Name="rotateTransform" Angle="-90" />
@@ -401,20 +333,8 @@
                                                 <DataTemplate>
                                                     <StackPanel    Orientation="Horizontal" x:Name="ImageStackPanel" >
                                                         <Grid Margin="10 0" >
-                                                            <Border   Tag="{Binding RelativeSource={RelativeSource Mode=TemplatedParent},Path=(ItemsControl.AlternationIndex)}"  Opacity="0.5" MouseEnter="Border_MouseEnter" MouseLeave="Border_MouseLeave" Cursor="Hand" Panel.ZIndex="5"  Background="Black"  MouseLeftButtonUp="ShowExtraImage">
-                                                                <Border.ContextMenu>
-                                                                    <ContextMenu>
-                                                                        <MenuItem Header="{x:Static lang:Resources.OpenPath}" Click="OpenExtraImagePath" ></MenuItem>
-                                                                        <MenuItem Header="{x:Static lang:Resources.SetAs}" >
-                                                                            <MenuItem Header="{x:Static lang:Resources.ThumbnailAndPoster}" Click="SetToBigAndSmallPic" ></MenuItem>
-                                                                            <MenuItem Header="{x:Static lang:Resources.Thumbnail}"  Click="SetToSmallPic" ></MenuItem>
-                                                                            <MenuItem Header="{x:Static lang:Resources.Poster}" Click="SetToBigPic" ></MenuItem>
-                                                                        </MenuItem>
-                                                                        <MenuItem Header="{x:Static lang:Resources.DeleteImage}" Click="DeleteImage" ></MenuItem>
-                                                                    </ContextMenu>
-                                                                </Border.ContextMenu>
-                                                            </Border>
-                                                            <Image VerticalAlignment="Center"   Height="{Binding ElementName=scrollViewer,Path=ActualHeight,Converter={StaticResource SmallerValueConverter},ConverterParameter=20,Mode=OneWay}" Width="auto" Style="{StaticResource ExtraPic}"  />
+                                                            <Border   Tag="{Binding RelativeSource={RelativeSource Mode=TemplatedParent},Path=(ItemsControl.AlternationIndex)}"  Opacity="0.5" MouseEnter="Border_MouseEnter" MouseLeave="Border_MouseLeave" Cursor="Hand" Panel.ZIndex="5"  Background="Black"  MouseLeftButtonUp="ShowExtraImage" ContextMenu="{StaticResource ImageContextMenu}"/>
+                                                            <Image  Style="{StaticResource ExtraPic}"  />
                                                         </Grid>
                                                     </StackPanel>
                                                 </DataTemplate>
@@ -517,7 +437,7 @@
 
                                                             <ItemsControl.ItemTemplate>
                                                                 <DataTemplate>
-                                                                    <Label Style="{StaticResource GenLabel}" Content="{Binding name}" MouseLeftButtonUp="ShowSameActor"  MouseEnter="ShowActor" MouseLeave="HideActor" MouseMove="ActorMouseMove" ToolTip="{x:Null}"/>
+                                                                    <Label Style="{StaticResource HoverLabel}" Content="{Binding name}" MouseLeftButtonUp="ShowSameActor"  MouseEnter="ShowActor" MouseLeave="HideActor" MouseMove="ActorMouseMove" ToolTip="{x:Null}"/>
                                                                 </DataTemplate>
                                                             </ItemsControl.ItemTemplate>
                                                         </ItemsControl>
@@ -527,14 +447,14 @@
                                                     <StackPanel   Tag="{Binding DetailMovie.director}" Style="{StaticResource InfoStackPanel}" >
                                                         <TextBlock Text="{x:Static lang:Resources.Director}"  Style="{StaticResource BaseTextBlock}" ></TextBlock>
                                                         <TextBlock  Text="：" Style="{StaticResource BaseTextBlock}" />
-                                                        <Label  Style="{StaticResource GenLabel}" Content="{Binding DetailMovie.director}" MouseLeftButtonUp="ShowSameDirector"     />
+                                                        <Label  Style="{StaticResource HoverLabel}" Content="{Binding DetailMovie.director}" MouseLeftButtonUp="ShowSameDirector"     />
                                                     </StackPanel>
 
 
                                                     <StackPanel   Tag="{Binding DetailMovie.tag}" Style="{StaticResource InfoStackPanel}" >
                                                         <TextBlock Text="{x:Static lang:Resources.Tag}"  Style="{StaticResource BaseTextBlock}"></TextBlock>
                                                         <TextBlock  Text="：" Style="{StaticResource BaseTextBlock}" />
-                                                        <Label    Content="{Binding DetailMovie.tag}" MouseLeftButtonUp="ShowSameTag" Style="{DynamicResource GenLabel}"  />
+                                                        <Label    Content="{Binding DetailMovie.tag}" MouseLeftButtonUp="ShowSameTag" Style="{DynamicResource HoverLabel}"  />
                                                     </StackPanel>
 
                                                     <StackPanel   Margin="0 5 0 5"     Tag="{Binding DetailMovie.vediotype}" Style="{StaticResource InfoStackPanel}" >
@@ -564,7 +484,7 @@
                                                     <StackPanel   Tag="{Binding DetailMovie.studio}" Style="{StaticResource InfoStackPanel}" >
                                                         <TextBlock Text="{x:Static lang:Resources.Studio}"  Style="{StaticResource BaseTextBlock}"></TextBlock>
                                                         <TextBlock  Text="：" Style="{StaticResource BaseTextBlock}" />
-                                                        <Label   Style="{StaticResource GenLabel}" Content="{Binding DetailMovie.studio}" MouseLeftButtonUp="ShowSameStudio"></Label>
+                                                        <Label   Style="{StaticResource HoverLabel}" Content="{Binding DetailMovie.studio}" MouseLeftButtonUp="ShowSameStudio"></Label>
                                                     </StackPanel>
 
 
@@ -608,7 +528,7 @@
 
                                                         <usercontrol:TagPanel x:Name="tagPanel" Grid.Column="2" TagList="{Binding DetailMovie.labellist,Mode=OneWay}" Margin="5" />
 
-                                                </Grid>
+                                                    </Grid>
 
 
                                                     <!--摘要-->

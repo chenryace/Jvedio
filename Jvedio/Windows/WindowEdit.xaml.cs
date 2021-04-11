@@ -13,22 +13,22 @@ namespace Jvedio
     /// <summary>
     /// WindowEdit.xaml 的交互逻辑
     /// </summary>
-    public partial class WindowEdit :  BaseWindow
+    public partial class WindowEdit : BaseWindow
     {
 
 
 
         VieModel_Edit vieModel;
 
-        private string ID ;
+        private string ID;
 
-        
-        public WindowEdit(string id="")
+
+        public WindowEdit(string id = "")
         {
             InitializeComponent();
             ID = id;
             vieModel = new VieModel_Edit();
-            
+
             if (ID == "")
                 vieModel.Reset();
             else
@@ -44,7 +44,7 @@ namespace Jvedio
             System.Windows.Forms.OpenFileDialog OpenFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             OpenFileDialog1.Title = Jvedio.Language.Resources.ChooseFile;
             OpenFileDialog1.FileName = "";
-            OpenFileDialog1.Filter =$"{Jvedio.Language.Resources.NormalVedio}(*.avi, *.mp4, *.mkv, *.mpg, *.rmvb)| *.avi; *.mp4; *.mkv; *.mpg; *.rmvb|{Jvedio.Language.Resources.OtherVedio}((*.rm, *.mov, *.mpeg, *.flv, *.wmv, *.m4v)| *.rm; *.mov; *.mpeg; *.flv; *.wmv; *.m4v|{Jvedio.Language.Resources.AllFile} (*.*)|*.*";
+            OpenFileDialog1.Filter = $"{Jvedio.Language.Resources.NormalVedio}(*.avi, *.mp4, *.mkv, *.mpg, *.rmvb)| *.avi; *.mp4; *.mkv; *.mpg; *.rmvb|{Jvedio.Language.Resources.OtherVedio}((*.rm, *.mov, *.mpeg, *.flv, *.wmv, *.m4v)| *.rm; *.mov; *.mpeg; *.flv; *.wmv; *.m4v|{Jvedio.Language.Resources.AllFile} (*.*)|*.*";
             OpenFileDialog1.FilterIndex = 1;
             OpenFileDialog1.RestoreDirectory = true;
             if (OpenFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK)
@@ -52,7 +52,7 @@ namespace Jvedio
                 if (vieModel.DetailMovie == null) vieModel.DetailMovie = new DetailMovie();
                 SaveInfo(OpenFileDialog1.FileName);
             }
-            
+
         }
 
 
@@ -80,14 +80,14 @@ namespace Jvedio
             }
             else
             {
-                using(MySqlite mySqlite=new MySqlite("mylist"))
+                using (MySqlite mySqlite = new MySqlite("mylist"))
                 {
                     return mySqlite.SelectMovieBySql($"select * from {table} where id='{ID}'");
                 }
             }
         }
 
-        private  void UpdateMain(string oldID,string newID)
+        private void UpdateMain(string oldID, string newID)
         {
             Main main = App.Current.Windows[0] as Main;
             Movie movie = SelectMovie(newID);
@@ -146,10 +146,10 @@ namespace Jvedio
 
             string oldID = vieModel.DetailMovie.id;
             string newID = idTextBox.Text;
-            bool success=vieModel.SaveModel(idTextBox.Text);
+            bool success = vieModel.SaveModel(idTextBox.Text);
             if (success)
             {
-                UpdateMain(oldID,newID);//更新主窗口
+                UpdateMain(oldID, newID);//更新主窗口
                 UpdateDetail();//更新详情窗口
                 HandyControl.Controls.Growl.Success(Jvedio.Language.Resources.Message_Success, "EditGrowl");
             }
@@ -174,16 +174,6 @@ namespace Jvedio
             e.Handled = true;
         }
 
-        private void DatePicker_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
-        {
-            DateTime date = DateTime.Now; ;
-            bool success = DateTime.TryParse(DatePicker.SelectedDate?.ToString("yyyy-MM-dd "), out date);
-            if (success)
-            {
-                this.vieModel.DetailMovie.releasedate = date.ToString("yyyy-MM-dd ");
-            }
-
-        }
 
 
 
@@ -219,11 +209,12 @@ namespace Jvedio
                 vieModel.DetailMovie.filepath = filepath;
 
                 FileInfo fileInfo = new FileInfo(filepath);
-                
+
                 string id = Identify.GetFanhao(fileInfo.Name);
                 int vt = (int)Identify.GetVideoType(id);
-                if(vt>0)  vieModel.DetailMovie.vediotype = vt;
-                if (File.Exists(filepath)) {
+                if (vt > 0) vieModel.DetailMovie.vediotype = vt;
+                if (File.Exists(filepath))
+                {
                     string createDate = "";
                     try { createDate = fileInfo.LastWriteTime.ToString("yyyy-MM-dd HH:mm:ss"); }
                     catch { }
@@ -232,7 +223,7 @@ namespace Jvedio
                     vieModel.DetailMovie.scandate = createDate;
                 }
 
-               vieModel.SaveModel();
+                vieModel.SaveModel();
 
                 string table = ((Main)GetWindowByName("Main")).GetCurrentList();
                 if (string.IsNullOrEmpty(table))
@@ -251,8 +242,18 @@ namespace Jvedio
         {
 
         }
+
+        private void TextBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            DateTime date = DateTime.Now; ;
+            bool success = DateTime.TryParse((sender as TextBox).Text, out date);
+            if (success)
+            {
+                this.vieModel.DetailMovie.releasedate = date.ToString("yyyy-MM-dd ");
+            }
+        }
     }
 
-   
+
 
 }

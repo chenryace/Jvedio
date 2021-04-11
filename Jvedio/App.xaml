@@ -1,8 +1,12 @@
-<Application x:Class="Jvedio.App" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:local="clr-namespace:Jvedio" 
-             StartupUri="WindowStartUp.xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" d1p1:Ignorable="d" xmlns:d1p1="http://schemas.openxmlformats.org/markup-compatibility/2006">
+<Application x:Class="Jvedio.App" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:local="clr-namespace:Jvedio" 
+             StartupUri="WindowStartUp.xaml" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             d1p1:Ignorable="d" 
+             xmlns:d1p1="http://schemas.openxmlformats.org/markup-compatibility/2006">
 
-    
-    
+
+
     <Application.Resources>
         <ResourceDictionary >
 
@@ -15,8 +19,6 @@
 
                 <!--Fuck!why HandyControl must change all controls style-->
                 <!--Fuck! Why can not  App.xaml use Chinese-->
-                <!--Fuck! I won't use wpf any more, i just want to draw everything by myself, not use xmal or anything else!!!-->
-                
                 <!--Main-->
                 <ResourceDictionary Source="pack://application:,,,/Jvedio.Style;Component/XAML/ButtonStyle.xaml"/>
 
@@ -39,6 +41,7 @@
                 <ResourceDictionary Source="pack://application:,,,/Jvedio.Style;Component/XAML/BasicStyle.xaml"/>
                 <ResourceDictionary Source="pack://application:,,,/Jvedio.Style;Component/XAML/Color.xaml"/>
 
+                <ResourceDictionary Source="pack://application:,,,/Jvedio.Style;Component/XAML/HandyControlStyle.xaml"/>
                 <ResourceDictionary Source="pack://application:,,,/Jvedio.Style;Component/BaseWindows/BaseDialogStyle.xaml"/>
                 <ResourceDictionary Source="pack://application:,,,/Jvedio.Style;Component/BaseWindows/BaseWindowStyle.xaml"/>
             </ResourceDictionary.MergedDictionaries>

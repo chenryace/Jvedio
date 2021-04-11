@@ -21,6 +21,8 @@
     <converter:ViewTypeEnumConverter x:Key="ViewTypeEnumConverter" />
     <converter:IntToCheckedConverter x:Key="IntToCheckedConverter"/>
     <converter:MultiIntToMarginConverter x:Key="MultiIntToMarginConverter" />
+    <converter:SmallerValueConverter x:Key="SmallerValueConverter" />
+    <converter:LanguageTypeEnumConverter x:Key="LanguageTypeEnumConverter" />
 
     <!--字体-->
     <converter:BoolToFontBoldConverter x:Key="BoolToFontBoldConverter" />
@@ -121,34 +123,21 @@
         </Style.Triggers>
     </Style>
 
-
-    <Style x:Key="ReadOnlyWrapTextBox" TargetType="{x:Type TextBox}">
-        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
-        <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="Foreground" Value="{DynamicResource ForegroundSearch}"/>
-        <Setter Property="BorderThickness" Value="0"/>
-        <Setter Property="IsReadOnly" Value="True"/>
-        <Setter Property="TextWrapping" Value="Wrap"/>
-        <Setter Property="TextAlignment" Value="Center"/>
-        <Setter Property="Padding" Value="5"/>
-        <Setter Property="ContextMenu" Value="{StaticResource CopyContextMenu}"/>
+    <Style x:Key="OrangeEllipse" TargetType="Ellipse">
+        <Setter Property="Cursor" Value="Hand"/>
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Canvas}},Path=IsMouseOver}" Value="True">
+                <Setter Property="Fill" Value="#AD744C"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Canvas}},Path=IsMouseOver}" Value="False">
+                <Setter Property="Fill" Value="#E07C4A"/>
+            </DataTrigger>
+        </Style.Triggers>
     </Style>
 
-    <Style x:Key="ReadOnlyNoWrapTextBox" TargetType="{x:Type TextBox}" BasedOn="{StaticResource ReadOnlyWrapTextBox}">
-        <Setter Property="TextWrapping" Value="NoWrap"/>
-        <Setter Property="TextAlignment" Value="Left"/>
-    </Style>
 
-    <Style x:Key="BaseTextBlock" TargetType="{x:Type TextBlock}">
-        <Setter Property="Width" Value="auto" />
-        <Setter Property="Height" Value="auto" />
-        <Setter Property="FontFamily" Value="微软雅黑"/>
-        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
-        <Setter Property="Margin" Value="10"/>
-        <Setter Property="FontSize" Value="15"/>
-        <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="Foreground" Value="{DynamicResource ForegroundGlobal}"/>
-    </Style>
+
+
 
 
     <Style x:Key="SimpleBorder" TargetType="{x:Type Border}">
@@ -202,6 +191,8 @@
             </Trigger>
         </Style.Triggers>
     </Style>
+
+
 
     <Style x:Key="TagBarBorderStyle" TargetType="Border">
         <Setter Property="Margin" Value="5 2"/>
@@ -298,11 +289,11 @@
 
     <Style x:Key="GridCloseBorderStyle" TargetType="Border">
         <Setter Property="Margin" Value="5"/>
-            <Setter Property="Height" Value="30"/>
-            <Setter Property="Width" Value="30"/>
-            <Setter Property="HorizontalAlignment" Value="Right"/>
-            <Setter Property="VerticalAlignment" Value="Top"/>
-            <Setter Property="CornerRadius" Value="3"/>
+        <Setter Property="Height" Value="30"/>
+        <Setter Property="Width" Value="30"/>
+        <Setter Property="HorizontalAlignment" Value="Right"/>
+        <Setter Property="VerticalAlignment" Value="Top"/>
+        <Setter Property="CornerRadius" Value="3"/>
 
 
         <Setter Property="Background" Value="Transparent"/>
@@ -391,8 +382,36 @@
 
 
 
+    <Style x:Key="HoverLabel" TargetType="Label">
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="ToolTip" Value="{Binding RelativeSource={RelativeSource Mode=Self},Path=Content}"/>
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="Foreground" Value="{DynamicResource ForegroundGlobal}"/>
+        <Setter Property="FontSize" Value="16"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="FontFamily" Value="微软雅黑"/>
+        <Setter Property="Margin" Value="2"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Label">
+                    <Border BorderBrush="Transparent" BorderThickness="0" Background="{TemplateBinding Background}" CornerRadius="3" Padding="4" SnapsToDevicePixels="True">
+                        <ContentPresenter ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" ContentStringFormat="{TemplateBinding ContentStringFormat}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
 
-   
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{DynamicResource BackgroundTitle}"/>
+            </Trigger>
+        </Style.Triggers>
+
+
+    </Style>
+
 
 
 </ResourceDictionary>
