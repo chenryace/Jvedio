@@ -19,21 +19,20 @@ using System.Windows.Media.Animation;
 using static Jvedio.FileProcess;
 namespace Jvedio
 {
-    /// <summary>
-    /// Window_DBManagement.xaml 的交互逻辑
-    /// </summary>
+
     public partial class Window_DBManagement : BaseWindow
     {
+        private string srcToCopy = "";
+        private string dstToCopy = "";
+        private static string GrowlToken = "DBManageGrowl";
 
-        public static string GrowlToken = "DBManageGrowl";
-        public CancellationTokenSource cts;
-        public CancellationToken ct;
+        private CancellationTokenSource cts;
+        private CancellationToken ct;
+        private VieModel_DBManagement vieModel_DBManagement;
+        private Microsoft.WindowsAPICodePack.Taskbar.TaskbarManager taskbarInstance = null;
 
-        public VieModel_DBManagement vieModel_DBManagement;
-        Microsoft.WindowsAPICodePack.Taskbar.TaskbarManager taskbarInstance = null;
 
-        private string src = "";
-        private string dst = "";
+
         public Window_DBManagement()
         {
             InitializeComponent();
@@ -43,17 +42,23 @@ namespace Jvedio
 
             this.DataContext = vieModel_DBManagement;
             vieModel_DBManagement.CurrentDataBase = Path.GetFileNameWithoutExtension(Properties.Settings.Default.DataBasePath);
-
-            this.SizedChangedCompleted += OnSizedChangedCompleted;
+            this.SizedChangedCompleted += delegate { ShowStatistic(); };
         }
 
-
-        private void OnSizedChangedCompleted(object o, EventArgs e)
+        private void Jvedio_BaseWindow_ContentRendered(object sender, EventArgs e)
         {
-            ShowStatistic();
+            //设置当前数据库
+            for (int i = 0; i < vieModel_DBManagement.DataBases.Count; i++)
+            {
+                if (vieModel_DBManagement.DataBases[i].ToLower() == Path.GetFileNameWithoutExtension(Properties.Settings.Default.DataBasePath).ToLower())
+                {
+                    DatabaseComboBox.SelectedIndex = i;
+                    break;
+                }
+            }
+
+            if (vieModel_DBManagement.DataBases.Count == 1) DatabaseComboBox.Visibility = Visibility.Hidden;
         }
-
-
 
 
         public void LoadDataBase(object sender, MouseButtonEventArgs e)
@@ -102,7 +107,6 @@ namespace Jvedio
         public void DelDataBase(object sender, MouseButtonEventArgs e)
         {
             //删除数据库
-
             string name = "";
             Border border = sender as Border;
             Grid grid = border.Parent as Grid;
@@ -114,30 +118,18 @@ namespace Jvedio
             if (new Msgbox(this, $"{Jvedio.Language.Resources.IsToDelete} {name}?").ShowDialog() == true)
             {
                 string dirpath = DateTime.Now.ToString("yyyyMMddHHss");
-                Directory.CreateDirectory($"BackUp\\{dirpath}");
+                FileHelper.TryCreateDir($"BackUp\\{dirpath}");
                 if (File.Exists($"DataBase\\{name}.sqlite"))
                 {
                     //备份
                     FileHelper.TryCopyFile($"DataBase\\{name}.sqlite", $"BackUp\\{dirpath}\\{name}.sqlite", true);
                     //删除
-
-                    try
+                    if (FileHelper.TryDeleteFile($"DataBase\\{name}.sqlite"))
                     {
-                        File.Delete($"DataBase\\{name}.sqlite");
-
                         vieModel_DBManagement.DataBases.Remove(name);
                         RefreshMain();
                     }
-                    catch
-                    {
-                        new Msgbox(this, $"【{name}】{Jvedio.Language.Resources.IsUsing}").ShowDialog();
-                    }
-
-
                 }
-
-
-
             }
 
         }
@@ -146,56 +138,9 @@ namespace Jvedio
 
 
 
-        private void CartesianChart_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
-        {
-            int num = Properties.Settings.Default.Statictistic_ID_Number;
-            num += (int)(e.Delta / 120);
-
-            if (num < 5) num = 5;
-            else if (num > 50) num = 50;
-
-            Properties.Settings.Default.Statictistic_ID_Number = num;
-            Properties.Settings.Default.Save();
-        }
-
-        private void CartesianChart_PreviewMouseWheel1(object sender, MouseWheelEventArgs e)
-        {
-            int num = Properties.Settings.Default.Statictistic_Genre_Number;
-            num += (int)(e.Delta / 120);
-
-            if (num < 5) num = 5;
-            else if (num > 50) num = 50;
-
-            Properties.Settings.Default.Statictistic_Genre_Number = num;
-            Properties.Settings.Default.Save();
-        }
-
-        private void CartesianChart_PreviewMouseWheel2(object sender, MouseWheelEventArgs e)
-        {
-            int num = Properties.Settings.Default.Statictistic_Tag_Number;
-            num += (int)(e.Delta / 120);
-
-            if (num < 5) num = 5;
-            else if (num > 50) num = 50;
-
-            Properties.Settings.Default.Statictistic_Tag_Number = num;
-            Properties.Settings.Default.Save();
-        }
 
 
-        private void CartesianChart_PreviewMouseWheel3(object sender, MouseWheelEventArgs e)
-        {
-            int num = Properties.Settings.Default.Statictistic_Actor_Number;
-            num += (int)(e.Delta / 120);
-
-            if (num < 5) num = 5;
-            else if (num > 50) num = 50;
-
-            Properties.Settings.Default.Statictistic_Actor_Number = num;
-            Properties.Settings.Default.Save();
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void NewLibrary(object sender, RoutedEventArgs e)
         {
             DialogInput dialogInput = new DialogInput(this, Jvedio.Language.Resources.PleaseEnter);
             if (dialogInput.ShowDialog() == true)
@@ -209,9 +154,6 @@ namespace Jvedio
                     return;
                 }
 
-
-
-
                 MySqlite db = new MySqlite("DataBase\\" + name);
                 db.CreateTable(DataBase.SQLITETABLE_MOVIE);
                 db.CreateTable(DataBase.SQLITETABLE_ACTRESS);
@@ -222,14 +164,12 @@ namespace Jvedio
                 vieModel_DBManagement.DataBases.Add(name);
                 //刷新主界面
                 RefreshMain();
-
-
             }
 
 
         }
 
-        private void Button_Click_1(object sender, RoutedEventArgs e)
+        private void ImportLibrary(object sender, RoutedEventArgs e)
         {
             System.Windows.Forms.OpenFileDialog OpenFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             OpenFileDialog1.Title = Jvedio.Language.Resources.ChooseDataBase;
@@ -270,26 +210,9 @@ namespace Jvedio
             RefreshMain();
         }
 
-        private void Jvedio_BaseWindow_ContentRendered(object sender, EventArgs e)
-        {
 
 
-            //设置当前数据库
-            for (int i = 0; i < vieModel_DBManagement.DataBases.Count; i++)
-            {
-                if (vieModel_DBManagement.DataBases[i].ToLower() == Path.GetFileNameWithoutExtension(Properties.Settings.Default.DataBasePath).ToLower())
-                {
-                    DatabaseComboBox.SelectedIndex = i;
-                    break;
-                }
-            }
-
-            if (vieModel_DBManagement.DataBases.Count == 1) DatabaseComboBox.Visibility = Visibility.Hidden;
-            //TabControl.SelectedIndex=2;
-
-        }
-
-        private void DatabaseComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void StatictisticComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (e.AddedItems.Count == 0) return;
             if (e.AddedItems[0].ToString().ToLower() != Path.GetFileNameWithoutExtension(Properties.Settings.Default.DataBasePath).ToLower())
@@ -300,12 +223,12 @@ namespace Jvedio
             }
         }
 
-        private async void Button_Click_2(object sender, RoutedEventArgs e)
+        private async void BeginTask(object sender, RoutedEventArgs e)
         {
             Button button = (Button)sender;
             button.IsEnabled = false;
             cts = new CancellationTokenSource();
-            cts.Token.Register(() => { HandyControl.Controls.Growl.Info(Jvedio.Language.Resources.Cancel, GrowlToken); });
+            cts.Token.Register(() => { });
             ct = cts.Token;
 
             //数据库管理
@@ -330,22 +253,25 @@ namespace Jvedio
                 long num = 0;
                 await Task.Run(() =>
                 {
-
                     var movies = db.SelectMoviesBySql("select * from movie");
                     try
                     {
                         vieModel_DBManagement.ProgressBarValue = 0;
-
+                        List<string> idlist = new List<string>();
+                        //先判断再删除
                         for (int i = 0; i < movies.Count; i++)
                         {
                             ct.ThrowIfCancellationRequested();
                             if (!File.Exists(movies[i].filepath))
                             {
-                                db.DeleteByField("movie", "id", movies[i].id);
+                                idlist.Add("'" + movies[i].id + "'");
                                 num++;
                             }
                             if (movies.Count > 0) vieModel_DBManagement.ProgressBarValue = (int)((double)(i + 1) / (double)movies.Count * 100);
                         }
+                        string sql = $"delete from movie where id in ({string.Join(",", idlist)})";
+                        db.ExecuteSql(sql);
+                        Console.WriteLine(idlist.Count);
                         db.Vacuum();
                     }
                     catch (OperationCanceledException ex)
@@ -368,18 +294,20 @@ namespace Jvedio
                     try
                     {
                         vieModel_DBManagement.ProgressBarValue = 0;
-
+                        List<string> idlist = new List<string>();
+                        //先判断再删除
                         for (int i = 0; i < movies.Count; i++)
                         {
                             ct.ThrowIfCancellationRequested();
                             if (!IsPathIn(movies[i].filepath, ScanPath))
                             {
-                                db.DeleteByField("movie", "id", movies[i].id);
+                                idlist.Add("'" + movies[i].id + "'");
                                 num++;
                             }
                             if (movies.Count > 0) vieModel_DBManagement.ProgressBarValue = (int)((double)(i + 1) / (double)movies.Count * 100);
                         }
-
+                        string sql = $"delete from movie where id in ({string.Join(",", idlist)})";
+                        db.ExecuteSql(sql);
                         db.Vacuum();
                     }
                     catch (OperationCanceledException ex)
@@ -392,6 +320,9 @@ namespace Jvedio
                 HandyControl.Controls.Growl.Success($"{Jvedio.Language.Resources.SuccessDelete} {num}", GrowlToken);
             }
 
+
+            //TODO
+            //优化一下速度
             if ((bool)cb[3].IsChecked)
             {
                 if (Properties.Settings.Default.SaveInfoToNFO)
@@ -402,7 +333,6 @@ namespace Jvedio
                         try
                         {
                             vieModel_DBManagement.ProgressBarValue = 0;
-
                             for (int i = 0; i < detailMovies.Count; i++)
                             {
                                 ct.ThrowIfCancellationRequested();
@@ -415,7 +345,6 @@ namespace Jvedio
                             Console.WriteLine($"{nameof(OperationCanceledException)} thrown with message: {ex.Message}");
                         }
                     }, ct);
-
                     HandyControl.Controls.Growl.Success($"{Jvedio.Language.Resources.Message_Success}", GrowlToken);
                 }
                 else
@@ -499,7 +428,7 @@ namespace Jvedio
             }
         }
 
-        private void Button_Click_3(object sender, RoutedEventArgs e)
+        private void CancelTask(object sender, RoutedEventArgs e)
         {
             cts?.Cancel();
             vieModel_DBManagement.ProgressBarValue = 0;
@@ -541,20 +470,20 @@ namespace Jvedio
             textBlock.Text = $"{Jvedio.Language.Resources.Number}：{count}\n{Jvedio.Language.Resources.FileSize}：{length.ToProperFileSize()}";
 
             if (tb.Text == Jvedio.Language.Resources.Source)
-                src = path;
+                srcToCopy = path;
             else
-                dst = path;
+                dstToCopy = path;
         }
 
 
 
         CancellationToken ct_copy;
         CancellationTokenSource cts_copy;
-        private void CopyButton_Click(object sender, RoutedEventArgs e)
+        private void BeginCopy(object sender, RoutedEventArgs e)
         {
-            if (src == "" || dst == "") return;
-            if (!File.Exists(src) || !File.Exists(dst)) return;
-            if (src == dst)
+            if (srcToCopy == "" || dstToCopy == "") return;
+            if (!File.Exists(srcToCopy) || !File.Exists(dstToCopy)) return;
+            if (srcToCopy == dstToCopy)
             {
                 HandyControl.Controls.Growl.Error(Jvedio.Language.Resources.SamePathError, GrowlToken);
                 return;
@@ -567,7 +496,7 @@ namespace Jvedio
             {
                 try
                 {
-                    DataBase.CopyDatabaseInfo(src, dst, ct_copy, (value) =>
+                    DataBase.CopyDatabaseInfo(srcToCopy, dstToCopy, ct_copy, (value) =>
                     {
                         Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Background, (Action)delegate
                         {
@@ -589,7 +518,7 @@ namespace Jvedio
             });
         }
 
-        private void Button_Click_4(object sender, RoutedEventArgs e)
+        private void CancelCopy(object sender, RoutedEventArgs e)
         {
             try
             {

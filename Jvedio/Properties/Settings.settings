@@ -260,18 +260,6 @@
     <Setting Name="VedioPlayerPath" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="Statictistic_ID_Number" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">20</Value>
-    </Setting>
-    <Setting Name="Statictistic_Genre_Number" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">20</Value>
-    </Setting>
-    <Setting Name="Statictistic_Tag_Number" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">20</Value>
-    </Setting>
-    <Setting Name="Statictistic_Actor_Number" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">20</Value>
-    </Setting>
     <Setting Name="DataBasePath" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>

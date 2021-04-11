@@ -1057,54 +1057,6 @@ namespace Jvedio.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("20")]
-        public int Statictistic_ID_Number {
-            get {
-                return ((int)(this["Statictistic_ID_Number"]));
-            }
-            set {
-                this["Statictistic_ID_Number"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("20")]
-        public int Statictistic_Genre_Number {
-            get {
-                return ((int)(this["Statictistic_Genre_Number"]));
-            }
-            set {
-                this["Statictistic_Genre_Number"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("20")]
-        public int Statictistic_Tag_Number {
-            get {
-                return ((int)(this["Statictistic_Tag_Number"]));
-            }
-            set {
-                this["Statictistic_Tag_Number"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("20")]
-        public int Statictistic_Actor_Number {
-            get {
-                return ((int)(this["Statictistic_Actor_Number"]));
-            }
-            set {
-                this["Statictistic_Actor_Number"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string DataBasePath {
             get {

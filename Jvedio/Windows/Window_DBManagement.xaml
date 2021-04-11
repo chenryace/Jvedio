@@ -44,7 +44,7 @@
                 <Grid  >
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"/>
-                        <RowDefinition   Height="auto"/>
+                        <RowDefinition Height="auto"/>
                     </Grid.RowDefinitions>
 
                     <Grid Grid.Row="0">
@@ -54,17 +54,14 @@
                         </Grid.ColumnDefinitions>
 
                         <StackPanel Orientation="Vertical" Grid.Column="0" >
-
-                            <Button Margin="20" Style="{StaticResource FlatButton}" Content="{x:Static lang:Resources.NewLibrary}" HorizontalAlignment="Center" MinWidth="100" Width="auto"   Click="Button_Click"/>
-                            <Button Style="{StaticResource FlatButton}" Content="{x:Static lang:Resources.Import}" HorizontalAlignment="Center" MinWidth="100" Width="auto"   Click="Button_Click_1"/>
-
-
+                            <Button Margin="20" Style="{StaticResource FlatButton}" Content="{x:Static lang:Resources.NewLibrary}" HorizontalAlignment="Center" MinWidth="100" Width="auto"   Click="NewLibrary"/>
+                            <Button Style="{StaticResource FlatButton}" Content="{x:Static lang:Resources.Import}" HorizontalAlignment="Center" MinWidth="100" Width="auto"   Click="ImportLibrary"/>
                         </StackPanel>
 
 
 
 
-                        <ScrollViewer  Grid.Column="1"       Panel.ZIndex="4"    x:Name="scrollViewer"     >
+                        <ScrollViewer  Grid.Column="1"           >
                             <ItemsControl   ItemsSource="{Binding DataBases}"  >
                                 <ItemsControl.ItemsPanel>
                                     <ItemsPanelTemplate>
@@ -93,14 +90,14 @@
                                                         <ColumnDefinition Width="334*"/>
                                                     </Grid.ColumnDefinitions>
 
-                                                    <Border  Grid.Column="0" Style="{StaticResource DBBorder}" MouseLeftButtonUp="LoadDataBase" ToolTip="装载" >
+                                                    <Border  Grid.Column="0" Style="{StaticResource DBBorder}" MouseLeftButtonUp="LoadDataBase" ToolTip="{x:Static lang:Resources.Import}" >
                                                         <Image  Source="pack://application:,,,/Resources/Picture/loaddatabase.png" Height="32"/>
                                                     </Border>
-                                                    <Border  Grid.Column="1" Style="{StaticResource DBBorder}"   MouseLeftButtonUp="EditDataBase"  ToolTip="编辑" >
+                                                    <Border  Grid.Column="1" Style="{StaticResource DBBorder}"   MouseLeftButtonUp="EditDataBase"  ToolTip="{x:Static lang:Resources.Edit}" >
                                                         <Image Grid.Column="1" Source="pack://application:,,,/Resources/Picture/edit.png" Width="25"/>
                                                     </Border>
 
-                                                    <Border Grid.Column="2"  Style="{StaticResource DBBorder}"  MouseLeftButtonUp="DelDataBase"  ToolTip="删除"  >
+                                                    <Border Grid.Column="2"  Style="{StaticResource DBBorder}"  MouseLeftButtonUp="DelDataBase"  ToolTip="{x:Static lang:Resources.Delete}"  >
                                                         <Image Grid.Column="2" Source="pack://application:,,,/Resources/Picture/delete.png" Width="32"/>
                                                     </Border>
                                                 </Grid>
@@ -129,18 +126,14 @@
                                     <TextBlock Text="{x:Static lang:Resources.DataBase}" Style="{StaticResource BaseTextBlock}" Margin="5" VerticalAlignment="Center"/>
                                     <TextBlock Margin="5"  Text="{Binding CurrentDataBase}" Style="{StaticResource BaseTextBlock}" HorizontalAlignment="Left" />
                                 </StackPanel>
-
-
                             </Border>
 
 
-                            <WrapPanel x:Name="CheckBoxWrapPanel"  Orientation="Horizontal" Margin="15">
-
+                            <WrapPanel x:Name="CheckBoxWrapPanel"  Orientation="Horizontal" Margin="15" HorizontalAlignment="Left">
                                 <CheckBox  Content="{x:Static lang:Resources.ResetDataBase}" Height="30" Width="150"   Margin="5"  HorizontalAlignment="Left"></CheckBox>
                                 <CheckBox  Content="{x:Static lang:Resources.DeleteMovieNotExist}" Height="30" Width="150"   Margin="5"  HorizontalAlignment="Left"></CheckBox>
                                 <CheckBox  Content="{x:Static lang:Resources.DeleteMovieNotInScan}" Height="30" Width="auto"   Margin="5"  HorizontalAlignment="Left"></CheckBox>
                                 <CheckBox  Content="{x:Static lang:Resources.exportnfo}" Height="30" Width="150"   Margin="5"  HorizontalAlignment="Left"></CheckBox>
-
                             </WrapPanel>
 
 
@@ -157,27 +150,17 @@
                             <TextBlock Grid.Column="1" Text="{Binding ProgressBarValue,StringFormat={}{0}%,FallbackValue=50%}"   Visibility="{Binding ProgressBarVisibility}" Style="{StaticResource BaseTextBlock}" VerticalAlignment="Center" Margin="0 0 50 0"/>
 
                             <StackPanel Orientation="Horizontal" Grid.Column="2">
-                                <Button IsEnabled="{Binding ElementName=RunButton,Path=IsEnabled,Converter={StaticResource OppositeBooleanConverter}}" Style="{StaticResource ButtonDanger}"  Margin="5" Content="{x:Static lang:Resources.Cancel}" HorizontalAlignment="Left" MinWidth="80" Width="auto" Height="auto" Click="Button_Click_3"/>
-                                <Button Name="RunButton" Style="{StaticResource ButtonPrimary}" Margin="5" Content="{x:Static lang:Resources.Run}" HorizontalAlignment="Left" MinWidth="80" Width="auto" Height="auto" Click="Button_Click_2"/>
+                                <Button IsEnabled="{Binding ElementName=RunButton,Path=IsEnabled,Converter={StaticResource OppositeBooleanConverter}}" Style="{StaticResource ButtonDanger}"  Margin="5" Content="{x:Static lang:Resources.Cancel}" HorizontalAlignment="Left" MinWidth="80" Width="auto" Height="auto" Click="CancelTask"/>
+                                <Button Name="RunButton" Style="{StaticResource ButtonPrimary}" Margin="5" Content="{x:Static lang:Resources.Run}" HorizontalAlignment="Left" MinWidth="80" Width="auto" Height="auto" Click="BeginTask"/>
                             </StackPanel>
 
                         </Grid>
-
-
-
-
                     </Grid>
-
-
-
-
-
                 </Grid>
             </TabItem>
 
             <TabItem   Background="Transparent" Header="{x:Static lang:Resources.Statistic}" FontSize="15" ScrollViewer.VerticalScrollBarVisibility="Disabled">
                 <Grid x:Name="StatisticGrid" Visibility="Visible">
-
                     <Grid.RowDefinitions >
                         <RowDefinition Height="auto"/>
                         <RowDefinition Height="auto"/>
@@ -187,7 +170,7 @@
 
                     <StackPanel Orientation="Horizontal" Grid.Row="0" HorizontalAlignment="Left" Visibility="Visible" Margin="5 10" >
                         <TextBlock Text="{x:Static lang:Resources.ChooseDataBase}" Style="{StaticResource BaseTextBlock}"/>
-                        <ComboBox Style="{StaticResource SideComboBoxStyle}" SelectionChanged="DatabaseComboBox_SelectionChanged"  x:Name="DatabaseComboBox" ItemsSource="{Binding DataBases}"   MinWidth="150" MaxWidth="300" Background="{DynamicResource BackgroundMenu}" Height="25" HorizontalAlignment="Left" Margin="20 0" ToolTip="{Binding RelativeSource={RelativeSource Mode=Self},Path=Text}" />
+                        <ComboBox Style="{StaticResource SideComboBoxStyle}" SelectionChanged="StatictisticComboBox_SelectionChanged"  x:Name="DatabaseComboBox" ItemsSource="{Binding DataBases}"   MinWidth="150" MaxWidth="300" Background="{DynamicResource BackgroundMenu}" Height="25" HorizontalAlignment="Left" Margin="20 0" ToolTip="{Binding RelativeSource={RelativeSource Mode=Self},Path=Text}" />
                     </StackPanel>
 
                     <Grid Grid.Row="2">
@@ -243,9 +226,7 @@
                                 <ComboBox Style="{StaticResource SideComboBoxStyle}" SelectionChanged="ComboBox_SelectionChanged"   ItemsSource="{Binding DataBases}"   MinWidth="150" MaxWidth="300" Background="{DynamicResource BackgroundMenu}" Height="25" HorizontalAlignment="Left" Margin="20 0" ToolTip="{Binding RelativeSource={RelativeSource Mode=Self},Path=Text}" />
                                 <Button Content="{x:Static lang:Resources.OpenPath}" Style="{StaticResource ButtonPrimary}" Click="OpenPath"/>
                             </StackPanel>
-
                             <TextBlock Text="{x:Static lang:Resources.Number}" TextAlignment="Left" Style="{StaticResource BaseTextBlock}" HorizontalAlignment="Left"/>
-
                         </StackPanel>
 
                         <StackPanel Grid.Column="1">
@@ -256,12 +237,8 @@
                             </StackPanel>
                             <TextBlock Text="{x:Static lang:Resources.Number}" TextAlignment="Left" Style="{StaticResource BaseTextBlock}" HorizontalAlignment="Left"/>
                         </StackPanel>
-
                     </Grid>
                     <Grid Grid.Row="2" >
-
-
-
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="auto"/>
@@ -269,11 +246,9 @@
                         </Grid.ColumnDefinitions>
                         <ProgressBar x:Name="CopyProgressBar" Grid.Column="0" Background="{DynamicResource BackgroundSide}"     Style="{StaticResource ProgressBarSuccessStripe}" MinWidth="400"   ValueChanged="ProgressBar_ValueChanged"  DockPanel.Dock="Bottom" IsVisibleChanged="ProgressBar_IsVisibleChanged"    Value="{Binding ProgressBarValue,FallbackValue=50}"   Height="15" Margin="20 0 5 0"   VerticalAlignment="Center"  HorizontalAlignment="Stretch" Width="auto"  Maximum="100" Minimum="0"  />
                         <TextBlock Text="{Binding ElementName=CopyProgressBar,Path=Value,StringFormat={}{0}%}"  Grid.Column="1"  Visibility="{Binding ProgressBarVisibility}" Style="{StaticResource BaseTextBlock}" VerticalAlignment="Center" Margin="0 0 50 0"/>
-
-
                         <StackPanel Grid.Column="2" Orientation="Horizontal">
-                            <Button IsEnabled="{Binding ElementName=CopyButton,Path=IsEnabled,Converter={StaticResource OppositeBooleanConverter}}" Style="{StaticResource ButtonDanger}"  Margin="5" Content="{x:Static lang:Resources.Cancel}" HorizontalAlignment="Left" MinWidth="80" Width="auto" Height="auto" Click="Button_Click_4"/>
-                            <Button Name="CopyButton" Style="{StaticResource ButtonPrimary}" Margin="5" Content="{x:Static lang:Resources.Run}" HorizontalAlignment="Left" MinWidth="80" Width="auto" Height="auto" Click="CopyButton_Click"/>
+                            <Button IsEnabled="{Binding ElementName=CopyButton,Path=IsEnabled,Converter={StaticResource OppositeBooleanConverter}}" Style="{StaticResource ButtonDanger}"  Margin="5" Content="{x:Static lang:Resources.Cancel}" HorizontalAlignment="Left" MinWidth="80" Width="auto" Height="auto" Click="CancelCopy"/>
+                            <Button Name="CopyButton" Style="{StaticResource ButtonPrimary}" Margin="5" Content="{x:Static lang:Resources.Run}" HorizontalAlignment="Left" MinWidth="80" Width="auto" Height="auto" Click="BeginCopy"/>
 
                         </StackPanel>
 
@@ -284,18 +259,5 @@
                 </Grid>
             </TabItem>
         </TabControl>
-
-
-
-        <Grid>
-
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="150"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-
-
-        </Grid>
-
     </Grid>
 </style:BaseWindow>

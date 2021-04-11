@@ -4,9 +4,6 @@ using System.Windows.Input;
 
 namespace Jvedio
 {
-    /// <summary>
-    /// DialogInput.xaml 的交互逻辑
-    /// </summary>
     public partial class DialogInput : Window
     {
 
@@ -20,10 +17,10 @@ namespace Jvedio
 
             if (window.Height == System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Height || window.Width == System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Width)
             {
-                this.Left = window.Left ;
-                this.Top = window.Top ;
-                this.Height = window.Height ;
-                this.Width = window.Width ;
+                this.Left = window.Left;
+                this.Top = window.Top;
+                this.Height = window.Height;
+                this.Width = window.Width;
             }
             else if (window.WindowState == WindowState.Maximized)
             {
@@ -39,11 +36,6 @@ namespace Jvedio
                 this.Height = window.Height - 30;
                 this.Width = window.Width - 30;
             }
-
-
-
-
-
         }
 
         public string Text
@@ -58,12 +50,12 @@ namespace Jvedio
         }
 
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void Confirm(object sender, RoutedEventArgs e)
         {
             this.DialogResult = true;
         }
 
-        private void Button_Click_1(object sender, RoutedEventArgs e)
+        private void Cancel(object sender, RoutedEventArgs e)
         {
             this.DialogResult = false;
         }
@@ -76,8 +68,6 @@ namespace Jvedio
                 this.DialogResult = false;
             else if (e.Key == Key.Delete)
                 ContentTextBox.Text = "";
-
-
         }
     }
 }

@@ -43,25 +43,12 @@
                         <RowDefinition Height="auto"/>
                     </Grid.RowDefinitions>
                     <TextBox Grid.Row="0"  x:Name="TextBlock"  Style="{StaticResource ViewTextBox}" Text="123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123" />
-
-
-
                     <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right"   >
-                        <Button  x:Name="CancelButton"   Style="{StaticResource ButtonDanger}"  Margin="10" MinWidth="100"    Content="{x:Static lang:Resources.Cancel}"   Click="Cancel"/>
-                        <Button  x:Name="YesButton"     Style="{StaticResource ButtonPrimary}" Margin="10" MinWidth="100"    Content="{x:Static lang:Resources.Confirm}"   Click="Confirm"/>
+                        <Button  x:Name="CancelButton"   Style="{StaticResource ButtonDanger}" Cursor="Hand"  Margin="10" MinWidth="100"    Content="{x:Static lang:Resources.Cancel}"   Click="Cancel"/>
+                        <Button  x:Name="YesButton"     Style="{StaticResource ButtonPrimary}" Cursor="Hand" Margin="10" MinWidth="100"    Content="{x:Static lang:Resources.Confirm}"   Click="Confirm"/>
                     </StackPanel>
-
                 </Grid>
-
-
             </Border>
-
-
-
-
-
-
         </Grid>
-
     </Grid>
 </Window>

@@ -6,9 +6,7 @@ using System.Windows.Input;
 
 namespace Jvedio
 {
-    /// <summary>
-    /// Msgbox.xaml 的交互逻辑
-    /// </summary>
+
     public partial class Msgbox : Window
     {
         public string Text;
