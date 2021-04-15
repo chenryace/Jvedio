@@ -205,7 +205,7 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
-        ///   查找类似 添加收藏 的本地化字符串。
+        ///   查找类似 添加/取消收藏 的本地化字符串。
         /// </summary>
         public static string AddToFavorites {
             get {
@@ -264,6 +264,15 @@ namespace Jvedio.Language {
         public static string AllVideo {
             get {
                 return ResourceManager.GetString("AllVideo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 影片已翻译，是否继续翻译？ 的本地化字符串。
+        /// </summary>
+        public static string AlreadyTranslate {
+            get {
+                return ResourceManager.GetString("AlreadyTranslate", resourceCulture);
             }
         }
         

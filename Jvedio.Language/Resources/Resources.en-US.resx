@@ -1405,7 +1405,7 @@
     <value>Double Click To Cancel</value>
   </data>
   <data name="AddToFavorites" xml:space="preserve">
-    <value>Add To Favorites</value>
+    <value>Add/Cancel To Favorites</value>
   </data>
   <data name="Censored" xml:space="preserve">
     <value>Censored</value>
@@ -1715,5 +1715,8 @@
   </data>
   <data name="JvedioIsRunning" xml:space="preserve">
     <value>Jvedio is already running!</value>
+  </data>
+  <data name="AlreadyTranslate" xml:space="preserve">
+    <value>The film has been translated. Do you want to continue the translation?</value>
   </data>
 </root>

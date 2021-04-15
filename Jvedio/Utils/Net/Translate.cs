@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace Jvedio
 {
+    //https://ai.youdao.com/DOCSIRMA/html/%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E7%BF%BB%E8%AF%91/API%E6%96%87%E6%A1%A3/%E6%96%87%E6%9C%AC%E7%BF%BB%E8%AF%91%E6%9C%8D%E5%8A%A1/%E6%96%87%E6%9C%AC%E7%BF%BB%E8%AF%91%E6%9C%8D%E5%8A%A1-API%E6%96%87%E6%A1%A3.html
     public static class Translate
     {
         public static string Youdao_appKey;
@@ -21,21 +22,40 @@ namespace Jvedio
 
         public static void InitYoudao()
         {
-            Youdao_appKey = Properties.Settings.Default.TL_YOUDAO_APIKEY.Replace(" ","");
+            Youdao_appKey = Properties.Settings.Default.TL_YOUDAO_APIKEY.Replace(" ", "");
             Youdao_appSecret = Properties.Settings.Default.TL_YOUDAO_SECRETKEY.Replace(" ", "");
         }
 
 
-        public static  Task<string>  Youdao(string q)
+        public static Task<string> Youdao(string q)
         {
-            return Task.Run(() => {
+            string from = "auto";
+            string to = "zh-CHS";
+            string language = Jvedio.Properties.Settings.Default.Language;
+            switch (language)
+            {
+
+                case "中文":
+                    to = "zh-CHS";
+                    break;
+                case "English":
+                    to = "en";
+                    break;
+                case "日本語":
+                    to = "ja";
+                    break;
+                default:
+                    break;
+            }
+            return Task.Run(() =>
+            {
                 InitYoudao();
                 Dictionary<String, String> dic = new Dictionary<String, String>();
                 string url = "https://openapi.youdao.com/api";
 
                 string salt = DateTime.Now.Millisecond.ToString();
-                dic.Add("from", "auto");
-                dic.Add("to", "zh-CHS");
+                dic.Add("from", from);
+                dic.Add("to", to);
                 dic.Add("signType", "v3");
                 TimeSpan ts = (DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc));
                 long millis = (long)ts.TotalMilliseconds;
@@ -50,12 +70,13 @@ namespace Jvedio
                 try
                 {
                     return GetYoudaoResult(Post(url, dic));
-                }catch(Exception ex)
+                }
+                catch (Exception ex)
                 {
                     Console.WriteLine(ex.Message);
                     return "";
                 }
-                
+
             });
 
         }
@@ -65,7 +86,7 @@ namespace Jvedio
             if (content.IndexOf("translation") < 0) return "";
             string pattern = @"""translation"":\["".+""\]";
             string result = Regex.Match(content, pattern).Value;
-            return result.Replace("\"translation\":[\"","").Replace("\"]","");
+            return result.Replace("\"translation\":[\"", "").Replace("\"]", "");
         }
 
 

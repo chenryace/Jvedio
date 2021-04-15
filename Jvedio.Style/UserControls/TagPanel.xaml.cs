@@ -62,6 +62,14 @@ namespace Jvedio.Style.UserControls
             Refresh();
         }
 
+        private void DeleteLabel(object sender, RoutedEventArgs e)
+        {
+            MenuItem menuItem = sender as MenuItem;
+            Border border = (menuItem.Parent as ContextMenu).PlacementTarget as Border;
+            Border border1 = (border.Child as StackPanel).Children.OfType<Border>().First();
+            DeleteTag(border1, null);
+        }
+
         public T FindElementByName<T>(FrameworkElement element, string sChildName) where T : FrameworkElement
         {
             T childElement = null;
@@ -91,11 +99,6 @@ namespace Jvedio.Style.UserControls
 
         private void NewTag(object sender, RoutedEventArgs e)
         {
-            //if (TagList == null) TagList = new List<string>();
-            //TagList.Insert(0, GetTagName());
-            //TagChanged?.Invoke(this, new ListChangedEventArgs(TagList));
-            //Refresh();
-
             OnAddNewLabel?.Invoke(this, null);
 
         }
@@ -151,13 +154,15 @@ namespace Jvedio.Style.UserControls
 
         private void Tag_Click(object sender, MouseButtonEventArgs e)
         {
-            onTagClick?.Invoke(sender,e);
+            onTagClick?.Invoke(sender, e);
         }
 
         private void AddExistsLabel(object sender, RoutedEventArgs e)
         {
             OnAddExistsLabel?.Invoke(sender, e);
         }
+
+
     }
 
     public class ListChangedEventArgs : EventArgs

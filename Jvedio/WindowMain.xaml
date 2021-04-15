@@ -19,7 +19,7 @@
     Background="Transparent"
     WindowStartupLocation="CenterScreen"
     MinHeight="500"
-    MinWidth="900" 
+    MinWidth="1100" 
     Icon="pack://application:,,,/Resources/Jvedio.ico"
     Closed="Window_Closed"
     Closing="Window_Closing"
@@ -184,7 +184,7 @@
 
         <!--背景-->
         <Image x:Name="BgImage"  Margin="{Binding MainGridThickness,Converter={StaticResource SmallerThicknessConverter},ConverterParameter=-5,FallbackValue=5}"    Source="{Binding BackgroundImage}" Stretch="UniformToFill"></Image>
-        
+
         <Grid Margin="{Binding MainGridThickness,Converter={StaticResource SmallerThicknessConverter},ConverterParameter=-5,FallbackValue=5}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="30"/>
@@ -198,7 +198,7 @@
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
                         <Image  ToolTip="Jvedio"   HorizontalAlignment="Center" Height="20"  VerticalAlignment="Center"  Source="Resources/Picture/Title.png" Margin="0"/>
                     </StackPanel>
- 
+
                     <StackPanel Panel.ZIndex="5" Orientation="Horizontal" HorizontalAlignment="Right">
                         <Button     Style="{StaticResource TitleButton}" Click="MinWindow" Height="30" Width="40"  Margin="0" HorizontalContentAlignment="Left" VerticalContentAlignment="Top"   >
                             <Viewbox   Width="15" Height="auto" Margin="12 7 0 0"        >
@@ -362,21 +362,21 @@
                                 <Expander   Margin="0 5 0 0" BorderThickness="0"    Header="{x:Static lang:Resources.ReleaseYear}"  Foreground="{DynamicResource ForegroundGlobal}" Background="{DynamicResource BackgroundTitle}"  >
                                     <Border     BorderThickness="0"   Background="{DynamicResource BackgroundMain}" CornerRadius="0,0,4,4">
                                         <ScrollViewer MaxHeight="200">
-                                            
-                                        
-                                        <ItemsControl   x:Name="SideFilterYear"   >
-                                            <ItemsControl.ItemsPanel>
-                                                <ItemsPanelTemplate>
-                                                    <StackPanel />
-                                                </ItemsPanelTemplate>
-                                            </ItemsControl.ItemsPanel>
 
-                                            <ItemsControl.ItemTemplate>
-                                                <DataTemplate>
-                                                    <CheckBox Content="{Binding }" Name="CheckBox"  Click="FilterSide" HorizontalAlignment="Left"/>
-                                                </DataTemplate>
-                                            </ItemsControl.ItemTemplate>
-                                        </ItemsControl>
+
+                                            <ItemsControl   x:Name="SideFilterYear"   >
+                                                <ItemsControl.ItemsPanel>
+                                                    <ItemsPanelTemplate>
+                                                        <StackPanel />
+                                                    </ItemsPanelTemplate>
+                                                </ItemsControl.ItemsPanel>
+
+                                                <ItemsControl.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <CheckBox Content="{Binding }" Name="CheckBox"  Click="FilterSide" HorizontalAlignment="Left"/>
+                                                    </DataTemplate>
+                                                </ItemsControl.ItemTemplate>
+                                            </ItemsControl>
                                         </ScrollViewer>
                                     </Border>
 
@@ -433,19 +433,19 @@
                                 <Expander  Margin="0 5 0 0" BorderThickness="0" Header="{x:Static lang:Resources.MovieLabels}"  Foreground="{DynamicResource ForegroundGlobal}" Background="{DynamicResource BackgroundTitle}">
                                     <Border  BorderThickness="0"   Background="{DynamicResource BackgroundMain}" CornerRadius="0,0,4,4">
                                         <ScrollViewer MaxHeight="200"  >
-                                        <ItemsControl x:Name="SideFilterLabel">
-                                            <ItemsControl.ItemsPanel>
-                                                <ItemsPanelTemplate>
-                                                    <StackPanel></StackPanel>
-                                                </ItemsPanelTemplate>
-                                            </ItemsControl.ItemsPanel>
-                                            <ItemsControl.ItemTemplate>
-                                                <DataTemplate>
-                                                    <CheckBox Content="{Binding }" Name="CheckBox"  Click="FilterSide" HorizontalAlignment="Left"/>
-                                                </DataTemplate>
-                                            </ItemsControl.ItemTemplate>
-                                        </ItemsControl>
-                                    </ScrollViewer>
+                                            <ItemsControl x:Name="SideFilterLabel">
+                                                <ItemsControl.ItemsPanel>
+                                                    <ItemsPanelTemplate>
+                                                        <StackPanel></StackPanel>
+                                                    </ItemsPanelTemplate>
+                                                </ItemsControl.ItemsPanel>
+                                                <ItemsControl.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <CheckBox Content="{Binding }" Name="CheckBox"  Click="FilterSide" HorizontalAlignment="Left"/>
+                                                    </DataTemplate>
+                                                </ItemsControl.ItemTemplate>
+                                            </ItemsControl>
+                                        </ScrollViewer>
                                     </Border>
                                 </Expander>
 
@@ -599,7 +599,7 @@
                                             <Button VerticalAlignment="Center" Style="{StaticResource ButtonPrimary}"  Content="{x:Static lang:Resources.FastImport}" Command="{Binding AddNewMovie}"   HorizontalAlignment="Stretch"   />
 
                                         </StackPanel>
-                                      
+
 
 
                                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
@@ -837,25 +837,25 @@
 
                                                     <Border   CornerRadius="5" Margin="10 0">
                                                         <ScrollViewer  FocusVisualStyle="{x:Null}"  CanContentScroll="True" MaxHeight="100">
-                                                        <ItemsControl x:Name="GenreItemsControl"  ItemsSource="{Binding Genre}" ScrollViewer.VerticalScrollBarVisibility="Disabled" Margin="5 5 5 5" Background="Transparent">
-                                                            <ItemsControl.ItemsPanel>
-                                                                <ItemsPanelTemplate>
-                                                                    <WrapPanel Orientation="Horizontal" >
-                                                                    </WrapPanel>
-                                                                </ItemsPanelTemplate>
-                                                            </ItemsControl.ItemsPanel>
-
-                                                            <ItemsControl.ItemTemplate>
-                                                                <DataTemplate>
-                                                                    <Border Padding="3">
-                                                                        <WrapPanel>
-                                                                            <ToggleButton Style="{StaticResource ToggleButtonStyle2}" Name="CheckBox" Content="{Binding }"  />
+                                                            <ItemsControl x:Name="GenreItemsControl"  ItemsSource="{Binding Genre}" ScrollViewer.VerticalScrollBarVisibility="Disabled" Margin="5 5 5 5" Background="Transparent">
+                                                                <ItemsControl.ItemsPanel>
+                                                                    <ItemsPanelTemplate>
+                                                                        <WrapPanel Orientation="Horizontal" >
                                                                         </WrapPanel>
-                                                                    </Border>
-                                                                </DataTemplate>
-                                                            </ItemsControl.ItemTemplate>
-                                                        </ItemsControl>
-                                                    </ScrollViewer>
+                                                                    </ItemsPanelTemplate>
+                                                                </ItemsControl.ItemsPanel>
+
+                                                                <ItemsControl.ItemTemplate>
+                                                                    <DataTemplate>
+                                                                        <Border Padding="3">
+                                                                            <WrapPanel>
+                                                                                <ToggleButton Style="{StaticResource ToggleButtonStyle2}" Name="CheckBox" Content="{Binding }"  />
+                                                                            </WrapPanel>
+                                                                        </Border>
+                                                                    </DataTemplate>
+                                                                </ItemsControl.ItemTemplate>
+                                                            </ItemsControl>
+                                                        </ScrollViewer>
                                                     </Border>
                                                 </WrapPanel>
 
@@ -865,29 +865,29 @@
                                                     <Button Content="{x:Static lang:Resources.ShowAll}" Cursor="Hand"  PreviewMouseLeftButtonUp="Actor_PreviewMouseLeftButtonUp"   Style="{StaticResource ButtonPrimary}" Margin="5 10"/>
 
                                                     <Border  CornerRadius="5" Margin="10 0">
-                                                        
-                                                    
-                                                    <ScrollViewer  FocusVisualStyle="{x:Null}"  CanContentScroll="True" MaxHeight="100" >
 
-                                                        <ItemsControl x:Name="ActorFilterItemsControl"  ItemsSource="{Binding Actor}" ScrollViewer.VerticalScrollBarVisibility="Disabled" Margin="5 5 5 5" Background="Transparent">
-                                                            <ItemsControl.ItemsPanel>
-                                                                <ItemsPanelTemplate>
-                                                                    <WrapPanel Orientation="Horizontal">
-                                                                    </WrapPanel>
-                                                                </ItemsPanelTemplate>
-                                                            </ItemsControl.ItemsPanel>
 
-                                                            <ItemsControl.ItemTemplate>
-                                                                <DataTemplate>
-                                                                    <Border Padding="3">
-                                                                        <WrapPanel>
-                                                                            <ToggleButton Style="{StaticResource ToggleButtonStyle2}" Name="CheckBox" Content="{Binding }"  />
+                                                        <ScrollViewer  FocusVisualStyle="{x:Null}"  CanContentScroll="True" MaxHeight="100" >
+
+                                                            <ItemsControl x:Name="ActorFilterItemsControl"  ItemsSource="{Binding Actor}" ScrollViewer.VerticalScrollBarVisibility="Disabled" Margin="5 5 5 5" Background="Transparent">
+                                                                <ItemsControl.ItemsPanel>
+                                                                    <ItemsPanelTemplate>
+                                                                        <WrapPanel Orientation="Horizontal">
                                                                         </WrapPanel>
-                                                                    </Border>
-                                                                </DataTemplate>
-                                                            </ItemsControl.ItemTemplate>
-                                                        </ItemsControl>
-                                                    </ScrollViewer>
+                                                                    </ItemsPanelTemplate>
+                                                                </ItemsControl.ItemsPanel>
+
+                                                                <ItemsControl.ItemTemplate>
+                                                                    <DataTemplate>
+                                                                        <Border Padding="3">
+                                                                            <WrapPanel>
+                                                                                <ToggleButton Style="{StaticResource ToggleButtonStyle2}" Name="CheckBox" Content="{Binding }"  />
+                                                                            </WrapPanel>
+                                                                        </Border>
+                                                                    </DataTemplate>
+                                                                </ItemsControl.ItemTemplate>
+                                                            </ItemsControl>
+                                                        </ScrollViewer>
                                                     </Border>
                                                 </WrapPanel>
 
@@ -896,25 +896,25 @@
                                                     <TextBlock  Text="{x:Static lang:Resources.MovieLabels}" Style="{StaticResource BaseFilterTextBlock}"/>
                                                     <Border   CornerRadius="5" Margin="10 0">
                                                         <ScrollViewer  FocusVisualStyle="{x:Null}"  CanContentScroll="True" MaxHeight="100">
-                                                        <ItemsControl  x:Name="LabelFilterItemsControl"  ItemsSource="{Binding Label}" ScrollViewer.VerticalScrollBarVisibility="Disabled" Margin="5 5 5 5" Background="Transparent">
-                                                            <ItemsControl.ItemsPanel>
-                                                                <ItemsPanelTemplate>
-                                                                    <WrapPanel Orientation="Horizontal">
-                                                                    </WrapPanel>
-                                                                </ItemsPanelTemplate>
-                                                            </ItemsControl.ItemsPanel>
-
-                                                            <ItemsControl.ItemTemplate>
-                                                                <DataTemplate>
-                                                                    <Border Padding="3">
-                                                                        <WrapPanel>
-                                                                            <ToggleButton Style="{StaticResource ToggleButtonStyle2}" Name="CheckBox" Content="{Binding }"  />
+                                                            <ItemsControl  x:Name="LabelFilterItemsControl"  ItemsSource="{Binding Label}" ScrollViewer.VerticalScrollBarVisibility="Disabled" Margin="5 5 5 5" Background="Transparent">
+                                                                <ItemsControl.ItemsPanel>
+                                                                    <ItemsPanelTemplate>
+                                                                        <WrapPanel Orientation="Horizontal">
                                                                         </WrapPanel>
-                                                                    </Border>
-                                                                </DataTemplate>
-                                                            </ItemsControl.ItemTemplate>
-                                                        </ItemsControl>
-                                                    </ScrollViewer>
+                                                                    </ItemsPanelTemplate>
+                                                                </ItemsControl.ItemsPanel>
+
+                                                                <ItemsControl.ItemTemplate>
+                                                                    <DataTemplate>
+                                                                        <Border Padding="3">
+                                                                            <WrapPanel>
+                                                                                <ToggleButton Style="{StaticResource ToggleButtonStyle2}" Name="CheckBox" Content="{Binding }"  />
+                                                                            </WrapPanel>
+                                                                        </Border>
+                                                                    </DataTemplate>
+                                                                </ItemsControl.ItemTemplate>
+                                                            </ItemsControl>
+                                                        </ScrollViewer>
                                                     </Border>
                                                 </WrapPanel>
 
@@ -937,8 +937,8 @@
 
 
                                 </Grid>
-                                
-                                
+
+
 
 
 
@@ -1018,7 +1018,7 @@
                                             </Grid.RowDefinitions>
 
 
-                                            
+
                                             <StackPanel Grid.Row="0">
                                                 <Image Source="{Binding Actress.smallimage}" Width="120" VerticalAlignment="Top" Margin="0 20"  DragOver="Image_DragOver" Drop="Image_Drop"  AllowDrop="True"   >
                                                     <Image.ContextMenu>
@@ -1056,7 +1056,7 @@
                                             <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Visible" Margin="0 5">
                                                 <StackPanel x:Name="ActorInfoStackPanel"  >
                                                     <TextBox Text="{Binding Actress.id}"  Visibility="Collapsed"  />
-                                                  
+
 
                                                     <StackPanel Orientation="Horizontal">
                                                         <TextBlock Text="{x:Static lang:Resources.Actress_Birthday}"  Style="{StaticResource ActorInfoTextBlock}" />
@@ -1488,7 +1488,7 @@
                                             <ColumnDefinition Width="*"/>
                                             <ColumnDefinition Width="auto"/>
                                         </Grid.ColumnDefinitions>
-                                        <ProgressBar x:Name="MainProgressBar" Grid.Column="0" Background="{DynamicResource BackgroundSide}"     Style="{StaticResource ProgressBarSuccessStripe}" MinWidth="100"   ValueChanged="ProgressBar_ValueChanged"  DockPanel.Dock="Bottom" IsVisibleChanged="ProgressBar_IsVisibleChanged"  Visibility="{Binding ProgressBarVisibility}"  Value="{Binding ProgressBarValue,FallbackValue=20}"   Height="15" Margin="20 0 5 0"   VerticalAlignment="Center"  HorizontalAlignment="Stretch" Width="auto"  Maximum="100" Minimum="0"  />
+                                        <ProgressBar x:Name="MainProgressBar" Grid.Column="0" Background="{DynamicResource BackgroundSide}"     Style="{StaticResource ProgressBarSuccessStripe}" MinWidth="100"   ValueChanged="ProgressBar_ValueChanged"  DockPanel.Dock="Bottom" IsVisibleChanged="ProgressBar_IsVisibleChanged"  Visibility="{Binding ProgressBarVisibility}"  Value="{Binding ProgressBarValue}"   Height="15" Margin="20 0 5 0"   VerticalAlignment="Center"  HorizontalAlignment="Stretch" Width="auto"  Maximum="100" Minimum="0"  />
                                         <TextBlock Text="{Binding ProgressBarValue,StringFormat={}{0}%,FallbackValue=20%}" VerticalAlignment="Center"  Grid.Column="1"  Visibility="{Binding ProgressBarVisibility}" Style="{StaticResource BaseTextBlock}" Margin="5 0"/>
                                     </Grid>
 

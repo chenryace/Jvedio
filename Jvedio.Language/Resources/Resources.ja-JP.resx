@@ -1435,7 +1435,7 @@
     <value>残りの動画を表示する</value>
   </data>
   <data name="AddToFavorites" xml:space="preserve">
-    <value>お気に入りに追加</value>
+    <value>お気に入りを追加/削除する</value>
   </data>
   <data name="Censored" xml:space="preserve">
     <value>モザイク付き</value>
@@ -1715,5 +1715,8 @@
   </data>
   <data name="JvedioIsRunning" xml:space="preserve">
     <value>Jvedio はすでに動いている!</value>
+  </data>
+  <data name="AlreadyTranslate" xml:space="preserve">
+    <value>映画は翻訳されて、翻訳を続けますか?</value>
   </data>
 </root>

@@ -72,6 +72,11 @@
                     <DataTemplate>
                         <WrapPanel Name="TagWrapPanel">
                             <Border Style="{StaticResource TagBarBorderStyle}" CornerRadius="5" Margin="5"  Cursor="Hand">
+                                <Border.ContextMenu>
+                                    <ContextMenu>
+                                        <MenuItem Header="{x:Static lang:Resources.Delete}" Click="DeleteLabel"/>
+                                    </ContextMenu>
+                                </Border.ContextMenu>
                                 <StackPanel Orientation="Horizontal">
                                     <TextBox Name="tb" Text="{Binding .,Mode=OneWay}" IsReadOnly="True"  Cursor="Hand" Style="{StaticResource InfoTextBox}" LostFocus="SaveTag" PreviewKeyUp="tb_KeyUp"  PreviewMouseLeftButtonUp="Tag_Click"  />
                                     <Border  Style="{StaticResource CloseBorder}" MouseLeftButtonUp="DeleteTag" Width="20" Height="20"  >

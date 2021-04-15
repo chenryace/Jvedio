@@ -734,14 +734,14 @@ namespace Jvedio
             if (info.ContainsKey("vediotype"))
             {
                 int vt = 1;
-                int.TryParse(info["vediotype"],out  vt);
+                int.TryParse(info["vediotype"], out vt);
                 movie.vediotype = vt;
             }
 
             if (info.ContainsKey("year"))
             {
                 int year = 1970;
-                int.TryParse(info["year"], out  year);
+                int.TryParse(info["year"], out year);
                 movie.year = year;
             }
 
@@ -1166,7 +1166,7 @@ namespace Jvedio
                                 Movie AccessMovie = new Movie()
                                 {
                                     id = sr["fanhao"].ToString(),
-                                    title =FileProcess.Unicode2String(sr["mingcheng"].ToString()),
+                                    title = FileProcess.Unicode2String(sr["mingcheng"].ToString()),
                                     filesize = string.IsNullOrEmpty(sr["wenjiandaxiao"].ToString()) ? 0 : double.Parse(sr["wenjiandaxiao"].ToString()),
                                     filepath = sr["weizhi"].ToString(),
                                     vediotype = string.IsNullOrEmpty(sr["shipinleixing"].ToString()) ? 0 : int.Parse(sr["shipinleixing"].ToString()),

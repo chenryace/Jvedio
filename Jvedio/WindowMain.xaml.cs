@@ -358,7 +358,7 @@ namespace Jvedio
             GlobalVariable.BackgroundImage = null;
             GC.Collect();
 
-            if(File.Exists(path))
+            if (File.Exists(path))
                 GlobalVariable.BackgroundImage = ImageProcess.BitmapImageFromFile(path);
 
             DefaultBigImage = new BitmapImage(new Uri("/Resources/Picture/NoPrinting_B.png", UriKind.Relative));
@@ -376,7 +376,7 @@ namespace Jvedio
             foreach (StackPanel item in ActorInfoStackPanel.Children.OfType<StackPanel>().ToList())
             {
                 TextBox textBox = item.Children[1] as TextBox;
-                
+
                 textBox.PreviewKeyUp += SaveActress;
             }
 
@@ -433,7 +433,7 @@ namespace Jvedio
                 else
                     vieModel.Reset();
 
-                
+
 
                 Dispatcher.BeginInvoke(DispatcherPriority.Background, (Action)delegate
                 {
@@ -971,7 +971,6 @@ namespace Jvedio
 
             HideMargin();
             vieModel.SideBorderWidth = Properties.Settings.Default.SideGridWidth < 200 ? 200 : Properties.Settings.Default.SideGridWidth;
-
         }
 
         private void SetWindowProperty()
@@ -1409,12 +1408,6 @@ namespace Jvedio
             //LabelEditGrid.Visibility = Visibility.Visible;
         }
 
-        public void Tag_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            Label label = (Label)sender;
-            string tag = label.Content.ToString();
-            vieModel.GetMoviebyTag(tag);
-        }
 
         public void Label_MouseDown(object sender, MouseButtonEventArgs e)
         {
@@ -1441,21 +1434,9 @@ namespace Jvedio
 
         }
 
-        public void Studio_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            Label label = (Label)sender;
-            string genre = label.Content.ToString();
-            vieModel.GetMoviebyStudio(genre);
 
-        }
 
-        public void Director_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            Label label = (Label)sender;
-            string genre = label.Content.ToString();
-            vieModel.GetMoviebyDirector(genre);
 
-        }
 
         public void Genre_MouseDown(object sender, MouseButtonEventArgs e)
         {
@@ -1591,18 +1572,46 @@ namespace Jvedio
             string name = textBox.Text.Split('(')[0];
             if (Properties.Settings.Default.ActorEditMode)
             {
-                foreach (Actress actress in vieModel.ActorList)
+                (Actress currentActress, int selectIdx) = GetActressFromCurrentActors(name);
+                if (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift))
                 {
-                    if (actress.name == name)
+                    if (firstidx == -1)
+                        firstidx = selectIdx;
+                    else
+                        secondidx = selectIdx;
+                }
+
+
+                if (firstidx >= 0 && secondidx >= 0)
+                {
+                    if (firstidx > secondidx)
                     {
-                        if (SelectedActress.Contains(actress))
-                            SelectedActress.Remove(actress);
-                        else
-                            SelectedActress.Add(actress);
-                        break;
+                        //交换一下顺序
+                        int temp = firstidx;
+                        firstidx = secondidx - 1;
+                        secondidx = temp - 1;
                     }
 
+                    for (int i = firstidx + 1; i <= secondidx; i++)
+                    {
+                        var m = vieModel.CurrentActorList[i];
+                        if (SelectedActress.Contains(m))
+                            SelectedActress.Remove(m);
+                        else
+                            SelectedActress.Add(m);
+                    }
+                    firstidx = -1;
+                    secondidx = -1;
                 }
+                else
+                {
+                    if (SelectedActress.Contains(currentActress))
+                        SelectedActress.Remove(currentActress);
+                    else
+                        SelectedActress.Add(currentActress);
+                }
+
+
                 ActorSetSelected();
             }
             else
@@ -1653,6 +1662,23 @@ namespace Jvedio
             return (result, idx);
         }
 
+
+        private (Actress, int) GetActressFromCurrentActors(string name)
+        {
+            Actress result = null;
+            int idx = 0;
+            for (int i = 0; i < vieModel.CurrentActorList.Count; i++)
+            {
+                if (vieModel.CurrentActorList[i].name == name)
+                {
+                    result = vieModel.CurrentActorList[i];
+                    idx = i;
+                    break;
+                }
+            }
+            return (result, idx);
+        }
+
         private (Movie, int) GetMovieFromFilterMovie(string id)
         {
             Movie result = null;
@@ -1669,8 +1695,8 @@ namespace Jvedio
             return (result, idx);
         }
 
-        public int firstidx=-1;
-        public int secondidx=-1;
+        public int firstidx = -1;
+        public int secondidx = -1;
         WindowDetails wd;
         private void ShowDetails(object sender, MouseButtonEventArgs e)
         {
@@ -1692,11 +1718,11 @@ namespace Jvedio
                 }
 
 
-                Console.WriteLine("firstidx="+firstidx);
+                Console.WriteLine("firstidx=" + firstidx);
                 Console.WriteLine("secondidx=" + secondidx);
-                if(firstidx>=0 && secondidx >= 0  )
+                if (firstidx >= 0 && secondidx >= 0)
                 {
-                    if (  firstidx > secondidx)
+                    if (firstidx > secondidx)
                     {
                         //交换一下顺序
                         int temp = firstidx;
@@ -1704,7 +1730,7 @@ namespace Jvedio
                         secondidx = temp - 1;
                     }
 
-                    for (int i = firstidx+1; i <=secondidx; i++)
+                    for (int i = firstidx + 1; i <= secondidx; i++)
                     {
                         var m = vieModel.CurrentMovieList[i];
                         if (vieModel.SelectedMovie.Contains(m))
@@ -1735,7 +1761,7 @@ namespace Jvedio
                 wd.Show();
                 VieModel_Main.PreviousPage = vieModel.CurrentPage;
 
-                if(Properties.Settings.Default.EasyMode)
+                if (Properties.Settings.Default.EasyMode)
                     VieModel_Main.PreviousOffset = SimpleMovieScrollViewer.VerticalOffset;
                 else
                     VieModel_Main.PreviousOffset = MovieScrollViewer.VerticalOffset;
@@ -2266,7 +2292,7 @@ namespace Jvedio
 
         }
 
-        public void PlayVedioWithPlayer(string filepath, string ID,string token= "")
+        public void PlayVedioWithPlayer(string filepath, string ID, string token = "")
         {
             if (token == "") token = GrowlToken;
             if (File.Exists(filepath))
@@ -2293,44 +2319,44 @@ namespace Jvedio
 
         public void OpenImagePath(object sender, RoutedEventArgs e)
         {
-                if (!Properties.Settings.Default.EditMode) vieModel.SelectedMovie.Clear();
-                MenuItem _mnu = sender as MenuItem;
-                StackPanel sp = null;
-                if (_mnu.Parent is MenuItem mnu)
+            if (!Properties.Settings.Default.EditMode) vieModel.SelectedMovie.Clear();
+            MenuItem _mnu = sender as MenuItem;
+            StackPanel sp = null;
+            if (_mnu.Parent is MenuItem mnu)
+            {
+                int index = mnu.Items.IndexOf(_mnu);
+                sp = ((ContextMenu)mnu.Parent).PlacementTarget as StackPanel;
+                string id = sp.Tag.ToString();
+                Movie CurrentMovie = GetMovieFromVieModel(id);
+
+                if (!vieModel.SelectedMovie.Select(g => g.id).ToList().Contains(CurrentMovie.id))
+                    vieModel.SelectedMovie.Add(CurrentMovie);
+
+                string filepath = "";
+                vieModel.SelectedMovie.ToList().ForEach(arg =>
                 {
-                    int index = mnu.Items.IndexOf(_mnu);
-                    sp = ((ContextMenu)mnu.Parent).PlacementTarget as StackPanel;
-                    string id = sp.Tag.ToString();
-                    Movie CurrentMovie = GetMovieFromVieModel(id);
+                    filepath = arg.filepath;
+                    if (index == 0) { filepath = arg.filepath; }
+                    else if (index == 1) { filepath = BasePicPath + $"BigPic\\{arg.id}.jpg"; }
+                    else if (index == 2) { filepath = BasePicPath + $"SmallPic\\{arg.id}.jpg"; }
+                    else if (index == 3) { filepath = BasePicPath + $"Gif\\{arg.id}.gif"; }
+                    else if (index == 4) { filepath = BasePicPath + $"ExtraPic\\{arg.id}\\"; }
+                    else if (index == 5) { filepath = BasePicPath + $"ScreenShot\\{arg.id}\\"; }
+                    else if (index == 6) { if (arg.actor.Length > 0) filepath = BasePicPath + $"Actresses\\{arg.actor.Split(actorSplitDict[arg.vediotype])[0]}.jpg"; else filepath = ""; }
 
-                    if (!vieModel.SelectedMovie.Select(g => g.id).ToList().Contains(CurrentMovie.id)) 
-                        vieModel.SelectedMovie.Add(CurrentMovie);
-
-                    string filepath = "";
-                    vieModel.SelectedMovie.ToList().ForEach(arg =>
+                    if (index == 4 | index == 5)
                     {
-                        filepath = arg.filepath;
-                        if (index == 0) { filepath = arg.filepath; }
-                        else if (index == 1) { filepath = BasePicPath + $"BigPic\\{arg.id}.jpg"; }
-                        else if (index == 2) { filepath = BasePicPath + $"SmallPic\\{arg.id}.jpg"; }
-                        else if (index == 3) { filepath = BasePicPath + $"Gif\\{arg.id}.gif"; }
-                        else if (index == 4) { filepath = BasePicPath + $"ExtraPic\\{arg.id}\\"; }
-                        else if (index == 5) { filepath = BasePicPath + $"ScreenShot\\{arg.id}\\"; }
-                        else if (index == 6) { if (arg.actor.Length > 0) filepath = BasePicPath + $"Actresses\\{arg.actor.Split(actorSplitDict[arg.vediotype])[0]}.jpg"; else filepath = ""; }
 
-                        if (index == 4 | index == 5)
-                        {
-
-                            if (!FileHelper.TryOpenPath(filepath) && vieModel.SelectedMovie.Count == 1)
-                                HandyControl.Controls.Growl.Error($"{Jvedio.Language.Resources.NotExists}  {filepath}", GrowlToken);
-                        }
-                        else
-                        {
-                            if (!FileHelper.TryOpenSelectPath(filepath) && vieModel.SelectedMovie.Count == 1)
-                                HandyControl.Controls.Growl.Error($"{Jvedio.Language.Resources.NotExists}  {filepath}", GrowlToken);
-                        }
-                    });
-                }
+                        if (!FileHelper.TryOpenPath(filepath) && vieModel.SelectedMovie.Count == 1)
+                            HandyControl.Controls.Growl.Error($"{Jvedio.Language.Resources.NotExists}  {filepath}", GrowlToken);
+                    }
+                    else
+                    {
+                        if (!FileHelper.TryOpenSelectPath(filepath) && vieModel.SelectedMovie.Count == 1)
+                            HandyControl.Controls.Growl.Error($"{Jvedio.Language.Resources.NotExists}  {filepath}", GrowlToken);
+                    }
+                });
+            }
             if (!Properties.Settings.Default.EditMode) vieModel.SelectedMovie.Clear();
         }
 
@@ -2342,7 +2368,7 @@ namespace Jvedio
             if (!vieModel.SelectedMovie.Select(g => g.id).ToList().Contains(CurrentMovie.id)) vieModel.SelectedMovie.Add(CurrentMovie);
             vieModel.SelectedMovie.ToList().ForEach(arg =>
             {
-                if(!FileHelper.TryOpenSelectPath(arg.filepath) && vieModel.SelectedMovie.Count==1)
+                if (!FileHelper.TryOpenSelectPath(arg.filepath) && vieModel.SelectedMovie.Count == 1)
                     HandyControl.Controls.Growl.Error($"{Jvedio.Language.Resources.NotExists}  {arg.filepath}", GrowlToken);
             });
             if (!Properties.Settings.Default.EditMode) vieModel.SelectedMovie.Clear();
@@ -3412,7 +3438,7 @@ namespace Jvedio
             if (ImageSlides == null) return;
             Canvas canvas = (Canvas)sender;
             int index = vieModel.CurrentMovieList.IndexOf(vieModel.CurrentMovieList.Where(arg => arg.id == canvas.ToolTip.ToString()).FirstOrDefault());
-            if (index < ImageSlides.Count)
+            if (index >= 0 && index < ImageSlides.Count)
             {
                 ImageSlides[index].Stop();
             }
@@ -3757,7 +3783,8 @@ namespace Jvedio
                 DataBase.CreateTable(DataBase.SQLITETABLE_ACTRESS_LOVE);
                 foreach (Actress actress in SelectedActress)
                 {
-                    DataBase.SaveActressLikeByName(actress.name, 1);
+                    Actress newActress = DataBase.SelectInfoByActress(actress);
+                    DataBase.SaveActressLikeByName(newActress.name, newActress.like == 0 ? 1 : 0);
                 }
 
             }
@@ -3996,7 +4023,7 @@ namespace Jvedio
         }
 
 
-        private  void Window_ContentRendered(object sender, EventArgs e)
+        private void Window_ContentRendered(object sender, EventArgs e)
         {
 
             if (Properties.Settings.Default.FirstRun)
@@ -4039,7 +4066,6 @@ namespace Jvedio
 
             InitList();
             vieModel.InitLettersNavigation();
-            //设置渐变
 
         }
 
@@ -4071,7 +4097,7 @@ namespace Jvedio
                 ActorProgressBar.Background = Brushes.Transparent;
                 foreach (Expander expander in ExpanderStackPanel.Children.OfType<Expander>().ToList())
                 {
-                    expander.Background= Brushes.Transparent;
+                    expander.Background = Brushes.Transparent;
                     Border border = expander.Content as Border;
                     border.Background = Brushes.Transparent;
                 }
@@ -4089,7 +4115,7 @@ namespace Jvedio
                     border.Background = (SolidColorBrush)Application.Current.Resources["BackgroundMain"];
                 }
             }
-                
+
 
         }
 
@@ -4108,7 +4134,7 @@ namespace Jvedio
         }
 
 
-        
+
 
 
 
@@ -4196,15 +4222,25 @@ namespace Jvedio
         {
             if (e.AddedItems.Count == 0) return;
             string name = e.AddedItems[0].ToString().ToLower();
-            if (name != System.IO.Path.GetFileNameWithoutExtension(Properties.Settings.Default.DataBasePath).ToLower())
+            string path = AppDomain.CurrentDomain.BaseDirectory + $"DataBase\\{name}.sqlite";
+            if (!File.Exists(path))
             {
-                Properties.Settings.Default.DataBasePath = AppDomain.CurrentDomain.BaseDirectory + $"DataBase\\{name}.sqlite";
-                //切换数据库
-                vieModel.IsRefresh = true;
-                vieModel.Reset();
-                vieModel.InitLettersNavigation();
-                vieModel.GetFilterInfo();
+                HandyControl.Controls.Growl.Error(Jvedio.Language.Resources.NotExists);
             }
+            else
+            {
+                if (name != System.IO.Path.GetFileNameWithoutExtension(Properties.Settings.Default.DataBasePath).ToLower())
+                {
+                    Properties.Settings.Default.DataBasePath = path;
+                    //切换数据库
+                    vieModel.IsRefresh = true;
+                    vieModel.Reset();
+                    vieModel.InitLettersNavigation();
+                    vieModel.GetFilterInfo();
+                }
+            }
+
+
         }
 
 
@@ -4701,7 +4737,7 @@ namespace Jvedio
             WindowBatch.Show();
         }
 
-        private  void Test(object sender, RoutedEventArgs e)
+        private void Test(object sender, RoutedEventArgs e)
         {
             DoubleAnimation verticalAnimation = new DoubleAnimation();
             verticalAnimation.From = 0;
@@ -5509,14 +5545,14 @@ namespace Jvedio
             {
                 taskbarInstance.SetProgressState(Microsoft.WindowsAPICodePack.Taskbar.TaskbarProgressBarState.Normal, this);
                 taskbarInstance.SetProgressValue((int)e.NewValue, 100, this);
-                if (e.NewValue == 100) taskbarInstance.SetProgressState(Microsoft.WindowsAPICodePack.Taskbar.TaskbarProgressBarState.NoProgress, this);
+                if (e.NewValue >= 100 || e.NewValue <= 0) taskbarInstance.SetProgressState(Microsoft.WindowsAPICodePack.Taskbar.TaskbarProgressBarState.NoProgress, this);
             }
         }
 
         private void ActorProgressBar_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             if (vieModel == null) return;
-            if (vieModel.ActorProgressBarValue == 100 || vieModel.ActorProgressBarValue==0)
+            if (vieModel.ActorProgressBarValue == 100 || vieModel.ActorProgressBarValue == 0)
                 vieModel.ActorProgressBarVisibility = Visibility.Hidden;
             else
                 vieModel.ActorProgressBarVisibility = Visibility.Visible;
@@ -5935,7 +5971,7 @@ namespace Jvedio
                                             total += 1;
                                         }
 
-                                        if (page == 2 )
+                                        if (page == 2)
                                         {
                                             Actress actress = DataBase.SelectInfoByActress(new Actress() { name = actorSearch.Name });
                                             if (string.IsNullOrEmpty(actress.birthday))
@@ -6078,7 +6114,7 @@ namespace Jvedio
                         webSite = WebSite.DB;
                     else
                         webSite = WebSite.Bus;
-                    if (!url.EndsWith("/") && url.IndexOf("javdb")<0) url += "/";
+                    if (!url.EndsWith("/") && url.IndexOf("javdb") < 0) url += "/";
                     //遍历要下载的页码
                     int total = 0;
                     InitLoadSearch(Jvedio.Language.Resources.LoadFromNet);
@@ -6091,12 +6127,12 @@ namespace Jvedio
                             string Url;
                             if (webSite == WebSite.DB)
                             {
-                                if(url.IndexOf("?")>0)
+                                if (url.IndexOf("?") > 0)
                                     Url = url + "&page=" + i;
                                 else
                                     Url = url + "?page=" + i;
                             }
-                                
+
                             else
                                 Url = url + i;
                             Dispatcher.Invoke((Action)delegate
@@ -6109,17 +6145,17 @@ namespace Jvedio
                             });
                             HttpResult newResult = null;
                             if (webSite == WebSite.DB)
-                                 newResult = await new MyNet().Http(Url, new CrawlerHeader() { Cookies = JvedioServers.DB.Cookie });
+                                newResult = await new MyNet().Http(Url, new CrawlerHeader() { Cookies = JvedioServers.DB.Cookie });
                             else
-                                 newResult = await new MyNet().Http(Url, new CrawlerHeader() { Cookies = JvedioServers.Bus.Cookie });
+                                newResult = await new MyNet().Http(Url, new CrawlerHeader() { Cookies = JvedioServers.Bus.Cookie });
                             if (newResult != null && newResult.SourceCode != "" && newResult.StatusCode == HttpStatusCode.OK)
                             {
                                 //解析影片
                                 List<Movie> movies = new List<Movie>();
-                                if (webSite==WebSite.DB)
-                                    movies =JavDBParse.GetMoviesFromPage(newResult.SourceCode);
+                                if (webSite == WebSite.DB)
+                                    movies = JavDBParse.GetMoviesFromPage(newResult.SourceCode);
                                 else
-                                    movies =BusParse.GetMoviesFromPage(newResult.SourceCode);
+                                    movies = BusParse.GetMoviesFromPage(newResult.SourceCode);
                                 List<string> idlist = DataBase.SelectAllID();
                                 foreach (Movie movie in movies)
                                 {
@@ -6137,9 +6173,9 @@ namespace Jvedio
                                 });
 
 
-                                if (webSite==WebSite.Bus &&  movies.Count < 30) break;//小于 bus 每页的最大数目
+                                if (webSite == WebSite.Bus && movies.Count < 30) break;//小于 bus 每页的最大数目
                                 if (webSite == WebSite.DB && movies.Count < 40) break;//小于 db 每页的最大数目
-                                if (webSite == WebSite.DB && allMovies.Intersect(movies.Select(arg=>arg.id)).Count() >= 30) break;// 如果新添加的影片未变化，则说明到了末页
+                                if (webSite == WebSite.DB && allMovies.Intersect(movies.Select(arg => arg.id)).Count() >= 30) break;// 如果新添加的影片未变化，则说明到了末页
                                 allMovies.AddRange(movies.Select(arg => arg.id));
 
                             }
@@ -6240,8 +6276,8 @@ namespace Jvedio
         {
             (sender as Button).Visibility = Visibility.Collapsed;
             autoScroll = true;
-            HideActressGrid(this,null);
-            vieModel.ExecutiveSqlCommand(0, vieModel.TextType, VieModel_Main.PreviousSql, istorecord: false,flip:false);
+            HideActressGrid(this, null);
+            vieModel.ExecutiveSqlCommand(0, vieModel.TextType, VieModel_Main.PreviousSql, istorecord: false, flip: false);
             //TODO
             //流动模式
         }

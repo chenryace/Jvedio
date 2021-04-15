@@ -1,34 +1,25 @@
-﻿using Jvedio.ViewModel;
+﻿using FontAwesome.WPF;
+using Jvedio.Style;
+using Jvedio.Utils;
+using Jvedio.Utils.Encrypt;
+using Jvedio.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Globalization;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Security.Permissions;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
 using static Jvedio.FileProcess;
 using static Jvedio.GlobalVariable;
-using static Jvedio.FileProcess;
-using System.Windows.Controls.Primitives;
-using FontAwesome.WPF;
-using System.ComponentModel;
-using DynamicData.Annotations;
-using System.Runtime.CompilerServices;
-using System.Windows.Interop;
-using System.Runtime.InteropServices;
-using System.Reflection;
-using System.Text.RegularExpressions;
-using Jvedio.Utils.Encrypt;
-using Jvedio.Utils;
-using Jvedio.Style;
-using Jvedio.Utils.Net;
 
 namespace Jvedio
 {
@@ -539,7 +530,7 @@ namespace Jvedio
         private void SetBasePicPath(object sender, RoutedEventArgs e)
         {
             var path = FileHelper.SelectPath(this);
-             if (Directory.Exists(path))
+            if (Directory.Exists(path))
             {
                 if (path.Substring(path.Length - 1, 1) != "\\") { path = path + "\\"; }
                 Properties.Settings.Default.BasePicPath = path;
@@ -1230,7 +1221,7 @@ namespace Jvedio
 
         private void SetScanRe(object sender, RoutedEventArgs e)
         {
-            Properties.Settings.Default.ScanRe = (sender as TextBox).Text.Replace("；",";");
+            Properties.Settings.Default.ScanRe = (sender as TextBox).Text.Replace("；", ";");
         }
     }
 

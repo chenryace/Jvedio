@@ -77,13 +77,13 @@ namespace Jvedio
                 string label = dialogInput.Text;
                 List<string> labels = LabelToList(label);
                 vieModel.DetailMovie.labellist = vieModel.DetailMovie.labellist.Union(labels).ToList();
-                SaveTags(null,null);
+                SaveTags(null, null);
             }
         }
 
         private void SaveTags(object s, ListChangedEventArgs e)
         {
-            if(e!=null) vieModel.DetailMovie.labellist = e.List;
+            if (e != null) vieModel.DetailMovie.labellist = e.List;
             vieModel.SaveLabel();
 
             tagPanel.TagList = vieModel.DetailMovie.labellist;
@@ -434,21 +434,21 @@ namespace Jvedio
         //显示导演
         public void ShowSameDirector(object sender, MouseButtonEventArgs e)
         {
-            string genretext = ((Label)sender).Content.ToString();
-            if (string.IsNullOrEmpty(genretext)) return;
-            windowMain.Director_MouseDown(sender, e);
+            Border border = sender as Border;
+            string text = ((TextBlock)border.Child).Text;
+            if (string.IsNullOrEmpty(text)) return;
+            windowMain.vieModel.GetMoviebyDirector(text);
             windowMain.BackBtn.Visibility = Visibility.Visible;
             this.Close();
-
-
         }
 
         //显示发行商
         public void ShowSameStudio(object sender, MouseButtonEventArgs e)
         {
-            string genretext = ((Label)sender).Content.ToString();
-            if (string.IsNullOrEmpty(genretext)) return;
-            windowMain.Studio_MouseDown(sender, e);
+            Border border = sender as Border;
+            string text = ((TextBlock)border.Child).Text;
+            if (string.IsNullOrEmpty(text)) return;
+            windowMain.vieModel.GetMoviebyStudio(text); ;
             windowMain.BackBtn.Visibility = Visibility.Visible;
             this.Close();
 
@@ -458,9 +458,10 @@ namespace Jvedio
         //显示系列
         public void ShowSameTag(object sender, MouseButtonEventArgs e)
         {
-            string genretext = ((Label)sender).Content.ToString();
-            if (string.IsNullOrEmpty(genretext)) return;
-            windowMain.Tag_MouseDown(sender, e);
+            Border border = sender as Border;
+            string text = ((TextBlock)border.Child).Text;
+            if (string.IsNullOrEmpty(text)) return;
+            windowMain.vieModel.GetMoviebyTag(text);
             windowMain.BackBtn.Visibility = Visibility.Visible;
             this.Close();
 
@@ -489,7 +490,7 @@ namespace Jvedio
             {
                 string filepath = vieModel.DetailMovie.filepath;
                 Main main = GetWindowByName("Main") as Main;
-                main.PlayVedioWithPlayer(filepath, vieModel.DetailMovie.id,GrowlToken);
+                main.PlayVedioWithPlayer(filepath, vieModel.DetailMovie.id, GrowlToken);
             }
         }
 
@@ -500,6 +501,7 @@ namespace Jvedio
             {
                 this.DragMove();
             }
+
         }
 
         private void scrollViewer_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
@@ -657,7 +659,7 @@ namespace Jvedio
 
                 if (index == 4 | index == 5)
                 {
-                    FileHelper.TryOpenPath(filepath,GrowlToken);
+                    FileHelper.TryOpenPath(filepath, GrowlToken);
                 }
                 else
                 {
@@ -1016,27 +1018,36 @@ namespace Jvedio
         public async void TranslateMovie(object sender, RoutedEventArgs e)
         {
             if (IsTranslating) return;
-            
-            if (!Properties.Settings.Default.Enable_TL_BAIDU & !Properties.Settings.Default.Enable_TL_YOUDAO) { HandyControl.Controls.Growl.Warning("请设置【有道翻译】并测试", GrowlToken); return; }
+
+            if (!Properties.Settings.Default.Enable_TL_BAIDU & !Properties.Settings.Default.Enable_TL_YOUDAO) { HandyControl.Controls.Growl.Warning("请设置【有道翻译】并测试", GrowlToken); IsTranslating = false; return; }
             string result = "";
             MySqlite dataBase = new MySqlite("Translate");
 
             DetailMovie movie = vieModel.DetailMovie;
             IsTranslating = true;
-            //检查是否已经翻译过，如有则跳过
-            if (!string.IsNullOrEmpty(dataBase.SelectByField("translate_title", "youdao", movie.id))) { HandyControl.Controls.Growl.Warning("影片已经翻译过！", GrowlToken); return; }
-            if (movie.title != "")
+            //检查是否已经翻译过，如有提示
+            if (!string.IsNullOrEmpty(dataBase.SelectByField("translate_title", "youdao", movie.id)))
+            {
+                if (new Msgbox(this, Jvedio.Language.Resources.AlreadyTranslate).ShowDialog() == false)
+                {
+                    IsTranslating = false;
+                    return;
+                }
+
+            }
+
+            string title = DataBase.SelectInfoByID("title", "movie", movie.id);
+
+            if (title != "")
             {
 
-                if (Properties.Settings.Default.Enable_TL_YOUDAO) result = await Translate.Youdao(movie.title);
+                if (Properties.Settings.Default.Enable_TL_YOUDAO) result = await Translate.Youdao(title);
                 //保存
                 if (result != "")
                 {
-
-                    dataBase.SaveYoudaoTranslateByID(movie.id, movie.title, result, "title");
+                    dataBase.SaveYoudaoTranslateByID(movie.id, title, result, "title");
                     movie.title = result;
                     UpdateInfo(movie);
-                    //HandyControl.Controls.Growl.Info(Jvedio.Language.Resources.TranslateSuccess, GrowlToken);
                 }
                 else
                 {
@@ -1044,14 +1055,14 @@ namespace Jvedio
                 }
 
             }
-
-            if (movie.plot != "")
+            string plot = DataBase.SelectInfoByID("plot", "movie", movie.id);
+            if (plot != "")
             {
-                if (Properties.Settings.Default.Enable_TL_YOUDAO) result = await Translate.Youdao(movie.plot);
+                if (Properties.Settings.Default.Enable_TL_YOUDAO) result = await Translate.Youdao(plot);
                 //保存
                 if (result != "")
                 {
-                    dataBase.SaveYoudaoTranslateByID(movie.id, movie.plot, result, "plot");
+                    dataBase.SaveYoudaoTranslateByID(movie.id, plot, result, "plot");
                     movie.plot = result;
                     UpdateInfo(movie);
                     //HandyControl.Controls.Growl.Info(Jvedio.Language.Resources.TranslateSuccess, GrowlToken);
@@ -1194,7 +1205,7 @@ namespace Jvedio
                 PreviousMovie(sender, new MouseButtonEventArgs(InputManager.Current.PrimaryMouseDevice, 0, MouseButton.Left));
             else if (e.Key == Key.Right)
                 NextMovie(sender, new MouseButtonEventArgs(InputManager.Current.PrimaryMouseDevice, 0, MouseButton.Left));
-            else if ( e.Key == Key.Space || e.Key == Key.Enter || e.Key == Key.P)
+            else if (e.Key == Key.Space || e.Key == Key.Enter || e.Key == Key.P)
                 PlayVedio(sender, new MouseEventArgs(InputManager.Current.PrimaryMouseDevice, 0));
             else if (e.Key == Key.E)
                 EditInfo(sender, new MouseButtonEventArgs(InputManager.Current.PrimaryMouseDevice, 0, MouseButton.Left));
@@ -1467,7 +1478,7 @@ namespace Jvedio
         {
             if (e.ClickCount == 2)
             {
-                Window_ImageViewer window_ImageViewer = new Window_ImageViewer(this,BigImage.Source);
+                Window_ImageViewer window_ImageViewer = new Window_ImageViewer(this, BigImage.Source);
                 window_ImageViewer.ShowDialog();
             }
         }
@@ -1556,7 +1567,7 @@ namespace Jvedio
                     ShowTagStamps();//显示标签戳
                     SetStatus(true);//设置状态
                     //加载信息在所有
-                    await Task.Run(() => vieModel.VideoInfo = MediaParse.GetMediaInfo(vieModel.DetailMovie.filepath)  );
+                    await Task.Run(() => vieModel.VideoInfo = MediaParse.GetMediaInfo(vieModel.DetailMovie.filepath));
                     //加载图片
                     if ((bool)ExtraImageRadioButton.IsChecked) await LoadImage();
                     else await LoadScreenShotImage();
@@ -1591,15 +1602,15 @@ namespace Jvedio
             {
                 CopyMagnetsMenuItem.Items.Clear();
                 var magnets = DataBase.SelectMagnetsByID(vieModel.DetailMovie.id);
-                magnets = magnets.OrderByDescending(arg => arg.size).ThenByDescending(arg=>arg.releasedate).ThenByDescending(arg=>string.Join(" ", arg.tag).Length).ToList();
+                magnets = magnets.OrderByDescending(arg => arg.size).ThenByDescending(arg => arg.releasedate).ThenByDescending(arg => string.Join(" ", arg.tag).Length).ToList();
                 foreach (var magnet in magnets)
                 {
                     MenuItem menuItem = new MenuItem();
                     string tag = "";
-                    if (magnet.tag.Count > 0) tag ="（" + string.Join(" ", magnet.tag) + "）";
-                 
+                    if (magnet.tag.Count > 0) tag = "（" + string.Join(" ", magnet.tag) + "）";
+
                     menuItem.Header = $"{magnet.releasedate} {tag} {magnet.size} MB {magnet.title}";
-                    menuItem.Click += (s, ev) => ClipBoard.TrySetDataObject(magnet.link,GrowlToken,false);
+                    menuItem.Click += (s, ev) => ClipBoard.TrySetDataObject(magnet.link, GrowlToken, false);
                     CopyMagnetsMenuItem.Items.Add(menuItem);
                 }
             }
@@ -1636,7 +1647,7 @@ namespace Jvedio
 
         private async Task<bool> LoadImage()
         {
-            
+
             scrollViewer.ScrollToHorizontalOffset(0);
             //加载大图到预览图
             DisposeImage();
@@ -1669,7 +1680,7 @@ namespace Jvedio
                         foreach (var path in Directory.GetFiles(GlobalVariable.BasePicPath + $"ExtraPic\\{vieModel.DetailMovie.id}\\")) imagePathList.Add(path);
                     }
                     catch { }
-                    if (imagePathList.Count > 0) imagePathList = imagePathList.Where(arg=>Scan.ImagePattern.Contains(Path.GetExtension(arg))).CustomSort().ToList();
+                    if (imagePathList.Count > 0) imagePathList = imagePathList.Where(arg => Scan.ImagePattern.Contains(Path.GetExtension(arg))).CustomSort().ToList();
                 }
             });
 
@@ -1729,14 +1740,14 @@ namespace Jvedio
         private void LoadExtraImage(BitmapSource bitmapSource)
         {
             vieModel.DetailMovie.extraimagelist.Add(bitmapSource);
-            
+
         }
 
         private delegate void LoadExtraPathDelegate(string path);
         private void LoadExtraPath(string path)
         {
             vieModel.DetailMovie.extraimagePath.Add(path);
-            
+
         }
 
         private async void ExtraImageRadioButton_Click(object sender, RoutedEventArgs e)
@@ -1892,7 +1903,7 @@ namespace Jvedio
             {
                 taskbarInstance.SetProgressState(Microsoft.WindowsAPICodePack.Taskbar.TaskbarProgressBarState.Normal, this);
                 taskbarInstance.SetProgressValue((int)e.NewValue, 100, this);
-                if (e.NewValue == 100) taskbarInstance.SetProgressState(Microsoft.WindowsAPICodePack.Taskbar.TaskbarProgressBarState.NoProgress, this);
+                if (e.NewValue >= 100 || e.NewValue <= 0) taskbarInstance.SetProgressState(Microsoft.WindowsAPICodePack.Taskbar.TaskbarProgressBarState.NoProgress, this);
             }
         }
 
@@ -1926,20 +1937,22 @@ namespace Jvedio
             ClipBoard.TrySetDataObject(vieModel.DetailMovie.id, GrowlToken);
         }
 
-        private  void GetPlot(object sender, RoutedEventArgs e)
+        private void GetPlot(object sender, RoutedEventArgs e)
         {
             if (JvedioServers.DMM.Url.IsProperUrl())
             {
-                Task.Run(async () => {
-                    HttpResult httpResult = await new FANZACrawler(vieModel.DetailMovie.id,true).Crawl();
+                Task.Run(async () =>
+                {
+                    HttpResult httpResult = await new FANZACrawler(vieModel.DetailMovie.id, true).Crawl();
                     if (this.Dispatcher != null)
                     {
-                        Dispatcher.Invoke((Action)delegate {
+                        Dispatcher.Invoke((Action)delegate
+                        {
                             RefreshCurrent();
                         });
                     }
                 });
-                
+
             }
         }
 
@@ -1948,10 +1961,11 @@ namespace Jvedio
             MenuItem menuItem = sender as MenuItem;
             ContextMenu contextMenu = menuItem.Parent as ContextMenu;
             contextMenu.IsOpen = false;
-            await Task.Run(async () => {
-                await Task.Delay(300) ;
+            await Task.Run(async () =>
+            {
+                await Task.Delay(300);
             });
-            Window_ScreenShot window_ScreenShot = new Window_ScreenShot(this,ImageProcess.GetScreenShot());
+            Window_ScreenShot window_ScreenShot = new Window_ScreenShot(this, ImageProcess.GetScreenShot());
             window_ScreenShot.ShowDialog();
         }
 
@@ -1961,9 +1975,9 @@ namespace Jvedio
             if (vieModel.DetailMovie != null)
             {
                 MenuItem menuItem = (MenuItem)sender;
-                MenuItem parent = menuItem.Parent as MenuItem;
-                TextBox textBox = (parent.Parent as ContextMenu).PlacementTarget as TextBox;
-                int idx = parent.Items.IndexOf(menuItem)+1;
+                ContextMenu parent = menuItem.Parent as ContextMenu;
+                TextBox textBox = parent.PlacementTarget as TextBox;
+                int idx = parent.Items.IndexOf(menuItem) + 1;
                 vieModel.DetailMovie.vediotype = idx;
                 DataBase.UpdateMovieByID(vieModel.DetailMovie.id, "vediotype", idx, "Int");
                 //更新主界面
@@ -1973,7 +1987,7 @@ namespace Jvedio
 
         private void DownLoadMagnets(object sender, RoutedEventArgs e)
         {
-            new Msgbox(this, "开发中").ShowDialog() ;
+            new Msgbox(this, "开发中").ShowDialog();
         }
 
         private void SortByLetter(object sender, RoutedEventArgs e)
@@ -2016,7 +2030,7 @@ namespace Jvedio
         {
             HandyControl.Controls.SearchBar searchBar = sender as HandyControl.Controls.SearchBar;
             LabelItemsControl.ItemsSource = null;
-            LabelItemsControl.ItemsSource = vieModel.LabelList.Where(arg=>arg.IndexOf(SearchBar.Text)>=0);
+            LabelItemsControl.ItemsSource = vieModel.LabelList.Where(arg => arg.IndexOf(SearchBar.Text) >= 0);
         }
 
 
@@ -2047,7 +2061,6 @@ namespace Jvedio
             }
         }
 
-       
     }
 
 

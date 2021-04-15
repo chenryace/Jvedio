@@ -1435,7 +1435,7 @@
     <value>显示剩余影片</value>
   </data>
   <data name="AddToFavorites" xml:space="preserve">
-    <value>添加收藏</value>
+    <value>添加/取消收藏</value>
   </data>
   <data name="Censored" xml:space="preserve">
     <value>骑兵</value>
@@ -1715,5 +1715,8 @@
   </data>
   <data name="JvedioIsRunning" xml:space="preserve">
     <value>Jvedio已经在运行！</value>
+  </data>
+  <data name="AlreadyTranslate" xml:space="preserve">
+    <value>影片已翻译，是否继续翻译？</value>
   </data>
 </root>
