@@ -47,9 +47,9 @@
 
                 <StackPanel x:Name="ButtonStackPanel"  Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
 
-                    <Button  x:Name="ConfirmButton"   Content="{x:Static lang:Resources.Confirm}" Style="{StaticResource ButtonStyleFill}"  />
+                    <Button  x:Name="ConfirmButton"   Content="{x:Static lang:Resources.Confirm}" Style="{StaticResource ButtonPrimary}"  />
 
-                    <Button x:Name="CancelButton"  Content="{x:Static lang:Resources.Cancel}" Style="{StaticResource ButtonStyleFill}"   />
+                    <Button x:Name="CancelButton"  Content="{x:Static lang:Resources.Cancel}" Style="{StaticResource ButtonDanger}"   />
 
                 </StackPanel>
             </Grid>

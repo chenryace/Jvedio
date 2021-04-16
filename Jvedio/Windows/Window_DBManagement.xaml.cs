@@ -41,7 +41,21 @@ namespace Jvedio
             vieModel_DBManagement.ListDatabase();
 
             this.DataContext = vieModel_DBManagement;
-            vieModel_DBManagement.CurrentDataBase = Path.GetFileNameWithoutExtension(Properties.Settings.Default.DataBasePath);
+            if (File.Exists(Properties.Settings.Default.DataBasePath))
+            {
+                vieModel_DBManagement.CurrentDataBase = Path.GetFileNameWithoutExtension(Properties.Settings.Default.DataBasePath);
+                for (int i = 0; i < vieModel_DBManagement.DataBases.Count; i++)
+                {
+                    if (vieModel_DBManagement.DataBases[i] == vieModel_DBManagement.CurrentDataBase)
+                    {
+                        comboBox.SelectedIndex = i;
+                        break;
+                    }
+                }
+            }
+
+
+
             this.SizedChangedCompleted += delegate { ShowStatistic(); };
         }
 
@@ -61,20 +75,7 @@ namespace Jvedio
         }
 
 
-        public void LoadDataBase(object sender, MouseButtonEventArgs e)
-        {
 
-            string name = "";
-            Border border = sender as Border;
-            Grid grid = border.Parent as Grid;
-            Grid grid1 = grid.Parent as Grid;
-            TextBlock textBlock = grid1.Children[1] as TextBlock;
-            name = textBlock.Text.ToLower();
-
-            Main main = GetWindowByName("Main") as Main;
-            main.vieModel.DatabaseSelectedIndex = main.vieModel.DataBases.IndexOf(name);
-
-        }
 
         public void RefreshMain()
         {
@@ -94,6 +95,14 @@ namespace Jvedio
             TextBlock textBlock = grid1.Children[1] as TextBlock;
             name = textBlock.Text.ToLower();
             vieModel_DBManagement.CurrentDataBase = name;
+            for (int i = 0; i < vieModel_DBManagement.DataBases.Count; i++)
+            {
+                if (vieModel_DBManagement.DataBases[i] == name)
+                {
+                    comboBox.SelectedIndex = i;
+                    break;
+                }
+            }
 
             var brush = new SolidColorBrush(Colors.Red);
             NameBorder.Background = brush;
@@ -107,14 +116,9 @@ namespace Jvedio
         public void DelDataBase(object sender, MouseButtonEventArgs e)
         {
             //删除数据库
-            string name = "";
+
             Border border = sender as Border;
-            Grid grid = border.Parent as Grid;
-            Grid grid1 = grid.Parent as Grid;
-            TextBlock textBlock = grid1.Children[1] as TextBlock;
-            name = textBlock.Text.ToLower();
-
-
+            string name = border.Tag.ToString();
             if (new Msgbox(this, $"{Jvedio.Language.Resources.IsToDelete} {name}?").ShowDialog() == true)
             {
                 string dirpath = DateTime.Now.ToString("yyyyMMddHHss");
@@ -128,6 +132,12 @@ namespace Jvedio
                     {
                         vieModel_DBManagement.DataBases.Remove(name);
                         RefreshMain();
+                        if (vieModel_DBManagement.DataBases.Count == 0)
+                        {
+                            Properties.Settings.Default.DataBasePath = "";
+                            Properties.Settings.Default.Save();
+                        }
+
                     }
                 }
             }
@@ -225,16 +235,19 @@ namespace Jvedio
 
         private async void BeginTask(object sender, RoutedEventArgs e)
         {
+
+            //数据库管理
+            var cb = CheckBoxWrapPanel.Children.OfType<CheckBox>().ToList();
+            string path = $"DataBase\\{vieModel_DBManagement.CurrentDataBase}";
+            if (!File.Exists(path)) return;
+
+
+            MySqlite db = new MySqlite(path);
             Button button = (Button)sender;
             button.IsEnabled = false;
             cts = new CancellationTokenSource();
             cts.Token.Register(() => { });
             ct = cts.Token;
-
-            //数据库管理
-            var cb = CheckBoxWrapPanel.Children.OfType<CheckBox>().ToList();
-            string path = $"DataBase\\{vieModel_DBManagement.CurrentDataBase}";
-            MySqlite db = new MySqlite(path);
 
             if ((bool)cb[0].IsChecked)
             {
@@ -513,6 +526,7 @@ namespace Jvedio
                 catch (OperationCanceledException ex)
                 {
                     Console.WriteLine(ex.Message);
+                    HandyControl.Controls.Growl.Error(Jvedio.Language.Resources.Cancel, GrowlToken);
                 }
 
             });
@@ -535,6 +549,12 @@ namespace Jvedio
             ComboBox comboBox = sp.Children.OfType<ComboBox>().First();
             string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "DataBase", comboBox.Text + ".sqlite");
             FileHelper.TryOpenSelectPath(path, GrowlToken);
+        }
+
+        private void currentDatabase_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (e.AddedItems.Count == 0) return;
+            vieModel_DBManagement.CurrentDataBase = e.AddedItems[0].ToString();
         }
     }
 

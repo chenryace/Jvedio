@@ -62,6 +62,23 @@ namespace Jvedio
             return result;
         }
 
+        private static DataTable getDataTable(string src, string table)
+        {
+            DataTable dataTable = new DataTable();
+            using (SQLiteConnection conn = new SQLiteConnection("data source=" + src))
+            {
+                using (SQLiteCommand cmd = new SQLiteCommand())
+                {
+                    cmd.Connection = conn;
+                    conn.Open();
+                    cmd.CommandText = "SELECT * FROM " + table;
+                    SQLiteDataReader sQLiteDataReader = cmd.ExecuteReader();
+                    dataTable.Load(sQLiteDataReader);
+                }
+            }
+            return dataTable;
+        }
+
 
         /// <summary>
         /// 数据库之间复制数据
@@ -73,26 +90,12 @@ namespace Jvedio
         /// <param name="skipnulltitle"></param>
         public static void CopyDatabaseInfo(string src, string dst, CancellationToken ct, Action<int> callback = null, bool skipnulltitle = true)
         {
-            DataTable dataTable = new DataTable();
-            using (SQLiteConnection conn = new SQLiteConnection("data source=" + src))
-            {
-                using (SQLiteCommand cmd = new SQLiteCommand())
-                {
-                    cmd.Connection = conn;
-                    conn.Open();
-                    cmd.CommandText = "SELECT * FROM movie";
-                    SQLiteDataReader sQLiteDataReader = cmd.ExecuteReader();
-                    dataTable.Load(sQLiteDataReader);
-                }
-            }
 
-
+            // movie表
+            DataTable dataTable = getDataTable(src, "movie");
             string sqltext = $"INSERT INTO movie(id  , title  , filesize  , filepath  , subsection  , vediotype  , scandate  , releasedate , visits , director  , genre  , tag  , actor  , actorid  ,studio  , rating , chinesetitle  , favorites  , label  , plot  , outline  , year   , runtime , country  , countrycode ,otherinfo , sourceurl , source ,actressimageurl ,smallimageurl ,bigimageurl ,extraimageurl ) " +
                 "values(@id  , @title  , @filesize  , @filepath  , @subsection  , @vediotype  , @scandate  , @releasedate , @visits , @director  , @genre  , @tag  , @actor  , @actorid  ,@studio  , @rating , @chinesetitle  , @favorites  ,@label  , @plot  , @outline  , @year   , @runtime , @country  , @countrycode ,@otherinfo , @sourceurl , @source ,@actressimageurl ,@smallimageurl ,@bigimageurl ,@extraimageurl) " +
                 "ON CONFLICT(id) DO UPDATE SET title=@title  , filesize=@filesize  , filepath=@filepath  , subsection=@subsection  , vediotype=@vediotype  , scandate=@scandate  , releasedate=@releasedate , visits=@visits , director=@director  , genre=@genre  , tag=@tag  , actor=@actor  , actorid=@actorid  ,studio=@studio  , rating=@rating , chinesetitle=@chinesetitle  ,favorites=@favorites  ,label=@label  , plot=@plot  , outline=@outline  , year=@year   , runtime=@runtime , country=@country  , countrycode=@countrycode ,otherinfo=@otherinfo , sourceurl=@sourceurl , source=@source ,actressimageurl=@actressimageurl ,smallimageurl=@smallimageurl ,bigimageurl=@bigimageurl ,extraimageurl=@extraimageurl";
-
-
-
             using (SQLiteConnection conn = new SQLiteConnection("data source=" + dst))
             {
                 using (SQLiteCommand cmd = new SQLiteCommand())
@@ -106,11 +109,7 @@ namespace Jvedio
                     {
                         idx++;
                         int progress = (int)(idx / total * 100);
-                        Console.WriteLine(progress);
                         callback?.Invoke(progress);
-
-
-
                         ct.ThrowIfCancellationRequested();
                         EnumerableRowCollection<DataRow> dataRows = dataTable.AsEnumerable().Where(myRow => myRow.Field<string>("id") == row["id"].ToString());
                         DataRow dataRow = null;
@@ -154,17 +153,175 @@ namespace Jvedio
                         cmd.Parameters.Add("bigimageurl", DbType.String).Value = dataRow["bigimageurl"];
                         cmd.Parameters.Add("extraimageurl", DbType.String).Value = dataRow["extraimageurl"];
                         cmd.Parameters.Add("actressimageurl", DbType.String).Value = dataRow["actressimageurl"];
-
-
                         cmd.ExecuteNonQuery();
+                    }
+                }
+            }
 
+            // actress
+            ct.ThrowIfCancellationRequested();
+            dataTable = getDataTable(src, "actress");
+            sqltext = $"insert into actress(id,name ,  birthday , age ,height, cup, chest  , waist , hipline ,birthplace  , hobby,sourceurl ,source,imageurl) values(@id,@name ,  @birthday , @age ,@height, @cup, @chest  , @waist , @hipline ,@birthplace  , @hobby,@sourceurl ,@source,@imageurl) on conflict(id) do update set name=@name ,  birthday=@birthday , age=@age  ,height=@height, cup=@cup, chest=@chest  , waist=@waist , hipline=@hipline ,birthplace=@birthplace  , hobby=@hobby,sourceurl=@sourceurl ,source=@source,imageurl=@imageurl";
+            using (SQLiteConnection conn = new SQLiteConnection("data source=" + dst))
+            {
+                using (SQLiteCommand cmd = new SQLiteCommand())
+                {
+                    cmd.Connection = conn;
+                    conn.Open();
+
+                    double idx = 0;
+                    double total = dataTable.Rows.Count > 0 ? dataTable.Rows.Count : 1;
+                    foreach (DataRow row in dataTable.Rows)
+                    {
+                        idx++;
+                        int progress = (int)(idx / total * 100);
+                        Console.WriteLine(progress);
+                        callback?.Invoke(progress);
+
+
+
+                        ct.ThrowIfCancellationRequested();
+                        EnumerableRowCollection<DataRow> dataRows = dataTable.AsEnumerable().Where(myRow => myRow.Field<string>("id") == row["id"].ToString());
+                        DataRow dataRow = null;
+                        if (dataRows != null && dataRows.Count() > 0)
+                            dataRow = dataRows.First();
+                        else continue;
+                        cmd.CommandText = sqltext;
+                        cmd.Parameters.Add("id", DbType.String).Value = dataRow["id"];
+                        cmd.Parameters.Add("name", DbType.String).Value = dataRow["name"];
+                        cmd.Parameters.Add("birthday", DbType.String).Value = dataRow["birthday"];
+                        cmd.Parameters.Add("age", DbType.Int16).Value = dataRow["age"];
+                        cmd.Parameters.Add("height", DbType.Int16).Value = dataRow["height"];
+                        cmd.Parameters.Add("cup", DbType.String).Value = dataRow["cup"];
+                        cmd.Parameters.Add("chest", DbType.Int16).Value = dataRow["chest"];
+                        cmd.Parameters.Add("waist", DbType.Int16).Value = dataRow["waist"];
+                        cmd.Parameters.Add("hipline", DbType.Int16).Value = dataRow["hipline"];
+                        cmd.Parameters.Add("birthplace", DbType.String).Value = dataRow["birthplace"];
+                        cmd.Parameters.Add("hobby", DbType.String).Value = dataRow["hobby"];
+                        cmd.Parameters.Add("sourceurl", DbType.String).Value = dataRow["sourceurl"];
+                        cmd.Parameters.Add("source", DbType.String).Value = dataRow["source"];
+                        cmd.Parameters.Add("imageurl", DbType.String).Value = dataRow["imageurl"];
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+            }
+
+            // library
+            ct.ThrowIfCancellationRequested();
+            dataTable = getDataTable(src, "library");
+            sqltext = $"insert into library(id,code) values(@id,@code) on conflict(id) do update set code=@code ";
+            using (SQLiteConnection conn = new SQLiteConnection("data source=" + dst))
+            {
+                using (SQLiteCommand cmd = new SQLiteCommand())
+                {
+                    cmd.Connection = conn;
+                    conn.Open();
+
+                    double idx = 0;
+                    double total = dataTable.Rows.Count > 0 ? dataTable.Rows.Count : 1;
+                    foreach (DataRow row in dataTable.Rows)
+                    {
+                        idx++;
+                        int progress = (int)(idx / total * 100);
+                        Console.WriteLine(progress);
+                        callback?.Invoke(progress);
+
+                        ct.ThrowIfCancellationRequested();
+                        EnumerableRowCollection<DataRow> dataRows = dataTable.AsEnumerable().Where(myRow => myRow.Field<string>("id") == row["id"].ToString());
+                        DataRow dataRow = null;
+                        if (dataRows != null && dataRows.Count() > 0)
+                            dataRow = dataRows.First();
+                        else continue;
+                        cmd.CommandText = sqltext;
+                        cmd.Parameters.Add("id", DbType.String).Value = dataRow["id"];
+                        cmd.Parameters.Add("code", DbType.String).Value = dataRow["code"];
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+            }
+
+            // javdb
+            ct.ThrowIfCancellationRequested();
+            dataTable = getDataTable(src, "javdb");
+            sqltext = $"insert into javdb(id,code) values(@id,@code) on conflict(id) do update set code=@code ";
+            using (SQLiteConnection conn = new SQLiteConnection("data source=" + dst))
+            {
+                using (SQLiteCommand cmd = new SQLiteCommand())
+                {
+                    cmd.Connection = conn;
+                    conn.Open();
+
+                    double idx = 0;
+                    double total = dataTable.Rows.Count > 0 ? dataTable.Rows.Count : 1;
+                    foreach (DataRow row in dataTable.Rows)
+                    {
+                        idx++;
+                        int progress = (int)(idx / total * 100);
+                        Console.WriteLine(progress);
+                        callback?.Invoke(progress);
+
+                        ct.ThrowIfCancellationRequested();
+                        EnumerableRowCollection<DataRow> dataRows = dataTable.AsEnumerable().Where(myRow => myRow.Field<string>("id") == row["id"].ToString());
+                        DataRow dataRow = null;
+                        if (dataRows != null && dataRows.Count() > 0)
+                            dataRow = dataRows.First();
+                        else continue;
+                        cmd.CommandText = sqltext;
+                        cmd.Parameters.Add("id", DbType.String).Value = dataRow["id"];
+                        cmd.Parameters.Add("code", DbType.String).Value = dataRow["code"];
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+            }
+
+
+            // actresslove
+            ct.ThrowIfCancellationRequested();
+            dataTable = getDataTable(src, "actresslove");
+            sqltext = $"insert into actresslove(name,islove) values(@name,@islove) on conflict(name) do update set islove=@islove ";
+
+            using (MySqlite mySqlite = new MySqlite(dst, true))
+            {
+                bool istableExist = mySqlite.IsTableExist("actresslove");
+                if (!istableExist)
+                {
+                    mySqlite.CreateTable(DataBase.SQLITETABLE_ACTRESS_LOVE);
+                }
+            }
+
+
+
+
+            using (SQLiteConnection conn = new SQLiteConnection("data source=" + dst))
+            {
+                using (SQLiteCommand cmd = new SQLiteCommand())
+                {
+                    cmd.Connection = conn;
+                    conn.Open();
+
+                    double idx = 0;
+                    double total = dataTable.Rows.Count > 0 ? dataTable.Rows.Count : 1;
+                    foreach (DataRow row in dataTable.Rows)
+                    {
+                        idx++;
+                        int progress = (int)(idx / total * 100);
+                        Console.WriteLine(progress);
+                        callback?.Invoke(progress);
+
+                        ct.ThrowIfCancellationRequested();
+                        EnumerableRowCollection<DataRow> dataRows = dataTable.AsEnumerable().Where(myRow => myRow.Field<string>("name") == row["name"].ToString());
+                        DataRow dataRow = null;
+                        if (dataRows != null && dataRows.Count() > 0)
+                            dataRow = dataRows.First();
+                        else continue;
+                        cmd.CommandText = sqltext;
+                        cmd.Parameters.Add("name", DbType.String).Value = dataRow["name"];
+                        cmd.Parameters.Add("islove", DbType.Int32).Value = dataRow["islove"];
+                        cmd.ExecuteNonQuery();
                     }
                 }
             }
         }
-
-
-
 
         #region "SELECT"
 
@@ -930,6 +1087,7 @@ namespace Jvedio
         public async static Task<List<List<string>>> GetAllFilter()
         {
             Init();
+            if (!File.Exists(Properties.Settings.Default.DataBasePath) || !IsTableExist("movie")) return null;
             return await Task.Run(() =>
             {
                 using (SQLiteConnection cn = new SQLiteConnection("data source=" + SqlitePath))

@@ -70,14 +70,14 @@ namespace Jvedio
                 HttpResult httpResult = await MyNet.DownLoadFromNet(DetailMovie);
                 if (httpResult != null && !httpResult.Success)
                 {
-                        string error = httpResult.Error != "" ? httpResult.Error : httpResult.StatusCode.ToStatusMessage();
-                        MessageCallBack?.Invoke(this, new MessageCallBackEventArgs($" {DetailMovie.id} {Jvedio.Language.Resources.DownloadMessageFailFor}：{error}"));
-                    
+                    string error = httpResult.Error != "" ? httpResult.Error : httpResult.StatusCode.ToStatusMessage();
+                    MessageCallBack?.Invoke(this, new MessageCallBackEventArgs($" {DetailMovie.id} {Jvedio.Language.Resources.DownloadMessageFailFor}：{error}"));
+
                 }
 
             }
             DetailMovie dm = DataBase.SelectDetailMovieById(DetailMovie.id);
-            if (dm==null || string.IsNullOrEmpty(dm.title))
+            if (dm == null || string.IsNullOrEmpty(dm.title))
             {
                 InfoUpdate?.Invoke(this, new DetailMovieEventArgs() { DetailMovie = dm, value = 1, maximum = 1 });
                 return;
@@ -142,7 +142,10 @@ namespace Jvedio
                     if (dlimageSuccess)
                     {
                         ExtraImageDownLoadCompleted?.Invoke(this, new MessageCallBackEventArgs(filepath));
-                        Thread.Sleep(Delay.MEDIUM);
+                        if (urlList[i].IndexOf("dmm") > 0)
+                            Thread.Sleep(Delay.MEDIUM);
+                        else
+                            Thread.Sleep(Delay.SHORT_3);
                     }
                     else
                     {

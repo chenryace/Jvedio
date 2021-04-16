@@ -363,8 +363,8 @@
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
-                                            <Button Content="{x:Static lang:Resources.Test}"  Tag="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}}" Cursor="Hand"  Style="{StaticResource ButtonPrimary}" Margin="5"  Click="TestServer" />
-                                            <Button Content="{x:Static lang:Resources.Delete}"   Style="{StaticResource ButtonDanger}"   Margin="5" Cursor="Hand"   Click="DeleteServer"  />
+                                            <Button Content="{x:Static lang:Resources.Test}"  Tag="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}}" Cursor="Hand"  Style="{StaticResource ButtonPrimary}" Margin="5" MinWidth="50"  Click="TestServer" />
+                                            <Button Content="{x:Static lang:Resources.Delete}"   Style="{StaticResource ButtonDanger}"   Margin="5" Cursor="Hand"   Click="DeleteServer"  MinWidth="50"    />
                                         </StackPanel>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>

@@ -73,35 +73,31 @@
 
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
-                                        <Border Height="150" Width="150" Background="{DynamicResource BackgroundSide}" Margin="10" CornerRadius="5">
+                                        <Border Height="auto" Width="150" Background="{DynamicResource BackgroundSide}" Margin="10 20" CornerRadius="5">
                                             <Grid >
                                                 <Grid.RowDefinitions>
-                                                    <RowDefinition Height="400*"/>
-                                                    <RowDefinition Height="200*"/>
-                                                    <RowDefinition Height="300*"/>
+                                                    <RowDefinition Height="*"/>
+                                                    <RowDefinition Height="auto"/>
                                                 </Grid.RowDefinitions>
 
-                                                <Image Grid.Row="0" Source="pack://application:,,,/Resources/Picture/database.png" Height="64"/>
-                                                <TextBlock Text="{Binding }" Margin="5" Grid.Row="1" Style="{StaticResource BaseTextBlock}" VerticalAlignment="Center" FontSize="16" ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=Text}"/>
-                                                <Grid  Grid.Row="2" Background="{DynamicResource BackgroundTitle}" >
-                                                    <Grid.ColumnDefinitions>
-                                                        <ColumnDefinition Width="333*"/>
-                                                        <ColumnDefinition Width="333*"/>
-                                                        <ColumnDefinition Width="334*"/>
-                                                    </Grid.ColumnDefinitions>
+                                                <Image Grid.Row="0" Margin="20" Source="pack://application:,,,/Resources/Picture/database.png" Height="64"/>
+                                                <TextBlock Text="{Binding }" Margin="10" Grid.Row="1" Style="{StaticResource BaseTextBlock}" VerticalAlignment="Center" FontSize="16" ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=Text}"/>
+                                                <Border Tag="{Binding }"  MouseLeftButtonUp="DelDataBase"       CornerRadius="15"    Height="30" Width="30" Cursor="Hand" Margin="-10" VerticalAlignment="Top" HorizontalAlignment="Right"  >
+                                                    <Border.Style>
+                                                        <Style TargetType="Border">
+                                                            <Setter Property="Background" Value="{DynamicResource BackgroundMenu}"/>
+                                                            <Style.Triggers>
+                                                                <Trigger Property="IsMouseOver" Value="True">
+                                                                    <Setter Property="Background" Value="Red"/>
+                                                                </Trigger>
+                                                            </Style.Triggers>
+                                                        </Style>
 
-                                                    <Border  Grid.Column="0" Style="{StaticResource DBBorder}" MouseLeftButtonUp="LoadDataBase" ToolTip="{x:Static lang:Resources.Import}" >
-                                                        <Image  Source="pack://application:,,,/Resources/Picture/loaddatabase.png" Height="32"/>
-                                                    </Border>
-                                                    <Border  Grid.Column="1" Style="{StaticResource DBBorder}"   MouseLeftButtonUp="EditDataBase"  ToolTip="{x:Static lang:Resources.Edit}" >
-                                                        <Image Grid.Column="1" Source="pack://application:,,,/Resources/Picture/edit.png" Width="25"/>
-                                                    </Border>
-
-                                                    <Border Grid.Column="2"  Style="{StaticResource DBBorder}"  MouseLeftButtonUp="DelDataBase"  ToolTip="{x:Static lang:Resources.Delete}"  >
-                                                        <Image Grid.Column="2" Source="pack://application:,,,/Resources/Picture/delete.png" Width="32"/>
-                                                    </Border>
-                                                </Grid>
-
+                                                    </Border.Style>
+                                                    <Viewbox   Width="12" Height="auto" Margin="0"        >
+                                                        <Path VerticalAlignment="Center" HorizontalAlignment="Center"      Fill="{DynamicResource ForegroundGlobal}" Data="M610.218667 505.6l398.08-387.413333a49.664 49.664 0 0 0 0-71.338667l-2.133334-2.133333a52.992 52.992 0 0 0-73.301333 0L534.784 432.64 136.704 44.373333a52.992 52.992 0 0 0-73.386667 0L61.269333 46.592a48.810667 48.810667 0 0 0 0 71.338667l398.165334 387.669333-398.165334 387.498667a49.664 49.664 0 0 0 0 71.253333l2.218667 2.133333c20.48 19.626667 52.821333 19.626667 73.301333 0l398.08-387.413333 398.08 387.413333c20.48 19.626667 52.906667 19.626667 73.386667 0l2.048-2.133333a49.664 49.664 0 0 0 0-71.253333l-398.08-387.413334z" />
+                                                    </Viewbox>
+                                                </Border>
                                             </Grid>
                                         </Border>
                                     </DataTemplate>
@@ -124,7 +120,8 @@
                             <Border x:Name="NameBorder"   Background="{DynamicResource BackgroundMain}" HorizontalAlignment="Left" VerticalAlignment="Top" CornerRadius="5" >
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock Text="{x:Static lang:Resources.DataBase}" Style="{StaticResource BaseTextBlock}" Margin="5" VerticalAlignment="Center"/>
-                                    <TextBlock Margin="5"  Text="{Binding CurrentDataBase}" Style="{StaticResource BaseTextBlock}" HorizontalAlignment="Left" />
+                                    <!--<TextBlock Margin="5"  Text="{Binding CurrentDataBase}" Style="{StaticResource BaseTextBlock}" HorizontalAlignment="Left" />-->
+                                    <ComboBox x:Name="comboBox" SelectionChanged="currentDatabase_SelectionChanged" ItemsSource="{Binding DataBases}" Style="{StaticResource SideComboBoxStyle}" MinWidth="150" MaxWidth="500" Margin="20 0 10 0"></ComboBox>
                                 </StackPanel>
                             </Border>
 

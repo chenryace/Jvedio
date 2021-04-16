@@ -755,7 +755,7 @@
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
                                 <WrapPanel x:Name="LabelWrapPanel">
-                                    <ToggleButton  Style="{StaticResource ToggleButtonStyle1}"  Padding="5" Margin="10" FontSize="15" BorderThickness="0" Content="{Binding }"  Foreground="{DynamicResource ForegroundSearch}">
+                                    <ToggleButton Name="tb"  Style="{StaticResource ToggleButtonStyle1}" Click="AddToSelected"  Padding="5" Margin="10" FontSize="15" BorderThickness="0" Content="{Binding }"  Foreground="{DynamicResource ForegroundSearch}">
                                     </ToggleButton>
                                 </WrapPanel>
                             </DataTemplate>

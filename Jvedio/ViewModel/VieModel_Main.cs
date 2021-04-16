@@ -1213,6 +1213,7 @@ namespace Jvedio.ViewModel
             FileSize = new ObservableCollection<string>();
             Rating = new ObservableCollection<string>();
             Filters = await DataBase.GetAllFilter();
+            if (Filters == null) return;
             Year.AddRange(Filters[0]);
             Genre.AddRange(Filters[1].Take(30));
             Actor.AddRange(Filters[2].Take(30));
@@ -1726,7 +1727,7 @@ namespace Jvedio.ViewModel
         /// <summary>
         /// 翻页：加载图片以及其他
         /// </summary>
-        public bool FlipOver(int page=-1)
+        public bool FlipOver(int page = -1)
         {
             TabSelectedIndex = 0;
             if (MovieList == null) return false;
@@ -1741,7 +1742,7 @@ namespace Jvedio.ViewModel
             int number = 0;
             if (FilterMovieList != null) number = FilterMovieList.Count;
             FilterMovieList = FileProcess.FilterMovie(MovieList);   //筛选影片
-            if (page<=0 && FilterMovieList.Count < number) CurrentPage = 1;                // FilterMovieList 如果改变了，则回到第一页
+            if (page <= 0 && FilterMovieList.Count < number) CurrentPage = 1;                // FilterMovieList 如果改变了，则回到第一页
             if (page > 0) CurrentPage = page;
             Task.Run(async () =>
            {
@@ -2039,7 +2040,7 @@ namespace Jvedio.ViewModel
 
 
 
-        public void ExecutiveSqlCommand(int sideIndex, string textType, string sql, string dbName = "",bool istorecord=true,bool flip=true)
+        public void ExecutiveSqlCommand(int sideIndex, string textType, string sql, string dbName = "", bool istorecord = true, bool flip = true)
         {
             if (sql.Length <= 0) return;
             IsLoadingMovie = true;
@@ -2056,7 +2057,7 @@ namespace Jvedio.ViewModel
             bool record = TextType == Jvedio.Language.Resources.Filter;
             if (!record)
             {
-                
+
                 for (int i = 0; i < ignoresql.Length; i++)
                 {
                     if (sql.IndexOf(ignoresql[i]) >= 0)
@@ -2070,7 +2071,7 @@ namespace Jvedio.ViewModel
             if (record && istorecord) PreviousSql = sql;
 
 
-             TextType = textType;
+            TextType = textType;
 
             string viewText = "";
             int.TryParse(Properties.Settings.Default.ShowViewMode, out int vm);
@@ -2095,7 +2096,7 @@ namespace Jvedio.ViewModel
                     FlipOver();
                 else
                 {
-                  FlipOver(PreviousPage);
+                    FlipOver(PreviousPage);
                 }
             });
             InitLettersNavigation();

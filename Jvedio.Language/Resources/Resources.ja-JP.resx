@@ -1719,4 +1719,10 @@
   <data name="AlreadyTranslate" xml:space="preserve">
     <value>映画は翻訳されて、翻訳を続けますか?</value>
   </data>
+  <data name="OnlySupportBus" xml:space="preserve">
+    <value>サポートのみ Bus</value>
+  </data>
+  <data name="MainIsDownloading" xml:space="preserve">
+    <value>メイン画面はすでに同期しています!</value>
+  </data>
 </root>

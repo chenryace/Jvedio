@@ -1888,6 +1888,15 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 主界面已经在同步！ 的本地化字符串。
+        /// </summary>
+        public static string MainIsDownloading {
+            get {
+                return ResourceManager.GetString("MainIsDownloading", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 图片管理 的本地化字符串。
         /// </summary>
         public static string ManageImage {
@@ -2892,6 +2901,15 @@ namespace Jvedio.Language {
         public static string OnlyShowSubsection {
             get {
                 return ResourceManager.GetString("OnlyShowSubsection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 仅支持 Bus 的本地化字符串。
+        /// </summary>
+        public static string OnlySupportBus {
+            get {
+                return ResourceManager.GetString("OnlySupportBus", resourceCulture);
             }
         }
         

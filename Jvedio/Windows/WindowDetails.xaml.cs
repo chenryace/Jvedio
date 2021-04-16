@@ -169,17 +169,25 @@ namespace Jvedio
             }
             else
             {
-                if (DetailDownLoad == null)
+                if (windowMain.DownLoader?.State == DownLoadState.DownLoading)
                 {
-                    Task.Run(() => { StartDownload(); });
+                    HandyControl.Controls.Growl.Error(Jvedio.Language.Resources.MainIsDownloading, GrowlToken);
                 }
                 else
                 {
-                    if (!DetailDownLoad.IsDownLoading)
+                    if (DetailDownLoad == null)
                     {
                         Task.Run(() => { StartDownload(); });
                     }
+                    else
+                    {
+                        if (!DetailDownLoad.IsDownLoading)
+                        {
+                            Task.Run(() => { StartDownload(); });
+                        }
+                    }
                 }
+
             }
         }
 
@@ -223,7 +231,7 @@ namespace Jvedio
         }
 
 
-
+        private bool cancelDownload = false;
         public void StartDownload()
         {
             List<string> urlList = new List<string>();
@@ -234,17 +242,25 @@ namespace Jvedio
 
             //添加到下载列表
             DetailDownLoad = new DetailDownLoad(vieModel.DetailMovie);
+            cancelDownload = false;
             DetailDownLoad.DownLoad();
             Dispatcher.Invoke((Action)delegate () { ProgressBar.Value = 0; ProgressBar.Visibility = Visibility.Visible; });
 
             //监听取消下载：
-            DetailDownLoad.CancelEvent += (s, e) => { Dispatcher.Invoke((Action)delegate () { ProgressBar.Visibility = Visibility.Collapsed; }); };
+            DetailDownLoad.CancelEvent += (s, e) =>
+            {
+                Dispatcher.Invoke((Action)delegate ()
+                {
+                    ProgressBar.Visibility = Visibility.Collapsed;
+                    cancelDownload = true;
+                });
+            };
 
             //显示详细信息
             DetailDownLoad.InfoDownloadCompleted += (s, e) =>
             {
                 MessageCallBackEventArgs eventArgs = e as MessageCallBackEventArgs;
-                if (vieModel.DetailMovie.id == eventArgs.Message)
+                if (vieModel.DetailMovie.id == eventArgs.Message && !cancelDownload)
                 {
                     //判断是否是当前番号
 
@@ -315,7 +331,7 @@ namespace Jvedio
             {
                 if (!File.Exists(BasePicPath + $"BigPic\\{vieModel.DetailMovie.id}.jpg")) return;
                 MessageCallBackEventArgs eventArgs = e as MessageCallBackEventArgs;
-                if (vieModel.DetailMovie.id == eventArgs.Message)
+                if (vieModel.DetailMovie.id == eventArgs.Message && !cancelDownload)
                 {
                     Dispatcher.Invoke((Action)delegate ()
                 {
@@ -360,6 +376,7 @@ namespace Jvedio
             //显示预览图
             DetailDownLoad.ExtraImageDownLoadCompleted += (s, e) =>
             {
+                if (cancelDownload) return;
                 Dispatcher.Invoke((Action)delegate ()
                 {
                     if ((bool)ScreenShotRadioButton.IsChecked) return;
@@ -1588,12 +1605,36 @@ namespace Jvedio
 
             //设置右键菜单
             OpenOtherUrlMenuItem.Items.Clear();
-            if (JvedioServers.Bus.Url.IsProperUrl())
+            //Bus
+            if (vieModel.DetailMovie.source != "javbus" && JvedioServers.Bus.Url.IsProperUrl())
             {
                 MenuItem menuItem = new MenuItem() { Header = "BUS" };
                 menuItem.Click += (s, ev) => FileHelper.TryOpenUrl(JvedioServers.Bus.Url + vieModel.DetailMovie.id, GrowlToken);
                 OpenOtherUrlMenuItem.Items.Add(menuItem);
             }
+            //DB
+            if (vieModel.DetailMovie.source != "javdb" && JvedioServers.DB.Url.IsProperUrl())
+            {
+                //先获得 code 
+                string code = DataBase.SelectInfoByID("code", "javdb", vieModel.DetailMovie.id);
+                string url = $"{JvedioServers.DB.Url}search?q={vieModel.DetailMovie.id}&f=all";
+                if (code != "") url = $"{JvedioServers.DB.Url}v/{code}";
+                MenuItem menuItem = new MenuItem() { Header = "DB" };
+                menuItem.Click += (s, ev) => FileHelper.TryOpenUrl(url, GrowlToken);
+                OpenOtherUrlMenuItem.Items.Add(menuItem);
+            }
+
+            //Library
+            if (vieModel.DetailMovie.source != "javlibrary" && JvedioServers.Library.Url.IsProperUrl())
+            {
+                string code = DataBase.SelectInfoByID("code", "library", vieModel.DetailMovie.id);
+                string url = $"{JvedioServers.Library.Url}vl_searchbyid.php?keyword={vieModel.DetailMovie.id}";
+                if (code != "") url = $"{JvedioServers.Library.Url}?v={code}";
+                MenuItem menuItem = new MenuItem() { Header = "Library" };
+                menuItem.Click += (s, ev) => FileHelper.TryOpenUrl(url, GrowlToken);
+                OpenOtherUrlMenuItem.Items.Add(menuItem);
+            }
+
         }
 
         private void ShowMagnets()
@@ -1833,6 +1874,7 @@ namespace Jvedio
         {
             vieModel.GetLabelList();
             LabelGrid.Visibility = Visibility.Visible;
+            SelectedLabel = new List<string>();
             for (int i = 0; i < LabelItemsControl.Items.Count; i++)
             {
                 ContentPresenter c = (ContentPresenter)LabelItemsControl.ItemContainerGenerator.ContainerFromItem(LabelItemsControl.Items[i]);
@@ -1843,6 +1885,7 @@ namespace Jvedio
                     toggleButton.IsChecked = false;
                 }
             }
+
         }
 
 
@@ -1851,31 +1894,29 @@ namespace Jvedio
             LabelGrid.Visibility = Visibility.Hidden;
 
             //获得选中的标签
-            List<string> originLabels = new List<string>();
-            for (int i = 0; i < LabelItemsControl.Items.Count; i++)
-            {
-                ContentPresenter c = (ContentPresenter)LabelItemsControl.ItemContainerGenerator.ContainerFromItem(LabelItemsControl.Items[i]);
-                WrapPanel wrapPanel = FindElementByName<WrapPanel>(c, "LabelWrapPanel");
-                if (wrapPanel != null)
-                {
-                    ToggleButton toggleButton = wrapPanel.Children.OfType<ToggleButton>().First();
-                    if ((bool)toggleButton.IsChecked)
-                    {
-                        Match match = Regex.Match(toggleButton.Content.ToString(), @"\( \d+ \)");
-                        if (match != null && match.Value != "")
-                        {
-                            string label = toggleButton.Content.ToString().Replace(match.Value, "");
-                            if (!originLabels.Contains(label)) originLabels.Add(label);
-                        }
+            //List<string> originLabels = new List<string>();
+            //for (int i = 0; i < LabelItemsControl.Items.Count; i++)
+            //{
+            //    ContentPresenter c = (ContentPresenter)LabelItemsControl.ItemContainerGenerator.ContainerFromItem(LabelItemsControl.Items[i]);
+            //    WrapPanel wrapPanel = FindElementByName<WrapPanel>(c, "LabelWrapPanel");
+            //    if (wrapPanel != null)
+            //    {
+            //        ToggleButton toggleButton = wrapPanel.Children.OfType<ToggleButton>().First();
+            //        if ((bool)toggleButton.IsChecked)
+            //        {
+            //            Match match = Regex.Match(toggleButton.Content.ToString(), @"\( \d+ \)");
+            //            if (match != null && match.Value != "")
+            //            {
+            //                string label = toggleButton.Content.ToString().Replace(match.Value, "");
+            //                if (!originLabels.Contains(label)) originLabels.Add(label);
+            //            }
 
-                    }
-                }
-            }
+            //        }
+            //    }
+            //}
 
-            if (originLabels.Count <= 0) { return; }
-
-
-            List<string> labels = vieModel.DetailMovie.labellist.Union(originLabels).ToList();
+            if (SelectedLabel.Count <= 0) return;
+            List<string> labels = vieModel.DetailMovie.labellist.Union(SelectedLabel).ToList();
             vieModel.DetailMovie.label = string.Join(" ", labels);
             vieModel.DetailMovie.labellist = labels;
             SaveTags(null, null);
@@ -2005,7 +2046,7 @@ namespace Jvedio
 
             LabelItemsControl.ItemsSource = null;
             LabelItemsControl.ItemsSource = labels;
-
+            SetSelected();
 
         }
 
@@ -2023,7 +2064,7 @@ namespace Jvedio
                 labels = labels.OrderBy(arg => int.Parse(arg.Split('(').Last().Replace(" ", "").Replace(")", ""))).ToList();
             LabelItemsControl.ItemsSource = null;
             LabelItemsControl.ItemsSource = labels;
-
+            SetSelected();
         }
 
         private void SearchBar_SearchStarted(object sender, FunctionEventArgs<string> e)
@@ -2031,6 +2072,7 @@ namespace Jvedio
             HandyControl.Controls.SearchBar searchBar = sender as HandyControl.Controls.SearchBar;
             LabelItemsControl.ItemsSource = null;
             LabelItemsControl.ItemsSource = vieModel.LabelList.Where(arg => arg.IndexOf(SearchBar.Text) >= 0);
+            SetSelected();
         }
 
 
@@ -2054,6 +2096,7 @@ namespace Jvedio
             {
                 LabelItemsControl.ItemsSource = null;
                 LabelItemsControl.ItemsSource = vieModel.LabelList;
+                SetSelected();
             }
             else
             {
@@ -2061,6 +2104,36 @@ namespace Jvedio
             }
         }
 
+        public List<string> SelectedLabel = new List<string>();
+        private void AddToSelected(object sender, RoutedEventArgs e)
+        {
+            string value = (sender as ToggleButton).Content.ToString().Split('(')[0];
+            if (!SelectedLabel.Contains(value))
+                SelectedLabel.Add(value);
+            else
+                SelectedLabel.Remove(value);
+
+            Console.WriteLine(value);
+        }
+
+        public async void SetSelected()
+        {
+            await Task.Delay(200);
+            for (int i = 0; i < LabelItemsControl.Items.Count; i++)
+            {
+                ContentPresenter c = (ContentPresenter)LabelItemsControl.ItemContainerGenerator.ContainerFromItem(LabelItemsControl.Items[i]);
+                WrapPanel wrapPanel = FindElementByName<WrapPanel>(c, "LabelWrapPanel");
+                if (wrapPanel != null)
+                {
+                    ToggleButton toggleButton = wrapPanel.Children.OfType<ToggleButton>().First();
+                    string value = toggleButton.Content.ToString().Split('(')[0];
+
+                    if (SelectedLabel.Contains(value))
+                        toggleButton.IsChecked = true;
+                }
+            }
+
+        }
     }
 
 

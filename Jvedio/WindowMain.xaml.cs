@@ -1755,7 +1755,6 @@ namespace Jvedio
             }
             else
             {
-                StopDownLoad();
                 wd?.Close();
                 wd = new WindowDetails(id);
                 wd.Show();
@@ -5883,9 +5882,19 @@ namespace Jvedio
 
 
 
-
+        /// <summary>
+        /// 加载该演员出演的其他作品，仅支持 bus
+        /// </summary>
+        /// <param name="name"></param>
         private async void LoadActor(string name)
         {
+            if (!JvedioServers.Bus.IsEnable || JvedioServers.Bus.Url.IsProperUrl())
+            {
+                HandyControl.Controls.Growl.Info(Jvedio.Language.Resources.OnlySupportBus, GrowlToken);
+                LoadSearchWaitingPanel.Visibility = Visibility.Collapsed;
+                LoadSearchCTS?.Dispose();
+                return;
+            }
             string log = "";
             //先搜索出演员
             await Task.Run(async () =>
@@ -6005,14 +6014,6 @@ namespace Jvedio
 
 
                     }
-
-
-
-
-
-
-
-
                 }
                 else
                 {
@@ -6022,9 +6023,12 @@ namespace Jvedio
             LoadSearchWaitingPanel.Visibility = Visibility.Collapsed;
             LoadSearchCTS?.Dispose();
             //显示加载的信息
-            new Msgbox(this, log).ShowDialog();
+            if (log != "")
+            {
+                new Msgbox(this, log).ShowDialog();
+                ShowSameActors(name);
+            }
 
-            ShowSameActors(name);
         }
 
 
