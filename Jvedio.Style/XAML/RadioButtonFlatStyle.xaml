@@ -5,7 +5,7 @@
 
 
     <Style x:Key="FlatRadioButton" TargetType="{x:Type RadioButton}">
-        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
         <Setter Property="Background" Value="{StaticResource RadioButton.Static.Background}"/>
         <Setter Property="BorderBrush" Value="{StaticResource RadioButton.Static.Border}"/>
         <Setter Property="Foreground" Value="{DynamicResource ForegroundGlobal}"/>
@@ -31,7 +31,7 @@
                     </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="HasContent" Value="true">
-                            <Setter Property="FocusVisualStyle" Value="{StaticResource OptionMarkFocusVisual}"/>
+                            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
                         </Trigger>
                         <Trigger Property="IsMouseOver" Value="true" >
                             <Setter Property="Background" TargetName="markBorder" Value="{DynamicResource BackgroundTitle}"/>
@@ -54,7 +54,7 @@
 
 
     <Style x:Key="ColorRadioButton" TargetType="RadioButton">
-        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
         <Setter Property="Margin" Value="1"/>
         <Setter Property="Template">
             <Setter.Value>
@@ -69,19 +69,7 @@
                     </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="HasContent" Value="True">
-                            <Setter Property="FocusVisualStyle">
-                                <Setter.Value>
-                                    <Style>
-                                        <Setter Property="Control.Template">
-                                            <Setter.Value>
-                                                <ControlTemplate>
-                                                    <Rectangle Margin="14,0,0,0" SnapsToDevicePixels="True" Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" StrokeThickness="1" StrokeDashArray="1 2"/>
-                                                </ControlTemplate>
-                                            </Setter.Value>
-                                        </Setter>
-                                    </Style>
-                                </Setter.Value>
-                            </Setter>
+                            <Setter Property="FocusVisualStyle"  Value="{StaticResource FocusVisual}"/>
 
                         </Trigger>
                         <Trigger Property="IsMouseOver" Value="True">

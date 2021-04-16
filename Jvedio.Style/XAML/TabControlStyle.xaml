@@ -2,7 +2,7 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:hc="https://handyorg.github.io/handycontrol">
 
     <Style x:Key="BaseHcTabControlStyle" TargetType="{x:Type TabControl}">
-        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
         <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}"/>
         <Setter Property="Background" Value="{DynamicResource RegionBrush}"/>
         <Setter Property="BorderThickness" Value="0"/>
@@ -10,7 +10,7 @@
         <Setter Property="ItemContainerStyle">
             <Setter.Value>
                 <Style TargetType="{x:Type TabItem}">
-                    <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+                    <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
                     <Setter Property="Foreground" Value="{DynamicResource PrimaryTextBrush}"/>
                     <Setter Property="Background" Value="{DynamicResource RegionBrush}"/>
                     <Setter Property="BorderBrush" Value="{DynamicResource PrimaryBrush}"/>
@@ -133,7 +133,7 @@
     </Style>
 
     <Style x:Key="TapControlStyle" TargetType="{x:Type TabControl}">
-        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
         <Style.BasedOn>
             <Style TargetType="{x:Type TabControl}">
                 <Setter Property="ItemContainerStyleSelector">
@@ -165,7 +165,7 @@
         </Style.BasedOn>
     </Style>
     <Style x:Key="TopTabItemStyle" TargetType="{x:Type TabItem}">
-        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
         <Setter Property="Foreground" Value="{DynamicResource ForegroundSearch}"/>
         <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="Margin" Value="0"/>

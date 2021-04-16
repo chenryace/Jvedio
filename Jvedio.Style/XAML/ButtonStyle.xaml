@@ -19,9 +19,17 @@
         <Setter Property="Margin" Value="10 5" />
     </Style>
 
+    <Style x:Key="ButtonSuccess" BasedOn="{StaticResource ButtonBaseStyle}" TargetType="{x:Type Button}">
+        <Setter Property="Background" Value="{DynamicResource SuccessBrush}" />
+        <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="MinWidth" Value="100" />
+        <Setter Property="Margin" Value="10 5" />
+    </Style>
+
 
     <Style x:Key="HoverButton" TargetType="{x:Type Button}">
-        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
         <Setter Property="FontFamily" Value="微软雅黑"/>
         <Setter Property="FontSize" Value="15"/>
         <Setter Property="Cursor" Value="Hand"/>
@@ -49,7 +57,7 @@
 
 
     <Style x:Key="ButtonTrigger_Yes" TargetType="Button">
-        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
         <Setter Property="Cursor" Value="Hand"/>
         <Setter Property="Foreground" Value="{DynamicResource ForegroundSearch}"/>
         <Setter Property="Template">
@@ -76,7 +84,7 @@
 
     </Style>
     <Style x:Key="ButtonTrigger_No" TargetType="Button">
-        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
         <Setter Property="Cursor" Value="Hand"/>
         <Setter Property="Foreground" Value="{DynamicResource ForegroundSearch}"/>
         <Setter Property="Template">
@@ -106,7 +114,7 @@
 
 
     <Style x:Key="FlatButton" TargetType="{x:Type Button}">
-        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
         <Setter Property="Margin" Value="5"/>
         <Setter Property="MinWidth" Value="80"/>
         <Setter Property="Width" Value="auto"/>
@@ -117,7 +125,7 @@
         <Setter Property="BorderThickness" Value="2"/>
         <Setter Property="BorderBrush" Value="#1A97ED"/>
         <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
         <Setter Property="Foreground" Value="{DynamicResource ForegroundSearch}"/>
         <Setter Property="Template">
             <Setter.Value>
@@ -157,7 +165,7 @@
     </Style>
 
     <Style x:Key="FlatRedButton" TargetType="{x:Type Button}">
-        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
         <Setter Property="Margin" Value="5"/>
         <Setter Property="MinWidth" Value="80"/>
         <Setter Property="Width" Value="auto"/>
@@ -168,7 +176,7 @@
         <Setter Property="BorderThickness" Value="2"/>
         <Setter Property="BorderBrush" Value="Red"/>
         <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
         <Setter Property="Foreground" Value="{DynamicResource ForegroundSearch}"/>
         <Setter Property="Template">
             <Setter.Value>
@@ -208,14 +216,14 @@
     </Style>
 
     <Style x:Key="ButtonStyleFill" TargetType="{x:Type Button}">
-        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
         <Setter Property="Margin" Value="5"/>
         <Setter Property="MinWidth" Value="80"/>
         <Setter Property="Width" Value="auto"/>
         <Setter Property="Height" Value="auto"/>
         <Setter Property="Cursor" Value="Hand"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
-        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
@@ -240,7 +248,7 @@
     </Style>
 
     <Style x:Key="CloseButton" TargetType="{x:Type Button}">
-        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
         <Setter Property="Height" Value="27"/>
         <Setter Property="Width" Value="27"/>
         <Setter Property="Margin" Value="5 0"/>
@@ -269,7 +277,7 @@
     </Style>
 
     <Style x:Key="RoundCloseButton" TargetType="{x:Type Button}">
-        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
         <Setter Property="Height" Value="27"/>
         <Setter Property="Cursor" Value="Hand"/>
         <Setter Property="Width" Value="27"/>
@@ -301,7 +309,7 @@
     </Style>
 
     <Style x:Key="TitleButton" TargetType="{x:Type Button}">
-        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
         <Setter Property="Height" Value="27"/>
         <Setter Property="Width" Value="27"/>
         <Setter Property="Margin" Value="5 0"/>
@@ -330,7 +338,7 @@
     </Style>
 
     <Style x:Key="RoundTitleButton" TargetType="{x:Type Button}">
-        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
         <Setter Property="Height" Value="27"/>
         <Setter Property="Cursor" Value="Hand"/>
         <Setter Property="Width" Value="27"/>
@@ -361,7 +369,7 @@
         </Setter>
     </Style>
     <Style x:Key="NavigateButton" TargetType="{x:Type Button}">
-        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
         <Setter Property="Height" Value="27"/>
         <Setter Property="Width" Value="27"/>
         <Setter Property="Margin" Value="5 0"/>

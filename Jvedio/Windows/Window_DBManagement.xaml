@@ -22,7 +22,7 @@
     <style:BaseWindow.Resources>
 
         <Style x:Key="DBBorder" TargetType="{x:Type Border}">
-            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+            <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
             <Setter Property="Cursor" Value="Hand"/>
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
@@ -61,10 +61,8 @@
                         </StackPanel>
 
 
-
-
                         <ScrollViewer  Grid.Column="1"           >
-                            <ItemsControl   ItemsSource="{Binding DataBases}"  >
+                            <ItemsControl   ItemsSource="{Binding DataBases}"  FocusVisualStyle="{x:Null}" >
                                 <ItemsControl.ItemsPanel>
                                     <ItemsPanelTemplate>
                                         <WrapPanel   Orientation="Horizontal" >

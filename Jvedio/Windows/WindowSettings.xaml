@@ -119,16 +119,16 @@
 
                     <StackPanel  Margin="20 5"  Orientation="Horizontal" >
                         <Label  Style="{StaticResource InfoLabel}" Content="{x:Static lang:Resources.Language}"/>
-                        <RadioButton GroupName="LangRadioButton"  Click="SetLanguage"  IsChecked="{Binding Language, ConverterParameter=中文, Converter={StaticResource LanguageTypeEnumConverter}, Mode=TwoWay}" Content="中文" Style="{StaticResource FlatRadioButton}"/>
-                        <RadioButton GroupName="LangRadioButton"   Click="SetLanguage"   IsChecked="{Binding Language, ConverterParameter=English, Converter={StaticResource LanguageTypeEnumConverter}, Mode=TwoWay}"  Content="English"  Style="{StaticResource FlatRadioButton}"/>
-                        <RadioButton  GroupName="LangRadioButton"  Click="SetLanguage"   IsChecked="{Binding Language, ConverterParameter=日本語, Converter={StaticResource LanguageTypeEnumConverter}, Mode=TwoWay}"  Content="日本語"  Style="{StaticResource FlatRadioButton}"/>
+                        <RadioButton FocusVisualStyle="{x:Null}" GroupName="LangRadioButton"  Click="SetLanguage"  IsChecked="{Binding Language, ConverterParameter=中文, Converter={StaticResource LanguageTypeEnumConverter}, Mode=TwoWay}" Content="中文" Style="{StaticResource FlatRadioButton}"/>
+                        <RadioButton  FocusVisualStyle="{x:Null}"  GroupName="LangRadioButton"   Click="SetLanguage"   IsChecked="{Binding Language, ConverterParameter=English, Converter={StaticResource LanguageTypeEnumConverter}, Mode=TwoWay}"  Content="English"  Style="{StaticResource FlatRadioButton}"/>
+                        <RadioButton  FocusVisualStyle="{x:Null}"   GroupName="LangRadioButton"  Click="SetLanguage"   IsChecked="{Binding Language, ConverterParameter=日本語, Converter={StaticResource LanguageTypeEnumConverter}, Mode=TwoWay}"  Content="日本語"  Style="{StaticResource FlatRadioButton}"/>
                     </StackPanel>
 
                     <WrapPanel x:Name="SkinWrapPanel" Orientation="Horizontal"  Margin="20 5">
                         <Label  Style="{StaticResource InfoLabel}"  Content="{x:Static lang:Resources.Skin}"/>
-                        <RadioButton   GroupName="SkinRadioButton"  Click="SetSkin"   Content="黑色" Background="Black"  Style="{StaticResource ColorRadioButton}"  />
-                        <RadioButton  GroupName="SkinRadioButton"  Click="SetSkin"   Content="白色" Background="White"  Style="{StaticResource ColorRadioButton}"  />
-                        <RadioButton   GroupName="SkinRadioButton"  Click="SetSkin"  Content="蓝色" Background="#87CEFF"  Style="{StaticResource ColorRadioButton}"  />
+                        <RadioButton  FocusVisualStyle="{x:Null}"    GroupName="SkinRadioButton"  Click="SetSkin"   Content="黑色" Background="Black"  Style="{StaticResource ColorRadioButton}"  />
+                        <RadioButton  FocusVisualStyle="{x:Null}"   GroupName="SkinRadioButton"  Click="SetSkin"   Content="白色" Background="White"  Style="{StaticResource ColorRadioButton}"  />
+                        <RadioButton  FocusVisualStyle="{x:Null}"    GroupName="SkinRadioButton"  Click="SetSkin"  Content="蓝色" Background="#87CEFF"  Style="{StaticResource ColorRadioButton}"  />
                     </WrapPanel>
 
                     <StackPanel Orientation="Horizontal"  Margin="20 5">
@@ -286,7 +286,7 @@
 
 
 
-                    <DataGrid Visibility="Visible" IsSynchronizedWithCurrentItem="True" ItemsSource="{Binding Servers}" Background="{DynamicResource BackgroundMenu}" MinHeight="200"  ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Disabled"   PreviewMouseLeftButtonDown="DataGrid_PreviewMouseLeftButtonDown"  x:Name="ServersDataGrid" VerticalScrollBarVisibility="Disabled"   Foreground="{DynamicResource ForegroundSearch}" Margin="20 5" HorizontalGridLinesBrush="Transparent" VerticalGridLinesBrush="Transparent"  BorderThickness="0" CanUserResizeRows="False" CanUserResizeColumns="True"  AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="True" CanUserSortColumns="True"    Style="{DynamicResource DataGridStyle1}" ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}" CellStyle="{DynamicResource DataGridCellStyle1}"  RowHeaderStyle="{DynamicResource DataGridRowHeaderStyle1}" RowStyle="{DynamicResource DataGridRowStyle1}" DragIndicatorStyle="{DynamicResource DataGridColumnHeaderStyle2}" DropLocationIndicatorStyle="{DynamicResource DataGridStyle2}" ItemsPanel="{DynamicResource ItemsPanelTemplate1}">
+                    <DataGrid Visibility="Visible" IsSynchronizedWithCurrentItem="True" ItemsSource="{Binding Servers}" Background="{DynamicResource BackgroundMenu}" MinHeight="200"  ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Disabled"   PreviewMouseLeftButtonDown="SetCurrentRowIndex"  x:Name="ServersDataGrid" VerticalScrollBarVisibility="Disabled"   Foreground="{DynamicResource ForegroundSearch}" Margin="20 5" HorizontalGridLinesBrush="Transparent" VerticalGridLinesBrush="Transparent"  BorderThickness="0" CanUserResizeRows="False" CanUserResizeColumns="True"  AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="True" CanUserSortColumns="True"    Style="{DynamicResource DataGridStyle1}" ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}" CellStyle="{DynamicResource DataGridCellStyle1}"  RowHeaderStyle="{DynamicResource DataGridRowHeaderStyle1}" RowStyle="{DynamicResource DataGridRowStyle1}" DragIndicatorStyle="{DynamicResource DataGridColumnHeaderStyle2}" DropLocationIndicatorStyle="{DynamicResource DataGridStyle2}" ItemsPanel="{DynamicResource ItemsPanelTemplate1}">
 
 
                         <DataGrid.Columns>

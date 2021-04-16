@@ -5,7 +5,7 @@
     <!--checkbox样式-->
 
     <Style x:Key="CheckBoxStyle1" TargetType="{x:Type CheckBox}" >
-        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
         <Setter Property="Foreground" Value="{DynamicResource ForegroundGlobal}"/>
         <Setter Property="FontSize" Value="15"/>
         <Setter Property="Margin" Value="10 5"/>

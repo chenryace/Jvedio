@@ -3,7 +3,7 @@
 >
 
     <Style x:Key="BaseTextBlock" TargetType="{x:Type TextBlock}">
-        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
         <Setter Property="FontFamily" Value="微软雅黑"/>
         <Setter Property="TextWrapping" Value="Wrap"/>
         <Setter Property="TextAlignment" Value="Center"/>
@@ -13,12 +13,12 @@
     </Style>
 
     <Style x:Key="CenterTextBlock" TargetType="{x:Type TextBlock}">
-        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
         <Setter Property="TextAlignment" Value="Center"/>
     </Style>
 
     <Style x:Key="GenreTextBlock" TargetType="{x:Type TextBlock}">
-        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
         <Setter Property="TextAlignment" Value="Center"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
         <Setter Property="FontSize" Value="15"/>
@@ -34,7 +34,7 @@
     </Style>
 
     <Style x:Key="BaseTextBox" TargetType="{x:Type TextBox}">
-        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="Height" Value="40"/>
         <Setter Property="FontFamily" Value="Times New Romans"/>
@@ -53,7 +53,7 @@
     </Style>
 
     <Style x:Key="ReadWriteTextBox" TargetType="{x:Type TextBox}">
-        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="Height" Value="40"/>
         <Setter Property="FontFamily" Value="Times New Romans"/>
@@ -79,7 +79,7 @@
 
 
     <Style x:Key="ReadOnlyTextBox" TargetType="{x:Type TextBox}">
-        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="HorizontalAlignment" Value="Center"/>
         <Setter Property="Height" Value="auto"/>
@@ -95,7 +95,7 @@
     </Style>
 
     <Style x:Key="ReadOnlyWrapTextBox" TargetType="{x:Type TextBox}">
-        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="Foreground" Value="{DynamicResource ForegroundSearch}"/>
         <Setter Property="BorderThickness" Value="0"/>

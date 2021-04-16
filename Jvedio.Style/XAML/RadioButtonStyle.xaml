@@ -6,7 +6,7 @@
 
 
     <Style x:Key="RadioButtonStyle" TargetType="RadioButton">
-        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="FontSize" Value="15"/>
         <Setter Property="Foreground" Value="{DynamicResource ForegroundSearch}"/>
@@ -80,7 +80,7 @@
     <SolidColorBrush x:Key="RadioButton.Pressed.Glyph" Color="#FF212121"/>
     <SolidColorBrush x:Key="RadioButton.Static.Glyph" Color="#FF212121"/>
     <Style x:Key="RadioButtonStyleSide" TargetType="{x:Type RadioButton}">
-        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="BorderBrush" Value="{StaticResource RadioButton.Static.Border}"/>
         <Setter Property="Foreground" Value="{DynamicResource ForegroundGlobal}"/>

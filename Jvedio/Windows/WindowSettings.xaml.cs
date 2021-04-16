@@ -820,7 +820,7 @@ namespace Jvedio
         }
 
 
-        private void DataGrid_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        private void SetCurrentRowIndex(object sender, MouseButtonEventArgs e)
         {
             DataGridRow dgr = null;
             var visParent = VisualTreeHelper.GetParent(e.OriginalSource as FrameworkElement);
@@ -1195,27 +1195,44 @@ namespace Jvedio
             }
         }
 
+        private int GetRowIndex(RoutedEventArgs e)
+        {
+            DataGridRow dgr = null;
+            var visParent = VisualTreeHelper.GetParent(e.OriginalSource as FrameworkElement);
+            while (dgr == null && visParent != null)
+            {
+                dgr = visParent as DataGridRow;
+                visParent = VisualTreeHelper.GetParent(visParent);
+            }
+            if (dgr == null)
+                return -1;
+            else
+                return dgr.GetIndex();
+        }
+
         private void TextBox_GotFocus(object sender, RoutedEventArgs e)
         {
+            CurrentRowIndex = GetRowIndex(e);
             HandyControl.Controls.TextBox textBox = sender as HandyControl.Controls.TextBox;
             textBox.Background = (SolidColorBrush)Application.Current.Resources["ForegroundSearch"];
             textBox.Foreground = (SolidColorBrush)Application.Current.Resources["BackgroundMenu"];
             textBox.CaretBrush = (SolidColorBrush)Application.Current.Resources["BackgroundMenu"];
         }
 
+
+        //修改地址
         private void TextBox_LostFocus(object sender, RoutedEventArgs e)
         {
             HandyControl.Controls.TextBox textBox = sender as HandyControl.Controls.TextBox;
             textBox.Background = Brushes.Transparent;
             textBox.Foreground = (SolidColorBrush)Application.Current.Resources["ForegroundGlobal"];
+
+            if (CurrentRowIndex >= vieModel_Settings.Servers.Count || CurrentRowIndex < 0) return;
+
             if (textBox.Name == "url")
-            {
                 vieModel_Settings.Servers[CurrentRowIndex].Url = textBox.Text;
-            }
             else
-            {
                 vieModel_Settings.Servers[CurrentRowIndex].Cookie = textBox.Text;
-            }
         }
 
 

@@ -267,26 +267,26 @@
 
                                 <Grid>
                                     <Image  Source="{Binding Themes, Mode=OneWay, ConverterParameter=all,Converter={StaticResource StringToUriStringConverter}, Source={x:Static p:Settings.Default}}" Height="22" HorizontalAlignment="Left" Panel.ZIndex="2" Margin="10 0"    />
-                                    <RadioButton x:Name="AllRadioButton"  IsChecked="True"  Padding="20 0"     Style="{StaticResource SideRadioButtonStyle}"  Command="{Binding ResetCommand}" Content="{x:Static lang:Resources.AllVideo}"      />
+                                    <RadioButton  FocusVisualStyle="{x:Null}"  x:Name="AllRadioButton"  IsChecked="True"  Padding="20 0"     Style="{StaticResource SideRadioButtonStyle}"  Command="{Binding ResetCommand}" Content="{x:Static lang:Resources.AllVideo}"      />
                                     <TextBlock Text="{Binding AllVedioCount}" Style="{StaticResource BaseTextBlock}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10 0" Foreground="{DynamicResource ForegroundGlobal}"/>
                                 </Grid>
 
                                 <Grid>
                                     <Image  Source="{Binding Themes, Mode=OneWay, ConverterParameter=like,Converter={StaticResource StringToUriStringConverter}, Source={x:Static p:Settings.Default}}" Height="22" HorizontalAlignment="Left" Panel.ZIndex="2" Margin="10 0"    />
-                                    <RadioButton   Padding="20 0"   Style="{StaticResource SideRadioButtonStyle}" Command="{Binding FavoritesCommand}" Content="{x:Static lang:Resources.Favorites}"    />
+                                    <RadioButton  FocusVisualStyle="{x:Null}"    Padding="20 0"   Style="{StaticResource SideRadioButtonStyle}" Command="{Binding FavoritesCommand}" Content="{x:Static lang:Resources.Favorites}"    />
                                     <TextBlock Text="{Binding FavoriteVedioCount}" Style="{StaticResource BaseTextBlock}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10 0" Foreground="{DynamicResource ForegroundGlobal}"/>
 
                                 </Grid>
 
                                 <Grid>
                                     <Image  Source="{Binding Themes, Mode=OneWay, ConverterParameter=create,Converter={StaticResource StringToUriStringConverter}, Source={x:Static p:Settings.Default}}" Height="20" HorizontalAlignment="Left" Panel.ZIndex="2" Margin="10 0"    />
-                                    <RadioButton Padding="20 0"   Style="{StaticResource SideRadioButtonStyle}" Command="{Binding RecentCommand}" Content="{x:Static lang:Resources.RecentCreate}"    />
+                                    <RadioButton  FocusVisualStyle="{x:Null}"  Padding="20 0"   Style="{StaticResource SideRadioButtonStyle}" Command="{Binding RecentCommand}" Content="{x:Static lang:Resources.RecentCreate}"    />
                                     <TextBlock Text="{Binding RecentVedioCount}" Style="{StaticResource BaseTextBlock}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10 0" Foreground="{DynamicResource ForegroundGlobal}"/>
                                 </Grid>
 
                                 <Grid>
                                     <Image  Source="{Binding Themes, Mode=OneWay, ConverterParameter=recent,Converter={StaticResource StringToUriStringConverter}, Source={x:Static p:Settings.Default}}" Height="22" HorizontalAlignment="Left" Panel.ZIndex="2" Margin="10 0"    />
-                                    <RadioButton  Padding="20 0"   Style="{StaticResource SideRadioButtonStyle}" Command="{Binding RecentWatchCommand}" Content="{x:Static lang:Resources.RecentPlay}"  >
+                                    <RadioButton  FocusVisualStyle="{x:Null}"   Padding="20 0"   Style="{StaticResource SideRadioButtonStyle}" Command="{Binding RecentWatchCommand}" Content="{x:Static lang:Resources.RecentPlay}"  >
                                         <RadioButton.ContextMenu>
                                             <ContextMenu>
                                                 <MenuItem Header="{x:Static lang:Resources.Clear}" Click="ClearRecentWatched" />
@@ -298,7 +298,7 @@
 
                                 <Grid  >
                                     <Image  Source="{Binding Themes, Mode=OneWay, ConverterParameter=classify,Converter={StaticResource StringToUriStringConverter}, Source={x:Static p:Settings.Default}}" Height="20" HorizontalAlignment="Left" Panel.ZIndex="2" Margin="10 0"    />
-                                    <RadioButton Click="ShowClassifyGrid"   Background="Transparent"  Cursor="Hand"    Padding="20 0"   Style="{StaticResource SideRadioButtonStyle}"  Content="{x:Static lang:Resources.AutoClassification}"    />
+                                    <RadioButton  FocusVisualStyle="{x:Null}"  Click="ShowClassifyGrid"   Background="Transparent"  Cursor="Hand"    Padding="20 0"   Style="{StaticResource SideRadioButtonStyle}"  Content="{x:Static lang:Resources.AutoClassification}"    />
                                 </Grid>
                             </StackPanel>
 
@@ -334,7 +334,7 @@
                                             <DataTemplate>
                                                 <StackPanel  Name="ListStackPanel"  >
                                                     <Grid >
-                                                        <RadioButton   Padding="20 0"    Style="{StaticResource SideRadioButtonStyle}"  Content="{Binding Name}"  Click="ShowSameList"  >
+                                                        <RadioButton FocusVisualStyle="{x:Null}"    Padding="20 0"    Style="{StaticResource SideRadioButtonStyle}"  Content="{Binding Name}"  Click="ShowSameList"  >
                                                             <RadioButton.ContextMenu>
                                                                 <ContextMenu>
                                                                     <MenuItem Header="{x:Static lang:Resources.Rename}" Click="EditListItem"/>
@@ -515,9 +515,9 @@
                                                         <Grid    Margin="5"   >
                                                             <Border     Background="{DynamicResource BackgroundMenu}" CornerRadius="5" Margin="5" Effect="{StaticResource PopupDropShadowEffect}" />
                                                             <StackPanel Margin="5">
-                                                                <RadioButton Click="SaveAllSearchType" IsChecked="True"  Content="{x:Static lang:Resources.ID}" Style="{StaticResource RadioButtonStyle}"  GroupName="SearchTypeRadioButton" Template="{DynamicResource RadioButtonControlTemplate1}"/>
-                                                                <RadioButton Click="SaveAllSearchType"      Content="{x:Static lang:Resources.Title}" Style="{StaticResource RadioButtonStyle}" GroupName="SearchTypeRadioButton" Template="{DynamicResource RadioButtonControlTemplate1}"/>
-                                                                <RadioButton Click="SaveAllSearchType"      Content="{x:Static lang:Resources.Actor}" Style="{StaticResource RadioButtonStyle}" GroupName="SearchTypeRadioButton" Template="{DynamicResource RadioButtonControlTemplate1}"/>
+                                                                <RadioButton  FocusVisualStyle="{x:Null}"  Click="SaveAllSearchType" IsChecked="True"  Content="{x:Static lang:Resources.ID}" Style="{StaticResource RadioButtonStyle}"  GroupName="SearchTypeRadioButton" Template="{DynamicResource RadioButtonControlTemplate1}"/>
+                                                                <RadioButton  FocusVisualStyle="{x:Null}"  Click="SaveAllSearchType"      Content="{x:Static lang:Resources.Title}" Style="{StaticResource RadioButtonStyle}" GroupName="SearchTypeRadioButton" Template="{DynamicResource RadioButtonControlTemplate1}"/>
+                                                                <RadioButton  FocusVisualStyle="{x:Null}"  Click="SaveAllSearchType"      Content="{x:Static lang:Resources.Actor}" Style="{StaticResource RadioButtonStyle}" GroupName="SearchTypeRadioButton" Template="{DynamicResource RadioButtonControlTemplate1}"/>
                                                                 <CheckBox   Margin="5 0" IsChecked="{Binding SearchInCurrent,Mode=TwoWay}" Content="{x:Static lang:Resources.SearchCurrent}" Style="{StaticResource CheckBoxStyle1}"/>
                                                             </StackPanel>
                                                         </Grid>
@@ -645,11 +645,11 @@
                                             <Grid    Margin="5"   >
                                                 <Border     Background="{DynamicResource BackgroundMenu}" CornerRadius="5" Margin="5"  Effect="{StaticResource PopupDropShadowEffect}"/>
                                                 <StackPanel x:Name="ImageTypeStackPanel"   Panel.ZIndex="7" Background="Transparent" Orientation="Vertical" Margin="10 5" Width="auto">
-                                                    <RadioButton  Content="{x:Static lang:Resources.Thumbnail}" Style="{StaticResource RadioButtonStyle}"  GroupName="RB2" Template="{DynamicResource RadioButtonControlTemplate1}"/>
-                                                    <RadioButton      Content="{x:Static lang:Resources.Poster}" Style="{StaticResource RadioButtonStyle}" GroupName="RB2" Template="{DynamicResource RadioButtonControlTemplate1}"/>
-                                                    <RadioButton     Content="{x:Static lang:Resources.Preview}" Style="{StaticResource RadioButtonStyle}" GroupName="RB2" Template="{DynamicResource RadioButtonControlTemplate1}"/>
-                                                    <RadioButton     Content="Gif" Style="{StaticResource RadioButtonStyle}" GroupName="RB2" Template="{DynamicResource RadioButtonControlTemplate1}"/>
-                                                    <RadioButton  Visibility="Collapsed"        Content="{x:Static lang:Resources.ListView}" Style="{StaticResource RadioButtonStyle}" GroupName="RB2" Template="{DynamicResource RadioButtonControlTemplate1}"/>
+                                                    <RadioButton  FocusVisualStyle="{x:Null}"   Content="{x:Static lang:Resources.Thumbnail}" Style="{StaticResource RadioButtonStyle}"  GroupName="RB2" Template="{DynamicResource RadioButtonControlTemplate1}"/>
+                                                    <RadioButton  FocusVisualStyle="{x:Null}"       Content="{x:Static lang:Resources.Poster}" Style="{StaticResource RadioButtonStyle}" GroupName="RB2" Template="{DynamicResource RadioButtonControlTemplate1}"/>
+                                                    <RadioButton  FocusVisualStyle="{x:Null}"      Content="{x:Static lang:Resources.Preview}" Style="{StaticResource RadioButtonStyle}" GroupName="RB2" Template="{DynamicResource RadioButtonControlTemplate1}"/>
+                                                    <RadioButton  FocusVisualStyle="{x:Null}"      Content="Gif" Style="{StaticResource RadioButtonStyle}" GroupName="RB2" Template="{DynamicResource RadioButtonControlTemplate1}"/>
+                                                    <RadioButton  FocusVisualStyle="{x:Null}"   Visibility="Collapsed"        Content="{x:Static lang:Resources.ListView}" Style="{StaticResource RadioButtonStyle}" GroupName="RB2" Template="{DynamicResource RadioButtonControlTemplate1}"/>
                                                 </StackPanel>
                                             </Grid>
                                         </Popup>
@@ -658,17 +658,17 @@
                                             <Grid  Margin="5"   >
                                                 <Border     Background="{DynamicResource BackgroundMenu}" CornerRadius="5" Margin="5"  Effect="{StaticResource PopupDropShadowEffect}"/>
                                                 <StackPanel x:Name="SortStackPanel"   Panel.ZIndex="7" Background="Transparent" Orientation="Vertical" Margin="5" Width="auto">
-                                                    <RadioButton Margin="5 5 10 5"    Style="{StaticResource RadioButtonStyle}" Content="{x:Static lang:Resources.ID}" HorizontalContentAlignment="Center"  GroupName="RBSort" Template="{DynamicResource RadioButtonControlTemplate1}" />
-                                                    <RadioButton  Margin="5 0 10 5"  Style="{StaticResource RadioButtonStyle}"  Content="{x:Static lang:Resources.FileSize}" HorizontalContentAlignment="Center" GroupName="RBSort" Template="{DynamicResource RadioButtonControlTemplate1}" />
-                                                    <RadioButton  Margin="5 0 10 5"    Style="{StaticResource RadioButtonStyle}" Content="{x:Static lang:Resources.CreatedDate}" HorizontalContentAlignment="Center" GroupName="RBSort" Template="{DynamicResource RadioButtonControlTemplate1}" />
-                                                    <RadioButton  Margin="5 0 10 5"    Style="{StaticResource RadioButtonStyle}" Content="{x:Static lang:Resources.ImportDate}" HorizontalContentAlignment="Center" GroupName="RBSort" Template="{DynamicResource RadioButtonControlTemplate1}" />
-                                                    <RadioButton  Margin="5 0 10 5"   Style="{StaticResource RadioButtonStyle}"  Content="{x:Static lang:Resources.Favorites}" HorizontalContentAlignment="Center" GroupName="RBSort" Template="{DynamicResource RadioButtonControlTemplate1}" />
-                                                    <RadioButton  Margin="5 0 10 5"   Style="{StaticResource RadioButtonStyle}"  Content="{x:Static lang:Resources.Title}" HorizontalContentAlignment="Center" GroupName="RBSort" Template="{DynamicResource RadioButtonControlTemplate1}" />
-                                                    <RadioButton  Margin="5 0 10 5"   Style="{StaticResource RadioButtonStyle}"  Content="{x:Static lang:Resources.ViewNumber}" HorizontalContentAlignment="Center" GroupName="RBSort" Template="{DynamicResource RadioButtonControlTemplate1}" />
-                                                    <RadioButton  Margin="5 0 10 5"   Style="{StaticResource RadioButtonStyle}"  Content="{x:Static lang:Resources.ReleaseDate}" HorizontalContentAlignment="Center" GroupName="RBSort" Template="{DynamicResource RadioButtonControlTemplate1}" />
-                                                    <RadioButton  Margin="5 0 10 5"   Style="{StaticResource RadioButtonStyle}"  Content="{x:Static lang:Resources.Rating}" HorizontalContentAlignment="Center" GroupName="RBSort" Template="{DynamicResource RadioButtonControlTemplate1}" />
-                                                    <RadioButton  Margin="5 0 10 5"   Style="{StaticResource RadioButtonStyle}"  Content="{x:Static lang:Resources.Duration}" HorizontalContentAlignment="Center" GroupName="RBSort" Template="{DynamicResource RadioButtonControlTemplate1}" />
-                                                    <RadioButton  Margin="5 0 10 5"   Style="{StaticResource RadioButtonStyle}"  Content="{x:Static lang:Resources.Actor}" HorizontalContentAlignment="Center" GroupName="RBSort" Template="{DynamicResource RadioButtonControlTemplate1}" />
+                                                    <RadioButton  FocusVisualStyle="{x:Null}"  Margin="5 5 10 5"    Style="{StaticResource RadioButtonStyle}" Content="{x:Static lang:Resources.ID}" HorizontalContentAlignment="Center"  GroupName="RBSort" Template="{DynamicResource RadioButtonControlTemplate1}" />
+                                                    <RadioButton  FocusVisualStyle="{x:Null}"   Margin="5 0 10 5"  Style="{StaticResource RadioButtonStyle}"  Content="{x:Static lang:Resources.FileSize}" HorizontalContentAlignment="Center" GroupName="RBSort" Template="{DynamicResource RadioButtonControlTemplate1}" />
+                                                    <RadioButton  FocusVisualStyle="{x:Null}"   Margin="5 0 10 5"    Style="{StaticResource RadioButtonStyle}" Content="{x:Static lang:Resources.CreatedDate}" HorizontalContentAlignment="Center" GroupName="RBSort" Template="{DynamicResource RadioButtonControlTemplate1}" />
+                                                    <RadioButton  FocusVisualStyle="{x:Null}"   Margin="5 0 10 5"    Style="{StaticResource RadioButtonStyle}" Content="{x:Static lang:Resources.ImportDate}" HorizontalContentAlignment="Center" GroupName="RBSort" Template="{DynamicResource RadioButtonControlTemplate1}" />
+                                                    <RadioButton  FocusVisualStyle="{x:Null}"   Margin="5 0 10 5"   Style="{StaticResource RadioButtonStyle}"  Content="{x:Static lang:Resources.Favorites}" HorizontalContentAlignment="Center" GroupName="RBSort" Template="{DynamicResource RadioButtonControlTemplate1}" />
+                                                    <RadioButton  FocusVisualStyle="{x:Null}"   Margin="5 0 10 5"   Style="{StaticResource RadioButtonStyle}"  Content="{x:Static lang:Resources.Title}" HorizontalContentAlignment="Center" GroupName="RBSort" Template="{DynamicResource RadioButtonControlTemplate1}" />
+                                                    <RadioButton  FocusVisualStyle="{x:Null}"   Margin="5 0 10 5"   Style="{StaticResource RadioButtonStyle}"  Content="{x:Static lang:Resources.ViewNumber}" HorizontalContentAlignment="Center" GroupName="RBSort" Template="{DynamicResource RadioButtonControlTemplate1}" />
+                                                    <RadioButton  FocusVisualStyle="{x:Null}"   Margin="5 0 10 5"   Style="{StaticResource RadioButtonStyle}"  Content="{x:Static lang:Resources.ReleaseDate}" HorizontalContentAlignment="Center" GroupName="RBSort" Template="{DynamicResource RadioButtonControlTemplate1}" />
+                                                    <RadioButton  FocusVisualStyle="{x:Null}"   Margin="5 0 10 5"   Style="{StaticResource RadioButtonStyle}"  Content="{x:Static lang:Resources.Rating}" HorizontalContentAlignment="Center" GroupName="RBSort" Template="{DynamicResource RadioButtonControlTemplate1}" />
+                                                    <RadioButton  FocusVisualStyle="{x:Null}"   Margin="5 0 10 5"   Style="{StaticResource RadioButtonStyle}"  Content="{x:Static lang:Resources.Duration}" HorizontalContentAlignment="Center" GroupName="RBSort" Template="{DynamicResource RadioButtonControlTemplate1}" />
+                                                    <RadioButton  FocusVisualStyle="{x:Null}"   Margin="5 0 10 5"   Style="{StaticResource RadioButtonStyle}"  Content="{x:Static lang:Resources.Actor}" HorizontalContentAlignment="Center" GroupName="RBSort" Template="{DynamicResource RadioButtonControlTemplate1}" />
                                                 </StackPanel>
                                             </Grid>
                                         </Popup>
@@ -1578,10 +1578,10 @@
 
                                         <Border Background="Transparent" CornerRadius="5" >
                                             <StackPanel x:Name="ClassifyVedioTypeStackPanel" Orientation="Horizontal" Margin="5">
-                                                <RadioButton GroupName="VedioTypeRadioButton" IsChecked="True"   Content="{x:Static lang:Resources.All}" Style="{StaticResource FlatRadioButton}"/>
-                                                <RadioButton GroupName="VedioTypeRadioButton"   Content="{x:Static lang:Resources.Uncensored}" Style="{StaticResource FlatRadioButton}"/>
-                                                <RadioButton GroupName="VedioTypeRadioButton"     Content="{x:Static lang:Resources.Censored}"  Style="{StaticResource FlatRadioButton}"/>
-                                                <RadioButton GroupName="VedioTypeRadioButton"      Content="{x:Static lang:Resources.Europe}"  Style="{StaticResource FlatRadioButton}"/>
+                                                <RadioButton FocusVisualStyle="{x:Null}" GroupName="VedioTypeRadioButton" IsChecked="True"   Content="{x:Static lang:Resources.All}" Style="{StaticResource FlatRadioButton}"/>
+                                                <RadioButton FocusVisualStyle="{x:Null}"  GroupName="VedioTypeRadioButton"   Content="{x:Static lang:Resources.Uncensored}" Style="{StaticResource FlatRadioButton}"/>
+                                                <RadioButton FocusVisualStyle="{x:Null}"  GroupName="VedioTypeRadioButton"     Content="{x:Static lang:Resources.Censored}"  Style="{StaticResource FlatRadioButton}"/>
+                                                <RadioButton FocusVisualStyle="{x:Null}"  GroupName="VedioTypeRadioButton"      Content="{x:Static lang:Resources.Europe}"  Style="{StaticResource FlatRadioButton}"/>
                                             </StackPanel>
                                         </Border>
 
