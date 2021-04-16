@@ -2,6 +2,7 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:hc="https://handyorg.github.io/handycontrol">
 
     <Style x:Key="BaseHcTabControlStyle" TargetType="{x:Type TabControl}">
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
         <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}"/>
         <Setter Property="Background" Value="{DynamicResource RegionBrush}"/>
         <Setter Property="BorderThickness" Value="0"/>
@@ -24,7 +25,7 @@
                                 <hc:SimplePanel x:Name="templateRoot" SnapsToDevicePixels="True">
                                     <Border x:Name="mainBorder" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="0" Background="{TemplateBinding Background}" Margin="0"/>
 
-                                        <ContentPresenter x:Name="contentPresenter" ContentTemplate="{TemplateBinding HeaderTemplate}" Content="{TemplateBinding Header}" ContentStringFormat="{TemplateBinding HeaderStringFormat}" ContentSource="Header" TextElement.Foreground="{DynamicResource ForegroundGlobal}" Focusable="False" HorizontalAlignment="Center" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="Center"/>
+                                    <ContentPresenter x:Name="contentPresenter" ContentTemplate="{TemplateBinding HeaderTemplate}" Content="{TemplateBinding Header}" ContentStringFormat="{TemplateBinding HeaderStringFormat}" ContentSource="Header" TextElement.Foreground="{DynamicResource ForegroundGlobal}" Focusable="False" HorizontalAlignment="Center" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="Center"/>
 
                                 </hc:SimplePanel>
                                 <ControlTemplate.Triggers>
@@ -132,6 +133,7 @@
     </Style>
 
     <Style x:Key="TapControlStyle" TargetType="{x:Type TabControl}">
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
         <Style.BasedOn>
             <Style TargetType="{x:Type TabControl}">
                 <Setter Property="ItemContainerStyleSelector">

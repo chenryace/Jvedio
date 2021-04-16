@@ -22,6 +22,7 @@
     <style:BaseWindow.Resources>
 
         <Style x:Key="DBBorder" TargetType="{x:Type Border}">
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
             <Setter Property="Cursor" Value="Hand"/>
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
@@ -29,6 +30,7 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
+
 
     </style:BaseWindow.Resources>
     <Grid Background="{DynamicResource BackgroundMain}">

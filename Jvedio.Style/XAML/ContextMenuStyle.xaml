@@ -12,6 +12,7 @@
 
     <!--contextmenu 样式-->
     <Style   TargetType="ContextMenu">
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
         <Setter Property="FontFamily" Value="微软雅黑"/>
         <Setter Property="SnapsToDevicePixels" Value="True" />
         <Setter Property="OverridesDefaultStyle" Value="True" />
@@ -36,9 +37,10 @@
             </Setter.Value>
         </Setter>
     </Style>
-    
+
     <!--MenuItem-->
     <Style    TargetType="MenuItem">
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
         <Setter Property="FontFamily" Value="微软雅黑"/>
         <Setter Property="Template">
             <Setter.Value>
@@ -100,7 +102,7 @@
         </Setter>
     </Style>
 
-   
+
 
     <ContextMenu x:Key="TextBoxContextMenu">
         <MenuItem Command="ApplicationCommands.Copy" Header="{x:Static lang:Resources.Copy}" />
@@ -116,6 +118,6 @@
     </ContextMenu>
 
 
-   
+
 
 </ResourceDictionary>

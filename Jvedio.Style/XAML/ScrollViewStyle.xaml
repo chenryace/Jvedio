@@ -2,10 +2,11 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     >
 
-    
+
     <SolidColorBrush x:Key="ScrollBarDisabledBackground" Color="Transparent"/>
     <!--ScrollViewer样式-->
     <Style TargetType="ScrollViewer" x:Key="ScrollViewerStyle">
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ScrollViewer}">

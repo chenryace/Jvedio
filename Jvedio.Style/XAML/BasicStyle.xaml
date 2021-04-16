@@ -100,6 +100,7 @@
     <BlurEffect x:Key="NormalBlurEffect" Radius="4" KernelType="Box"  RenderingBias="Quality"/>
 
     <Style x:Key="Ellipse" TargetType="{x:Type Ellipse}">
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
         <Style.Triggers>
             <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource AncestorType={x:Type Canvas}, Mode=FindAncestor}}" Value="True">
                 <Setter Property="Fill" Value="{DynamicResource ForegroundSearch}"/>
@@ -112,6 +113,7 @@
 
 
     <Style x:Key="Ellipse2" TargetType="{x:Type Ellipse}">
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
         <Setter Property="Cursor" Value="Hand"/>
         <Style.Triggers>
             <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource AncestorType={x:Type Canvas}, Mode=FindAncestor}}" Value="True">
@@ -124,6 +126,7 @@
     </Style>
 
     <Style x:Key="OrangeEllipse" TargetType="Ellipse">
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
         <Setter Property="Cursor" Value="Hand"/>
         <Style.Triggers>
             <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Canvas}},Path=IsMouseOver}" Value="True">
@@ -153,6 +156,7 @@
 
 
     <Style x:Key="BaseFilterTextBlock" TargetType="{x:Type TextBlock}">
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
         <Setter Property="TextWrapping" Value="Wrap"/>
         <Setter Property="HorizontalAlignment" Value="Left"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
@@ -165,6 +169,7 @@
     </Style>
 
     <Style x:Key="SearchCandidateTextBlock" TargetType="{x:Type TextBlock}">
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
         <Setter Property="TextWrapping" Value="Wrap"/>
         <Setter Property="TextAlignment" Value="Left"/>
         <Setter Property="Margin" Value="0,5,0,5"/>
@@ -175,6 +180,7 @@
     </Style>
 
     <Style x:Key="ToolsBarBorderStyle" TargetType="Border">
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
         <Setter Property="Margin" Value="5"/>
         <Setter Property="CornerRadius" Value="3"/>
         <Setter Property="Cursor" Value="Hand"/>
@@ -195,6 +201,7 @@
 
 
     <Style x:Key="TagBarBorderStyle" TargetType="Border">
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
         <Setter Property="Margin" Value="5 2"/>
         <Setter Property="CornerRadius" Value="3"/>
         <Setter Property="Cursor" Value="Hand"/>
@@ -211,6 +218,7 @@
     </Style>
 
     <Style x:Key="ActorInfoBorderStyle" TargetType="Border">
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
         <Setter Property="Margin" Value="5"/>
         <Setter Property="Cursor" Value="Hand"/>
@@ -238,30 +246,18 @@
 
 
     <Style x:Key="BorderStyle" TargetType="Border">
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
         <Setter Property="Background" Value="Transparent"/>
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="Background" Value="{DynamicResource BackgroundTitle}"/>
-                <!--<Trigger.EnterActions>
-                    <BeginStoryboard >
-                        <Storyboard FillBehavior="HoldEnd" >
-                            <ColorAnimation Duration="0:0:0.2"  Storyboard.TargetProperty="Background.Color" To="Gray" />
-                        </Storyboard>
-                    </BeginStoryboard>
-                </Trigger.EnterActions>
-                <Trigger.ExitActions>
-                    <BeginStoryboard>
-                        <Storyboard >
-                            <ColorAnimation Duration="0:0:0.2"  Storyboard.TargetProperty="Background.Color" To="Transparent" />
-                        </Storyboard>
-                    </BeginStoryboard>
-                </Trigger.ExitActions>-->
             </Trigger>
         </Style.Triggers>
     </Style>
 
 
     <Style x:Key="GenreBorderStyle" TargetType="Border">
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
         <Setter Property="CornerRadius" Value="3"/>
         <Setter Property="Margin" Value="10"/>
         <Setter Property="Padding" Value="0"/>
@@ -288,6 +284,7 @@
     </Style>
 
     <Style x:Key="GridCloseBorderStyle" TargetType="Border">
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
         <Setter Property="Margin" Value="5"/>
         <Setter Property="Height" Value="30"/>
         <Setter Property="Width" Value="30"/>
@@ -318,6 +315,7 @@
     </Style>
 
     <Style x:Key="ReturnBorder" TargetType="Border">
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
         <Setter Property="Background" Value="{DynamicResource BackgroundMain}"/>
         <Setter Property="Cursor" Value="Hand"/>
         <Style.Triggers>
@@ -331,6 +329,7 @@
     </Style>
 
     <Style x:Key="DropBorderStyle" TargetType="Border">
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
         <Setter Property="AllowDrop" Value="True"/>
         <Setter Property="BorderThickness" Value="2"/>
         <Setter Property="CornerRadius" Value="5"/>
@@ -361,6 +360,7 @@
 
 
     <Style x:Key="MultiLineTextBox" TargetType="TextBox" >
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
         <Setter Property="Background" Value="{DynamicResource BackgroundSide}"/>
         <Setter Property="Foreground" Value="{DynamicResource ForegroundSearch}"/>
         <Setter Property="BorderBrush" Value="{DynamicResource ForegroundGlobal}"/>
