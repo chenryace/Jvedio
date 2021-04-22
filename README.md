@@ -1,4 +1,9 @@
-﻿
+# Due to some personal reasons, Jvedio temporary maintenance, the latest version of the [4.6.0.0](https://github.com/hitchao/Jvedio/releases/tag/Jvedio4.6.0.0),Or download  [other version](https://github.com/hitchao/Jvedio/releases)
+
+
+
+
+
 [中文](README_CHS.md) [English](README.md) [日本語](README_JP.md)
 
 
@@ -18,7 +23,7 @@
 
 
 
-Due to some personal reasons, Jvedio temporary maintenance, the latest version of the [4.6.0.0](https://github.com/hitchao/Jvedio/releases/tag/Jvedio4.6.0.0),Or download  [other version](https://github.com/hitchao/Jvedio/releases)
+
 
 
 
