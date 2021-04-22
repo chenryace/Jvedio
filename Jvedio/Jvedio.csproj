@@ -232,6 +232,7 @@
     </Compile>
     <Compile Include="Utils\FileProcess\ClipBoard.cs" />
     <Compile Include="Utils\FileProcess\FileHelper.cs" />
+    <Compile Include="Utils\FileProcess\StreamHelper.cs" />
     <Compile Include="Utils\Net\ActorCrawler.cs" />
     <Compile Include="Utils\Net\MyNet.cs" />
     <Compile Include="Utils\Other\BaseClass.cs" />

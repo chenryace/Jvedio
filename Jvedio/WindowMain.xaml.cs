@@ -40,6 +40,8 @@ using HtmlAgilityPack;
 using System.Net;
 using Jvedio.Style;
 using Jvedio.Utils.Net;
+using Jvedio.Utils.FileProcess;
+using HandyControl.Data;
 
 namespace Jvedio
 {
@@ -608,22 +610,13 @@ namespace Jvedio
                 //获取本地的公告
                 string notices = "";
                 string path = AppDomain.CurrentDomain.BaseDirectory + "Notice.txt";
-                if (File.Exists(path))
-                {
-                    using (StreamReader sr = new StreamReader(path))
-                    {
-                        notices = sr.ReadToEnd();
-                    }
-                }
+                notices = StreamHelper.TryRead(path);
                 HttpResult httpResult = await new MyNet().Http(NoticeUrl);
                 //判断公告是否内容不同
                 if (httpResult != null && httpResult.SourceCode != "" && httpResult.SourceCode != notices)
                 {
                     //覆盖原有公告
-                    using (StreamWriter sw = new StreamWriter(path, false))
-                    {
-                        sw.Write(httpResult.SourceCode);
-                    }
+                    StreamHelper.TryWrite(path, httpResult.SourceCode);
                     //提示用户
                     this.Dispatcher.Invoke((Action)delegate ()
                     {
@@ -6300,6 +6293,67 @@ namespace Jvedio
             {
                 vieModel.Search = SearchBar.Text;
                 vieModel.ShowSearchPopup = false;
+            }
+        }
+
+        private void SearchBar_SearchStarted_1(object sender, FunctionEventArgs<string> e)
+        {
+            HandyControl.Controls.SearchBar searchBar = sender as HandyControl.Controls.SearchBar;
+            int idx = ActorTabControl.SelectedIndex;
+            switch (idx)
+            {
+                case 0:
+
+                    break;
+                case 1:
+
+                    break;
+                case 2:
+
+                    break;
+                case 3:
+
+                    break;
+                case 4:
+
+                    break;
+                case 5:
+
+                    break;
+                case 6:
+
+                    break;
+                case 7:
+
+                    break;
+            }
+        }
+
+
+        private void SearchBar_MouseEnter_1(object sender, MouseEventArgs e)
+        {
+            HandyControl.Controls.SearchBar searchBar = sender as HandyControl.Controls.SearchBar;
+            Color color = (Color)ColorConverter.ConvertFromString(Application.Current.Resources["ForegroundSearch"].ToString());
+            searchBar.BorderBrush = new SolidColorBrush(color);
+        }
+
+        private void SearchBar_MouseLeave_1(object sender, MouseEventArgs e)
+        {
+            HandyControl.Controls.SearchBar searchBar = sender as HandyControl.Controls.SearchBar;
+            Color color = (Color)ColorConverter.ConvertFromString(Application.Current.Resources["ForegroundGlobal"].ToString());
+            searchBar.BorderBrush = new SolidColorBrush(color);
+        }
+
+        private void SearchBar_TextChanged_1(object sender, TextChangedEventArgs e)
+        {
+            HandyControl.Controls.SearchBar searchBar = sender as HandyControl.Controls.SearchBar;
+            if (searchBar.Text == "")
+            {
+
+            }
+            else
+            {
+                SearchBar_SearchStarted(sender, null);
             }
         }
     }

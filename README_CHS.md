@@ -1,4 +1,4 @@
-﻿
+
 [中文](README_CHS.md) [English](README.md) [日本語](README_JP.md)
 
 
@@ -16,6 +16,8 @@
 ---
 
 
+
+由于一些个人原因，Jvedio 暂时维护，目前最新版 [4.6.0.0]( https://github.com/hitchao/Jvedio/releases/tag/Jvedio4.6.0.0)，或下载 [其他版本](https://github.com/hitchao/Jvedio/releases)
 
 
 

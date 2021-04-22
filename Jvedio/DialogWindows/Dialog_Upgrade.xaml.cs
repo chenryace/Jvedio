@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Jvedio.Utils.FileProcess;
+using System;
 using System.ComponentModel;
 using System.IO;
 using System.Runtime.CompilerServices;
@@ -9,7 +10,7 @@ using static Jvedio.GlobalVariable;
 namespace Jvedio
 {
     //https://docs.microsoft.com/en-us/dotnet/api/system.componentmodel.inotifypropertychanged?view=net-5.0
-    public partial class Dialog_Upgrade : Jvedio.Style.BaseDialog,System.ComponentModel.INotifyPropertyChanged
+    public partial class Dialog_Upgrade : Jvedio.Style.BaseDialog, System.ComponentModel.INotifyPropertyChanged
     {
         private string remote = "";
         private string log = "";
@@ -26,7 +27,9 @@ namespace Jvedio
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public bool IsUpgrading { get => isUpgrading; 
+        public bool IsUpgrading
+        {
+            get => isUpgrading;
             set
             {
                 if (value != isUpgrading)
@@ -37,7 +40,7 @@ namespace Jvedio
                     NotifyPropertyChanged();
                 }
             }
-        
+
         }
 
         public bool IsChecking
@@ -54,7 +57,7 @@ namespace Jvedio
 
         }
 
-        public Dialog_Upgrade(Window owner,bool showbutton,string remote,string log) : base(owner, showbutton)
+        public Dialog_Upgrade(Window owner, bool showbutton, string remote, string log) : base(owner, showbutton)
         {
             InitializeComponent();
             this.remote = remote;
@@ -73,11 +76,11 @@ namespace Jvedio
         }
 
 
-        
+
         private void BeginUpgrade(object sender, RoutedEventArgs e)
         {
             if (IsChecking || IsUpgrading) return;
-            
+
             Button button = (Button)sender;
             string text = button.Content.ToString();
             if (text == Jvedio.Language.Resources.BeginUpgrade)
@@ -88,11 +91,8 @@ namespace Jvedio
                 {
                     IsUpgrading = false;
                     //执行命令
-                    string arg = $"xcopy /y/e \"{Path.Combine(AppDomain.CurrentDomain.BaseDirectory,"Temp")}\" \"{AppDomain.CurrentDomain.BaseDirectory}\"&TIMEOUT /T 1&start \"\" \"jvedio.exe\" &exit";
-                    using (StreamWriter sw = new StreamWriter("upgrade.bat"))
-                    {
-                        sw.Write(arg);
-                    }
+                    string arg = $"xcopy /y/e \"{Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Temp")}\" \"{AppDomain.CurrentDomain.BaseDirectory}\"&TIMEOUT /T 1&start \"\" \"jvedio.exe\" &exit";
+                    StreamHelper.TryWrite("upgrade.bat", arg);
                     FileHelper.TryOpenFile("upgrade.bat");
                     Application.Current.Shutdown();
                 };

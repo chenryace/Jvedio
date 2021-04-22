@@ -1298,6 +1298,7 @@
                                                                                 <MenuItem  Header="{x:Static lang:Resources.Menu_SyncExtra}" Visibility="Visible"  >
                                                                                     <MenuItem Header="{x:Static lang:Resources.Menu_CustomUrl}" Click="DownLoadWithUrl"   ></MenuItem>
                                                                                     <MenuItem Header="{x:Static lang:Resources.Menu_EnforceSync}" Click="ForceToDownLoad"   ></MenuItem>
+
                                                                                 </MenuItem>
                                                                                 <MenuItem Header="{x:Static lang:Resources.Menu_EditInfo}" Click="EditInfo"  />
                                                                                 <MenuItem Header="{x:Static lang:Resources.Menu_Advance}"   >
@@ -1607,6 +1608,9 @@
                                         <Border  Visibility="{Binding ShowActorTools,Converter={StaticResource BoolToOppositeVisibilityConverter}}"   ToolTip="{x:Static lang:Resources.Refresh}"     Style="{StaticResource ToolsBarBorderStyle}" MouseLeftButtonUp="RefreshClassify">
                                             <Image Source="/Resources/menuitem/refresh.png" Height="20" Width="20"   />
                                         </Border>
+
+
+                                        <hc:SearchBar x:Name="ActorSearchBar" SearchStarted="SearchBar_SearchStarted_1" MouseEnter="SearchBar_MouseEnter_1" MouseLeave="SearchBar_MouseLeave_1" ContextMenu="{StaticResource TextBoxContextMenu}" BorderThickness="2" TextChanged="SearchBar_TextChanged_1"  BorderBrush="{DynamicResource ForegroundGlobal}"   Focusable="True"        Padding="5" Width="200" ShowClearButton="True"  hc:InfoElement.TitleWidth="140" CaretBrush="{DynamicResource ForegroundSearch}" Foreground="{DynamicResource ForegroundSearch}" hc:InfoElement.Placeholder="{x:Static lang:Resources.Search}" Margin="5 5 5 5" Background="Transparent"  hc:InfoElement.Title="" Style="{StaticResource SearchBarPlus}"  />
 
 
                                     </StackPanel>
