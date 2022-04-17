@@ -432,6 +432,7 @@
     <Compile Include="Utils\Sqlite\SqliteHelper.cs" />
     <Compile Include="Utils\Visual\VisualHelper.cs" />
     <Compile Include="ViewModels\VieModel_Batch.cs" />
+    <Compile Include="ViewModels\VieModel_MetaDataEdit.cs" />
     <Compile Include="ViewModels\VieModel_MetaData.cs" />
     <Compile Include="Windows\DialogInput.xaml.cs">
       <DependentUpon>DialogInput.xaml</DependentUpon>
@@ -446,6 +447,9 @@
     <Compile Include="Utils\FileProcess\NFO.cs" />
     <Compile Include="Core\Scan\ScanHelper.cs" />
     <Compile Include="Utils\Config\WindowConfig.cs" />
+    <Compile Include="Windows\MetaData\Window_MetaDataEdit.xaml.cs">
+      <DependentUpon>Window_MetaDataEdit.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\MetaData\Window_MetaDatas.xaml.cs">
       <DependentUpon>Window_MetaDatas.xaml</DependentUpon>
     </Compile>
@@ -531,6 +535,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Utils\Plot\Bar\BarView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\MetaData\Window_MetaDataEdit.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

@@ -206,13 +206,15 @@ namespace Jvedio
             return false;
         }
 
-        public static string SelectPath(Window window)
+        public static string SelectPath(Window window, string InitialDirectory = null)
         {
+            string path = AppDomain.CurrentDomain.BaseDirectory;
+            if (!string.IsNullOrEmpty(InitialDirectory)) path = InitialDirectory;
             var dialog = new CommonOpenFileDialog();
             string result = "";
             dialog.Title = Jvedio.Language.Resources.ChooseDir;
             dialog.IsFolderPicker = true;
-            dialog.InitialDirectory = AppDomain.CurrentDomain.BaseDirectory;
+            dialog.InitialDirectory = path;
             dialog.ShowHiddenItems = true;
             if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
             {
@@ -294,17 +296,33 @@ namespace Jvedio
         {
             try
             {
-                if (File.Exists(path))
+                if (IsFile(path))
                 {
-                    Process.Start("explorer.exe", "/select, \"" + path + "\"");
-                    return true;
-                }
+                    if (File.Exists(path))
+                    {
+                        Process.Start("explorer.exe", "/select, \"" + path + "\"");
+                        return true;
+                    }
 
+                    else
+                    {
+                        if (token != "") HandyControl.Controls.Growl.Error($"{Jvedio.Language.Resources.Message_FileNotExist}：{path}", token);
+                        return false;
+                    }
+                }
                 else
                 {
-                    if (token != "") HandyControl.Controls.Growl.Error($"{Jvedio.Language.Resources.Message_FileNotExist}：{path}", token);
-                    return false;
+                    if (Directory.Exists(path))
+                    {
+                        Process.Start("explorer.exe", " \"" + path + "\"");
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
                 }
+
 
             }
             catch (Exception ex)

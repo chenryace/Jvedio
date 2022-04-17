@@ -1,5 +1,7 @@
 ﻿using ChaoControls.Style;
+using DynamicData;
 using Jvedio.Core;
+using Jvedio.Core.Enums;
 using Jvedio.Core.Scan;
 using Jvedio.Core.SimpleORM;
 using Jvedio.Entity;
@@ -8,9 +10,12 @@ using Jvedio.Entity.Data;
 using Jvedio.Utils.Common;
 using Jvedio.Utils.Visual;
 using Jvedio.ViewModel;
+using Microsoft.VisualBasic;
+using Microsoft.VisualBasic.FileIO;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -45,6 +50,8 @@ namespace Jvedio
 
         public SelectWrapper<MetaData> CurrentWrapper;
         public string CurrentSQL;
+
+        public Window_MetaDataEdit editWindow;
 
 
 
@@ -831,7 +838,9 @@ namespace Jvedio
 
         private void EditInfo(object sender, RoutedEventArgs e)
         {
-
+            editWindow?.Close();
+            editWindow = new Window_MetaDataEdit(GetIDFromMenuItem(sender), GlobalVariable.CurrentDataType);
+            editWindow.ShowDialog();
         }
 
         private void OpenWeb(object sender, RoutedEventArgs e)
@@ -839,19 +848,203 @@ namespace Jvedio
 
         }
 
-        private void CopyFile(object sender, RoutedEventArgs e)
+        public void CopyFile(object sender, RoutedEventArgs e)
         {
+            handleMenuSelected((sender));
+            StringCollection paths = new StringCollection();
+            DataType dataType = GlobalVariable.CurrentDataType;
+            foreach (var item in vieModel.SelectedData)
+            {
+                string path = item.Path;
+                if (dataType == DataType.Game)
+                {
+                    path = System.IO.Path.GetDirectoryName(item.Path);
+                }
+                if (Directory.Exists(path))
+                    paths.Add(path);
+            }
 
+            if (paths.Count <= 0)
+            {
+                msgCard.Warning($"需要复制文件的个数为 0，文件可能不存在");
+                return;
+            }
+            bool success = ClipBoard.TrySetFileDropList(paths, (error) => { msgCard.Error(error); });
+
+            if (success)
+                msgCard.Success($"{Jvedio.Language.Resources.Message_Copied} {paths.Count}/{vieModel.SelectedData.Count}");
+
+
+            if (!Properties.Settings.Default.EditMode) vieModel.SelectedData.Clear();
         }
 
         private void DeleteID(object sender, RoutedEventArgs e)
         {
-
+            handleMenuSelected(sender);
+            if (vieModel.EditMode && new Msgbox(this, Jvedio.Language.Resources.IsToDelete).ShowDialog() == false) { return; }
+            deleteIDs(vieModel.SelectedData, false);
         }
 
-        private void DeleteFile(object sender, RoutedEventArgs e)
+        public void DeleteFile(object sender, RoutedEventArgs e)
         {
+            handleMenuSelected((sender));
+            if (vieModel.EditMode && new Msgbox(this, Jvedio.Language.Resources.IsToDelete).ShowDialog() == false) { return; }
+            int num = 0;
+            int totalCount = vieModel.SelectedData.Count;
 
+
+            DataType dataType = GlobalVariable.CurrentDataType;
+
+            foreach (var item in vieModel.SelectedData)
+            {
+                string path = item.Path;
+                if (dataType == DataType.Game)
+                {
+                    path = System.IO.Path.GetDirectoryName(item.Path);
+                }
+                try
+                {
+                    Microsoft.VisualBasic.FileIO.FileSystem.DeleteDirectory(path, UIOption.AllDialogs, RecycleOption.SendToRecycleBin);
+                    num++;
+                }
+                catch (Exception ex)
+                {
+                    msgCard.Error(ex.Message);
+                    Logger.LogF(ex);
+                }
+
+            }
+
+            msgCard.Info($"已删除到回收站 {num}/{totalCount}");
+
+            if (num > 0 && Properties.Settings.Default.DelInfoAfterDelFile)
+                deleteIDs(vieModel.SelectedData, false);
+
+            if (!vieModel.EditMode) vieModel.SelectedData.Clear();
         }
+
+        private void handleMenuSelected(object sender, int depth = 0)
+        {
+            long dataID = GetIDFromMenuItem(sender, depth);
+            if (!vieModel.EditMode) vieModel.SelectedData.Clear();
+            MetaData data = vieModel.CurrentDataList.Where(arg => arg.DataID == dataID).FirstOrDefault();
+            if (!vieModel.SelectedData.Where(arg => arg.DataID == dataID).Any()) vieModel.SelectedData.Add(data);
+        }
+
+        private long GetIDFromMenuItem(object sender, int depth = 0)
+        {
+            MenuItem mnu = sender as MenuItem;
+            ContextMenu contextMenu = null;
+            if (depth == 0)
+            {
+                contextMenu = mnu.Parent as ContextMenu;
+            }
+            else
+            {
+                MenuItem _mnu = mnu.Parent as MenuItem;
+                contextMenu = _mnu.Parent as ContextMenu;
+            }
+            GifImage gifImage = contextMenu.PlacementTarget as GifImage;
+            return getDataID(gifImage);
+        }
+
+        public async void deleteIDs(List<MetaData> to_delete, bool fromDetailWindow = true)
+        {
+            if (!fromDetailWindow)
+            {
+                vieModel.CurrentDataList.RemoveMany(to_delete);
+                vieModel.DataList.RemoveMany(to_delete);
+            }
+            else
+            {
+                // 影片只有单个
+                MetaData data = to_delete[0];
+                int idx = -1;
+                for (int i = 0; i < vieModel.CurrentDataList.Count; i++)
+                {
+                    if (vieModel.CurrentDataList[i].DataID == data.DataID)
+                    {
+                        idx = i;
+                        break;
+                    }
+                }
+                if (idx >= 0)
+                {
+                    vieModel.CurrentDataList.RemoveAt(idx);
+                    vieModel.DataList.RemoveAt(idx);
+                }
+
+            }
+
+
+            // todo FilterMovieList
+            //vieModel.FilterMovieList.Remove(arg);
+            int count = metaDataMapper.deleteDataByIds(to_delete.Select(arg => arg.DataID.ToString()).ToList());
+
+            // todo 关闭详情窗口
+            //if (!fromDetailWindow && FileProcess.GetWindowByName("WindowDetails") is Window window)
+            //{
+            //    WindowDetails windowDetails = (WindowDetails)window;
+            //    foreach (var item in to_delete)
+            //    {
+            //        if (windowDetails.DataID == item.DataID)
+            //        {
+            //            windowDetails.Close();
+            //            break;
+            //        }
+            //    }
+            //}
+
+            msgCard.Info($"{Jvedio.Language.Resources.SuccessDelete} {count}/{to_delete.Count} ");
+            //修复数字显示
+            vieModel.CurrentCount -= to_delete.Count;
+            vieModel.TotalCount -= to_delete.Count;
+
+            to_delete.Clear();
+            vieModel.Statistic();
+
+            await Task.Delay(1000);
+            vieModel.EditMode = false;
+            vieModel.SelectedData.Clear();
+            SetSelected();
+        }
+
+        public void RefreshData(long dataID)
+        {
+            for (int i = 0; i < vieModel.CurrentDataList.Count; i++)
+            {
+                if (vieModel.CurrentDataList[i]?.DataID == dataID)
+                {
+                    MetaData data = null;
+                    if (GlobalVariable.CurrentDataType == DataType.Picture)
+                    {
+                        vieModel.PictureList[i] = pictureMapper.SelectByID(dataID);
+                        data = vieModel.PictureList[i].toMetaData();
+
+                    }
+                    else if (GlobalVariable.CurrentDataType == DataType.Game)
+                    {
+                        vieModel.GameList[i] = gameMapper.SelectByID(dataID);
+                        data = vieModel.GameList[i].toMetaData();
+                    }
+                    else if (GlobalVariable.CurrentDataType == DataType.Comics)
+                    {
+                        vieModel.ComicList[i] = comicMapper.SelectByID(dataID);
+                        data = vieModel.ComicList[i].toMetaData();
+                    }
+                    if (data != null)
+                    {
+                        vieModel.setData(ref data);
+                        //vieModel.CurrentDataList[i].ViewImage = null;
+                        //vieModel.CurrentDataList[i].ViewImage = data.ViewImage; 
+                        vieModel.CurrentDataList[i] = null;
+                        vieModel.CurrentDataList[i] = data;
+                    }
+
+                    break;
+                }
+            }
+        }
+
     }
 }

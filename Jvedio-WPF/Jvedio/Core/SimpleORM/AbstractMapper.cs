@@ -208,7 +208,7 @@ namespace Jvedio.Core.SimpleORM
 
             string sql = $"update {TableName} set {field}={value} where {generateWhere(id)}";
             if (type == typeof(string))
-                sql = $"update {TableName} set {field}='{value}' where {generateWhere(id)}";
+                sql = $"update {TableName} set {field}='{SqliteHelper.format(value)}' where {generateWhere(id)}";
             return executeNonQuery(sql) > 0;
         }
 
@@ -218,7 +218,7 @@ namespace Jvedio.Core.SimpleORM
 
             string sql = $"update {TableName} set {field}={value} {wrapper.toWhere()}";
             if (type == typeof(string))
-                sql = $"update {TableName} set {field}='{value}' {wrapper.toWhere()}";
+                sql = $"update {TableName} set {field}='{SqliteHelper.format(value)}' {wrapper.toWhere()}";
             return executeNonQuery(sql);
         }
 
@@ -345,7 +345,7 @@ namespace Jvedio.Core.SimpleORM
                 }
                 else
                 {
-                    sql.Append($"{name}='{value}'");
+                    sql.Append($"{name}='{SqliteHelper.format(value)}'");
                 }
                 sql.Append(",");
 
@@ -459,7 +459,7 @@ namespace Jvedio.Core.SimpleORM
                         if (value == null || string.IsNullOrEmpty(value.ToString()))
                             value_sql.Add($"'{DateTime.Now.toLocalDate()}'");
                         else
-                            value_sql.Add($"'{value}'");
+                            value_sql.Add($"'{SqliteHelper.format(value)}'");
                     }
                     else
                     {
@@ -540,7 +540,7 @@ namespace Jvedio.Core.SimpleORM
                     }
                     else
                     {
-                        set_sql.Append($"WHEN {PrimaryKeyValue} THEN '{value}' ");
+                        set_sql.Append($"WHEN {PrimaryKeyValue} THEN '{SqliteHelper.format(value)}' ");
                     }
                 }
                 set_sql.Append("END,");

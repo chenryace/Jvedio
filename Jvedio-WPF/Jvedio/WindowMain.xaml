@@ -3037,7 +3037,7 @@
                                                 HorizontalAlignment="Left"
                                                 VerticalAlignment="Center"
                                                 LargeChange="10"
-                                                Maximum="500"
+                                                Maximum="800"
                                                 Minimum="200"
                                                 SmallChange="5"
                                                 ValueChanged="ImageSizeSlider_ValueChanged"
@@ -3046,7 +3046,8 @@
                                             <TextBlock
                                                 VerticalAlignment="Center"
                                                 Style="{StaticResource BaseTextBlock}"
-                                                Text="{Binding Path=GlobalImageWidth, Source={x:Static p:Settings.Default}, StringFormat=\{0\} px}" />
+                                                Text="{Binding Path=GlobalImageWidth, Source={x:Static p:Settings.Default}, StringFormat=\{0\} px}"
+                                                Visibility="Hidden" />
 
                                         </StackPanel>
 

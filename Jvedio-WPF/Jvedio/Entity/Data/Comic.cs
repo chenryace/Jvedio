@@ -27,6 +27,12 @@ namespace Jvedio.Entity.Data
         public string ExtraInfo { get; set; }
 
 
+        public new MetaData toMetaData()
+        {
+            MetaData metaData = (MetaData)this;
+            metaData.DataID = this.DataID;
+            return metaData;
+        }
 
 
     }

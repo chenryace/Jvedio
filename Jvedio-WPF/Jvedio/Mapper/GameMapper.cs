@@ -26,9 +26,55 @@ namespace Jvedio.Mapper
             "Path",
 
             "LastScanDate",
+            "BigImagePath",
             "ReleaseDate",
 
             "(select group_concat(TagID,',') from metadata_to_tagstamp where metadata_to_tagstamp.DataID=metadata.DataID)  as TagIDs ",
+        };
+
+        public static string[] SelectAllFields = {
+            "metadata.DataID",
+            "DBId",
+            "Title",
+            "Size",
+            "Path",
+            "Hash",
+            "Country",
+            "ReleaseDate",
+            "ReleaseYear",
+            "ViewCount",
+            "DataType",
+            "Rating",
+            "RatingCount",
+            "FavoriteCount",
+            "Genre",
+            "Grade",
+            $"(select group_concat(LabelName,'{GlobalVariable.Separator}') from metadata_to_label where metadata_to_label.DataID=metadata.DataID) as Label",
+            "ViewDate",
+            "FirstScanDate",
+            "LastScanDate",
+            "CreateDate",
+            "UpdateDate",
+            "(select group_concat(TagID,',') from metadata_to_tagstamp where metadata_to_tagstamp.DataID=metadata.DataID)  as TagIDs ",
+
+            "GID",
+            "Branch",
+            "OriginalPainting",
+            "VoiceActors",
+            "Play",
+            "Music",
+            "Singers",
+            "Plot",
+            "Outline",
+            "ExtraName",
+            "Studio",
+            "Publisher",
+            "GifImagePath",
+            "BigImagePath",
+            "SmallImagePath",
+            "WebType",
+            "WebUrl",
+            "ExtraInfo",
         };
 
         public static Dictionary<int, string> SortDict = new Dictionary<int, string>()
@@ -43,5 +89,21 @@ namespace Jvedio.Mapper
             { 7, "Rating" },
         };
 
+        public Game SelectByID(long dataid)
+        {
+            SelectWrapper<Game> wrapper = new SelectWrapper<Game>();
+
+            wrapper.Select(SelectAllFields).Eq("metadata.DataID", dataid);
+            string sql = $"{wrapper.toSelect(false)} FROM metadata_game " +
+                        "JOIN metadata " +
+                        "on metadata.DataID=metadata_game.DataID " + wrapper.toWhere(false);
+            List<Dictionary<string, object>> list = select(sql);
+            List<Game> games = toEntity<Game>(list, typeof(Game).GetProperties(), false);
+            if (games != null && games.Count > 0)
+            {
+                return games[0];
+            }
+            return null;
+        }
     }
 }

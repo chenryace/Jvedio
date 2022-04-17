@@ -306,7 +306,7 @@ namespace Jvedio.ViewModel
             int update2 = GlobalMapper.videoMapper.updateById(CurrentVideo);
 
             // 标签
-            GlobalMapper.videoMapper.SaveLabel(CurrentVideo, oldLabels);
+            GlobalMapper.metaDataMapper.SaveLabel(data, oldLabels);
 
             // 演员
             GlobalMapper.videoMapper.SaveActor(CurrentVideo, ViewActors.ToList());

@@ -14,7 +14,7 @@ namespace Jvedio.Core.Scan
             switch (dataType)
             {
                 case DataType.Video:
-                    return genPicScanner(scanPaths, filePaths, fileExt);
+                    return genVideoScanner(scanPaths, filePaths, fileExt);
                 case DataType.Picture:
                     if (fileExt == null) fileExt = ScanTask.PICTURE_EXTENSIONS_LIST;
                     return genPicScanner(scanPaths, filePaths, fileExt);

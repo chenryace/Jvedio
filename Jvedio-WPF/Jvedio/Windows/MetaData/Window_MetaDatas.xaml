@@ -1092,22 +1092,18 @@
                                                                                 <MenuItem
                                                                                     Command="cmd:File.OpenSelectFile"
                                                                                     CommandParameter="{Binding Path}"
-                                                                                    Header="{x:Static lang:Resources.Movie}" />
-                                                                                <MenuItem
-                                                                                    Command="cmd:File.OpenSelectFile"
-                                                                                    CommandParameter="{Binding BigImagePath, Converter={StaticResource ParseImagePathConverter}}"
-                                                                                    Header="{x:Static lang:Resources.Poster}" />
-                                                                                <MenuItem
-                                                                                    Command="cmd:File.OpenSelectFile"
-                                                                                    CommandParameter="{Binding SmallImagePath, Converter={StaticResource ParseImagePathConverter}}"
-                                                                                    Header="{x:Static lang:Resources.Thumbnail}" />
+                                                                                    Header="资源" />
 
                                                                             </MenuItem>
-                                                                            <MenuItem Name="TagMenuItems" Header="添加标记" />
+                                                                            <MenuItem
+                                                                                Name="TagMenuItems"
+                                                                                Header="添加标记"
+                                                                                IsEnabled="False" />
                                                                             <MenuItem
                                                                                 Click="OpenWeb"
                                                                                 Header="访问所在网址"
-                                                                                Icon="pack://application:,,,/Resources/menuitem/openwebsite.png" />
+                                                                                Icon="pack://application:,,,/Resources/menuitem/openwebsite.png"
+                                                                                IsEnabled="False" />
                                                                             <MenuItem Click="CopyFile" Header="{x:Static lang:Resources.Menu_CopyFile}" />
                                                                             <MenuItem
                                                                                 Click="DeleteID"
@@ -1368,7 +1364,7 @@
                                         HorizontalAlignment="Left"
                                         VerticalAlignment="Center"
                                         LargeChange="10"
-                                        Maximum="500"
+                                        Maximum="800"
                                         Minimum="200"
                                         SmallChange="5"
                                         ValueChanged="ImageSizeSlider_ValueChanged"
@@ -1377,7 +1373,8 @@
                                     <TextBlock
                                         VerticalAlignment="Center"
                                         Style="{StaticResource BaseTextBlock}"
-                                        Text="{Binding Path=GlobalImageWidth, Source={x:Static p:Settings.Default}, StringFormat=\{0\} px}" />
+                                        Text="{Binding Path=GlobalImageWidth, Source={x:Static p:Settings.Default}, StringFormat=\{0\} px}"
+                                        Visibility="Hidden" />
 
                                 </StackPanel>
 

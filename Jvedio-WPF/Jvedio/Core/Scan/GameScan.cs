@@ -39,7 +39,7 @@ namespace Jvedio.Core.Scan
                 game.Title = Path.GetFileName(path);
                 game.Path = getRealExe(list);
                 game.Size = DirHelper.getDirSize(new DirectoryInfo(path));
-                game.Hash = Jvedio.Utils.Encrypt.Encrypt.GetFileMD5(path);// 计算哈希
+                game.Hash = Jvedio.Utils.Encrypt.Encrypt.GetFileMD5(game.Path);// 计算哈希
                 import.Add(game);
             }
 
