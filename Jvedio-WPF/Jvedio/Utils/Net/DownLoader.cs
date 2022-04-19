@@ -12,6 +12,7 @@ using static Jvedio.GlobalVariable;
 using Jvedio.Utils;
 using Jvedio.Utils.Net;
 using Jvedio.Entity;
+using Jvedio.Core.Net;
 
 namespace Jvedio
 {
@@ -120,7 +121,7 @@ namespace Jvedio
             if (movie.IsToDownLoadInfo() || enforce)
             {
                 //满足一定条件才下载信息
-                HttpResult httpResult = await MyNet.DownLoadFromNet(movie);
+                HttpResult httpResult = await HTTP.DownLoadFromNet(movie);
                 if (httpResult != null)
                 {
                     if (httpResult.Success)
@@ -147,7 +148,7 @@ namespace Jvedio
 
             if (!File.Exists(BasePicPath + $"BigPic\\{dm.id}.jpg") || enforce)
             {
-                await MyNet.DownLoadImage(dm.bigimageurl, ImageType.BigImage, dm.id);//下载大图
+                await HTTP.DownLoadImage(dm.bigimageurl, ImageType.BigImage, dm.id);//下载大图
             }
 
 
@@ -166,7 +167,7 @@ namespace Jvedio
             {
                 if (!File.Exists(BasePicPath + $"SmallPic\\{dm.id}.jpg") || enforce)
                 {
-                    await MyNet.DownLoadImage(dm.smallimageurl, ImageType.SmallImage, dm.id); //下载小图
+                    await HTTP.DownLoadImage(dm.smallimageurl, ImageType.SmallImage, dm.id); //下载小图
                 }
             }
             dm.smallimage = ImageProcess.GetBitmapImage(dm.id, "SmallPic");
@@ -300,7 +301,7 @@ namespace Jvedio
                 if (!string.IsNullOrEmpty(actress.imageurl))
                 {
                     string url = actress.imageurl;
-                    HttpResult streamResult = await new MyNet().DownLoadFile(url);
+                    HttpResult streamResult = await HTTP.DownLoadFile(url);
                     if (streamResult != null)
                     {
                         ImageProcess.SaveImage(actress.name, streamResult.FileByte, ImageType.ActorImage, url);
@@ -313,7 +314,7 @@ namespace Jvedio
                 success = await Task.Run(() =>
                 {
                     Task.Delay(300).Wait();
-                    return MyNet.DownLoadActress(actress.id, actress.name, callback: (message) => { MessageCallBack?.Invoke(this, new MessageCallBackEventArgs(message)); });
+                    return HTTP.DownLoadActress(actress.id, actress.name, callback: (message) => { MessageCallBack?.Invoke(this, new MessageCallBackEventArgs(message)); });
                 });
 
                 if (success) actress = DataBase.SelectInfoByActress(actress);

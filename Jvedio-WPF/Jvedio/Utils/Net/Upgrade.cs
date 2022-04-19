@@ -1,4 +1,5 @@
 ﻿using DynamicData.Annotations;
+using Jvedio.Core.Net;
 using Jvedio.Utils.Encrypt;
 using Jvedio.Utils.Net;
 using System;
@@ -44,7 +45,7 @@ namespace Jvedio
         private async Task<bool> GetDownLoadList()
         {
             HttpResult httpResult = null;
-            try { httpResult = await new MyNet().Http(list_url); }
+            try { httpResult = await new BaseHttp().Send(list_url); }
             catch (TimeoutException ex)
             {
                 Logger.LogN(list_url + " => " + ex.Message);
@@ -115,7 +116,7 @@ namespace Jvedio
                 string filepath = Path.Combine(temppath, item);
                 if (!File.Exists(filepath))
                 {
-                    HttpResult streamResult = await new MyNet().DownLoadFile(file_url + item);
+                    HttpResult streamResult = await HTTP.DownLoadFile(file_url + item);
                     //写入本地
                     if (streamResult != null) WriteFile(streamResult.FileByte, filepath);
                 }

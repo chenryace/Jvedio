@@ -10,10 +10,11 @@ namespace Jvedio
     public static class GlobalConfig
     {
         public static StartUp StartUp = StartUp.createInstance();
-        public static Jvedio.Core.WindowConfig.Main Main = Jvedio.Core.WindowConfig.Main.createInstance();
-        public static Jvedio.Core.WindowConfig.Edit Edit = Jvedio.Core.WindowConfig.Edit.createInstance();
-        public static Jvedio.Core.WindowConfig.Detail Detail = Jvedio.Core.WindowConfig.Detail.createInstance();
-        public static Jvedio.Core.WindowConfig.MetaData MetaData = Jvedio.Core.WindowConfig.MetaData.createInstance();
+        public static Core.WindowConfig.Main Main = Core.WindowConfig.Main.createInstance();
+        public static Edit Edit = Edit.createInstance();
+        public static Detail Detail = Detail.createInstance();
+        public static MetaData MetaData = MetaData.createInstance();
+        public static Jvedio.Core.Config.ServerConfig ServerConfig = Jvedio.Core.Config.ServerConfig.createInstance();
 
         static GlobalConfig()
         {
@@ -22,6 +23,7 @@ namespace Jvedio
             Edit.Read();
             Detail.Read();
             MetaData.Read();
+            ServerConfig.Read();
         }
     }
 }

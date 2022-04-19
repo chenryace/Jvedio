@@ -199,20 +199,6 @@ namespace Jvedio.Utils
                 return sql.Replace("%", "").Replace("'", "");
         }
 
-        public static string ToProperUrl(this string url)
-        {
-            url = url.ToLower();
-            if (string.IsNullOrEmpty(url)) return "";
-            if (url.IndexOf("http") < 0) url = "https://" + url;
-            if (!url.EndsWith("/")) url += "/";
-            return url;
-        }
-
-
-
-
-
-        public static bool IsProperUrl(this string source) => Uri.TryCreate(source, UriKind.Absolute, out Uri uriResult) && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps);
 
 
         public static string ToProperFileName(this string filename)

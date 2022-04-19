@@ -1,4 +1,8 @@
-﻿using FontAwesome.WPF;
+﻿using ChaoControls.Style;
+using FontAwesome.WPF;
+using Jvedio.Core.Crawler;
+using Jvedio.Core.Net;
+using Jvedio.Core.SimpleMarkDown;
 using Jvedio.Entity;
 using Jvedio.Style;
 using Jvedio.Utils;
@@ -50,16 +54,16 @@ namespace Jvedio
             runtime = 126,
             country = Jvedio.Language.Resources.SampleMovie_Country
         };
-        public VieModel_Settings vieModel_Settings;
+        public VieModel_Settings vieModel;
         public Settings()
         {
             InitializeComponent();
             if (GlobalFont != null) this.FontFamily = GlobalFont;
-            vieModel_Settings = new VieModel_Settings();
+            vieModel = new VieModel_Settings();
 
 
-            this.DataContext = vieModel_Settings;
-            vieModel_Settings.Reset();
+            this.DataContext = vieModel;
+            vieModel.Reset();
 
 
 
@@ -216,12 +220,12 @@ namespace Jvedio
             var path = FileHelper.SelectPath(this);
             if (Directory.Exists(path))
             {
-                if (vieModel_Settings.ScanPath == null) { vieModel_Settings.ScanPath = new ObservableCollection<string>(); }
-                if (!vieModel_Settings.ScanPath.Contains(path) && !vieModel_Settings.ScanPath.IsIntersectWith(path))
+                if (vieModel.ScanPath == null) { vieModel.ScanPath = new ObservableCollection<string>(); }
+                if (!vieModel.ScanPath.Contains(path) && !vieModel.ScanPath.IsIntersectWith(path))
                 {
-                    vieModel_Settings.ScanPath.Add(path);
+                    vieModel.ScanPath.Add(path);
                     //保存
-                    FileProcess.SaveScanPathToConfig(vieModel_Settings.DataBase, vieModel_Settings.ScanPath?.ToList());
+                    FileProcess.SaveScanPathToConfig(vieModel.DataBase, vieModel.ScanPath?.ToList());
                 }
                 else
                 {
@@ -350,19 +354,19 @@ namespace Jvedio
             {
                 for (int i = PathListBox.SelectedItems.Count - 1; i >= 0; i--)
                 {
-                    vieModel_Settings.ScanPath.Remove(PathListBox.SelectedItems[i].ToString());
+                    vieModel.ScanPath.Remove(PathListBox.SelectedItems[i].ToString());
                 }
             }
-            if (vieModel_Settings.ScanPath != null)
-                SaveScanPathToConfig(vieModel_Settings.DataBase, vieModel_Settings.ScanPath.ToList());
+            if (vieModel.ScanPath != null)
+                SaveScanPathToConfig(vieModel.DataBase, vieModel.ScanPath.ToList());
 
         }
 
         public void ClearPath(object sender, RoutedEventArgs e)
         {
 
-            vieModel_Settings.ScanPath?.Clear();
-            SaveScanPathToConfig(vieModel_Settings.DataBase, new List<string>());
+            vieModel.ScanPath?.Clear();
+            SaveScanPathToConfig(vieModel.DataBase, new List<string>());
         }
 
 
@@ -651,8 +655,8 @@ namespace Jvedio
         private void DatabaseComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (e.AddedItems.Count == 0) return;
-            vieModel_Settings.DataBase = e.AddedItems[0].ToString();
-            vieModel_Settings.Reset();
+            vieModel.DataBase = e.AddedItems[0].ToString();
+            vieModel.Reset();
 
 
 
@@ -662,16 +666,16 @@ namespace Jvedio
         private void Window_ContentRendered(object sender, EventArgs e)
         {
             //设置当前数据库
-            for (int i = 0; i < vieModel_Settings.DataBases?.Count; i++)
+            for (int i = 0; i < vieModel.DataBases?.Count; i++)
             {
-                if (vieModel_Settings.DataBases[i].ToLower() == Path.GetFileNameWithoutExtension(Properties.Settings.Default.DataBasePath).ToLower())
+                if (vieModel.DataBases[i].ToLower() == Path.GetFileNameWithoutExtension(Properties.Settings.Default.DataBasePath).ToLower())
                 {
                     DatabaseComboBox.SelectedIndex = i;
                     break;
                 }
             }
 
-            if (vieModel_Settings.DataBases?.Count == 1) DatabaseComboBox.Visibility = Visibility.Hidden;
+            if (vieModel.DataBases?.Count == 1) DatabaseComboBox.Visibility = Visibility.Hidden;
 
             ShowViewRename(Properties.Settings.Default.RenameFormat);
 
@@ -760,15 +764,15 @@ namespace Jvedio
 
         private void PathListBox_Drop(object sender, DragEventArgs e)
         {
-            if (vieModel_Settings.ScanPath == null) { vieModel_Settings.ScanPath = new ObservableCollection<string>(); }
+            if (vieModel.ScanPath == null) { vieModel.ScanPath = new ObservableCollection<string>(); }
             string[] dragdropFiles = (string[])e.Data.GetData(DataFormats.FileDrop);
             foreach (var item in dragdropFiles)
             {
                 if (!FileHelper.IsFile(item))
                 {
-                    if (!vieModel_Settings.ScanPath.Contains(item) && !vieModel_Settings.ScanPath.IsIntersectWith(item))
+                    if (!vieModel.ScanPath.Contains(item) && !vieModel.ScanPath.IsIntersectWith(item))
                     {
-                        vieModel_Settings.ScanPath.Add(item);
+                        vieModel.ScanPath.Add(item);
                     }
                     else
                     {
@@ -778,7 +782,7 @@ namespace Jvedio
 
             }
             //保存
-            FileProcess.SaveScanPathToConfig(vieModel_Settings.DataBase, vieModel_Settings.ScanPath.ToList());
+            FileProcess.SaveScanPathToConfig(vieModel.DataBase, vieModel.ScanPath.ToList());
 
         }
 
@@ -802,37 +806,58 @@ namespace Jvedio
 
         private void NewServer(object sender, RoutedEventArgs e)
         {
-            if (vieModel_Settings.Servers.Count >= 10) return;
-            vieModel_Settings.Servers.Add(new Server()
+            string serverType = getCurrentServerType();
+            CrawlerServer server = new CrawlerServer()
             {
-                IsEnable = true,
-                Url = "https://",
-                Cookie = Jvedio.Language.Resources.Nothing,
+                Enabled = true,
+                Url = "https://www.baidu.com/",
+                Cookies = "",
                 Available = 0,
-                Name = "",
                 LastRefreshDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
-            }); ;
+            };
+            ObservableCollection<CrawlerServer> list = vieModel.CrawlerServers[serverType];
+            if (list == null) list = new ObservableCollection<CrawlerServer>();
+            list.Add(server);
+            vieModel.CrawlerServers[serverType] = list;
+            ServersDataGrid.ItemsSource = null;
+            ServersDataGrid.ItemsSource = list;
+        }
+
+
+
+        private string getCurrentServerType()
+        {
+            int idx = serverListBox.SelectedIndex;
+            return vieModel.CrawlerServers.Keys.ToList()[idx];
         }
 
 
         private int CurrentRowIndex = 0;
         private void TestServer(object sender, RoutedEventArgs e)
         {
-            int rowIndex = CurrentRowIndex;
-            vieModel_Settings.Servers[rowIndex].LastRefreshDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-            vieModel_Settings.Servers[rowIndex].Available = 2;
+            int idx = CurrentRowIndex;
+            string serverType = getCurrentServerType();
+            ObservableCollection<CrawlerServer> list = vieModel.CrawlerServers[serverType];
+
+            list[idx].LastRefreshDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+            list[idx].Available = 2;
             ServersDataGrid.IsEnabled = false;
-            CheckUrl(vieModel_Settings.Servers[rowIndex], (s) =>
-            {
-                ServersDataGrid.IsEnabled = true;
-            });
+            //CheckUrl(vieModel.Servers[rowIndex], (s) =>
+            //{
+            //    ServersDataGrid.IsEnabled = true;
+            //});
         }
 
         private void DeleteServer(object sender, RoutedEventArgs e)
         {
-            Server server = vieModel_Settings.Servers[CurrentRowIndex];
-            ServerConfig.Instance.DeleteByName(server.Name);
-            vieModel_Settings.Servers.RemoveAt(CurrentRowIndex);
+
+            string serverType = getCurrentServerType();
+            Console.WriteLine(CurrentRowIndex);
+            ObservableCollection<CrawlerServer> list = vieModel.CrawlerServers[serverType];
+            list.RemoveAt(CurrentRowIndex);
+            vieModel.CrawlerServers[serverType] = list;
+            ServersDataGrid.ItemsSource = null;
+            ServersDataGrid.ItemsSource = list;
         }
 
 
@@ -852,9 +877,7 @@ namespace Jvedio
 
         private async void CheckUrl(Server server, Action<int> callback)
         {
-            bool enablecookie = false;
-            if (server.Name == "DMM" || server.Name == "DB" || server.Name == "MOO") enablecookie = true;
-            (bool result, string title) = await new MyNet().TestAndGetTitle(server.Url, enablecookie, server.Cookie, server.Name);
+            (bool result, string title) = await HTTP.TestAndGetTitle(server.Url, false, server.Cookie, server.Name);
             if (!result && title.IndexOf("DB") >= 0)
             {
                 await Dispatcher.BeginInvoke((Action)delegate
@@ -984,11 +1007,11 @@ namespace Jvedio
 
         private void SetServerEnable(object sender, MouseButtonEventArgs e)
         {
-            bool enable = !(bool)((CheckBox)sender).IsChecked;
-            vieModel_Settings.Servers[CurrentRowIndex].IsEnable = enable;
-            ServerConfig.Instance.SaveServer(vieModel_Settings.Servers[CurrentRowIndex]);
-            InitVariable();
-            ServersDataGrid.Items.Refresh();
+            //bool enable = !(bool)((CheckBox)sender).IsChecked;
+            //vieModel.Servers[CurrentRowIndex].IsEnable = enable;
+            //ServerConfig.Instance.SaveServer(vieModel.Servers[CurrentRowIndex]);
+            //InitVariable();
+            //ServersDataGrid.Items.Refresh();
         }
 
         private void CheckBox_Checked(object sender, RoutedEventArgs e)
@@ -1043,7 +1066,7 @@ namespace Jvedio
                             else if (v == 3)
                                 value = Jvedio.Language.Resources.Europe;
                         }
-                        vieModel_Settings.ViewRenameFormat = vieModel_Settings.ViewRenameFormat.Replace("{" + property + "}", value);
+                        vieModel.ViewRenameFormat = vieModel.ViewRenameFormat.Replace("{" + property + "}", value);
                     }
                     break;
                 }
@@ -1097,7 +1120,7 @@ namespace Jvedio
 
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (vieModel_Settings == null) return;
+            if (vieModel == null) return;
             TextBox textBox = (TextBox)sender;
             string txt = textBox.Text;
             ShowViewRename(txt);
@@ -1109,7 +1132,7 @@ namespace Jvedio
             MatchCollection matches = Regex.Matches(txt, "\\{[a-z]+\\}");
             if (matches != null && matches.Count > 0)
             {
-                vieModel_Settings.ViewRenameFormat = txt;
+                vieModel.ViewRenameFormat = txt;
                 foreach (Match match in matches)
                 {
                     string property = match.Value.Replace("{", "").Replace("}", "");
@@ -1118,7 +1141,7 @@ namespace Jvedio
             }
             else
             {
-                vieModel_Settings.ViewRenameFormat = "";
+                vieModel.ViewRenameFormat = "";
             }
         }
 
@@ -1228,27 +1251,27 @@ namespace Jvedio
 
         private void TextBox_GotFocus(object sender, RoutedEventArgs e)
         {
-            CurrentRowIndex = GetRowIndex(e);
-            HandyControl.Controls.TextBox textBox = sender as HandyControl.Controls.TextBox;
-            textBox.Background = (SolidColorBrush)Application.Current.Resources["ForegroundSearch"];
-            textBox.Foreground = (SolidColorBrush)Application.Current.Resources["BackgroundMenu"];
-            textBox.CaretBrush = (SolidColorBrush)Application.Current.Resources["BackgroundMenu"];
+            //CurrentRowIndex = GetRowIndex(e);
+            //HandyControl.Controls.TextBox textBox = sender as HandyControl.Controls.TextBox;
+            //textBox.Background = (SolidColorBrush)Application.Current.Resources["ForegroundSearch"];
+            //textBox.Foreground = (SolidColorBrush)Application.Current.Resources["BackgroundMenu"];
+            //textBox.CaretBrush = (SolidColorBrush)Application.Current.Resources["BackgroundMenu"];
         }
 
 
         //修改地址
         private void TextBox_LostFocus(object sender, RoutedEventArgs e)
         {
-            HandyControl.Controls.TextBox textBox = sender as HandyControl.Controls.TextBox;
-            textBox.Background = Brushes.Transparent;
-            textBox.Foreground = (SolidColorBrush)Application.Current.Resources["ForegroundGlobal"];
+            //HandyControl.Controls.TextBox textBox = sender as HandyControl.Controls.TextBox;
+            //textBox.Background = Brushes.Transparent;
+            //textBox.Foreground = (SolidColorBrush)Application.Current.Resources["ForegroundGlobal"];
 
-            if (CurrentRowIndex >= vieModel_Settings.Servers.Count || CurrentRowIndex < 0) return;
+            //if (CurrentRowIndex >= vieModel.Servers.Count || CurrentRowIndex < 0) return;
 
-            if (textBox.Name == "url")
-                vieModel_Settings.Servers[CurrentRowIndex].Url = textBox.Text;
-            else
-                vieModel_Settings.Servers[CurrentRowIndex].Cookie = textBox.Text;
+            //if (textBox.Name == "url")
+            //    vieModel.Servers[CurrentRowIndex].Url = textBox.Text;
+            //else
+            //    vieModel.Servers[CurrentRowIndex].Cookie = textBox.Text;
         }
 
 
@@ -1280,6 +1303,43 @@ namespace Jvedio
             {
                 ChaoControls.Style.MessageCard.Error(Jvedio.Language.Resources.Message_CanNotBeNull);
             }
+        }
+
+
+        private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            int idx = (sender as ListBox).SelectedIndex;
+            if (vieModel.CrawlerServers != null && vieModel.CrawlerServers.Count > 0)
+            {
+                string serverType = vieModel.CrawlerServers.Keys.ToList()[idx];
+                ServersDataGrid.ItemsSource = null;
+                ServersDataGrid.ItemsSource = vieModel.CrawlerServers[serverType];
+            }
+        }
+
+        private void ShowCrawlerHelp(object sender, MouseButtonEventArgs e)
+        {
+            MessageCard.Info("左侧是支持的信息刮削器，右侧需要自行填入刮削器对应的网址，Jvedio 不提供任何网站地址！");
+        }
+
+        private void ShowContextMenu(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ChangedButton == MouseButton.Left)
+            {
+                Border border = sender as Border;
+                ContextMenu contextMenu = border.ContextMenu;
+                contextMenu.PlacementTarget = border;
+                contextMenu.Placement = PlacementMode.Bottom;
+                contextMenu.IsOpen = true;
+            }
+            e.Handled = true;
+        }
+
+        private void ListBox_SelectionChanged_1(object sender, SelectionChangedEventArgs e)
+        {
+            int idx = (sender as ListBox).SelectedIndex;
+            vieModel.CurrentPlugin = vieModel.InstalledPlugins[idx];
+            richTextBox.Document = MarkDown.parse(vieModel.CurrentPlugin.MarkDown);
         }
     }
 

@@ -18,6 +18,7 @@ using static Jvedio.GlobalVariable;
 using Jvedio.Utils;
 using Jvedio.Utils.Net;
 using Jvedio.Entity;
+using Jvedio.Core.Net;
 
 namespace Jvedio
 {
@@ -68,7 +69,7 @@ namespace Jvedio
             //下载信息
             if (DetailMovie.IsToDownLoadInfo())
             {
-                HttpResult httpResult = await MyNet.DownLoadFromNet(DetailMovie);
+                HttpResult httpResult = await HTTP.DownLoadFromNet(DetailMovie);
                 if (httpResult != null && !httpResult.Success)
                 {
                     string error = httpResult.Error != "" ? httpResult.Error : httpResult.StatusCode.ToStatusMessage();
@@ -101,7 +102,7 @@ namespace Jvedio
             HttpStatusCode sc = HttpStatusCode.Forbidden;
             if (dm.smallimageurl != "")
             {
-                (bool success, string cookie) = await Task.Run(() => { return MyNet.DownLoadImage(dm.smallimageurl, ImageType.SmallImage, dm.id, callback: (statuscode) => { sc = (HttpStatusCode)statuscode; }); });
+                (bool success, string cookie) = await Task.Run(() => { return HTTP.DownLoadImage(dm.smallimageurl, ImageType.SmallImage, dm.id, callback: (statuscode) => { sc = (HttpStatusCode)statuscode; }); });
                 if (success) SmallImageDownLoadCompleted?.Invoke(this, new MessageCallBackEventArgs(dm.id));
                 else MessageCallBack?.Invoke(this, new MessageCallBackEventArgs($"{Jvedio.Language.Resources.DownloadSPicFailFor} {sc.ToStatusMessage()} {Jvedio.Language.Resources.Message_ViewLog}"));
             }
@@ -115,7 +116,7 @@ namespace Jvedio
             {
                 (bool success, string cookie) = await Task.Run(() =>
                 {
-                    return MyNet.DownLoadImage(dm.bigimageurl, ImageType.BigImage, dm.id, callback: (statuscode) => { sc = (HttpStatusCode)statuscode; });
+                    return HTTP.DownLoadImage(dm.bigimageurl, ImageType.BigImage, dm.id, callback: (statuscode) => { sc = (HttpStatusCode)statuscode; });
                 });
                 if (success) BigImageDownLoadCompleted?.Invoke(this, new MessageCallBackEventArgs(dm.id));
                 else MessageCallBack?.Invoke(this, new MessageCallBackEventArgs($"{Jvedio.Language.Resources.DownloadBPicFailFor} {sc.ToStatusMessage()} {Jvedio.Language.Resources.Message_ViewLog}"));
@@ -139,7 +140,7 @@ namespace Jvedio
                 filepath = BasePicPath + "ExtraPic\\" + dm.id + "\\" + Path.GetFileName(new Uri(urlList[i]).LocalPath);
                 if (!File.Exists(filepath))
                 {
-                    (dlimageSuccess, cookies) = await Task.Run(() => { return MyNet.DownLoadImage(urlList[i], ImageType.ExtraImage, dm.id, Cookie: cookies, callback: (statuscode) => { sc = (HttpStatusCode)statuscode; }); });
+                    (dlimageSuccess, cookies) = await Task.Run(() => { return HTTP.DownLoadImage(urlList[i], ImageType.ExtraImage, dm.id, Cookie: cookies, callback: (statuscode) => { sc = (HttpStatusCode)statuscode; }); });
                     if (dlimageSuccess)
                     {
                         ExtraImageDownLoadCompleted?.Invoke(this, new MessageCallBackEventArgs(filepath));

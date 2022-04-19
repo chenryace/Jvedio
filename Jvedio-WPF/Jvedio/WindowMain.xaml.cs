@@ -44,6 +44,7 @@ using Jvedio.Core.Scan;
 using static Jvedio.Main.Msg;
 using System.Diagnostics;
 using Jvedio.Test;
+using Jvedio.Core.Net;
 
 namespace Jvedio
 {
@@ -661,7 +662,7 @@ namespace Jvedio
                 AppConfig appConfig = appConfigMapper.selectOne(wrapper);
                 if (appConfig != null && !string.IsNullOrEmpty(appConfig.ConfigValue))
                     notices = appConfig.ConfigValue.Replace(GlobalVariable.Separator, '\n');
-                HttpResult httpResult = await new MyNet().Http(NoticeUrl);
+                HttpResult httpResult = await new BaseHttp().Send(NoticeUrl);
                 //判断公告是否内容不同
                 if (httpResult != null && httpResult.SourceCode != "" && httpResult.SourceCode != notices)
                 {
@@ -1213,7 +1214,7 @@ namespace Jvedio
             }
             else
             {
-                (bool success, string remote, string updateContent) = await new MyNet().CheckUpdate(UpdateUrl);
+                (bool success, string remote, string updateContent) = await HTTP.CheckUpdate(UpdateUrl);
                 string local = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
                 if (success && local.CompareTo(remote) < 0)
                 {
@@ -4346,7 +4347,7 @@ namespace Jvedio
             //    {
 
             //        string host = new Uri(url).Host;
-            //        WebSite webSite = await new MyNet().CheckUrlType(url.Split(':')[0] + "://" + host);
+            //        WebSite webSite = await new HTTP.CheckUrlType(url.Split(':')[0] + "://" + host);
             //        if (webSite == WebSite.None)
             //        {
             //            msgCard.Error(Jvedio.Language.Resources.Message_NotRecognize);
@@ -4360,7 +4361,7 @@ namespace Jvedio
             //            else
             //            {
             //                msgCard.Info($"{webSite} {Jvedio.Language.Resources.Message_BeginParse}");
-            //                bool result = await MyNet.ParseSpecifiedInfo(webSite, id, url);
+            //                bool result = await HTTP.ParseSpecifiedInfo(webSite, id, url);
             //                if (result)
             //                {
             //                    msgCard.Success(Jvedio.Language.Resources.Message_BeginDownloadImage);
@@ -4370,7 +4371,7 @@ namespace Jvedio
             //                    //下载图片
             //                    DetailMovie dm = DataBase.SelectDetailMovieById(id);
             //                    //下载小图
-            //                    await MyNet.DownLoadSmallPic(dm, true);
+            //                    await HTTP.DownLoadSmallPic(dm, true);
             //                    dm.smallimage = ImageProcess.GetBitmapImage(dm.id, "SmallPic");
             //                    RefreshMovieByID(id);
 
@@ -4386,7 +4387,7 @@ namespace Jvedio
             //                    else
             //                    {
             //                        //下载大图
-            //                        await MyNet.DownLoadBigPic(dm, true);
+            //                        await HTTP.DownLoadBigPic(dm, true);
             //                    }
             //                    dm.bigimage = ImageProcess.GetBitmapImage(dm.id, "BigPic");
             //                    RefreshMovieByID(id);
@@ -5307,146 +5308,146 @@ namespace Jvedio
         /// <param name="name"></param>
         private async void LoadActor(string name)
         {
-            if (!JvedioServers.Bus.IsEnable || JvedioServers.Bus.Url.IsProperUrl())
-            {
-                msgCard.Info(Jvedio.Language.Resources.OnlySupportBus);
-                LoadSearchWaitingPanel.Visibility = Visibility.Collapsed;
-                LoadSearchCTS?.Dispose();
-                return;
-            }
-            string log = "";
-            //先搜索出演员
-            await Task.Run(async () =>
-            {
-                Console.WriteLine(name);
-                string url = $"{JvedioServers.Bus.Url}searchstar/{System.Web.HttpUtility.UrlEncode(name)}&type=&parent=ce";
+            //if (!JvedioServers.Bus.IsEnable || JvedioServers.Bus.Url.IsProperUrl())
+            //{
+            //    msgCard.Info(Jvedio.Language.Resources.OnlySupportBus);
+            //    LoadSearchWaitingPanel.Visibility = Visibility.Collapsed;
+            //    LoadSearchCTS?.Dispose();
+            //    return;
+            //}
+            //string log = "";
+            ////先搜索出演员
+            //await Task.Run(async () =>
+            //{
+            //    Console.WriteLine(name);
+            //    string url = $"{JvedioServers.Bus.Url}searchstar/{System.Web.HttpUtility.UrlEncode(name)}&type=&parent=ce";
 
-                HttpResult httpResult = await new MyNet().Http(url, new CrawlerHeader() { Cookies = JvedioServers.Bus.Cookie });
-                if (httpResult != null && httpResult.SourceCode != "")
-                {
-                    if (CheckLoadActorCancel()) return;
-                    //解析
-                    List<ActorSearch> actorSearches = GetActorSearchReulst(httpResult.SourceCode);
-                    List<ActorSearch> toDownload = new List<ActorSearch>();
-                    if (actorSearches.Count == 0)
-                    {
-                        msgCard.Info(Jvedio.Language.Resources.NoResult);
-                    }
-                    else
-                    {
-                        int vt = 1;
-                        int startpage = 1;
-                        int endpage = 500;
-                        //让用户选择
-                        Dispatcher.Invoke((Action)delegate
-                        {
-                            Dialog_SelectActor dialog = new Dialog_SelectActor(this, true, actorSearches);
+            //    HttpResult httpResult = await new BaseHttp().Send(url, new RequestHeader() { Cookies = JvedioServers.Bus.Cookie });
+            //    if (httpResult != null && httpResult.SourceCode != "")
+            //    {
+            //        if (CheckLoadActorCancel()) return;
+            //        //解析
+            //        List<ActorSearch> actorSearches = GetActorSearchReulst(httpResult.SourceCode);
+            //        List<ActorSearch> toDownload = new List<ActorSearch>();
+            //        if (actorSearches.Count == 0)
+            //        {
+            //            msgCard.Info(Jvedio.Language.Resources.NoResult);
+            //        }
+            //        else
+            //        {
+            //            int vt = 1;
+            //            int startpage = 1;
+            //            int endpage = 500;
+            //            //让用户选择
+            //            Dispatcher.Invoke((Action)delegate
+            //            {
+            //                Dialog_SelectActor dialog = new Dialog_SelectActor(this, true, actorSearches);
 
-                            if (dialog.ShowDialog() == true)
-                            {
-                                for (int i = 0; i < dialog.SelectedActor.Count; i++)
-                                {
-                                    toDownload.Add(actorSearches.Where(arg => arg.ID == dialog.SelectedActor[i]).First());
-                                }
-                                vt = dialog.VideoType;
-                                startpage = dialog.StartPage;
-                                endpage = dialog.EndPage;
-                            }
-                        });
-
-
-                        if (toDownload.Count > 3)
-                        {
-                            msgCard.Info(Jvedio.Language.Resources.MoreThanThree);
-                        }
-                        else
-                        {
-                            long total = 0;
-                            //遍历要下载的演员
-                            for (int i = 0; i < toDownload.Count; i++)
-                            {
-                                int page = startpage;
-                                if (CheckLoadActorCancel()) break;
-                                ActorSearch actorSearch = toDownload[i];
-                                while (true)
-                                {
-                                    if (CheckLoadActorCancel()) break;
-                                    url = actorSearch.Link;
-                                    if (page > 1) url += $"/{page}";
-                                    Dispatcher.Invoke((Action)delegate
-                                    {
-                                        LoadSearchWaitingPanel.ShowCancelButton = Visibility.Visible;
-                                        LoadSearchWaitingPanel.NoticeExtraText = Jvedio.Language.Resources.TotalImport + "：" + total + "\n" + Jvedio.Language.Resources.CurrentPage + "：" + page;
-                                        LoadSearchWaitingPanel.ShowExtraText = Visibility.Visible;
-                                        log = LoadSearchWaitingPanel.NoticeExtraText;
-                                    });
-
-                                    HttpResult newResult = await new MyNet().Http(url, new CrawlerHeader() { Cookies = JvedioServers.Bus.Cookie });
-                                    page++;
-                                    if (newResult != null && newResult.SourceCode != "" && newResult.StatusCode == HttpStatusCode.OK)
-                                    {
-                                        //解析演员
-                                        List<Movie> movies = BusParse.GetMoviesFromPage(newResult.SourceCode);
-                                        List<string> idlist = DataBase.SelectAllID();
-                                        foreach (Movie movie in movies)
-                                        {
-                                            if (idlist.Contains(movie.id)) continue;//如果数据库存在则跳过，不会更新信息
-                                            movie.vediotype = vt;
-                                            movie.actor = name;
-                                            movie.otherinfo = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-                                            if (vt != 3) movie.id = movie.id.ToUpper();
-                                            DataBase.InsertSearchMovie(movie);
-                                            total += 1;
-                                        }
-
-                                        if (page == 2)
-                                        {
-                                            Actress actress = DataBase.SelectInfoByActress(new Actress() { name = actorSearch.Name });
-                                            if (string.IsNullOrEmpty(actress.birthday))
-                                            {
-                                                BusParse busParse = new BusParse("", newResult.SourceCode, VideoType.Normal);
-                                                Actress saveActress = busParse.ParseActress();
-                                                saveActress.sourceurl = url;
-                                                saveActress.source = "javbus";
-                                                saveActress.id = "";
-                                                saveActress.name = actorSearch.Name;
-                                                if (saveActress != null && !string.IsNullOrEmpty(saveActress.birthday))
-                                                    DataBase.InsertActress(saveActress);//保存演员的信息到数据库
-                                            }
-                                        }
-                                        if (page > endpage) break;//达到末页
-                                        if (movies.Count < 30) break;//小于每页的最大数目
-                                    }
-                                    else
-                                    {
-                                        Console.WriteLine(Jvedio.Language.Resources.HttpFail);
-                                        break;
-                                        //msgCard.Error(Jvedio.Language.Resources.HttpFail);
-                                    }
-
-                                    await Task.Delay(5000);
-                                }
-                                await Task.Delay(5000);
-                            }
-                            msgCard.Info(Jvedio.Language.Resources.Complete);
-                        }
+            //                if (dialog.ShowDialog() == true)
+            //                {
+            //                    for (int i = 0; i < dialog.SelectedActor.Count; i++)
+            //                    {
+            //                        toDownload.Add(actorSearches.Where(arg => arg.ID == dialog.SelectedActor[i]).First());
+            //                    }
+            //                    vt = dialog.VideoType;
+            //                    startpage = dialog.StartPage;
+            //                    endpage = dialog.EndPage;
+            //                }
+            //            });
 
 
-                    }
-                }
-                else
-                {
-                    msgCard.Error(Jvedio.Language.Resources.HttpFail);
-                }
-            }, LoadSearchCT);
-            LoadSearchWaitingPanel.Visibility = Visibility.Collapsed;
-            LoadSearchCTS?.Dispose();
-            //显示加载的信息
-            if (log != "")
-            {
-                new Msgbox(this, log).ShowDialog();
-                ShowSameActors(name);
-            }
+            //            if (toDownload.Count > 3)
+            //            {
+            //                msgCard.Info(Jvedio.Language.Resources.MoreThanThree);
+            //            }
+            //            else
+            //            {
+            //                long total = 0;
+            //                //遍历要下载的演员
+            //                for (int i = 0; i < toDownload.Count; i++)
+            //                {
+            //                    int page = startpage;
+            //                    if (CheckLoadActorCancel()) break;
+            //                    ActorSearch actorSearch = toDownload[i];
+            //                    while (true)
+            //                    {
+            //                        if (CheckLoadActorCancel()) break;
+            //                        url = actorSearch.Link;
+            //                        if (page > 1) url += $"/{page}";
+            //                        Dispatcher.Invoke((Action)delegate
+            //                        {
+            //                            LoadSearchWaitingPanel.ShowCancelButton = Visibility.Visible;
+            //                            LoadSearchWaitingPanel.NoticeExtraText = Jvedio.Language.Resources.TotalImport + "：" + total + "\n" + Jvedio.Language.Resources.CurrentPage + "：" + page;
+            //                            LoadSearchWaitingPanel.ShowExtraText = Visibility.Visible;
+            //                            log = LoadSearchWaitingPanel.NoticeExtraText;
+            //                        });
+
+            //                        HttpResult newResult = await new BaseHttp().Send(url, new RequestHeader() { Cookies = JvedioServers.Bus.Cookie });
+            //                        page++;
+            //                        if (newResult != null && newResult.SourceCode != "" && newResult.StatusCode == HttpStatusCode.OK)
+            //                        {
+            //                            //解析演员
+            //                            List<Movie> movies = BusParse.GetMoviesFromPage(newResult.SourceCode);
+            //                            List<string> idlist = DataBase.SelectAllID();
+            //                            foreach (Movie movie in movies)
+            //                            {
+            //                                if (idlist.Contains(movie.id)) continue;//如果数据库存在则跳过，不会更新信息
+            //                                movie.vediotype = vt;
+            //                                movie.actor = name;
+            //                                movie.otherinfo = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+            //                                if (vt != 3) movie.id = movie.id.ToUpper();
+            //                                DataBase.InsertSearchMovie(movie);
+            //                                total += 1;
+            //                            }
+
+            //                            if (page == 2)
+            //                            {
+            //                                Actress actress = DataBase.SelectInfoByActress(new Actress() { name = actorSearch.Name });
+            //                                if (string.IsNullOrEmpty(actress.birthday))
+            //                                {
+            //                                    BusParse busParse = new BusParse("", newResult.SourceCode, VideoType.Normal);
+            //                                    Actress saveActress = busParse.ParseActress();
+            //                                    saveActress.sourceurl = url;
+            //                                    saveActress.source = "javbus";
+            //                                    saveActress.id = "";
+            //                                    saveActress.name = actorSearch.Name;
+            //                                    if (saveActress != null && !string.IsNullOrEmpty(saveActress.birthday))
+            //                                        DataBase.InsertActress(saveActress);//保存演员的信息到数据库
+            //                                }
+            //                            }
+            //                            if (page > endpage) break;//达到末页
+            //                            if (movies.Count < 30) break;//小于每页的最大数目
+            //                        }
+            //                        else
+            //                        {
+            //                            Console.WriteLine(Jvedio.Language.Resources.HttpFail);
+            //                            break;
+            //                            //msgCard.Error(Jvedio.Language.Resources.HttpFail);
+            //                        }
+
+            //                        await Task.Delay(5000);
+            //                    }
+            //                    await Task.Delay(5000);
+            //                }
+            //                msgCard.Info(Jvedio.Language.Resources.Complete);
+            //            }
+
+
+            //        }
+            //    }
+            //    else
+            //    {
+            //        msgCard.Error(Jvedio.Language.Resources.HttpFail);
+            //    }
+            //}, LoadSearchCT);
+            //LoadSearchWaitingPanel.Visibility = Visibility.Collapsed;
+            //LoadSearchCTS?.Dispose();
+            ////显示加载的信息
+            //if (log != "")
+            //{
+            //    new Msgbox(this, log).ShowDialog();
+            //    ShowSameActors(name);
+            //}
 
         }
 
@@ -5522,113 +5523,113 @@ namespace Jvedio
 
         private async void LoadFromPage(object sender, RoutedEventArgs e)
         {
-            Dialog_LoadPage dialog_LoadPage = new Dialog_LoadPage(this, true);
-            if (dialog_LoadPage.ShowDialog() == true)
-            {
-                int start = dialog_LoadPage.StartPage;
-                int end = dialog_LoadPage.EndPage;
-                int vt = dialog_LoadPage.VideoType;
-                string url = dialog_LoadPage.url;
-                string log = "";
-                if (url.IsProperUrl())
-                {
-                    WebSite webSite = WebSite.Bus;
-                    if (url.IndexOf("javdb") > 0)
-                        webSite = WebSite.DB;
-                    else
-                        webSite = WebSite.Bus;
-                    if (!url.EndsWith("/") && url.IndexOf("javdb") < 0) url += "/";
-                    //遍历要下载的页码
-                    int total = 0;
-                    InitLoadSearch(Jvedio.Language.Resources.LoadFromNet);
-                    await Task.Run(async () =>
-                    {
-                        List<string> allMovies = new List<string>();
-                        for (int i = start; i <= end; i++)
-                        {
-                            if (CheckLoadActorCancel()) break;
-                            string Url;
-                            if (webSite == WebSite.DB)
-                            {
-                                if (url.IndexOf("?") > 0)
-                                    Url = url + "&page=" + i;
-                                else
-                                    Url = url + "?page=" + i;
-                            }
+            //Dialog_LoadPage dialog_LoadPage = new Dialog_LoadPage(this, true);
+            //if (dialog_LoadPage.ShowDialog() == true)
+            //{
+            //    int start = dialog_LoadPage.StartPage;
+            //    int end = dialog_LoadPage.EndPage;
+            //    int vt = dialog_LoadPage.VideoType;
+            //    string url = dialog_LoadPage.url;
+            //    string log = "";
+            //    if (url.IsProperUrl())
+            //    {
+            //        WebSite webSite = WebSite.Bus;
+            //        if (url.IndexOf("javdb") > 0)
+            //            webSite = WebSite.DB;
+            //        else
+            //            webSite = WebSite.Bus;
+            //        if (!url.EndsWith("/") && url.IndexOf("javdb") < 0) url += "/";
+            //        //遍历要下载的页码
+            //        int total = 0;
+            //        InitLoadSearch(Jvedio.Language.Resources.LoadFromNet);
+            //        await Task.Run(async () =>
+            //        {
+            //            List<string> allMovies = new List<string>();
+            //            for (int i = start; i <= end; i++)
+            //            {
+            //                if (CheckLoadActorCancel()) break;
+            //                string Url;
+            //                if (webSite == WebSite.DB)
+            //                {
+            //                    if (url.IndexOf("?") > 0)
+            //                        Url = url + "&page=" + i;
+            //                    else
+            //                        Url = url + "?page=" + i;
+            //                }
 
-                            else
-                                Url = url + i;
-                            Dispatcher.Invoke((Action)delegate
-                            {
-                                LoadSearchWaitingPanel.NoticeText = Jvedio.Language.Resources.LoadFromNet;
-                                LoadSearchWaitingPanel.ShowCancelButton = Visibility.Visible;
-                                LoadSearchWaitingPanel.NoticeExtraText = Jvedio.Language.Resources.TotalImport + "：" + total + "\n" + Jvedio.Language.Resources.CurrentPage + "：" + i;
-                                LoadSearchWaitingPanel.ShowExtraText = Visibility.Visible;
-                                log = LoadSearchWaitingPanel.NoticeExtraText;
-                            });
-                            HttpResult newResult = null;
-                            if (webSite == WebSite.DB)
-                                newResult = await new MyNet().Http(Url, new CrawlerHeader() { Cookies = JvedioServers.DB.Cookie });
-                            else
-                                newResult = await new MyNet().Http(Url, new CrawlerHeader() { Cookies = JvedioServers.Bus.Cookie });
-                            if (newResult != null && newResult.SourceCode != "" && newResult.StatusCode == HttpStatusCode.OK)
-                            {
-                                //解析影片
-                                List<Movie> movies = new List<Movie>();
-                                if (webSite == WebSite.DB)
-                                    movies = JavDBParse.GetMoviesFromPage(newResult.SourceCode);
-                                else
-                                    movies = BusParse.GetMoviesFromPage(newResult.SourceCode);
-                                List<string> idlist = DataBase.SelectAllID();
-                                foreach (Movie movie in movies)
-                                {
-                                    if (idlist.Contains(movie.id)) continue;//如果数据库存在则跳过，不会更新信息
-                                    movie.vediotype = vt;
-                                    movie.otherinfo = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-                                    if (vt != 3) movie.id = movie.id.ToUpper();
-                                    DataBase.InsertSearchMovie(movie);
-                                    total += 1;
-                                }
-                                Dispatcher.Invoke((Action)delegate
-                                {
-                                    LoadSearchWaitingPanel.NoticeExtraText = Jvedio.Language.Resources.TotalImport + "：" + total + "\n" + Jvedio.Language.Resources.CurrentPage + "：" + i;
-                                    log = LoadSearchWaitingPanel.NoticeExtraText;
-                                });
-
-
-                                if (webSite == WebSite.Bus && movies.Count < 30) break;//小于 bus 每页的最大数目
-                                if (webSite == WebSite.DB && movies.Count < 40) break;//小于 db 每页的最大数目
-                                if (webSite == WebSite.DB && allMovies.Intersect(movies.Select(arg => arg.id)).Count() >= 30) break;// 如果新添加的影片未变化，则说明到了末页
-                                allMovies.AddRange(movies.Select(arg => arg.id));
-
-                            }
-                            else
-                            {
-                                Console.WriteLine(Jvedio.Language.Resources.HttpFail);
-                                break;
-                                //msgCard.Error(Jvedio.Language.Resources.HttpFail);
-                            }
-                            await Task.Delay(1000);
-
-                        }
+            //                else
+            //                    Url = url + i;
+            //                Dispatcher.Invoke((Action)delegate
+            //                {
+            //                    LoadSearchWaitingPanel.NoticeText = Jvedio.Language.Resources.LoadFromNet;
+            //                    LoadSearchWaitingPanel.ShowCancelButton = Visibility.Visible;
+            //                    LoadSearchWaitingPanel.NoticeExtraText = Jvedio.Language.Resources.TotalImport + "：" + total + "\n" + Jvedio.Language.Resources.CurrentPage + "：" + i;
+            //                    LoadSearchWaitingPanel.ShowExtraText = Visibility.Visible;
+            //                    log = LoadSearchWaitingPanel.NoticeExtraText;
+            //                });
+            //                HttpResult newResult = null;
+            //                if (webSite == WebSite.DB)
+            //                    newResult = await new BaseHttp().Send(Url, new RequestHeader() { Cookies = JvedioServers.DB.Cookie });
+            //                else
+            //                    newResult = await new BaseHttp().Send(Url, new RequestHeader() { Cookies = JvedioServers.Bus.Cookie });
+            //                if (newResult != null && newResult.SourceCode != "" && newResult.StatusCode == HttpStatusCode.OK)
+            //                {
+            //                    //解析影片
+            //                    List<Movie> movies = new List<Movie>();
+            //                    if (webSite == WebSite.DB)
+            //                        movies = JavDBParse.GetMoviesFromPage(newResult.SourceCode);
+            //                    else
+            //                        movies = BusParse.GetMoviesFromPage(newResult.SourceCode);
+            //                    List<string> idlist = DataBase.SelectAllID();
+            //                    foreach (Movie movie in movies)
+            //                    {
+            //                        if (idlist.Contains(movie.id)) continue;//如果数据库存在则跳过，不会更新信息
+            //                        movie.vediotype = vt;
+            //                        movie.otherinfo = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+            //                        if (vt != 3) movie.id = movie.id.ToUpper();
+            //                        DataBase.InsertSearchMovie(movie);
+            //                        total += 1;
+            //                    }
+            //                    Dispatcher.Invoke((Action)delegate
+            //                    {
+            //                        LoadSearchWaitingPanel.NoticeExtraText = Jvedio.Language.Resources.TotalImport + "：" + total + "\n" + Jvedio.Language.Resources.CurrentPage + "：" + i;
+            //                        log = LoadSearchWaitingPanel.NoticeExtraText;
+            //                    });
 
 
+            //                    if (webSite == WebSite.Bus && movies.Count < 30) break;//小于 bus 每页的最大数目
+            //                    if (webSite == WebSite.DB && movies.Count < 40) break;//小于 db 每页的最大数目
+            //                    if (webSite == WebSite.DB && allMovies.Intersect(movies.Select(arg => arg.id)).Count() >= 30) break;// 如果新添加的影片未变化，则说明到了末页
+            //                    allMovies.AddRange(movies.Select(arg => arg.id));
 
-                    });
-                    msgCard.Info(Jvedio.Language.Resources.Complete);
-                    LoadSearchWaitingPanel.Visibility = Visibility.Collapsed;
-                    LoadSearchCTS?.Dispose();
+            //                }
+            //                else
+            //                {
+            //                    Console.WriteLine(Jvedio.Language.Resources.HttpFail);
+            //                    break;
+            //                    //msgCard.Error(Jvedio.Language.Resources.HttpFail);
+            //                }
+            //                await Task.Delay(1000);
 
-                    //显示加载的信息
-                    new Msgbox(this, log).ShowDialog();
-                    vieModel.Reset();
+            //            }
 
-                }
-                else
-                {
-                    msgCard.Error(Jvedio.Language.Resources.ErrorUrl);
-                }
-            }
+
+
+            //        });
+            //        msgCard.Info(Jvedio.Language.Resources.Complete);
+            //        LoadSearchWaitingPanel.Visibility = Visibility.Collapsed;
+            //        LoadSearchCTS?.Dispose();
+
+            //        //显示加载的信息
+            //        new Msgbox(this, log).ShowDialog();
+            //        vieModel.Reset();
+
+            //    }
+            //    else
+            //    {
+            //        msgCard.Error(Jvedio.Language.Resources.ErrorUrl);
+            //    }
+            //}
 
 
         }

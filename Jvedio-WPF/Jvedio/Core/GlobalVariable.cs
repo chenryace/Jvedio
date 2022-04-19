@@ -247,8 +247,6 @@ namespace Jvedio
 
         public static void InitVariable()
         {
-            JvedioServers = ServerConfig.Instance.ReadAll();
-            Properties.Settings.Default.Save();
 
 
 

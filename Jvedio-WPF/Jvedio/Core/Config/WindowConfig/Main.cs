@@ -9,7 +9,7 @@ namespace Jvedio.Core.WindowConfig
 {
     public class Main : AbstractConfig
     {
-        private Main()
+        private Main() : base($"WindowConfig.Main")
         {
             Width = SystemParameters.WorkArea.Width * 0.8;
             Height = SystemParameters.WorkArea.Height * 0.8;

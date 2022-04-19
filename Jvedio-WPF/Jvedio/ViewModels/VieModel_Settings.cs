@@ -14,6 +14,8 @@ using static Jvedio.FileProcess;
 using Jvedio.Utils;
 using Jvedio.Entity;
 using Jvedio.Core;
+using Jvedio.Core.Crawler;
+using Jvedio.Core.Plugins;
 
 namespace Jvedio.ViewModel
 {
@@ -34,7 +36,8 @@ namespace Jvedio.ViewModel
                 ThemeList.Add(theme);
             }
 
-
+            setServers();
+            setPlugins();
 
         }
 
@@ -52,16 +55,57 @@ namespace Jvedio.ViewModel
             //GlobalVariable.InitVariable();
             Servers = new ObservableCollection<Server>();
 
-            Type type = JvedioServers.GetType();
-            foreach (var item in type.GetProperties())
+            //Type type = JvedioServers.GetType();
+            //foreach (var item in type.GetProperties())
+            //{
+            //    System.Reflection.PropertyInfo propertyInfo = type.GetProperty(item.Name);
+            //    Server server = (Server)propertyInfo.GetValue(JvedioServers);
+            //    if (server.Url != "")
+            //        Servers.Add(server);
+            //}
+        }
+
+
+        public void setPlugins()
+        {
+            InstalledPlugins = new ObservableCollection<PluginInfo>();
+            foreach (PluginInfo plugin in Global.Plugins.Crawlers)
             {
-                System.Reflection.PropertyInfo propertyInfo = type.GetProperty(item.Name);
-                Server server = (Server)propertyInfo.GetValue(JvedioServers);
-                if (server.Url != "")
-                    Servers.Add(server);
+                InstalledPlugins.Add(plugin);
             }
         }
 
+        public void setServers()
+        {
+            CrawlerServers = new Dictionary<string, ObservableCollection<CrawlerServer>>();
+            List<CrawlerServer> crawlerServers = GlobalConfig.ServerConfig.CrawlerServers;
+            foreach (CrawlerServer crawlerServer in crawlerServers)
+            {
+
+                if (CrawlerServers.ContainsKey(crawlerServer.ServerType))
+                {
+                    if (!string.IsNullOrEmpty(crawlerServer.Url))
+                        CrawlerServers[crawlerServer.ServerType].Add(crawlerServer);
+
+
+                }
+                else
+                {
+                    if (string.IsNullOrEmpty(crawlerServer.Url))
+                    {
+                        CrawlerServers.Add(crawlerServer.ServerType, null);
+                    }
+                    else
+                    {
+                        ObservableCollection<CrawlerServer> servers = new ObservableCollection<CrawlerServer>() { crawlerServer };
+                        CrawlerServers.Add(crawlerServer.ServerType, servers);
+
+                    }
+
+                }
+            }
+            Console.WriteLine(CrawlerServers);
+        }
 
         private string _ViewRenameFormat;
 
@@ -84,6 +128,28 @@ namespace Jvedio.ViewModel
             set
             {
                 _ThemeList = value;
+                RaisePropertyChanged();
+            }
+        }
+        private ObservableCollection<PluginInfo> _InstalledPlugins;
+
+        public ObservableCollection<PluginInfo> InstalledPlugins
+        {
+            get { return _InstalledPlugins; }
+            set
+            {
+                _InstalledPlugins = value;
+                RaisePropertyChanged();
+            }
+        }
+        private PluginInfo _CurrentPlugin;
+
+        public PluginInfo CurrentPlugin
+        {
+            get { return _CurrentPlugin; }
+            set
+            {
+                _CurrentPlugin = value;
                 RaisePropertyChanged();
             }
         }
@@ -161,6 +227,19 @@ namespace Jvedio.ViewModel
             set
             {
                 _DataBases = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
+        private Dictionary<string, ObservableCollection<CrawlerServer>> _CrawlerServers = new Dictionary<string, ObservableCollection<CrawlerServer>>();
+
+        public Dictionary<string, ObservableCollection<CrawlerServer>> CrawlerServers
+        {
+            get { return _CrawlerServers; }
+            set
+            {
+                _CrawlerServers = value;
                 RaisePropertyChanged();
             }
         }

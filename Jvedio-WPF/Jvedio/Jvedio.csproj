@@ -256,7 +256,9 @@
     <Compile Include="Core\Attributes\TableIdAttribute.cs" />
     <Compile Include="Core\Command\File.cs" />
     <Compile Include="Core\Command\OpenWindow.cs" />
-    <Compile Include="Core\CrawlerLoader.cs" />
+    <Compile Include="Core\Config\ServerConfig.cs" />
+    <Compile Include="Core\Crawler\AbstractCrawler.cs" />
+    <Compile Include="Core\Plugins\Crawler\CrawlerLoader.cs" />
     <Compile Include="Core\CustomSettingsProvider.cs" />
     <Compile Include="Core\DataBase\CommonConnection.cs" />
     <Compile Include="Core\DataBase\MysqlConnection.cs" />
@@ -281,6 +283,13 @@
     <Compile Include="Core\Extensions\MenuItemExtensions.cs" />
     <Compile Include="Core\GlobalMapper.cs" />
     <Compile Include="Core\GlobalStyle.cs" />
+    <Compile Include="Core\Net\BaseHttp.cs" />
+    <Compile Include="Core\Net\HTTP.cs" />
+    <Compile Include="Core\Net\Entity\HTTPResult.cs" />
+    <Compile Include="Core\Net\NetUtils.cs" />
+    <Compile Include="Core\Net\Entity\RequestHeader.cs" />
+    <Compile Include="Core\Net\Entity\ResponseHeader.cs" />
+    <Compile Include="Core\Plugins\PluginInfo.cs" />
     <Compile Include="Core\Scan\ComicScan.cs" />
     <Compile Include="Core\Scan\GameScan.cs" />
     <Compile Include="Core\Scan\PictureScan.cs" />
@@ -298,14 +307,14 @@
     <Compile Include="Core\SimpleORM\Wrapper\IWrapper.cs" />
     <Compile Include="Core\DataBase\Tables.cs" />
     <Compile Include="Core\SimpleORM\Wrapper\UpdateWrapper.cs" />
-    <Compile Include="Core\WindowConfig\Base\AbstractConfig.cs" />
+    <Compile Include="Core\Config\Base\AbstractConfig.cs" />
     <Compile Include="Core\GlobalConfig.cs" />
-    <Compile Include="Core\WindowConfig\Base\IConfig.cs" />
-    <Compile Include="Core\WindowConfig\Edit.cs" />
-    <Compile Include="Core\WindowConfig\Detail.cs" />
-    <Compile Include="Core\WindowConfig\MetaData.cs" />
-    <Compile Include="Core\WindowConfig\Main.cs" />
-    <Compile Include="Core\WindowConfig\StartUp.cs" />
+    <Compile Include="Core\Config\Base\IConfig.cs" />
+    <Compile Include="Core\Config\WindowConfig\Edit.cs" />
+    <Compile Include="Core\Config\WindowConfig\Detail.cs" />
+    <Compile Include="Core\Config\WindowConfig\MetaData.cs" />
+    <Compile Include="Core\Config\WindowConfig\Main.cs" />
+    <Compile Include="Core\Config\WindowConfig\StartUp.cs" />
     <Compile Include="Entity\Actor.cs" />
     <Compile Include="Entity\Actor\ActorInfo.cs" />
     <Compile Include="Entity\Actress.cs" />
@@ -329,6 +338,7 @@
     <Compile Include="Entity\MyListItem.cs" />
     <Compile Include="Entity\SampleMovies.cs" />
     <Compile Include="Entity\Serilizable.cs" />
+    <Compile Include="Core\Crawler\CrawlerServer.cs" />
     <Compile Include="Entity\Server.cs" />
     <Compile Include="Entity\Servers.cs" />
     <Compile Include="Entity\CommonSQL\Magnet.cs" />
@@ -360,6 +370,7 @@
     <Compile Include="DialogWindows\Dialog_About.xaml.cs">
       <DependentUpon>Dialog_About.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Global\Plugins.cs" />
     <Compile Include="Mapper\ActorMapper.cs" />
     <Compile Include="Mapper\AIFaceMapper.cs" />
     <Compile Include="Mapper\AppConfigMapper.cs" />
@@ -392,8 +403,7 @@
     <Compile Include="Utils\FileProcess\DirHelper.cs" />
     <Compile Include="Utils\FileProcess\FileHelper.cs" />
     <Compile Include="Utils\FileProcess\StreamHelper.cs" />
-    <Compile Include="Utils\Net\ActorCrawler.cs" />
-    <Compile Include="Utils\Net\MyNet.cs" />
+    <Compile Include="Core\Crawler\ActorCrawler.cs" />
     <Compile Include="Utils\Other\Comparer.cs" />
     <Compile Include="Utils\Other\Converter.cs" />
     <Compile Include="Utils\ImageAndVedio\FFmpegHelper.cs" />
@@ -439,11 +449,11 @@
     </Compile>
     <Compile Include="Utils\Net\DownLoader.cs" />
     <Compile Include="Utils\ImageAndVedio\ImageSlide.cs" />
-    <Compile Include="Utils\Net\Crawler.cs" />
+    <Compile Include="Core\Crawler\Crawler.cs" />
     <Compile Include="Utils\Sqlite\DataBase.cs" />
     <Compile Include="Utils\FileProcess\Identify.cs" />
     <Compile Include="Utils\FileProcess\Logger.cs" />
-    <Compile Include="Utils\Net\CrawlerParse.cs" />
+    <Compile Include="Core\Crawler\CrawlerParse.cs" />
     <Compile Include="Utils\FileProcess\NFO.cs" />
     <Compile Include="Core\Scan\ScanHelper.cs" />
     <Compile Include="Utils\Config\WindowConfig.cs" />

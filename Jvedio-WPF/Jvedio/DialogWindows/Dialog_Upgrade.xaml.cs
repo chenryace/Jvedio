@@ -1,4 +1,5 @@
-﻿using Jvedio.Utils.FileProcess;
+﻿using Jvedio.Core.Net;
+using Jvedio.Utils.FileProcess;
 using System;
 using System.ComponentModel;
 using System.IO;
@@ -144,7 +145,7 @@ namespace Jvedio
             {
                 //TODO
                 IsChecking = true;
-                (bool success, string remote, string updateContent) = await new MyNet().CheckUpdate(UpdateUrl);
+                (bool success, string remote, string updateContent) = await HTTP.CheckUpdate(UpdateUrl);
                 string local = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
                 if (success && !IsClosed)
                 {
@@ -159,7 +160,7 @@ namespace Jvedio
         {
             if (IsChecking || IsUpgrading) return;
             IsChecking = true;
-            (bool success, string remote, string updateContent) = await new MyNet().CheckUpdate(UpdateUrl);
+            (bool success, string remote, string updateContent) = await HTTP.CheckUpdate(UpdateUrl);
             string local = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
             if (success && !IsClosed)
             {

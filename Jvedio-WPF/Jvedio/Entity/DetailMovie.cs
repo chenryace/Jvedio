@@ -94,8 +94,9 @@ namespace Jvedio.Entity
             if (!string.IsNullOrEmpty(extraimageurl)) dict.Add("extraimages", extraimageurl.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries));
             string json = "";
             if (dict.Count > 0) json = JsonConvert.SerializeObject(dict);
-
-            Video video = (Video)toMetaData();
+            MetaData data = toMetaData();
+            var serializedParent = JsonConvert.SerializeObject(data);
+            Video video = JsonConvert.DeserializeObject<Video>(serializedParent);
             video.VID = id;
             video.VideoType = (VideoType)vediotype;
             video.Series = tag.Replace(' ', GlobalVariable.Separator);

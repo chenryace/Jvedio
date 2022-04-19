@@ -8,7 +8,7 @@ namespace Jvedio.Core.WindowConfig
 {
     public class StartUp : AbstractConfig
     {
-        private StartUp()
+        private StartUp() : base($"WindowConfig.StartUp")
         {
             Tile = false;
             ShowHideItem = false;

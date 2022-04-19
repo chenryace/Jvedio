@@ -9,7 +9,7 @@ namespace Jvedio.Core.WindowConfig
 {
     public class Detail : AbstractConfig
     {
-        private Detail()
+        private Detail() : base($"WindowConfig.Detail")
         {
         }
 

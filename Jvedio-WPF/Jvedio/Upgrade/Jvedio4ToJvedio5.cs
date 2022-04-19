@@ -70,11 +70,17 @@ namespace Jvedio
         public static Dictionary<string, object> getFromServer(Server server, string serverName)
         {
             Dictionary<string, object> dict = new Dictionary<string, object>();
-            dict.Add("ServerName", serverName);
-            dict.Add("Url", server.Url);
-            dict.Add("IsEnable", server.IsEnable);
-            dict.Add("LastRefreshDate", server.LastRefreshDate);
-            dict.Add("Cookie", server.Cookie);
+            dict.Add("ServerType", serverName);
+            List<Dictionary<string, object>> list = new List<Dictionary<string, object>>();
+            Dictionary<string, object> d = new Dictionary<string, object>();
+            d.Add("Url", server.Url);
+            d.Add("Enabled", server.IsEnable);
+            d.Add("Available", 0);
+            d.Add("LastRefreshDate", server.LastRefreshDate);
+            d.Add("Cookies", server.Cookie);
+            d.Add("Headers", new Dictionary<string, string>() { { "UserAgent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.69 Safari/537.36" } });
+            list.Add(d);
+            dict.Add("Datas", list);
             return dict;
         }
 

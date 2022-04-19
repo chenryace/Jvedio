@@ -1,4 +1,5 @@
-﻿using Jvedio.Utils;
+﻿using Jvedio.Core.Net;
+using Jvedio.Utils;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using System;
 using System.Collections;
@@ -105,7 +106,7 @@ namespace Jvedio
                     Logger.LogF(ex);
                 }
             }
-            return null;
+            return new string[0];
         }
 
         public static string TryLoadFile(string path)

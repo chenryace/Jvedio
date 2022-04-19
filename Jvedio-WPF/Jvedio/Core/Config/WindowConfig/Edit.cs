@@ -9,7 +9,7 @@ namespace Jvedio.Core.WindowConfig
 {
     public class Edit : AbstractConfig
     {
-        private Edit()
+        private Edit() : base($"WindowConfig.Edit")
         {
 
         }

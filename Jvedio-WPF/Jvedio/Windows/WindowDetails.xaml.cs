@@ -33,6 +33,7 @@ using Jvedio.Core.Enums;
 using Jvedio.Core.SimpleORM;
 using Jvedio.Utils.Visual;
 using Jvedio.Core.Scan;
+using Jvedio.Core.Net;
 
 namespace Jvedio
 {

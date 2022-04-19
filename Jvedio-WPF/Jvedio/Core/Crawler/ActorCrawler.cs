@@ -11,6 +11,7 @@ using System.IO;
 using System.Net;
 using Jvedio.Utils.Net;
 using Jvedio.Core.Enums;
+using Jvedio.Core.Net;
 
 namespace Jvedio
 {
@@ -43,7 +44,7 @@ namespace Jvedio
     public abstract class ActorCrawler
     {
         protected string Url;//网址
-        protected CrawlerHeader headers;
+        protected RequestHeader headers;
         protected HttpResult httpResult;
 
         public string Name { get; set; }//必须给出演员名字
@@ -52,7 +53,7 @@ namespace Jvedio
         {
             Name = name;
             Url = "";
-            headers = new CrawlerHeader();
+            headers = new RequestHeader();
             httpResult = null;
         }
 
@@ -83,7 +84,7 @@ namespace Jvedio
         public override async Task<HttpResult> Crawl()
         {
             if (Url.IsProperUrl()) InitHeaders();
-            httpResult = await new MyNet().Http(Url, headers);
+            httpResult = await new BaseHttp().Send(Url, headers);
             if (httpResult != null && httpResult.StatusCode == HttpStatusCode.OK && httpResult.SourceCode != null)
             {
 
@@ -118,7 +119,7 @@ namespace Jvedio
 
         protected override void InitHeaders()
         {
-            headers = new CrawlerHeader()
+            headers = new RequestHeader()
             {
                 Cookies = VideoType == VideoType.Europe ? JvedioServers.BusEurope.Cookie : JvedioServers.Bus.Cookie
             };
@@ -143,7 +144,7 @@ namespace Jvedio
 
         protected override void InitHeaders()
         {
-            headers = new CrawlerHeader()
+            headers = new RequestHeader()
             {
                 Cookies = JvedioServers.FC2.Cookie
             };
@@ -188,7 +189,7 @@ namespace Jvedio
         }
         protected override void InitHeaders()
         {
-            headers = new CrawlerHeader()
+            headers = new RequestHeader()
             {
                 Cookies = JvedioServers.DB.Cookie
             };
@@ -247,7 +248,7 @@ namespace Jvedio
 
         protected override void InitHeaders()
         {
-            headers = new CrawlerHeader() { Cookies = JvedioServers.Library.Cookie };
+            headers = new RequestHeader() { Cookies = JvedioServers.Library.Cookie };
         }
 
 
@@ -317,7 +318,7 @@ namespace Jvedio
 
         protected override void InitHeaders()
         {
-            headers = new CrawlerHeader() { Cookies = JvedioServers.DMM.Cookie };
+            headers = new RequestHeader() { Cookies = JvedioServers.DMM.Cookie };
         }
 
         protected override void ParseCookies(string SetCookie)
@@ -337,14 +338,14 @@ namespace Jvedio
         }
         protected override void InitHeaders()
         {
-            headers = new CrawlerHeader() { Cookies = JvedioServers.MOO.Cookie };
+            headers = new RequestHeader() { Cookies = JvedioServers.MOO.Cookie };
         }
 
         public async Task<string> GetMovieCode(Action<string> callback = null)
         {
 
             //从网络获取
-            HttpResult result = await new MyNet().Http(Url, headers, allowRedirect: false);
+            HttpResult result = await new BaseHttp().Send(Url, headers, allowRedirect: false);
             //if (result != null && result.StatusCode == HttpStatusCode.Redirect) callback?.Invoke(Jvedio.Language.Resources.SearchTooFrequent);
             if (result != null && result.SourceCode != "")
                 return GetMovieCodeFromSearchResult(result.SourceCode);
@@ -397,7 +398,7 @@ namespace Jvedio
             //sn=pppd-093
             if (!Url.IsProperUrl()) return;
             Uri uri = new Uri(Url);
-            headers = new CrawlerHeader()
+            headers = new RequestHeader()
             {
 
                 ContentLength = postdata.Length + 3,
@@ -411,7 +412,7 @@ namespace Jvedio
 
         protected override void InitHeaders()
         {
-            headers = new CrawlerHeader() { Cookies = JvedioServers.Jav321.Cookie };
+            headers = new RequestHeader() { Cookies = JvedioServers.Jav321.Cookie };
         }
 
         public async Task<string> GetMovieCode(Action<string> callback = null)

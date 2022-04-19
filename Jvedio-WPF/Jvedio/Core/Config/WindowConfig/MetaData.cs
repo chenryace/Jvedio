@@ -9,7 +9,7 @@ namespace Jvedio.Core.WindowConfig
 {
     public class MetaData : AbstractConfig
     {
-        private MetaData()
+        private MetaData() : base($"WindowConfig.MetaData")
         {
 
         }
