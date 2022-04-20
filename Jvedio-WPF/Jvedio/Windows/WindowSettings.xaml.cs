@@ -1,7 +1,8 @@
 ﻿using ChaoControls.Style;
 using FontAwesome.WPF;
+using Jvedio.Common.Crawler;
 using Jvedio.Core.Crawler;
-using Jvedio.Core.Net;
+
 using Jvedio.Core.SimpleMarkDown;
 using Jvedio.Entity;
 using Jvedio.Style;
@@ -543,11 +544,22 @@ namespace Jvedio
                 App.Current.Windows[0].Opacity = 1;
 
             ////UpdateServersEnable();
+            bool success = vieModel.SaveServers((msg) =>
+             {
+                 MessageCard.Error(msg);
+             });
+            if (success)
+            {
+                GlobalVariable.InitVariable();
+                ScanHelper.InitSearchPattern();
+                ChaoControls.Style.MessageCard.Success(Jvedio.Language.Resources.Message_Success);
+            }
 
-            GlobalVariable.InitVariable();
-            ScanHelper.InitSearchPattern();
-            ChaoControls.Style.MessageCard.Success(Jvedio.Language.Resources.Message_Success);
         }
+
+
+
+
 
         private void SetFFMPEGPath(object sender, RoutedEventArgs e)
         {
@@ -665,6 +677,13 @@ namespace Jvedio
 
         private void Window_ContentRendered(object sender, EventArgs e)
         {
+
+            // 设置 crawlerIndex
+            serverListBox.SelectedIndex = (int)GlobalConfig.Settings.CrawlerSelectedIndex;
+
+
+
+
             //设置当前数据库
             for (int i = 0; i < vieModel.DataBases?.Count; i++)
             {
@@ -732,6 +751,9 @@ namespace Jvedio
 
                 }
             }
+
+
+
 
         }
 
@@ -807,6 +829,7 @@ namespace Jvedio
         private void NewServer(object sender, RoutedEventArgs e)
         {
             string serverType = getCurrentServerType();
+            if (string.IsNullOrEmpty(serverType)) return;
             CrawlerServer server = new CrawlerServer()
             {
                 Enabled = true,
@@ -828,6 +851,7 @@ namespace Jvedio
         private string getCurrentServerType()
         {
             int idx = serverListBox.SelectedIndex;
+            if (idx < 0 || vieModel.CrawlerServers == null || vieModel.CrawlerServers.Count == 0) return null;
             return vieModel.CrawlerServers.Keys.ToList()[idx];
         }
 
@@ -837,21 +861,24 @@ namespace Jvedio
         {
             int idx = CurrentRowIndex;
             string serverType = getCurrentServerType();
+            if (string.IsNullOrEmpty(serverType)) return;
             ObservableCollection<CrawlerServer> list = vieModel.CrawlerServers[serverType];
 
-            list[idx].LastRefreshDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
             list[idx].Available = 2;
             ServersDataGrid.IsEnabled = false;
-            //CheckUrl(vieModel.Servers[rowIndex], (s) =>
-            //{
-            //    ServersDataGrid.IsEnabled = true;
-            //});
+            CheckUrl(list[idx], (s) =>
+            {
+                ServersDataGrid.IsEnabled = true;
+                list[idx].LastRefreshDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+
+            });
         }
 
         private void DeleteServer(object sender, RoutedEventArgs e)
         {
 
             string serverType = getCurrentServerType();
+            if (string.IsNullOrEmpty(serverType)) return;
             Console.WriteLine(CurrentRowIndex);
             ObservableCollection<CrawlerServer> list = vieModel.CrawlerServers[serverType];
             list.RemoveAt(CurrentRowIndex);
@@ -875,89 +902,23 @@ namespace Jvedio
             CurrentRowIndex = dgr.GetIndex();
         }
 
-        private async void CheckUrl(Server server, Action<int> callback)
+        private async void CheckUrl(CrawlerServer server, Action<int> callback)
         {
-            (bool result, string title) = await HTTP.TestAndGetTitle(server.Url, false, server.Cookie, server.Name);
-            if (!result && title.IndexOf("DB") >= 0)
+            string title = await HTTP.AsyncGetWebTitle(server.Url, server.Cookies);
+            if (string.IsNullOrEmpty(title))
             {
-                await Dispatcher.BeginInvoke((Action)delegate
-                {
-                    ChaoControls.Style.MessageCard.Error(Jvedio.Language.Resources.Message_TestError);
-                });
-                callback.Invoke(0);
-            }
-            if (result && title != "")
-            {
-                server.Available = 1;
-                if (title.IndexOf("JavBus") >= 0 && title.IndexOf("歐美") < 0)
-                {
-                    server.Name = "Bus";
-                }
-                else if (title.IndexOf("JavBus") >= 0 && title.IndexOf("歐美") >= 0)
-                {
-                    server.Name = "BusEurope";
-                }
-                else if (title.IndexOf("JavDB") >= 0)
-                {
-                    server.Name = "DB";
-                }
-                else if (title.IndexOf("JavLibrary") >= 0)
-                {
-                    server.Name = "Library";
-                }
-                else if (title.IndexOf("FANZA") >= 0)
-                {
-                    server.Name = "DMM";
-                    if (server.Url.EndsWith("top/")) server.Url = server.Url.Replace("top/", "");
-                }
-                else if (title.IndexOf("FC2コンテンツマーケット") >= 0 || title.IndexOf("FC2电子市场") >= 0)
-                {
-                    server.Name = "FC2";
-                }
-                else if (title.IndexOf("JAV321") >= 0)
-                {
-                    server.Name = "Jav321";
-                }
-                else if (title.IndexOf("AVMOO") >= 0)
-                {
-                    server.Name = "MOO";
-                }
-                else
-                {
-                    server.Name = title;
-                }
+                server.Available = -1;
             }
             else
             {
-                server.Available = -1;
+                server.Available = 1;
             }
             await Dispatcher.BeginInvoke((Action)delegate
             {
                 ServersDataGrid.Items.Refresh();
+                if (!string.IsNullOrEmpty(title))
+                    MessageCard.Success(title);
             });
-
-
-            if (NeedCookie.Contains(server.Name))
-            {
-                //是否包含 cookie
-                if (server.Cookie == Jvedio.Language.Resources.Nothing || server.Cookie == "")
-                {
-                    server.Available = -1;
-                    await Dispatcher.BeginInvoke((Action)delegate
-                    {
-                        new Msgbox(this, Jvedio.Language.Resources.Message_NeedCookies).ShowDialog();
-                    });
-
-                }
-                else
-                {
-                    ServerConfig.Instance.SaveServer(server);//保存覆盖
-                }
-            }
-            else
-            {
-                ServerConfig.Instance.SaveServer(server);//保存覆盖
-            }
             callback.Invoke(0);
         }
 
@@ -1184,6 +1145,7 @@ namespace Jvedio
         {
             Properties.Settings.Default.SettingsIndex = TabControl.SelectedIndex;
             Properties.Settings.Default.Save();
+            GlobalConfig.Settings.Save();
         }
 
         private void CopyFFmpegUrl(object sender, MouseButtonEventArgs e)
@@ -1314,6 +1276,7 @@ namespace Jvedio
                 string serverType = vieModel.CrawlerServers.Keys.ToList()[idx];
                 ServersDataGrid.ItemsSource = null;
                 ServersDataGrid.ItemsSource = vieModel.CrawlerServers[serverType];
+                GlobalConfig.Settings.CrawlerSelectedIndex = idx;
             }
         }
 
@@ -1340,6 +1303,7 @@ namespace Jvedio
             int idx = (sender as ListBox).SelectedIndex;
             vieModel.CurrentPlugin = vieModel.InstalledPlugins[idx];
             richTextBox.Document = MarkDown.parse(vieModel.CurrentPlugin.MarkDown);
+            pluginDetailGrid.Visibility = Visibility.Visible;
         }
     }
 

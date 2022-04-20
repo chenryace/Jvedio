@@ -1688,8 +1688,12 @@
                                                     Margin="5"
                                                     Click="Test_1"
                                                     Content="测试扫描"
+                                                    IsEnabled="False"
                                                     Style="{StaticResource ButtonWarning}" />
-                                                <Button Click="StopLoad" Content="停止加载" />
+                                                <Button
+                                                    Click="StopLoad"
+                                                    Content="停止加载"
+                                                    IsEnabled="False" />
 
 
                                                 <Button

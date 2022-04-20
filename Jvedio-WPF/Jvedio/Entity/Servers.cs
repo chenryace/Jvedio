@@ -18,6 +18,7 @@ namespace Jvedio.Entity
         public Server DB { get; set; }
         public Server MOO { get; set; }
 
+        public bool AlreadyLoad = false;
 
         public Servers()
         {
@@ -32,14 +33,14 @@ namespace Jvedio.Entity
 
         public void Save()
         {
-            ServerConfig.Instance.SaveServer(Bus);
-            ServerConfig.Instance.SaveServer(BusEurope);
-            ServerConfig.Instance.SaveServer(Library);
-            ServerConfig.Instance.SaveServer(FC2);
-            ServerConfig.Instance.SaveServer(Jav321);
-            ServerConfig.Instance.SaveServer(DMM);
-            ServerConfig.Instance.SaveServer(DB);
-            ServerConfig.Instance.SaveServer(MOO);
+            //ServerConfig.Instance.SaveServer(Bus);
+            //ServerConfig.Instance.SaveServer(BusEurope);
+            //ServerConfig.Instance.SaveServer(Library);
+            //ServerConfig.Instance.SaveServer(FC2);
+            //ServerConfig.Instance.SaveServer(Jav321);
+            //ServerConfig.Instance.SaveServer(DMM);
+            //ServerConfig.Instance.SaveServer(DB);
+            //ServerConfig.Instance.SaveServer(MOO);
         }
 
         /// <summary>

@@ -16,6 +16,7 @@ using Jvedio.Entity;
 using Jvedio.Core;
 using Jvedio.Core.Crawler;
 using Jvedio.Core.Plugins;
+using Newtonsoft.Json;
 
 namespace Jvedio.ViewModel
 {
@@ -78,34 +79,84 @@ namespace Jvedio.ViewModel
         public void setServers()
         {
             CrawlerServers = new Dictionary<string, ObservableCollection<CrawlerServer>>();
-            List<CrawlerServer> crawlerServers = GlobalConfig.ServerConfig.CrawlerServers;
-            foreach (CrawlerServer crawlerServer in crawlerServers)
+            List<string> serverTypes = Global.Plugins.Crawlers.Select(item => item.ServerType).ToList();
+            foreach (string serverType in serverTypes)
             {
-
-                if (CrawlerServers.ContainsKey(crawlerServer.ServerType))
+                CrawlerServer crawlerServer = GlobalConfig.ServerConfig.CrawlerServers.Where(arg => arg.ServerType.ToLower() == serverType.ToLower()).FirstOrDefault();
+                if (crawlerServer == null)
                 {
-                    if (!string.IsNullOrEmpty(crawlerServer.Url))
-                        CrawlerServers[crawlerServer.ServerType].Add(crawlerServer);
-
-
+                    crawlerServer = new CrawlerServer();
+                    crawlerServer.ServerType = serverType;
+                    CrawlerServers.Add(serverType, null);
                 }
                 else
                 {
-                    if (string.IsNullOrEmpty(crawlerServer.Url))
-                    {
-                        CrawlerServers.Add(crawlerServer.ServerType, null);
-                    }
-                    else
-                    {
-                        ObservableCollection<CrawlerServer> servers = new ObservableCollection<CrawlerServer>() { crawlerServer };
-                        CrawlerServers.Add(crawlerServer.ServerType, servers);
+                    ObservableCollection<CrawlerServer> crawlers = new ObservableCollection<CrawlerServer>();
+                    GlobalConfig.ServerConfig.CrawlerServers.Where(arg => arg.ServerType.ToLower() == serverType.ToLower()).
+                        ToList().ForEach(t => crawlers.Add(t));
+                    CrawlerServers.Add(serverType, crawlers);
+                }
 
+            }
+
+
+            //foreach (CrawlerServer crawlerServer in crawlerServers)
+            //{
+
+            //    if (CrawlerServers.ContainsKey(crawlerServer.ServerType))
+            //    {
+            //        if (!string.IsNullOrEmpty(crawlerServer.Url))
+            //            CrawlerServers[crawlerServer.ServerType].Add(crawlerServer);
+
+
+            //    }
+            //    else
+            //    {
+            //        if (string.IsNullOrEmpty(crawlerServer.Url))
+            //        {
+            //            CrawlerServers.Add(crawlerServer.ServerType, null);
+            //        }
+            //        else
+            //        {
+            //            ObservableCollection<CrawlerServer> servers = new ObservableCollection<CrawlerServer>() { crawlerServer };
+            //            CrawlerServers.Add(crawlerServer.ServerType, servers);
+
+            //        }
+
+            //    }
+            //}
+            Console.WriteLine(CrawlerServers);
+        }
+
+        public bool SaveServers(Action<string> callback = null)
+        {
+            List<CrawlerServer> list = new List<CrawlerServer>();
+            foreach (string key in CrawlerServers.Keys)
+            {
+                List<CrawlerServer> crawlerServers = CrawlerServers[key]?.ToList();
+                if (crawlerServers == null || crawlerServers.Count <= 0) continue;
+                foreach (CrawlerServer server in crawlerServers)
+                {
+                    if (!server.isHeaderProper())
+                    {
+                        string format = "{\"UserAgent\":\"value\",...}";
+                        callback?.Invoke($"【{key}】 刮削器处地址为 {server.Url} 的 Headers 不合理，格式必须为：{format}");
+                        return false;
                     }
+                    server.ServerType = key;
+                    if (server.Headers == null) server.Headers = "";
+                    list.Add(server);
 
                 }
             }
-            Console.WriteLine(CrawlerServers);
+            GlobalConfig.ServerConfig.CrawlerServers = list;
+            GlobalConfig.ServerConfig.Save();
+            return true;
         }
+
+
+
+
 
         private string _ViewRenameFormat;
 
@@ -181,30 +232,30 @@ namespace Jvedio.ViewModel
         }
 
 
-        private Skin _Themes = (Skin)Enum.Parse(typeof(Skin), "黑色", true);
+        //private Skin _Themes = (Skin)Enum.Parse(typeof(Skin), "黑色", true);
 
-        public Skin Themes
-        {
-            get { return _Themes; }
-            set
-            {
-                _Themes = value;
-                RaisePropertyChanged();
-            }
-        }
+        //public Skin Themes
+        //{
+        //    get { return _Themes; }
+        //    set
+        //    {
+        //        _Themes = value;
+        //        RaisePropertyChanged();
+        //    }
+        //}
 
 
-        private MyLanguage _Language = (MyLanguage)Enum.Parse(typeof(MyLanguage), Properties.Settings.Default.Language, true);
+        //private MyLanguage _Language = (MyLanguage)Enum.Parse(typeof(MyLanguage), Properties.Settings.Default.Language, true);
 
-        public MyLanguage Language
-        {
-            get { return _Language; }
-            set
-            {
-                _Language = value;
-                RaisePropertyChanged();
-            }
-        }
+        //public MyLanguage Language
+        //{
+        //    get { return _Language; }
+        //    set
+        //    {
+        //        _Language = value;
+        //        RaisePropertyChanged();
+        //    }
+        //}
 
         private string _DataBase;
 

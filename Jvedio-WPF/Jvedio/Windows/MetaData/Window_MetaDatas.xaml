@@ -203,6 +203,7 @@
                 <ColumnDefinition
                     Name="SideGridColumn"
                     Width="{Binding SideGridWidth, FallbackValue=200, Mode=OneWay}"
+                    MinWidth="100"
                     MaxWidth="500" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
@@ -210,6 +211,7 @@
             <Border
                 x:Name="SideBorder"
                 Grid.Column="0"
+                MinWidth="100"
                 Background="{DynamicResource Window.Side.Background}"
                 SizeChanged="SideBorder_SizeChanged">
                 <Grid SizeChanged="Grid_SizeChanged">

@@ -21,8 +21,9 @@ using Jvedio.Windows;
 using Jvedio.Core.Enums;
 using System.Windows.Media.Animation;
 using System.Reflection;
-using Jvedio.Core.Net;
+
 using Jvedio.Core.Plugins.Crawler;
+using Jvedio.Common.Crawler.Entity;
 
 namespace Jvedio
 {

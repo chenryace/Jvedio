@@ -1,5 +1,5 @@
 ﻿
-using HtmlAgilityPack;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +11,8 @@ using System.IO;
 using System.Net;
 using Jvedio.Utils.Net;
 using Jvedio.Core.Enums;
-using Jvedio.Core.Net;
+using Jvedio.Common.Crawler.Entity;
+using Jvedio.Common.Crawler;
 
 namespace Jvedio
 {
@@ -84,7 +85,7 @@ namespace Jvedio
         public override async Task<HttpResult> Crawl()
         {
             if (Url.IsProperUrl()) InitHeaders();
-            httpResult = await new BaseHttp().Send(Url, headers);
+            httpResult = new BaseHttp().Send(Url, headers);
             if (httpResult != null && httpResult.StatusCode == HttpStatusCode.OK && httpResult.SourceCode != null)
             {
 
@@ -345,7 +346,7 @@ namespace Jvedio
         {
 
             //从网络获取
-            HttpResult result = await new BaseHttp().Send(Url, headers, allowRedirect: false);
+            HttpResult result = new BaseHttp().Send(Url, headers, allowRedirect: false);
             //if (result != null && result.StatusCode == HttpStatusCode.Redirect) callback?.Invoke(Jvedio.Language.Resources.SearchTooFrequent);
             if (result != null && result.SourceCode != "")
                 return GetMovieCodeFromSearchResult(result.SourceCode);

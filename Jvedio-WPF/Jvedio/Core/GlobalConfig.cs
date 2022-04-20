@@ -14,6 +14,7 @@ namespace Jvedio
         public static Edit Edit = Edit.createInstance();
         public static Detail Detail = Detail.createInstance();
         public static MetaData MetaData = MetaData.createInstance();
+        public static Jvedio.Core.WindowConfig.Settings Settings = Jvedio.Core.WindowConfig.Settings.createInstance();
         public static Jvedio.Core.Config.ServerConfig ServerConfig = Jvedio.Core.Config.ServerConfig.createInstance();
 
         static GlobalConfig()
@@ -24,6 +25,7 @@ namespace Jvedio
             Detail.Read();
             MetaData.Read();
             ServerConfig.Read();
+            Settings.Read();
         }
     }
 }

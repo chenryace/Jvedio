@@ -18,7 +18,8 @@ using static Jvedio.GlobalVariable;
 using Jvedio.Utils;
 using Jvedio.Utils.Net;
 using Jvedio.Entity;
-using Jvedio.Core.Net;
+using Jvedio.Common.Crawler.Entity;
+using Jvedio.Common.Crawler;
 
 namespace Jvedio
 {
@@ -69,13 +70,13 @@ namespace Jvedio
             //下载信息
             if (DetailMovie.IsToDownLoadInfo())
             {
-                HttpResult httpResult = await HTTP.DownLoadFromNet(DetailMovie);
-                if (httpResult != null && !httpResult.Success)
-                {
-                    string error = httpResult.Error != "" ? httpResult.Error : httpResult.StatusCode.ToStatusMessage();
-                    MessageCallBack?.Invoke(this, new MessageCallBackEventArgs($" {DetailMovie.id} {Jvedio.Language.Resources.DownloadMessageFailFor}：{error}"));
+                //HttpResult httpResult = await HTTP.DownLoadFromNet(DetailMovie);
+                //if (httpResult != null && !httpResult.Success)
+                //{
+                //    string error = httpResult.Error != "" ? httpResult.Error : httpResult.StatusCode.ToStatusMessage();
+                //    MessageCallBack?.Invoke(this, new MessageCallBackEventArgs($" {DetailMovie.id} {Jvedio.Language.Resources.DownloadMessageFailFor}：{error}"));
 
-                }
+                //}
 
             }
             DetailMovie dm = DataBase.SelectDetailMovieById(DetailMovie.id);
@@ -102,9 +103,9 @@ namespace Jvedio
             HttpStatusCode sc = HttpStatusCode.Forbidden;
             if (dm.smallimageurl != "")
             {
-                (bool success, string cookie) = await Task.Run(() => { return HTTP.DownLoadImage(dm.smallimageurl, ImageType.SmallImage, dm.id, callback: (statuscode) => { sc = (HttpStatusCode)statuscode; }); });
-                if (success) SmallImageDownLoadCompleted?.Invoke(this, new MessageCallBackEventArgs(dm.id));
-                else MessageCallBack?.Invoke(this, new MessageCallBackEventArgs($"{Jvedio.Language.Resources.DownloadSPicFailFor} {sc.ToStatusMessage()} {Jvedio.Language.Resources.Message_ViewLog}"));
+                //(bool success, string cookie) = await Task.Run(() => { return HTTP.DownLoadImage(dm.smallimageurl, ImageType.SmallImage, dm.id, callback: (statuscode) => { sc = (HttpStatusCode)statuscode; }); });
+                //if (success) SmallImageDownLoadCompleted?.Invoke(this, new MessageCallBackEventArgs(dm.id));
+                //else MessageCallBack?.Invoke(this, new MessageCallBackEventArgs($"{Jvedio.Language.Resources.DownloadSPicFailFor} {sc.ToStatusMessage()} {Jvedio.Language.Resources.Message_ViewLog}"));
             }
         }
 
@@ -114,12 +115,12 @@ namespace Jvedio
             HttpStatusCode sc = HttpStatusCode.Forbidden;
             if (dm.bigimageurl != "")
             {
-                (bool success, string cookie) = await Task.Run(() =>
-                {
-                    return HTTP.DownLoadImage(dm.bigimageurl, ImageType.BigImage, dm.id, callback: (statuscode) => { sc = (HttpStatusCode)statuscode; });
-                });
-                if (success) BigImageDownLoadCompleted?.Invoke(this, new MessageCallBackEventArgs(dm.id));
-                else MessageCallBack?.Invoke(this, new MessageCallBackEventArgs($"{Jvedio.Language.Resources.DownloadBPicFailFor} {sc.ToStatusMessage()} {Jvedio.Language.Resources.Message_ViewLog}"));
+                //(bool success, string cookie) = await Task.Run(() =>
+                //{
+                //    return HTTP.DownLoadImage(dm.bigimageurl, ImageType.BigImage, dm.id, callback: (statuscode) => { sc = (HttpStatusCode)statuscode; });
+                //});
+                //if (success) BigImageDownLoadCompleted?.Invoke(this, new MessageCallBackEventArgs(dm.id));
+                //else MessageCallBack?.Invoke(this, new MessageCallBackEventArgs($"{Jvedio.Language.Resources.DownloadBPicFailFor} {sc.ToStatusMessage()} {Jvedio.Language.Resources.Message_ViewLog}"));
 
             }
             InfoUpdate?.Invoke(this, new DetailMovieEventArgs() { DetailMovie = dm, value = Value, maximum = Maximum });
@@ -140,20 +141,20 @@ namespace Jvedio
                 filepath = BasePicPath + "ExtraPic\\" + dm.id + "\\" + Path.GetFileName(new Uri(urlList[i]).LocalPath);
                 if (!File.Exists(filepath))
                 {
-                    (dlimageSuccess, cookies) = await Task.Run(() => { return HTTP.DownLoadImage(urlList[i], ImageType.ExtraImage, dm.id, Cookie: cookies, callback: (statuscode) => { sc = (HttpStatusCode)statuscode; }); });
-                    if (dlimageSuccess)
-                    {
-                        ExtraImageDownLoadCompleted?.Invoke(this, new MessageCallBackEventArgs(filepath));
-                        if (urlList[i].IndexOf("dmm") > 0)
-                            Thread.Sleep(Delay.MEDIUM);
-                        else
-                            Thread.Sleep(Delay.SHORT_3);
-                    }
-                    else
-                    {
-                        Logger.LogN($" {Jvedio.Language.Resources.Preview} {i + 1} {Jvedio.Language.Resources.Message_Fail}：{urlList[i]}， {Jvedio.Language.Resources.Reason} ： {sc.ToStatusMessage()}");
-                        MessageCallBack?.Invoke(this, new MessageCallBackEventArgs($" {Jvedio.Language.Resources.Preview} {i + 1} {Jvedio.Language.Resources.Message_Fail}，{Jvedio.Language.Resources.Reason} ：{sc.ToStatusMessage()} ，{Jvedio.Language.Resources.Message_ViewLog}"));
-                    }
+                    //(dlimageSuccess, cookies) = await Task.Run(() => { return HTTP.DownLoadImage(urlList[i], ImageType.ExtraImage, dm.id, Cookie: cookies, callback: (statuscode) => { sc = (HttpStatusCode)statuscode; }); });
+                    //if (dlimageSuccess)
+                    //{
+                    //    ExtraImageDownLoadCompleted?.Invoke(this, new MessageCallBackEventArgs(filepath));
+                    //    if (urlList[i].IndexOf("dmm") > 0)
+                    //        Thread.Sleep(Delay.MEDIUM);
+                    //    else
+                    //        Thread.Sleep(Delay.SHORT_3);
+                    //}
+                    //else
+                    //{
+                    //    Logger.LogN($" {Jvedio.Language.Resources.Preview} {i + 1} {Jvedio.Language.Resources.Message_Fail}：{urlList[i]}， {Jvedio.Language.Resources.Reason} ： {sc.ToStatusMessage()}");
+                    //    MessageCallBack?.Invoke(this, new MessageCallBackEventArgs($" {Jvedio.Language.Resources.Preview} {i + 1} {Jvedio.Language.Resources.Message_Fail}，{Jvedio.Language.Resources.Reason} ：{sc.ToStatusMessage()} ，{Jvedio.Language.Resources.Message_ViewLog}"));
+                    //}
 
                 }
                 lock (lockobject) Value += 1;

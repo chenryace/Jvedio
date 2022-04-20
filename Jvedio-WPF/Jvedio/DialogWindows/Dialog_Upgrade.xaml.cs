@@ -1,4 +1,5 @@
-﻿using Jvedio.Core.Net;
+﻿
+using Jvedio.Common.Crawler;
 using Jvedio.Utils.FileProcess;
 using System;
 using System.ComponentModel;
@@ -144,15 +145,15 @@ namespace Jvedio
             else
             {
                 //TODO
-                IsChecking = true;
-                (bool success, string remote, string updateContent) = await HTTP.CheckUpdate(UpdateUrl);
-                string local = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
-                if (success && !IsClosed)
-                {
-                    RemoteVersionTextBlock.Text = $"{Jvedio.Language.Resources.LatestVersion}：{remote}";
-                    UpdateContentTextBox.Text = GetContentByLanguage(updateContent);
-                }
-                IsChecking = false;
+                //IsChecking = true;
+                //(bool success, string remote, string updateContent) = await HTTP.CheckUpdate(UpdateUrl);
+                //string local = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
+                //if (success && !IsClosed)
+                //{
+                //    RemoteVersionTextBlock.Text = $"{Jvedio.Language.Resources.LatestVersion}：{remote}";
+                //    UpdateContentTextBox.Text = GetContentByLanguage(updateContent);
+                //}
+                //IsChecking = false;
             }
         }
 
@@ -160,14 +161,14 @@ namespace Jvedio
         {
             if (IsChecking || IsUpgrading) return;
             IsChecking = true;
-            (bool success, string remote, string updateContent) = await HTTP.CheckUpdate(UpdateUrl);
-            string local = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
-            if (success && !IsClosed)
-            {
-                RemoteVersionTextBlock.Text = $"{Jvedio.Language.Resources.LatestVersion}：{remote}";
-                UpdateContentTextBox.Text = GetContentByLanguage(updateContent);
-            }
-            IsChecking = false;
+            //(bool success, string remote, string updateContent) = await HTTP.CheckUpdate(UpdateUrl);
+            //string local = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            //if (success && !IsClosed)
+            //{
+            //    RemoteVersionTextBlock.Text = $"{Jvedio.Language.Resources.LatestVersion}：{remote}";
+            //    UpdateContentTextBox.Text = GetContentByLanguage(updateContent);
+            //}
+            //IsChecking = false;
         }
 
         private string GetContentByLanguage(string content)

@@ -515,7 +515,7 @@
                                                     </ItemsControl.ItemsPanel>
                                                     <ItemsControl.ItemTemplate>
                                                         <DataTemplate>
-                                                            <Border MouseUp="Border_MouseUp" Style="{StaticResource GenreBorderStyle}">
+                                                            <Border MouseUp="Border_MouseUp" Style="{StaticResource ActorInfoBorderStyle}">
                                                                 <TextBlock Style="{StaticResource GenreTextBlock}" Text="{Binding}" />
                                                             </Border>
                                                         </DataTemplate>

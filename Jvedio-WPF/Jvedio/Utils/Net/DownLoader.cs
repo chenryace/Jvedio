@@ -12,7 +12,7 @@ using static Jvedio.GlobalVariable;
 using Jvedio.Utils;
 using Jvedio.Utils.Net;
 using Jvedio.Entity;
-using Jvedio.Core.Net;
+
 
 namespace Jvedio
 {
@@ -102,85 +102,85 @@ namespace Jvedio
         {
 
             //下载信息
-            Movie movie = o as Movie;
-            if (movie.id.ToUpper().StartsWith("FC2"))
-                SemaphoreFC2.WaitOne();
-            else
-                Semaphore.WaitOne();//阻塞
-            if (Cancel || string.IsNullOrEmpty(movie.id))
-            {
-                if (movie.id.ToUpper().StartsWith("FC2"))
-                    SemaphoreFC2.Release();
-                else
-                    Semaphore.Release();
-                return;
-            }
+            //    Movie movie = o as Movie;
+            //    if (movie.id.ToUpper().StartsWith("FC2"))
+            //        SemaphoreFC2.WaitOne();
+            //    else
+            //        Semaphore.WaitOne();//阻塞
+            //    if (Cancel || string.IsNullOrEmpty(movie.id))
+            //    {
+            //        if (movie.id.ToUpper().StartsWith("FC2"))
+            //            SemaphoreFC2.Release();
+            //        else
+            //            Semaphore.Release();
+            //        return;
+            //    }
 
-            //下载信息
-            State = DownLoadState.DownLoading;
-            if (movie.IsToDownLoadInfo() || enforce)
-            {
-                //满足一定条件才下载信息
-                HttpResult httpResult = await HTTP.DownLoadFromNet(movie);
-                if (httpResult != null)
-                {
-                    if (httpResult.Success)
-                    {
-                        InfoUpdate?.Invoke(this, new InfoUpdateEventArgs() { Movie = movie, progress = downLoadProgress.value, Success = httpResult.Success });//委托到主界面显示
-                    }
-                    else
-                    {
-                        string error = httpResult.Error != "" ? httpResult.Error : httpResult.StatusCode.ToStatusMessage();
-                        MessageCallBack?.Invoke(this, new MessageCallBackEventArgs($" {movie.id} {Jvedio.Language.Resources.DownloadMessageFailFor}：{error}"));
-                    }
-                }
-            }
-            DetailMovie dm = DataBase.SelectDetailMovieById(movie.id);
+            //    //下载信息
+            //    State = DownLoadState.DownLoading;
+            //    if (movie.IsToDownLoadInfo() || enforce)
+            //    {
+            //        //满足一定条件才下载信息
+            //        HttpResult httpResult = await HTTP.DownLoadFromNet(movie);
+            //        if (httpResult != null)
+            //        {
+            //            if (httpResult.Success)
+            //            {
+            //                InfoUpdate?.Invoke(this, new InfoUpdateEventArgs() { Movie = movie, progress = downLoadProgress.value, Success = httpResult.Success });//委托到主界面显示
+            //            }
+            //            else
+            //            {
+            //                string error = httpResult.Error != "" ? httpResult.Error : httpResult.StatusCode.ToStatusMessage();
+            //                MessageCallBack?.Invoke(this, new MessageCallBackEventArgs($" {movie.id} {Jvedio.Language.Resources.DownloadMessageFailFor}：{error}"));
+            //            }
+            //        }
+            //    }
+            //    DetailMovie dm = DataBase.SelectDetailMovieById(movie.id);
 
-            if (dm == null)
-            {
-                if (movie.id.ToUpper().StartsWith("FC2"))
-                    SemaphoreFC2.Release();
-                else
-                    Semaphore.Release();
-                return;
-            }
+            //    if (dm == null)
+            //    {
+            //        if (movie.id.ToUpper().StartsWith("FC2"))
+            //            SemaphoreFC2.Release();
+            //        else
+            //            Semaphore.Release();
+            //        return;
+            //    }
 
-            if (!File.Exists(BasePicPath + $"BigPic\\{dm.id}.jpg") || enforce)
-            {
-                await HTTP.DownLoadImage(dm.bigimageurl, ImageType.BigImage, dm.id);//下载大图
-            }
+            //    if (!File.Exists(BasePicPath + $"BigPic\\{dm.id}.jpg") || enforce)
+            //    {
+            //        await HTTP.DownLoadImage(dm.bigimageurl, ImageType.BigImage, dm.id);//下载大图
+            //    }
 
 
 
-            //fc2 没有缩略图
-            if (dm.id.IndexOf("FC2") >= 0)
-            {
-                //复制海报图作为缩略图
-                if (File.Exists(BasePicPath + $"BigPic\\{dm.id}.jpg") && !File.Exists(BasePicPath + $"SmallPic\\{dm.id}.jpg"))
-                {
-                    FileHelper.TryCopyFile(BasePicPath + $"BigPic\\{dm.id}.jpg", BasePicPath + $"SmallPic\\{dm.id}.jpg");
-                }
+            //    //fc2 没有缩略图
+            //    if (dm.id.IndexOf("FC2") >= 0)
+            //    {
+            //        //复制海报图作为缩略图
+            //        if (File.Exists(BasePicPath + $"BigPic\\{dm.id}.jpg") && !File.Exists(BasePicPath + $"SmallPic\\{dm.id}.jpg"))
+            //        {
+            //            FileHelper.TryCopyFile(BasePicPath + $"BigPic\\{dm.id}.jpg", BasePicPath + $"SmallPic\\{dm.id}.jpg");
+            //        }
 
-            }
-            else
-            {
-                if (!File.Exists(BasePicPath + $"SmallPic\\{dm.id}.jpg") || enforce)
-                {
-                    await HTTP.DownLoadImage(dm.smallimageurl, ImageType.SmallImage, dm.id); //下载小图
-                }
-            }
-            dm.smallimage = ImageProcess.GetBitmapImage(dm.id, "SmallPic");
-            InfoUpdate?.Invoke(this, new InfoUpdateEventArgs() { Movie = dm, progress = downLoadProgress.value, state = State });//委托到主界面显示
-            dm.bigimage = ImageProcess.GetBitmapImage(dm.id, "BigPic");
-            lock (downLoadProgress.lockobject) downLoadProgress.value += 1;//完全下载完一个影片
-            InfoUpdate?.Invoke(this, new InfoUpdateEventArgs() { Movie = dm, progress = downLoadProgress.value, state = State, Success = true });//委托到主界面显示
-            Task.Delay(Delay.MEDIUM).Wait();//每个线程之间暂停
-            //取消阻塞
-            if (movie.id.ToUpper().IndexOf("FC2") >= 0)
-                SemaphoreFC2.Release();
-            else
-                Semaphore.Release();
+            //    }
+            //    else
+            //    {
+            //        if (!File.Exists(BasePicPath + $"SmallPic\\{dm.id}.jpg") || enforce)
+            //        {
+            //            await HTTP.DownLoadImage(dm.smallimageurl, ImageType.SmallImage, dm.id); //下载小图
+            //        }
+            //    }
+            //    dm.smallimage = ImageProcess.GetBitmapImage(dm.id, "SmallPic");
+            //    InfoUpdate?.Invoke(this, new InfoUpdateEventArgs() { Movie = dm, progress = downLoadProgress.value, state = State });//委托到主界面显示
+            //    dm.bigimage = ImageProcess.GetBitmapImage(dm.id, "BigPic");
+            //    lock (downLoadProgress.lockobject) downLoadProgress.value += 1;//完全下载完一个影片
+            //    InfoUpdate?.Invoke(this, new InfoUpdateEventArgs() { Movie = dm, progress = downLoadProgress.value, state = State, Success = true });//委托到主界面显示
+            //    Task.Delay(Delay.MEDIUM).Wait();//每个线程之间暂停
+            //    //取消阻塞
+            //    if (movie.id.ToUpper().IndexOf("FC2") >= 0)
+            //        SemaphoreFC2.Release();
+            //    else
+            //        Semaphore.Release();
         }
     }
 
@@ -286,49 +286,49 @@ namespace Jvedio
         private async void DownLoad(object o)
         {
 
-            Semaphore.WaitOne();
-            Actress actress = o as Actress;
-            if (Cancel | actress.id == "")
-            {
-                Semaphore.Release();
-                return;
-            }
-            try
-            {
-                this.State = DownLoadState.DownLoading;
+            //    Semaphore.WaitOne();
+            //    Actress actress = o as Actress;
+            //    if (Cancel | actress.id == "")
+            //    {
+            //        Semaphore.Release();
+            //        return;
+            //    }
+            //    try
+            //    {
+            //        this.State = DownLoadState.DownLoading;
 
-                //下载头像
-                if (!string.IsNullOrEmpty(actress.imageurl))
-                {
-                    string url = actress.imageurl;
-                    HttpResult streamResult = await HTTP.DownLoadFile(url);
-                    if (streamResult != null)
-                    {
-                        ImageProcess.SaveImage(actress.name, streamResult.FileByte, ImageType.ActorImage, url);
-                        actress.smallimage = ImageProcess.GetBitmapImage(actress.name, "Actresses");
-                    }
+            //        //下载头像
+            //        if (!string.IsNullOrEmpty(actress.imageurl))
+            //        {
+            //            string url = actress.imageurl;
+            //            HttpResult streamResult = await HTTP.DownLoadFile(url);
+            //            if (streamResult != null)
+            //            {
+            //                ImageProcess.SaveImage(actress.name, streamResult.FileByte, ImageType.ActorImage, url);
+            //                actress.smallimage = ImageProcess.GetBitmapImage(actress.name, "Actresses");
+            //            }
 
-                }
-                //下载信息
-                bool success = false;
-                success = await Task.Run(() =>
-                {
-                    Task.Delay(300).Wait();
-                    return HTTP.DownLoadActress(actress.id, actress.name, callback: (message) => { MessageCallBack?.Invoke(this, new MessageCallBackEventArgs(message)); });
-                });
+            //        }
+            //        //下载信息
+            //        bool success = false;
+            //        success = await Task.Run(() =>
+            //        {
+            //            Task.Delay(300).Wait();
+            //            return HTTP.DownLoadActress(actress.id, actress.name, callback: (message) => { MessageCallBack?.Invoke(this, new MessageCallBackEventArgs(message)); });
+            //        });
 
-                if (success) actress = DataBase.SelectInfoByActress(actress);
-                ProgressBarUpdate.value += 1;
-                InfoUpdate?.Invoke(this, new ActressUpdateEventArgs() { Actress = actress, progressBarUpdate = ProgressBarUpdate, state = State });
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
-            finally
-            {
-                Semaphore.Release();
-            }
+            //        if (success) actress = DataBase.SelectInfoByActress(actress);
+            //        ProgressBarUpdate.value += 1;
+            //        InfoUpdate?.Invoke(this, new ActressUpdateEventArgs() { Actress = actress, progressBarUpdate = ProgressBarUpdate, state = State });
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        Console.WriteLine(ex.Message);
+            //    }
+            //    finally
+            //    {
+            //        Semaphore.Release();
+            //    }
         }
     }
 

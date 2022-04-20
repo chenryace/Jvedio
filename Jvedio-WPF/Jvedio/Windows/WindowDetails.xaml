@@ -266,6 +266,7 @@
                         VerticalAlignment="Top"
                         Orientation="Horizontal">
                         <Border
+                            IsEnabled="False"
                             Margin="10,5"
                             Padding="5"
                             CornerRadius="3"

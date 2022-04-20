@@ -1,5 +1,5 @@
 ﻿using DynamicData.Annotations;
-using Jvedio.Core.Net;
+using Jvedio.Common.Crawler;
 using Jvedio.Core.Scan;
 using Jvedio.Utils;
 using System;

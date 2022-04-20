@@ -1,7 +1,6 @@
 ﻿using ChaoControls.Style;
 using DynamicData;
 using HandyControl.Data;
-using HtmlAgilityPack;
 using Jvedio.Entity;
 using Jvedio.Utils;
 using Jvedio.Utils.FileProcess;
@@ -44,7 +43,7 @@ using Jvedio.Core.Scan;
 using static Jvedio.Main.Msg;
 using System.Diagnostics;
 using Jvedio.Test;
-using Jvedio.Core.Net;
+
 
 namespace Jvedio
 {
@@ -652,31 +651,31 @@ namespace Jvedio
 
         void ShowNotice()
         {
-            Task.Run(async () =>
-            {
-                string configName = "Notice";
-                //获取本地的公告
-                string notices = "";
-                SelectWrapper<AppConfig> wrapper = new SelectWrapper<AppConfig>();
-                wrapper.Eq("ConfigName", configName);
-                AppConfig appConfig = appConfigMapper.selectOne(wrapper);
-                if (appConfig != null && !string.IsNullOrEmpty(appConfig.ConfigValue))
-                    notices = appConfig.ConfigValue.Replace(GlobalVariable.Separator, '\n');
-                HttpResult httpResult = await new BaseHttp().Send(NoticeUrl);
-                //判断公告是否内容不同
-                if (httpResult != null && httpResult.SourceCode != "" && httpResult.SourceCode != notices)
-                {
-                    //覆盖原有公告
-                    appConfig.ConfigValue = SqliteHelper.handleNewLine(httpResult.SourceCode);
-                    appConfig.ConfigName = configName;
-                    appConfigMapper.insert(appConfig, Core.Enums.InsertMode.Replace);
-                    //提示用户
-                    this.Dispatcher.Invoke((Action)delegate ()
-                    {
-                        new Dialog_Notice(this, false, GetNoticeByLanguage(httpResult.SourceCode, Properties.Settings.Default.Language)).ShowDialog();
-                    });
-                }
-            });
+            //    Task.Run(async () =>
+            //    {
+            //        string configName = "Notice";
+            //        //获取本地的公告
+            //        string notices = "";
+            //        SelectWrapper<AppConfig> wrapper = new SelectWrapper<AppConfig>();
+            //        wrapper.Eq("ConfigName", configName);
+            //        AppConfig appConfig = appConfigMapper.selectOne(wrapper);
+            //        if (appConfig != null && !string.IsNullOrEmpty(appConfig.ConfigValue))
+            //            notices = appConfig.ConfigValue.Replace(GlobalVariable.Separator, '\n');
+            //        HttpResult httpResult = await new BaseHttp().Send(NoticeUrl);
+            //        //判断公告是否内容不同
+            //        if (httpResult != null && httpResult.SourceCode != "" && httpResult.SourceCode != notices)
+            //        {
+            //            //覆盖原有公告
+            //            appConfig.ConfigValue = SqliteHelper.handleNewLine(httpResult.SourceCode);
+            //            appConfig.ConfigName = configName;
+            //            appConfigMapper.insert(appConfig, Core.Enums.InsertMode.Replace);
+            //            //提示用户
+            //            this.Dispatcher.Invoke((Action)delegate ()
+            //            {
+            //                new Dialog_Notice(this, false, GetNoticeByLanguage(httpResult.SourceCode, Properties.Settings.Default.Language)).ShowDialog();
+            //            });
+            //        }
+            //    });
         }
 
         private string GetNoticeByLanguage(string notice, string language)
@@ -1214,12 +1213,12 @@ namespace Jvedio
             }
             else
             {
-                (bool success, string remote, string updateContent) = await HTTP.CheckUpdate(UpdateUrl);
-                string local = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
-                if (success && local.CompareTo(remote) < 0)
-                {
-                    new Dialog_Upgrade(this, false, remote, updateContent).ShowDialog();
-                }
+                //(bool success, string remote, string updateContent) = await HTTP.CheckUpdate(UpdateUrl);
+                //string local = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
+                //if (success && local.CompareTo(remote) < 0)
+                //{
+                //    new Dialog_Upgrade(this, false, remote, updateContent).ShowDialog();
+                //}
             }
         }
 
@@ -3010,12 +3009,12 @@ namespace Jvedio
             // 超过 3 个网页，询问是否继续
             if (vieModel.SelectedVideo.Count >= 3 && new Msgbox(this, $"即将打开 {vieModel.SelectedVideo.Count} 个网页，是否继续？").ShowDialog() == false) return;
 
-            foreach (Video video in vieModel.SelectedVideo)
-            {
-                string url = video.WebUrl;
-                if (url.IsProperUrl())
-                    FileHelper.TryOpenUrl(url);
-            }
+            //foreach (Video video in vieModel.SelectedVideo)
+            //{
+            //    string url = video.WebUrl;
+            //    if (url.IsProperUrl())
+            //        FileHelper.TryOpenUrl(url);
+            //}
         }
 
 
@@ -5274,26 +5273,26 @@ namespace Jvedio
         private List<ActorSearch> GetActorSearchReulst(string sourceCode)
         {
             List<ActorSearch> result = new List<ActorSearch>();
-            if (string.IsNullOrEmpty(sourceCode)) return result;
-            HtmlDocument doc = new HtmlDocument();
-            doc.LoadHtml(sourceCode);
-            HtmlNodeCollection actorNodes = doc.DocumentNode.SelectNodes("//a[@class='avatar-box text-center']");
-            if (actorNodes == null) return result;
-            foreach (HtmlNode actorNode in actorNodes)
-            {
-                ActorSearch actorSearch = new ActorSearch();
-                actorSearch.ID = result.Count;
-                HtmlNode img = actorNode.SelectSingleNode("div/img");
-                HtmlNode name = actorNode.SelectSingleNode("div/span");
-                HtmlNode tag = actorNode.SelectSingleNode("div/span/button");
+            //if (string.IsNullOrEmpty(sourceCode)) return result;
+            //HtmlDocument doc = new HtmlDocument();
+            //doc.LoadHtml(sourceCode);
+            //HtmlNodeCollection actorNodes = doc.DocumentNode.SelectNodes("//a[@class='avatar-box text-center']");
+            //if (actorNodes == null) return result;
+            //foreach (HtmlNode actorNode in actorNodes)
+            //{
+            //    ActorSearch actorSearch = new ActorSearch();
+            //    actorSearch.ID = result.Count;
+            //    HtmlNode img = actorNode.SelectSingleNode("div/img");
+            //    HtmlNode name = actorNode.SelectSingleNode("div/span");
+            //    HtmlNode tag = actorNode.SelectSingleNode("div/span/button");
 
-                if (actorNode.Attributes["href"]?.Value != "") actorSearch.Link = actorNode.Attributes["href"].Value;
-                if (tag != null && tag.InnerText != "") actorSearch.Tag = tag.InnerText;
-                if (name != null && name.InnerText != "") actorSearch.Name = name.InnerText.Replace(actorSearch.Tag, "");
-                if (img != null && img.Attributes["src"]?.Value != "") actorSearch.Img = img.Attributes["src"].Value;
+            //    if (actorNode.Attributes["href"]?.Value != "") actorSearch.Link = actorNode.Attributes["href"].Value;
+            //    if (tag != null && tag.InnerText != "") actorSearch.Tag = tag.InnerText;
+            //    if (name != null && name.InnerText != "") actorSearch.Name = name.InnerText.Replace(actorSearch.Tag, "");
+            //    if (img != null && img.Attributes["src"]?.Value != "") actorSearch.Img = img.Attributes["src"].Value;
 
-                result.Add(actorSearch);
-            }
+            //    result.Add(actorSearch);
+            //}
 
             return result;
 

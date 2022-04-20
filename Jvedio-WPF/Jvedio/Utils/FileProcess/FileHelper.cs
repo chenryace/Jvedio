@@ -1,4 +1,5 @@
-﻿using Jvedio.Core.Net;
+﻿
+using Jvedio.Common.Crawler;
 using Jvedio.Utils;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using System;

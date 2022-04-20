@@ -70,17 +70,14 @@ namespace Jvedio
         public static Dictionary<string, object> getFromServer(Server server, string serverName)
         {
             Dictionary<string, object> dict = new Dictionary<string, object>();
+            if (server == null) return dict;
             dict.Add("ServerType", serverName);
-            List<Dictionary<string, object>> list = new List<Dictionary<string, object>>();
-            Dictionary<string, object> d = new Dictionary<string, object>();
-            d.Add("Url", server.Url);
-            d.Add("Enabled", server.IsEnable);
-            d.Add("Available", 0);
-            d.Add("LastRefreshDate", server.LastRefreshDate);
-            d.Add("Cookies", server.Cookie);
-            d.Add("Headers", new Dictionary<string, string>() { { "UserAgent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.69 Safari/537.36" } });
-            list.Add(d);
-            dict.Add("Datas", list);
+            dict.Add("Url", server.Url);
+            dict.Add("Enabled", server.IsEnable);
+            dict.Add("Available", 0);
+            dict.Add("LastRefreshDate", server.LastRefreshDate);
+            dict.Add("Cookies", server.Cookie);
+            dict.Add("Headers", "");
             return dict;
         }
 
@@ -91,19 +88,23 @@ namespace Jvedio
             {
                 List<Dictionary<string, object>> list = new List<Dictionary<string, object>>();
                 Servers servers = ServerConfig.Instance.ReadAll();
-                list.Add(getFromServer(servers.Bus, "BUS"));
-                list.Add(getFromServer(servers.BusEurope, "BUSEUROPE"));
-                list.Add(getFromServer(servers.Library, "LIBRARY"));
-                list.Add(getFromServer(servers.FC2, "FC2"));
-                list.Add(getFromServer(servers.Jav321, "JAV321"));
-                list.Add(getFromServer(servers.DMM, "DMM"));
-                list.Add(getFromServer(servers.DB, "DB"));
-                list.Add(getFromServer(servers.MOO, "MOO"));
-                string json = JsonConvert.SerializeObject(list);
-                AppConfig appConfig = new AppConfig();
-                appConfig.ConfigName = "Servers";
-                appConfig.ConfigValue = json;
-                appConfigMapper.insert(appConfig, InsertMode.Replace);
+                if (servers != null && !servers.AlreadyLoad)
+                {
+                    list.Add(getFromServer(servers.Bus, "BUS"));
+                    list.Add(getFromServer(servers.BusEurope, "BUSEUROPE"));
+                    list.Add(getFromServer(servers.Library, "LIBRARY"));
+                    list.Add(getFromServer(servers.FC2, "FC2"));
+                    list.Add(getFromServer(servers.Jav321, "JAV321"));
+                    list.Add(getFromServer(servers.DMM, "DMM"));
+                    list.Add(getFromServer(servers.DB, "DB"));
+                    list.Add(getFromServer(servers.MOO, "MOO"));
+                    string json = JsonConvert.SerializeObject(list);
+                    AppConfig appConfig = new AppConfig();
+                    appConfig.ConfigName = "Servers";
+                    appConfig.ConfigValue = json;
+                    appConfigMapper.insert(appConfig, InsertMode.Replace);
+                }
+
 
             }
         }
@@ -451,7 +452,8 @@ namespace Jvedio
                 actorMapper.executeNonQuery(sql);
             }
             actorInfos = actorMapper.selectList();
-            Dictionary<string, long> dict = actorInfos.ToDictionary(x => x.ActorName, x => x.ActorID);
+            //Dictionary<string, long> dict = actorInfos.ToDictionary(x => x.ActorName, x => x.ActorID);
+            Dictionary<string, long> dict = actorInfos.ToLookup(x => x.ActorName, y => y.ActorID).ToDictionary(x => x.Key, x => x.First());
             List<UrlCode> urlCodes = new List<UrlCode>();
 
             List<string> insert_list = new List<string>();
@@ -728,7 +730,8 @@ namespace Jvedio
                     Dictionary<string, long> dict = new Dictionary<string, long>();
                     if (videos != null && videos.Count > 0)
                     {
-                        dict = videos.ToDictionary(x => x.VID, y => y.DataID);
+                        //dict = videos.ToDictionary(x => x.VID, y => y.DataID);
+                        dict = videos.ToLookup(x => x.VID, y => y.DataID).ToDictionary(x => x.Key, x => x.First());
                     }
 
                     if (dict.Count > 0)

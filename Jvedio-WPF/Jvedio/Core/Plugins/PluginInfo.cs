@@ -9,15 +9,9 @@ namespace Jvedio.Core.Plugins
 {
     public class PluginInfo
     {
-        //    {"Name","Bus 爬虫" },
-        //    { "Version","1.1.0" },
-        //    { "Image","base64" },
-        //    { "Author","chao" },
-        //    { "Email","secret" },
-        //    { "Description","chao" },
-        //    { "MarkDown","#aaa" },
-        //    { "License","MIT" },
 
+
+        public string ServerType { get; set; }
         public string Name { get; set; }
         public string Version { get; set; }
         public string Categories { get; set; }

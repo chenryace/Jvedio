@@ -21,7 +21,7 @@ namespace Jvedio
         private string ConfigPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "ServersConfig");
         private static string[] Nodes = new[] { "Url", "IsEnable", "LastRefreshDate", "Cookie" };
         private XmlDocument XmlDoc;
-
+        public bool Exist { get; set; }
         private static readonly ServerConfig instance = new ServerConfig();
 
 
@@ -43,6 +43,7 @@ namespace Jvedio
 
         public void InitXML()
         {
+            Exist = true;
             XmlDoc = new XmlDocument();
             if (File.Exists(ConfigPath))
             {
@@ -59,7 +60,8 @@ namespace Jvedio
             }
             else
             {
-                CreateRoot = true;
+                Exist = false;
+                return;
             }
 
 
@@ -155,6 +157,11 @@ namespace Jvedio
             foreach (var item in type.GetProperties())
             {
                 ServerConfig serverConfig = new ServerConfig();
+                if (!serverConfig.Exist)
+                {
+                    result.AlreadyLoad = true;
+                    return result;
+                }
                 Server server = new Server(item.Name)
                 {
                     Cookie = serverConfig.ReadByName(item.Name, "Cookie"),
@@ -166,7 +173,7 @@ namespace Jvedio
                 server.IsEnable = enable;
                 if (server.Cookie == Jvedio.Language.Resources.Nothing) server.Cookie = "";
                 System.Reflection.PropertyInfo propertyInfo = type.GetProperty(item.Name);
-                propertyInfo.SetValue(result, server, null);
+                propertyInfo.SetValue(result, server);
             }
             return result;
         }

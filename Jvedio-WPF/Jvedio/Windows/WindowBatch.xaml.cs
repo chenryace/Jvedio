@@ -25,7 +25,7 @@ using Jvedio.Style;
 using Jvedio.Utils.Net;
 using Jvedio.Entity;
 using ChaoControls.Style;
-using Jvedio.Core.Net;
+
 
 namespace Jvedio
 {
@@ -230,116 +230,116 @@ namespace Jvedio
 
         private async Task<bool> DownLoad(string id)
         {
-            Movie movie = DataBase.SelectMovieByID(id);
-            bool downloadinfo = vieModel.Info_ForceDownload || movie.IsToDownLoadInfo();
-            if (!downloadinfo)
-                ShowStatus($"{id}：{Jvedio.Language.Resources.Skip} {Jvedio.Language.Resources.SyncInfo}");
+            //Movie movie = DataBase.SelectMovieByID(id);
+            //bool downloadinfo = vieModel.Info_ForceDownload || movie.IsToDownLoadInfo();
+            //if (!downloadinfo)
+            //    ShowStatus($"{id}：{Jvedio.Language.Resources.Skip} {Jvedio.Language.Resources.SyncInfo}");
 
 
 
-            //下载信息
-            if (downloadinfo)
-            {
-                HttpResult httpResult = await HTTP.DownLoadFromNet(movie);
-                if (httpResult != null && httpResult.Success)
-                {
-                    ShowStatus($"{id}：{Jvedio.Language.Resources.SyncInfo} {Jvedio.Language.Resources.Message_Success}");
-                }
-                else if (httpResult != null)
-                {
-                    string error = httpResult.Error != "" ? httpResult.Error : httpResult.StatusCode.ToStatusMessage();
-                    ShowStatus($"{id}：{Jvedio.Language.Resources.SyncInfo}  {Jvedio.Language.Resources.Message_Fail} ，{Jvedio.Language.Resources.Reason} ：{error}");
-                }
-                else
-                {
-                    ShowStatus($"{id}：{Jvedio.Language.Resources.SyncInfo}  {Jvedio.Language.Resources.Message_Fail} ，{Jvedio.Language.Resources.Reason} ：{Jvedio.Language.Resources.HttpFail}");
-                }
-                Task.Delay(vieModel.Timeout_Medium).Wait();
-            }
+            ////下载信息
+            //if (downloadinfo)
+            //{
+            //    HttpResult httpResult = await HTTP.DownLoadFromNet(movie);
+            //    if (httpResult != null && httpResult.Success)
+            //    {
+            //        ShowStatus($"{id}：{Jvedio.Language.Resources.SyncInfo} {Jvedio.Language.Resources.Message_Success}");
+            //    }
+            //    else if (httpResult != null)
+            //    {
+            //        string error = httpResult.Error != "" ? httpResult.Error : httpResult.StatusCode.ToStatusMessage();
+            //        ShowStatus($"{id}：{Jvedio.Language.Resources.SyncInfo}  {Jvedio.Language.Resources.Message_Fail} ，{Jvedio.Language.Resources.Reason} ：{error}");
+            //    }
+            //    else
+            //    {
+            //        ShowStatus($"{id}：{Jvedio.Language.Resources.SyncInfo}  {Jvedio.Language.Resources.Message_Fail} ，{Jvedio.Language.Resources.Reason} ：{Jvedio.Language.Resources.HttpFail}");
+            //    }
+            //    Task.Delay(vieModel.Timeout_Medium).Wait();
+            //}
 
 
 
 
 
 
-            //加载预览图
-            movie = DataBase.SelectMovieByID(id);
-            List<string> extraImageList = new List<string>();
-            if (!string.IsNullOrEmpty(movie.extraimageurl) && movie.extraimageurl.IndexOf(";") > 0)
-            {
-                extraImageList = movie.extraimageurl.Split(';').ToList().Where(arg => !string.IsNullOrEmpty(arg) && arg.IndexOf("http") >= 0).ToList();
-            }
+            ////加载预览图
+            //movie = DataBase.SelectMovieByID(id);
+            //List<string> extraImageList = new List<string>();
+            //if (!string.IsNullOrEmpty(movie.extraimageurl) && movie.extraimageurl.IndexOf(";") > 0)
+            //{
+            //    extraImageList = movie.extraimageurl.Split(';').ToList().Where(arg => !string.IsNullOrEmpty(arg) && arg.IndexOf("http") >= 0).ToList();
+            //}
 
-            if (CheckPause()) return false;
+            //if (CheckPause()) return false;
 
-            bool success = false;
-            string resultMessage = "";
-            //同步缩略图
-            if (vieModel.DownloadSmallPic)
-            {
-                string path = Path.Combine(BasePicPath, "SmallPic", movie.id + ".jpg");
-                if (!File.Exists(path))
-                {
-                    (success, resultMessage) = await HTTP.DownLoadImage(movie.smallimageurl, ImageType.SmallImage, movie.id);
-                    ShowStatus($"{Jvedio.Language.Resources.Download} {Jvedio.Language.Resources.Thumbnail}：{(success ? Jvedio.Language.Resources.Message_Success : Jvedio.Language.Resources.Message_Fail)}");
-                    if (success) Task.Delay(vieModel.Timeout_Medium).Wait();
-                }
-                else
-                {
-                    ShowStatus($"{Jvedio.Language.Resources.Thumbnail} {Jvedio.Language.Resources.Message_AlreadyExist} {Jvedio.Language.Resources.Skip}");
-                }
-            }
-            if (CheckPause()) return false;
+            //bool success = false;
+            //string resultMessage = "";
+            ////同步缩略图
+            //if (vieModel.DownloadSmallPic)
+            //{
+            //    string path = Path.Combine(BasePicPath, "SmallPic", movie.id + ".jpg");
+            //    if (!File.Exists(path))
+            //    {
+            //        (success, resultMessage) = await HTTP.DownLoadImage(movie.smallimageurl, ImageType.SmallImage, movie.id);
+            //        ShowStatus($"{Jvedio.Language.Resources.Download} {Jvedio.Language.Resources.Thumbnail}：{(success ? Jvedio.Language.Resources.Message_Success : Jvedio.Language.Resources.Message_Fail)}");
+            //        if (success) Task.Delay(vieModel.Timeout_Medium).Wait();
+            //    }
+            //    else
+            //    {
+            //        ShowStatus($"{Jvedio.Language.Resources.Thumbnail} {Jvedio.Language.Resources.Message_AlreadyExist} {Jvedio.Language.Resources.Skip}");
+            //    }
+            //}
+            //if (CheckPause()) return false;
 
-            //同步海报图
-            if (vieModel.DownloadBigPic)
-            {
-                string path = Path.Combine(BasePicPath, "SmallPic", movie.id + ".jpg");
-                if (!File.Exists(path))
-                {
+            ////同步海报图
+            //if (vieModel.DownloadBigPic)
+            //{
+            //    string path = Path.Combine(BasePicPath, "SmallPic", movie.id + ".jpg");
+            //    if (!File.Exists(path))
+            //    {
 
-                    (success, resultMessage) = await HTTP.DownLoadImage(movie.bigimageurl, ImageType.BigImage, movie.id);
-                    ShowStatus($"{Jvedio.Language.Resources.Download} {Jvedio.Language.Resources.Poster}：{(success ? Jvedio.Language.Resources.Message_Success : Jvedio.Language.Resources.Message_Fail)}");
-                    if (success) Task.Delay(vieModel.Timeout_Medium).Wait();
-                }
-                else
-                {
-                    ShowStatus($"{Jvedio.Language.Resources.Poster} {Jvedio.Language.Resources.Message_AlreadyExist} {Jvedio.Language.Resources.Skip}");
-                }
-            }
-            if (CheckPause()) return false;
+            //        (success, resultMessage) = await HTTP.DownLoadImage(movie.bigimageurl, ImageType.BigImage, movie.id);
+            //        ShowStatus($"{Jvedio.Language.Resources.Download} {Jvedio.Language.Resources.Poster}：{(success ? Jvedio.Language.Resources.Message_Success : Jvedio.Language.Resources.Message_Fail)}");
+            //        if (success) Task.Delay(vieModel.Timeout_Medium).Wait();
+            //    }
+            //    else
+            //    {
+            //        ShowStatus($"{Jvedio.Language.Resources.Poster} {Jvedio.Language.Resources.Message_AlreadyExist} {Jvedio.Language.Resources.Skip}");
+            //    }
+            //}
+            //if (CheckPause()) return false;
 
-            //同步预览图
-            if (vieModel.DownloadExtraPic)
-            {
-                string cookies = "";
-                bool extraImageSuccess = false;
-                string filepath = "";
+            ////同步预览图
+            //if (vieModel.DownloadExtraPic)
+            //{
+            //    string cookies = "";
+            //    bool extraImageSuccess = false;
+            //    string filepath = "";
 
-                for (int i = 0; i < extraImageList.Count; i++)
-                {
-                    if (CheckPause()) return false;
-                    if (extraImageList[i].Length > 0)
-                    {
-                        filepath = Path.Combine(BasePicPath, "ExtraPic", movie.id, Path.GetFileName(new Uri(extraImageList[i]).LocalPath));
-                        if (!File.Exists(filepath))
-                        {
-                            (extraImageSuccess, cookies) = await Task.Run(() => { return HTTP.DownLoadImage(extraImageList[i], ImageType.ExtraImage, movie.id, Cookie: cookies); });
-                            if (extraImageSuccess)
-                                ShowStatus($"{Jvedio.Language.Resources.Download} {Jvedio.Language.Resources.Preview} {Jvedio.Language.Resources.Message_Success} {i + 1}/{extraImageList.Count}");
-                            else
-                                ShowStatus($"{Jvedio.Language.Resources.Download} {Jvedio.Language.Resources.Preview} {Jvedio.Language.Resources.Message_Fail} {i + 1}/{extraImageList.Count}");
-                            Task.Delay(vieModel.Timeout_Medium).Wait();
-                        }
-                        else
-                        {
-                            ShowStatus($"{Jvedio.Language.Resources.Message_AlreadyExist} {Jvedio.Language.Resources.Skip}  {i + 1}/{extraImageList.Count}");
-                        }
-                    }
-                }
+            //    for (int i = 0; i < extraImageList.Count; i++)
+            //    {
+            //        if (CheckPause()) return false;
+            //        if (extraImageList[i].Length > 0)
+            //        {
+            //            filepath = Path.Combine(BasePicPath, "ExtraPic", movie.id, Path.GetFileName(new Uri(extraImageList[i]).LocalPath));
+            //            if (!File.Exists(filepath))
+            //            {
+            //                (extraImageSuccess, cookies) = await Task.Run(() => { return HTTP.DownLoadImage(extraImageList[i], ImageType.ExtraImage, movie.id, Cookie: cookies); });
+            //                if (extraImageSuccess)
+            //                    ShowStatus($"{Jvedio.Language.Resources.Download} {Jvedio.Language.Resources.Preview} {Jvedio.Language.Resources.Message_Success} {i + 1}/{extraImageList.Count}");
+            //                else
+            //                    ShowStatus($"{Jvedio.Language.Resources.Download} {Jvedio.Language.Resources.Preview} {Jvedio.Language.Resources.Message_Fail} {i + 1}/{extraImageList.Count}");
+            //                Task.Delay(vieModel.Timeout_Medium).Wait();
+            //            }
+            //            else
+            //            {
+            //                ShowStatus($"{Jvedio.Language.Resources.Message_AlreadyExist} {Jvedio.Language.Resources.Skip}  {i + 1}/{extraImageList.Count}");
+            //            }
+            //        }
+            //    }
 
-            }
-            vieModel.CurrentNum += 1;
+            //}
+            //vieModel.CurrentNum += 1;
             return true;
         }
 

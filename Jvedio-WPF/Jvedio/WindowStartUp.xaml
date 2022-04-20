@@ -559,6 +559,7 @@
                                 Header="关于" />
                             <MenuItem Command="cmd:OpenWindow.Settings" Header="设置" />
                             <MenuItem
+                                IsEnabled="False"
                                 Command="cmd:OpenWindow.Upgrade"
                                 CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}"
                                 Header="检查更新" />

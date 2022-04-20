@@ -94,6 +94,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Visual_Studio_Project\chao-controls\ChaoControls.Style\bin\Debug\ChaoControls.Style.dll</HintPath>
     </Reference>
+    <Reference Include="Common">
+      <HintPath>..\..\..\Jvedio-Crawler\Common\bin\Debug\Common.dll</HintPath>
+    </Reference>
     <Reference Include="CommonServiceLocator, Version=2.0.2.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
       <HintPath>..\packages\CommonServiceLocator.2.0.2\lib\net47\CommonServiceLocator.dll</HintPath>
     </Reference>
@@ -126,9 +129,6 @@
     </Reference>
     <Reference Include="HandyControl, Version=3.1.0.0, Culture=neutral, PublicKeyToken=45be8712787a1e5b, processorArchitecture=MSIL">
       <HintPath>..\packages\HandyControl.3.1.0\lib\net472\HandyControl.dll</HintPath>
-    </Reference>
-    <Reference Include="HtmlAgilityPack, Version=1.11.32.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
-      <HintPath>..\packages\HtmlAgilityPack.1.11.32\lib\Net45\HtmlAgilityPack.dll</HintPath>
     </Reference>
     <Reference Include="K4os.Compression.LZ4, Version=1.2.6.0, Culture=neutral, PublicKeyToken=2186fa9121ef231d, processorArchitecture=MSIL">
       <HintPath>..\packages\K4os.Compression.LZ4.1.2.6\lib\net46\K4os.Compression.LZ4.dll</HintPath>
@@ -167,6 +167,9 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="PresentationFramework.Aero2" />
+    <Reference Include="PriorityQueue, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5e136dbf0437dacd, processorArchitecture=MSIL">
+      <HintPath>..\packages\OptimizedPriorityQueue.5.1.0\lib\net45\PriorityQueue.dll</HintPath>
+    </Reference>
     <Reference Include="QueryEngine, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Lib\QueryEngine.dll</HintPath>
@@ -257,7 +260,8 @@
     <Compile Include="Core\Command\File.cs" />
     <Compile Include="Core\Command\OpenWindow.cs" />
     <Compile Include="Core\Config\ServerConfig.cs" />
-    <Compile Include="Core\Crawler\AbstractCrawler.cs" />
+    <Compile Include="Core\Config\WindowConfig\Settings.cs" />
+    <Compile Include="Core\Net\DownloadDispatcher.cs" />
     <Compile Include="Core\Plugins\Crawler\CrawlerLoader.cs" />
     <Compile Include="Core\CustomSettingsProvider.cs" />
     <Compile Include="Core\DataBase\CommonConnection.cs" />
@@ -283,12 +287,6 @@
     <Compile Include="Core\Extensions\MenuItemExtensions.cs" />
     <Compile Include="Core\GlobalMapper.cs" />
     <Compile Include="Core\GlobalStyle.cs" />
-    <Compile Include="Core\Net\BaseHttp.cs" />
-    <Compile Include="Core\Net\HTTP.cs" />
-    <Compile Include="Core\Net\Entity\HTTPResult.cs" />
-    <Compile Include="Core\Net\NetUtils.cs" />
-    <Compile Include="Core\Net\Entity\RequestHeader.cs" />
-    <Compile Include="Core\Net\Entity\ResponseHeader.cs" />
     <Compile Include="Core\Plugins\PluginInfo.cs" />
     <Compile Include="Core\Scan\ComicScan.cs" />
     <Compile Include="Core\Scan\GameScan.cs" />

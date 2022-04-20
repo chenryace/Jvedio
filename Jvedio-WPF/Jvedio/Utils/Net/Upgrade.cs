@@ -1,5 +1,6 @@
 ﻿using DynamicData.Annotations;
-using Jvedio.Core.Net;
+using Jvedio.Common.Crawler;
+using Jvedio.Common.Crawler.Entity;
 using Jvedio.Utils.Encrypt;
 using Jvedio.Utils.Net;
 using System;
@@ -45,7 +46,7 @@ namespace Jvedio
         private async Task<bool> GetDownLoadList()
         {
             HttpResult httpResult = null;
-            try { httpResult = await new BaseHttp().Send(list_url); }
+            try { httpResult = new BaseHttp().Send(list_url); }
             catch (TimeoutException ex)
             {
                 Logger.LogN(list_url + " => " + ex.Message);
@@ -116,9 +117,9 @@ namespace Jvedio
                 string filepath = Path.Combine(temppath, item);
                 if (!File.Exists(filepath))
                 {
-                    HttpResult streamResult = await HTTP.DownLoadFile(file_url + item);
-                    //写入本地
-                    if (streamResult != null) WriteFile(streamResult.FileByte, filepath);
+                    //    HttpResult streamResult = await HTTP.DownLoadFile(file_url + item);
+                    //    //写入本地
+                    //    if (streamResult != null) WriteFile(streamResult.FileByte, filepath);
                 }
                 DownLoadProgress.value += 1;
                 if (!StopUpgrade) onProgressChanged?.Invoke(this, DownLoadProgress);
