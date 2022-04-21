@@ -23,6 +23,10 @@ namespace Jvedio.Core.WindowConfig
             return _instance;
         }
         public long CrawlerSelectedIndex { get; set; }
+        public long PicPathMode { get; set; }
+        public string PicPathJson { get; set; }
+
+        public Dictionary<string, object> PicPaths;
 
 
     }

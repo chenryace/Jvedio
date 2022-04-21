@@ -85,5 +85,31 @@ namespace Jvedio.Entity
         {
             return this.DataType.GetHashCode() + this.Name.GetHashCode();
         }
+
+
+        static Dictionary<DataType, string> typeDict = new Dictionary<DataType, string>()
+        {
+            {DataType.Video,"metadata_video" },
+            {DataType.Comics,"metadata_comic" },
+            {DataType.Game,"metadata_game" },
+            {DataType.Picture,"metadata_picture" },
+        };
+
+
+        public void deleteByID(long id)
+        {
+
+            StringBuilder builder = new StringBuilder();
+            builder.Append("begin;");
+            builder.Append($"delete from {typeDict[DataType]} where DataID in( SELECT DataID FROM metadata where DBId ='{id}');");
+            builder.Append($"delete from metadata_to_tagstamp where DataID in( SELECT DataID FROM metadata where DBId ='{id}');");
+            builder.Append($"delete from metadatas_to_actor where DataID in( SELECT DataID FROM metadata where DBId ='{id}');");
+            builder.Append($"delete from metadata_to_label where DataID in( SELECT DataID FROM metadata where DBId ='{id}');");
+            builder.Append($"delete from metadata_to_translation where DataID in( SELECT DataID FROM metadata where DBId ='{id}');");
+            builder.Append($"delete from metadata where DBId ='{id}';");
+            builder.Append("commit;");
+            GlobalMapper.appDatabaseMapper.executeNonQuery(builder.ToString());
+            GlobalMapper.appDatabaseMapper.deleteById(id);
+        }
     }
 }

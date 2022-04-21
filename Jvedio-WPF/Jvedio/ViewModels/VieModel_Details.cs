@@ -198,7 +198,7 @@ namespace Jvedio.ViewModel
             //todo 释放演员头像
             GC.Collect();
 
-            BitmapImage image = ImageProcess.BitmapImageFromFile(Video.parseImagePath(CurrentVideo.BigImagePath));
+            BitmapImage image = ImageProcess.BitmapImageFromFile(Video.getBigImage(CurrentVideo));
             if (image == null) image = DefaultBigImage;
             CurrentVideo.BigImage = image;
             //MySqlite db = new MySqlite("Translate");

@@ -38,5 +38,18 @@ namespace Jvedio.Core.Plugins
             return result;
         }
 
+        public override bool Equals(object obj)
+        {
+            if (obj == null) return false;
+            PluginInfo other = obj as PluginInfo;
+            if (other == null) return false;
+            return other.ServerType.Equals(ServerType) && other.Name.Equals(Name);
+        }
+
+        public override int GetHashCode()
+        {
+            return ServerType.GetHashCode() ^ Name.GetHashCode();
+        }
+
     }
 }

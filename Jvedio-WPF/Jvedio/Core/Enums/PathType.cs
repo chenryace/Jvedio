@@ -17,7 +17,7 @@ namespace Jvedio.Core.Enums
     {
         Absolute,
         RelativeToApp,
-        RelativeToVideo,
+        RelativeToData,
         AbsoluteUrl
     }
 }

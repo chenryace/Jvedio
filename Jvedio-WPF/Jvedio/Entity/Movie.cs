@@ -1,7 +1,9 @@
 ﻿using DynamicData.Annotations;
 using Jvedio.Common.Crawler;
+using Jvedio.Core.Enums;
 using Jvedio.Core.Scan;
 using Jvedio.Utils;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -394,6 +396,66 @@ namespace Jvedio.Entity
             return movie;
         }
 
+        public MetaData toMetaData()
+        {
+            MetaData result = new MetaData()
+            {
+                DBId = DBId,
+                Title = title,
+                Size = (long)filesize,
+                Path = filepath,
+                Hash = "",
+                Country = country,
+                ReleaseDate = releasedate,
+                ReleaseYear = year,
+                ViewCount = visits,
+                DataType = DataType.Video,
+                Rating = rating,
+                RatingCount = 0,
+                FavoriteCount = 0,
+                Genre = genre.Replace(' ', GlobalVariable.Separator),
+
+                Label = label.Replace(' ', GlobalVariable.Separator),
+                Grade = favorites,
+                ViewDate = "",
+                FirstScanDate = scandate,
+                LastScanDate = otherinfo,
+            };
+            return result;
+        }
+        public Video toVideo()
+        {
+            Dictionary<string, object> dict = new Dictionary<string, object>();
+            if (!string.IsNullOrEmpty(actressimageurl)) dict.Add("actress", actressimageurl.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries));
+            if (!string.IsNullOrEmpty(smallimageurl)) dict.Add("smallimage", smallimageurl);
+            if (!string.IsNullOrEmpty(bigimageurl)) dict.Add("bigimage", bigimageurl);
+            if (!string.IsNullOrEmpty(extraimageurl)) dict.Add("extraimages", extraimageurl.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries));
+            string json = "";
+            if (dict.Count > 0) json = JsonConvert.SerializeObject(dict);
+            MetaData data = toMetaData();
+            var serializedParent = JsonConvert.SerializeObject(data);
+            Video video = JsonConvert.DeserializeObject<Video>(serializedParent);
+            video.VID = id;
+            video.VideoType = (VideoType)vediotype;
+            video.Series = tag.Replace(' ', GlobalVariable.Separator);
+            video.Director = director;
+            video.Studio = studio;
+            video.Publisher = studio;
+            video.Plot = plot;
+            video.Outline = outline;
+            video.Duration = runtime;
+            video.SubSection = subsection.Replace(';', GlobalVariable.Separator);
+            video.WebType = source.Replace("jav", "");
+            video.WebUrl = sourceurl;
+            video.PreviewImagePath = "*PicPath*/ExtraPic/" + id;
+            video.ScreenShotPath = "*PicPath*/ScreenShot/" + id;
+            video.GifImagePath = "*PicPath*/Gif/" + $"{id}.gif";
+            video.BigImagePath = "*PicPath*/BigPic/" + $"{id}.jpg";
+            video.SmallImagePath = "*PicPath*/SmallPic/" + $"{id}.jpg";
+            video.ImageUrls = json;
+
+            return video;
+        }
 
 
 

@@ -63,7 +63,7 @@ namespace Jvedio
         public static string BackupPath = Path.Combine(CurrentUserFolder, "backup");
         public static string LogPath = Path.Combine(CurrentUserFolder, "log");
         public static string PicPath = Path.Combine(CurrentUserFolder, "pic");
-        public static string BasePicPath = Directory.Exists(Properties.Settings.Default.BasePicPath) ? Properties.Settings.Default.BasePicPath : PicPath;
+        public static string BasePicPath = "";
         public static string ProjectImagePath = Path.Combine(CurrentUserFolder, "image", "library");
         public static string TranslateDataBasePath = Path.Combine(CurrentUserFolder, "Translate.sqlite");
         public static string BasePluginsPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "plugins");

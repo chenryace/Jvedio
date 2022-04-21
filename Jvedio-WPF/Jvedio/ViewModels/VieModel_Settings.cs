@@ -17,6 +17,7 @@ using Jvedio.Core;
 using Jvedio.Core.Crawler;
 using Jvedio.Core.Plugins;
 using Newtonsoft.Json;
+using Jvedio.Core.Enums;
 
 namespace Jvedio.ViewModel
 {
@@ -39,8 +40,12 @@ namespace Jvedio.ViewModel
 
             setServers();
             setPlugins();
+            setBasePicPaths();
+
 
         }
+
+
 
 
         public void Reset()
@@ -156,6 +161,23 @@ namespace Jvedio.ViewModel
 
 
 
+        public int PIC_PATH_MODE_COUNT = 3;
+        public void setBasePicPaths()
+        {
+            //PathType type = (PathType)PicPathMode;
+            //BasePicPath = PicPaths[type.ToString()].ToString();
+            PicPaths = GlobalConfig.Settings.PicPaths;
+
+            Dictionary<string, string> dict = (Dictionary<string, string>)PicPaths[PathType.RelativeToData.ToString()];
+            BigImagePath = dict["BigImagePath"];
+            SmallImagePath = dict["SmallImagePath"];
+            PreviewImagePath = dict["PreviewImagePath"];
+            ScreenShotPath = dict["ScreenShotPath"];
+            ActorImagePath = dict["ActorImagePath"];
+
+        }
+
+
 
 
         private string _ViewRenameFormat;
@@ -256,6 +278,102 @@ namespace Jvedio.ViewModel
         //        RaisePropertyChanged();
         //    }
         //}
+
+        private int _PicPathMode = (int)GlobalConfig.Settings.PicPathMode;
+
+        public int PicPathMode
+        {
+            get { return _PicPathMode; }
+            set
+            {
+                _PicPathMode = value;
+                RaisePropertyChanged();
+            }
+        }
+        private string _BasePicPath = "";
+
+        public string BasePicPath
+        {
+            get { return _BasePicPath; }
+            set
+            {
+                _BasePicPath = value;
+                if (value != null)
+                {
+                    PathType type = (PathType)PicPathMode;
+                    if (type != PathType.RelativeToData)
+                        PicPaths[type.ToString()] = value;
+                }
+                RaisePropertyChanged();
+            }
+        }
+
+
+        private string _BigImagePath = "";
+
+        public string BigImagePath
+        {
+            get { return _BigImagePath; }
+            set
+            {
+                _BigImagePath = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private string _SmallImagePath = "";
+
+        public string SmallImagePath
+        {
+            get { return _SmallImagePath; }
+            set
+            {
+                _SmallImagePath = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private string _PreviewImagePath = "";
+
+        public string PreviewImagePath
+        {
+            get { return _PreviewImagePath; }
+            set
+            {
+                _PreviewImagePath = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private string _ScreenShotPath = "";
+
+        public string ScreenShotPath
+        {
+            get { return _ScreenShotPath; }
+            set
+            {
+                _ScreenShotPath = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private string _ActorImagePath = "";
+
+        public string ActorImagePath
+        {
+            get { return _ActorImagePath; }
+            set
+            {
+                _ActorImagePath = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
+        public Dictionary<string, object> PicPaths = new Dictionary<string, object>();
+
+
+
 
         private string _DataBase;
 

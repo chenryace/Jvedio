@@ -43,7 +43,7 @@ using Jvedio.Core.Scan;
 using static Jvedio.Main.Msg;
 using System.Diagnostics;
 using Jvedio.Test;
-
+using Jvedio.Core.Net;
 
 namespace Jvedio
 {
@@ -96,6 +96,7 @@ namespace Jvedio
         public static Msg msgCard = new Msg();
 
         public static bool CheckingScanStatus = false;
+        public static bool CheckingDownloadStatus = false;
 
         public Main()
         {
@@ -205,6 +206,11 @@ namespace Jvedio
                 if (GlobalConfig.Main.SearchSelectedIndex == searchTabControl.SelectedIndex) return;
                 GlobalConfig.Main.SearchSelectedIndex = searchTabControl.SelectedIndex;
                 RefreshCandiadte(null, null);
+            };
+
+            Global.Download.Dispatcher.onWorking += (s, e) =>
+            {
+                vieModel.DownLoadProgress = Global.Download.Dispatcher.Progress;
             };
 
         }
@@ -1768,7 +1774,7 @@ namespace Jvedio
 
         public void ShowDownloadPopup(object sender, MouseButtonEventArgs e)
         {
-            DownloadPopup.IsOpen = true;
+            downloadStatusPopup.IsOpen = true;
         }
 
 
@@ -3040,32 +3046,52 @@ namespace Jvedio
 
         private void DownLoadSelectMovie(object sender, RoutedEventArgs e)
         {
-            //if (DownLoader?.State == DownLoadState.DownLoading)
-            //{
-            //    msgCard.Info(Jvedio.Language.Resources.Message_WaitForDownload);
-            //}
-            //else if (!JvedioServers.IsProper())
-            //{
-            //    msgCard.Error(Jvedio.Language.Resources.Message_SetUrl);
-            //}
-            //else
-            //{
-            //    try
-            //    {
-            //        if (!Properties.Settings.Default.EditMode) vieModel.SelectedVideo.Clear();
-            //        string id = GetIDFromMenuItem(sender);
-            //        Movie CurrentMovie = GetMovieFromVieModel(id);
-            //        if (CurrentMovie != null)
-            //        {
-            //            if (!vieModel.SelectedVideo.Select(g => g.id).ToList().Contains(CurrentMovie.id)) vieModel.SelectedVideo.Add(CurrentMovie);
-            //            StartDownload(vieModel.SelectedVideo.ToList());
-            //        }
+            handleMenuSelected(sender);
+            vieModel.DownloadStatus = "Downloading";
+            foreach (Video video in vieModel.SelectedVideo)
+            {
+                DownLoadTask task = new DownLoadTask(video);
+                task.onError += (s, ev) =>
+                {
+                    msgCard.Error((ev as MessageCallBackEventArgs).Message);
+                };
+                Global.Download.Dispatcher.Enqueue(task);
+                if (!vieModel.DownLoadTasks.Contains(task))
+                    vieModel.DownLoadTasks.Add(task);
+            }
+            if (!Global.Download.Dispatcher.Working)
+                Global.Download.Dispatcher.BeginWork();
+            setDownloadStatus();
+            if (!Properties.Settings.Default.EditMode) vieModel.SelectedVideo.Clear();
+        }
 
 
-            //    }
-            //    catch (Exception ex) { Console.WriteLine(ex.StackTrace); Console.WriteLine(ex.Message); }
-            //}
-            //if (!Properties.Settings.Default.EditMode) vieModel.SelectedVideo.Clear();
+        private void setDownloadStatus()
+        {
+            if (!CheckingDownloadStatus)
+            {
+                CheckingDownloadStatus = true;
+                Task.Run(() =>
+                {
+                    while (true)
+                    {
+                        if (vieModel.DownLoadTasks.All(arg =>
+                         arg.Status == System.Threading.Tasks.TaskStatus.Canceled ||
+                         arg.Status == System.Threading.Tasks.TaskStatus.RanToCompletion
+                        ))
+                        {
+                            vieModel.DownloadStatus = "Complete";
+                            CheckingDownloadStatus = false;
+                            break;
+                        }
+                        else
+                        {
+                            Task.Delay(1000).Wait();
+                        }
+
+                    }
+                });
+            }
         }
 
         private void ForceToDownLoad(object sender, RoutedEventArgs e)
@@ -3588,7 +3614,7 @@ namespace Jvedio
 
         private CancellationToken scan_ct;
         private CancellationTokenSource scan_cts;
-        private async void Grid_Drop(object sender, DragEventArgs e)
+        private void Grid_Drop(object sender, DragEventArgs e)
         {
 
             vieModel.ScanStatus = "Scanning";
@@ -6296,6 +6322,38 @@ namespace Jvedio
             Application.Current.MainWindow = windowStartUp;
             windowStartUp.Show();
             this.Close();
+        }
+
+        private void HideDownloadPopup(object sender, MouseButtonEventArgs e)
+        {
+            downloadStatusPopup.IsOpen = false;
+        }
+
+        private void ShowContextMenu(object sender, RoutedEventArgs e)
+        {
+            (sender as Button).ContextMenu.IsOpen = true;
+        }
+
+        private void RemoveCompleteTask(object sender, RoutedEventArgs e)
+        {
+            for (int i = vieModel.DownLoadTasks.Count - 1; i >= 0; i--)
+            {
+                if (vieModel.DownLoadTasks[i].Status == System.Threading.Tasks.TaskStatus.RanToCompletion)
+                {
+                    vieModel.DownLoadTasks.RemoveAt(i);
+                }
+            }
+        }
+
+        private void RemoveCancelTask(object sender, RoutedEventArgs e)
+        {
+            for (int i = vieModel.DownLoadTasks.Count - 1; i >= 0; i--)
+            {
+                if (vieModel.DownLoadTasks[i].Status == System.Threading.Tasks.TaskStatus.Canceled)
+                {
+                    vieModel.DownLoadTasks.RemoveAt(i);
+                }
+            }
         }
     }
 

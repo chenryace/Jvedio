@@ -1338,7 +1338,7 @@ namespace Jvedio
             DisposeImage();
             vieModel.CurrentVideo.PreviewImageList = new ObservableCollection<BitmapSource>();
             vieModel.CurrentVideo.PreviewImagePathList = new ObservableCollection<string>();
-            string BigImagePath = Video.parseImagePath(vieModel.CurrentVideo.BigImagePath);
+            string BigImagePath = Video.getBigImage(vieModel.CurrentVideo);
             if (!isScreenShot && File.Exists(BigImagePath))
             {
                 vieModel.CurrentVideo.PreviewImageList.Add(vieModel.CurrentVideo.BigImage);
@@ -1355,8 +1355,8 @@ namespace Jvedio
 
             //扫描预览图目录
             List<string> imagePathList = new List<string>();
-            string imagePath = Video.parseImagePath(vieModel.CurrentVideo.PreviewImagePath);
-            if (isScreenShot) imagePath = Video.parseImagePath(vieModel.CurrentVideo.ScreenShotPath);
+            string imagePath = Video.getExtraImage(vieModel.CurrentVideo);
+            if (isScreenShot) imagePath = Video.getScreenShot(vieModel.CurrentVideo);
             await Task.Run(() =>
             {
                 if (Directory.Exists(imagePath))

@@ -1,13 +1,17 @@
 ﻿using Jvedio.Core.Attributes;
 using Jvedio.Core.Enums;
+using Jvedio.Core.Scan;
 using Jvedio.Core.SimpleORM;
 using Jvedio.Entity.CommonSQL;
+using Jvedio.Utils;
 using Jvedio.Utils.Common;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 
@@ -206,11 +210,20 @@ namespace Jvedio.Entity
 
         public static string parseImagePath(string path)
         {
+            PathType pathType = (PathType)GlobalConfig.Settings.PicPathMode;
+            string basePicPath = GlobalConfig.Settings.PicPaths[pathType.ToString()].ToString();
+            if (pathType == PathType.Absolute)
+            {
+                if (string.IsNullOrEmpty(basePicPath) || !Directory.Exists(basePicPath))
+                {
+                    basePicPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Pic");
+                }
+            }
+            else if (pathType == PathType.RelativeToApp)
+            {
+                basePicPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, basePicPath);
+            }
 
-            // todo 测试
-            string basePicPath = @"D:\soft\Jvedio\Pic";
-
-            //if (path.StartsWith("*PicPath*")) return Path.GetFullPath(GlobalVariable.BasePicPath + path.Replace("*PicPath*", ""));
             if (path.StartsWith("*PicPath*")) return System.IO.Path.GetFullPath(basePicPath + path.Replace("*PicPath*", ""));
             else return path;
         }
@@ -234,5 +247,98 @@ namespace Jvedio.Entity
             return video != null && (video.DataID == this.DataID || video.MVID == this.MVID);
         }
 
+        private static string parseRelativeImageFileName(string path)
+        {
+
+            string dirName = System.IO.Path.GetDirectoryName(path);
+            string regex = System.IO.Path.GetFileName(path);
+            List<string> list = FileHelper.TryGetAllFiles(dirName, "*.*").ToList();
+            list = list.Where(arg => ScanTask.PICTURE_EXTENSIONS_LIST.Contains(System.IO.Path.GetExtension(arg).ToLower())).ToList();
+            if (list.Count == 0) return null;
+            foreach (string item in list)
+            {
+                Match match = Regex.Match(System.IO.Path.GetFileNameWithoutExtension(item), regex);
+                if (match.Success) return item;
+            }
+            return null;
+        }
+
+        private static string parseRelativePath(string path)
+        {
+            string dirName = System.IO.Path.GetDirectoryName(path);
+            List<string> list = DirHelper.GetDirList(dirName).ToList();
+            string regex = System.IO.Path.GetFileName(path);
+            if (list.Count == 0) return null;
+            foreach (string item in list)
+            {
+                Match match = Regex.Match(System.IO.Path.GetFileNameWithoutExtension(item), regex);
+                if (match.Success) return item;
+            }
+            return null;
+        }
+
+        public static string getSmallImage(Video video)
+        {
+            string smallImagePath = Video.parseImagePath(video.SmallImagePath);
+            PathType pathType = (PathType)GlobalConfig.Settings.PicPathMode;
+            if (pathType == PathType.RelativeToData && !string.IsNullOrEmpty(video.Path) && File.Exists(video.Path))
+            {
+
+                string basePicPath = System.IO.Path.GetDirectoryName(video.Path);
+                Dictionary<string, string> dict = (Dictionary<string, string>)GlobalConfig.Settings.PicPaths[pathType.ToString()];
+                string smallPath = System.IO.Path.Combine(basePicPath, dict["SmallImagePath"]);
+                smallImagePath = parseRelativeImageFileName(smallPath);
+
+            }
+            return smallImagePath;
+        }
+
+        public static string getBigImage(Video video)
+        {
+            string bigImagePath = Video.parseImagePath(video.BigImagePath);
+
+            PathType pathType = (PathType)GlobalConfig.Settings.PicPathMode;
+            if (pathType == PathType.RelativeToData && !string.IsNullOrEmpty(video.Path) && File.Exists(video.Path))
+            {
+
+                string basePicPath = System.IO.Path.GetDirectoryName(video.Path);
+                Dictionary<string, string> dict = (Dictionary<string, string>)GlobalConfig.Settings.PicPaths[pathType.ToString()];
+                string bigPath = System.IO.Path.Combine(basePicPath, dict["BigImagePath"]);
+
+                bigImagePath = parseRelativeImageFileName(bigPath);
+
+            }
+            return bigImagePath;
+        }
+
+        public static string getExtraImage(Video video)
+        {
+            string imagePath = Video.parseImagePath(video.PreviewImagePath);
+
+            PathType pathType = (PathType)GlobalConfig.Settings.PicPathMode;
+            if (pathType == PathType.RelativeToData && !string.IsNullOrEmpty(video.Path) && File.Exists(video.Path))
+            {
+                string basePicPath = System.IO.Path.GetDirectoryName(video.Path);
+                Dictionary<string, string> dict = (Dictionary<string, string>)GlobalConfig.Settings.PicPaths[pathType.ToString()];
+                string path = System.IO.Path.Combine(basePicPath, dict["PreviewImagePath"]);
+                imagePath = parseRelativePath(path);
+            }
+            return imagePath;
+        }
+
+        public static string getScreenShot(Video video)
+        {
+            string imagePath = Video.parseImagePath(video.ScreenShotPath);
+
+            PathType pathType = (PathType)GlobalConfig.Settings.PicPathMode;
+            if (pathType == PathType.RelativeToData && !string.IsNullOrEmpty(video.Path) && File.Exists(video.Path))
+            {
+                string basePicPath = System.IO.Path.GetDirectoryName(video.Path);
+                Dictionary<string, string> dict = (Dictionary<string, string>)GlobalConfig.Settings.PicPaths[pathType.ToString()];
+                string path = System.IO.Path.Combine(basePicPath, dict["ScreenShotPath"]);
+                imagePath = parseRelativePath(path);
+            }
+            return imagePath;
+        }
     }
 }

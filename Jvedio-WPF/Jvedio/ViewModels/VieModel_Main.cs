@@ -38,6 +38,7 @@ using Jvedio.Core.Enums;
 using Jvedio.Core;
 using Jvedio.Mapper;
 using Jvedio.Core.Scan;
+using Jvedio.Core.Net;
 
 namespace Jvedio.ViewModel
 {
@@ -510,6 +511,28 @@ namespace Jvedio.ViewModel
             }
         }
 
+        private ObservableCollection<DownLoadTask> _DownLoadTasks = new ObservableCollection<DownLoadTask>();
+        public ObservableCollection<DownLoadTask> DownLoadTasks
+        {
+            get { return _DownLoadTasks; }
+            set
+            {
+                _DownLoadTasks = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private double _DownLoadProgress = 0;
+        public double DownLoadProgress
+        {
+            get { return _DownLoadProgress; }
+            set
+            {
+                _DownLoadProgress = value;
+                RaisePropertyChanged();
+            }
+        }
+
 
 
 
@@ -807,6 +830,18 @@ namespace Jvedio.ViewModel
             set
             {
                 _ScanStatus = value;
+                RaisePropertyChanged();
+
+            }
+        }
+        private string _DownloadStatus;
+
+        public string DownloadStatus
+        {
+            get { return _DownloadStatus; }
+            set
+            {
+                _DownloadStatus = value;
                 RaisePropertyChanged();
 
             }

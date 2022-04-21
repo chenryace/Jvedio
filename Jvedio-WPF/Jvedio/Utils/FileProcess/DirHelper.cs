@@ -71,6 +71,19 @@ namespace Jvedio.Utils
             return false;
         }
 
+        public static string[] GetDirList(string dir)
+        {
+            try
+            {
+                return Directory.GetDirectories(dir);
+            }
+            catch (Exception ex)
+            {
+                Logger.LogF(ex);
+            }
+            return new string[0];
+        }
+
         public static long getDirSize(DirectoryInfo d)
         {
             long size = 0;

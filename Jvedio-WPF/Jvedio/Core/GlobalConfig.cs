@@ -1,4 +1,6 @@
-﻿using Jvedio.Core.WindowConfig;
+﻿using Jvedio.Core.Enums;
+using Jvedio.Core.WindowConfig;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,6 +28,38 @@ namespace Jvedio
             MetaData.Read();
             ServerConfig.Read();
             Settings.Read();
+            EnsurePicPaths();// 确保 PicPaths
+        }
+
+
+        static void EnsurePicPaths()
+        {
+            if (string.IsNullOrEmpty(Settings.PicPathJson))
+            {
+                Dictionary<string, object> dict = new Dictionary<string, object>();
+                dict.Add(PathType.Absolute.ToString(), GlobalVariable.PicPath);
+                dict.Add(PathType.RelativeToApp.ToString(), "./Pic");
+
+                Dictionary<string, string> d = new Dictionary<string, string>();
+                d.Add("BigImagePath", "./.*fanart");
+                d.Add("SmallImagePath", "./.*poster");
+                d.Add("PreviewImagePath", "./.*预览图");
+                d.Add("ScreenShotPath", "./.*截图");
+                d.Add("ActorImagePath", "");
+                dict.Add(PathType.RelativeToData.ToString(), d);
+                Settings.PicPathJson = JsonConvert.SerializeObject(dict);
+                Settings.PicPaths = dict;
+            }
+            else
+            {
+                Dictionary<string, object> dictionary = JsonConvert.DeserializeObject<Dictionary<string, object>>(Settings.PicPathJson);
+
+                string str = dictionary[PathType.RelativeToData.ToString()].ToString();
+                dictionary[PathType.RelativeToData.ToString()] = JsonConvert.DeserializeObject<Dictionary<string, string>>(str);
+                Settings.PicPaths = dictionary;
+
+
+            }
         }
     }
 }

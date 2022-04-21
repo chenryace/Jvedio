@@ -2,13 +2,14 @@
 using FontAwesome.WPF;
 using Jvedio.Common.Crawler;
 using Jvedio.Core.Crawler;
-
+using Jvedio.Core.Enums;
 using Jvedio.Core.SimpleMarkDown;
 using Jvedio.Entity;
 using Jvedio.Style;
 using Jvedio.Utils;
 using Jvedio.Utils.Encrypt;
 using Jvedio.ViewModel;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -552,8 +553,24 @@ namespace Jvedio
             {
                 GlobalVariable.InitVariable();
                 ScanHelper.InitSearchPattern();
+                savePath();
+
+
                 ChaoControls.Style.MessageCard.Success(Jvedio.Language.Resources.Message_Success);
             }
+
+        }
+
+        private void savePath()
+        {
+            Dictionary<string, string> dict = (Dictionary<string, string>)vieModel.PicPaths[PathType.RelativeToData.ToString()];
+            dict["BigImagePath"] = vieModel.BigImagePath;
+            dict["SmallImagePath"] = vieModel.SmallImagePath;
+            dict["PreviewImagePath"] = vieModel.PreviewImagePath;
+            dict["ScreenShotPath"] = vieModel.ScreenShotPath;
+            dict["ActorImagePath"] = vieModel.ActorImagePath;
+            vieModel.PicPaths[PathType.RelativeToData.ToString()] = dict;
+            GlobalConfig.Settings.PicPathJson = JsonConvert.SerializeObject(vieModel.PicPaths);
 
         }
 
@@ -1145,6 +1162,15 @@ namespace Jvedio
         {
             Properties.Settings.Default.SettingsIndex = TabControl.SelectedIndex;
             Properties.Settings.Default.Save();
+
+            saveSettings();
+        }
+
+
+
+        private void saveSettings()
+        {
+            GlobalConfig.Settings.PicPathMode = vieModel.PicPathMode;
             GlobalConfig.Settings.Save();
         }
 
@@ -1258,12 +1284,8 @@ namespace Jvedio
             var path = FileHelper.SelectPath(this);
             if (Directory.Exists(path))
             {
-                if (path.Substring(path.Length - 1, 1) != "\\") { path = path + "\\"; }
-                Properties.Settings.Default.BasePicPath = path;
-            }
-            else
-            {
-                ChaoControls.Style.MessageCard.Error(Jvedio.Language.Resources.Message_CanNotBeNull);
+                if (!path.EndsWith("\\")) path += "\\";
+                vieModel.BasePicPath = path;
             }
         }
 
@@ -1304,6 +1326,17 @@ namespace Jvedio
             vieModel.CurrentPlugin = vieModel.InstalledPlugins[idx];
             richTextBox.Document = MarkDown.parse(vieModel.CurrentPlugin.MarkDown);
             pluginDetailGrid.Visibility = Visibility.Visible;
+        }
+
+        private void ImageSelectComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            int idx = (sender as ComboBox).SelectedIndex;
+            if (idx >= 0 && vieModel != null && idx < vieModel.PIC_PATH_MODE_COUNT)
+            {
+                PathType type = (PathType)idx;
+                if (type != PathType.RelativeToData)
+                    vieModel.BasePicPath = vieModel.PicPaths[type.ToString()].ToString();
+            }
         }
     }
 

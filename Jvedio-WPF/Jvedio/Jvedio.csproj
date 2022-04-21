@@ -262,6 +262,7 @@
     <Compile Include="Core\Config\ServerConfig.cs" />
     <Compile Include="Core\Config\WindowConfig\Settings.cs" />
     <Compile Include="Core\Net\DownloadDispatcher.cs" />
+    <Compile Include="Core\Net\DownLoadTask.cs" />
     <Compile Include="Core\Plugins\Crawler\CrawlerLoader.cs" />
     <Compile Include="Core\CustomSettingsProvider.cs" />
     <Compile Include="Core\DataBase\CommonConnection.cs" />
@@ -368,6 +369,7 @@
     <Compile Include="DialogWindows\Dialog_About.xaml.cs">
       <DependentUpon>Dialog_About.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Global\Download.cs" />
     <Compile Include="Global\Plugins.cs" />
     <Compile Include="Mapper\ActorMapper.cs" />
     <Compile Include="Mapper\AIFaceMapper.cs" />

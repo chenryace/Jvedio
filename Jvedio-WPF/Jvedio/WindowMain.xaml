@@ -1405,7 +1405,7 @@
                             FocusVisualStyle="{x:Null}"
                             ItemContainerStyle="{StaticResource FlatTabItem}"
                             SelectedIndex="{Binding TabSelectedIndex, FallbackValue=0}"
-                            Style="{StaticResource FlatTabControl}">
+                            Style="{StaticResource HeaderHideTabControlStyle}">
                             <TabItem Header="影片">
                                 <!--  影片  -->
                                 <Grid HorizontalAlignment="Stretch">
@@ -2698,10 +2698,7 @@
                                                                                     ContextMenuOpening="ContextMenu_ContextMenuOpening"
                                                                                     Opacity="0.9"
                                                                                     PreviewKeyUp="ContextMenu_PreviewKeyUp">
-                                                                                    <MenuItem
-                                                                                        Click="DownLoadSelectMovie"
-                                                                                        Header="{x:Static lang:Resources.Menu_SyncInfo}"
-                                                                                        IsEnabled="False" />
+                                                                                    <MenuItem Click="DownLoadSelectMovie" Header="{x:Static lang:Resources.Menu_SyncInfo}" />
                                                                                     <MenuItem
                                                                                         Header="{x:Static lang:Resources.Menu_SyncExtra}"
                                                                                         IsEnabled="False"
@@ -4219,132 +4216,385 @@
                         </Popup>
 
                     </Grid>
-                    <chao:PathMsg
-                        Name="downloadPathMsg"
-                        MsgCount="100"
-                        Path="M942.545455 676.584727a34.909091 34.909091 0 0 1 34.90909 34.909091v139.636364c0 70.562909-57.437091 128-128 128h-674.90909a128.139636 128.139636 0 0 1-128-128v-139.636364a34.909091 34.909091 0 1 1 69.818181 0v139.636364c0 32.046545 26.088727 58.181818 58.181819 58.181818h674.90909c32.093091 0 58.181818-26.135273 58.181819-58.181818v-139.636364a34.909091 34.909091 0 0 1 34.909091-34.909091z m-455.214546 129.396364l-164.584727-164.561455a34.909091 34.909091 0 1 1 49.361454-49.361454l104.983273 104.96V81.454545a34.909091 34.909091 0 1 1 69.818182 0v615.563637l104.96-104.96a34.909091 34.909091 0 1 1 49.361454 49.361454l-164.538181 164.561455a34.792727 34.792727 0 0 1-24.669091 10.216727c-8.96 0-17.873455-3.397818-24.715637-10.216727z"
-                        Style="{StaticResource NormalPathMsg}" />
-                    <chao:PathMsg
-                        Name="msgPathMsg"
-                        MouseLeftButtonUp="ShowMessage"
-                        MsgCount="{Binding Message.Count}"
-                        Path="M864 64H160C107.072 64 64 107.072 64 160v608c0 52.928 43.072 96 96 96h61.92v123.232L443.84 864H864c52.928 0 96-43.072 96-96V160c0-52.928-43.072-96-96-96z m32 704a32 32 0 0 1-32 32H443.84c-10.912 0-21.664 2.816-31.072 8.064l-126.88 70.4V864c0-35.296-28.704-64-64-64H160c-17.632 0-32-14.336-32-32V160c0-17.632 14.368-32 32-32h704c17.664 0 32 14.368 32 32v608z M640 520H256a32 32 0 1 0 0 64h384a32 32 0 1 0 0-64zM768 296H256a32 32 0 0 0 0 64h512a32 32 0 1 0 0-64z"
-                        Style="{StaticResource NormalPathMsg}" />
+                    <Grid>
+                        <chao:PathMsg
+                            Name="downloadPathMsg"
+                            MouseLeftButtonUp="ShowDownloadPopup"
+                            MsgCount="{Binding DownLoadTasks.Count}"
+                            Path="M942.545455 676.584727a34.909091 34.909091 0 0 1 34.90909 34.909091v139.636364c0 70.562909-57.437091 128-128 128h-674.90909a128.139636 128.139636 0 0 1-128-128v-139.636364a34.909091 34.909091 0 1 1 69.818181 0v139.636364c0 32.046545 26.088727 58.181818 58.181819 58.181818h674.90909c32.093091 0 58.181818-26.135273 58.181819-58.181818v-139.636364a34.909091 34.909091 0 0 1 34.909091-34.909091z m-455.214546 129.396364l-164.584727-164.561455a34.909091 34.909091 0 1 1 49.361454-49.361454l104.983273 104.96V81.454545a34.909091 34.909091 0 1 1 69.818182 0v615.563637l104.96-104.96a34.909091 34.909091 0 1 1 49.361454 49.361454l-164.538181 164.561455a34.792727 34.792727 0 0 1-24.669091 10.216727c-8.96 0-17.873455-3.397818-24.715637-10.216727z"
+                            Style="{StaticResource NormalPathMsg}" />
+                        <Popup
+                            x:Name="downloadStatusPopup"
+                            Width="500"
+                            MaxHeight="600"
+                            AllowsTransparency="True"
+                            HorizontalOffset="-450"
+                            Placement="Top"
+                            PlacementTarget="{Binding ElementName=downloadPathMsg}"
+                            PopupAnimation="Fade"
+                            StaysOpen="True"
+                            VerticalOffset="0">
+                            <Grid Margin="5">
+                                <Border
+                                    Margin="5"
+                                    Background="{DynamicResource Menu.Background}"
+                                    CornerRadius="0 0 5 5"
+                                    Effect="{StaticResource PopupDropShadowEffect}" />
+                                <Grid Margin="5">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="auto" />
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="auto" />
+                                    </Grid.RowDefinitions>
+                                    <Grid
+                                        Grid.Row="0"
+                                        Height="35"
+                                        Background="{DynamicResource Window.Title.Background}">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="auto" />
+                                            <ColumnDefinition Width="auto" />
+                                        </Grid.ColumnDefinitions>
+
+                                        <TextBlock
+                                            Margin="10,0"
+                                            HorizontalAlignment="Left"
+                                            VerticalAlignment="Center"
+                                            Style="{StaticResource BaseTextBlock}"
+                                            Text="下载任务" />
+
+                                        <Button
+                                            Grid.Column="1"
+                                            BorderThickness="0"
+                                            Click="ShowContextMenu"
+                                            Content="清除列表"
+                                            Style="{StaticResource FlatButton}">
+                                            <Button.ContextMenu>
+                                                <ContextMenu HorizontalOffset="-70" VerticalOffset="5">
+                                                    <MenuItem
+                                                        Click="RemoveCompleteTask"
+                                                        Header="已完成"
+                                                        IsCheckable="False" />
+                                                    <MenuItem
+                                                        Click="RemoveCancelTask"
+                                                        Header="已取消"
+                                                        IsCheckable="False" />
+                                                </ContextMenu>
+                                            </Button.ContextMenu>
+                                        </Button>
+
+                                        <Border
+                                            Grid.Column="2"
+                                            Margin="5,0"
+                                            MouseLeftButtonUp="HideDownloadPopup"
+                                            Style="{StaticResource ToolsBarBorderStyle}">
+
+                                            <Viewbox
+                                                Width="15"
+                                                Height="15"
+                                                RenderTransformOrigin="0.5,0.5">
+                                                <Viewbox.RenderTransform>
+                                                    <RotateTransform Angle="90" />
+                                                </Viewbox.RenderTransform>
+                                                <Path
+                                                    HorizontalAlignment="Center"
+                                                    VerticalAlignment="Center"
+                                                    Data="M312.889 995.556c-17.067 0-28.445-5.69-39.822-17.067-22.756-22.756-17.067-56.889 5.689-79.645L642.844 568.89c11.378-11.378 17.067-22.756 17.067-34.133 0-11.378-5.689-22.756-17.067-34.134L273.067 187.733c-22.756-22.755-28.445-56.889-5.69-79.644 22.756-22.756 56.89-28.445 79.645-5.689l364.09 312.889C745.243 443.733 768 489.244 768 534.756s-17.067 85.333-51.2 119.466L352.711 984.178c-11.378 5.689-28.444 11.378-39.822 11.378z"
+                                                    Fill="{Binding Foreground, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}" />
+                                            </Viewbox>
+                                        </Border>
+
+
+                                    </Grid>
+
+                                    <ScrollViewer
+                                        Grid.Row="1"
+                                        Margin="10"
+                                        HorizontalScrollBarVisibility="Hidden"
+                                        VerticalScrollBarVisibility="Auto">
+                                        <ItemsControl ItemsSource="{Binding DownLoadTasks}">
+
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Grid Name="rootGrid">
+                                                        <Border
+                                                            Margin="5"
+                                                            Background="{DynamicResource Menu.Background}"
+                                                            CornerRadius="0 0 5 5"
+                                                            Effect="{StaticResource PopupDropShadowEffect}" />
+                                                        <Grid Margin="5">
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="auto" />
+                                                                <ColumnDefinition Width="*" />
+                                                                <ColumnDefinition Width="auto" />
+                                                            </Grid.ColumnDefinitions>
+
+                                                            <fa:ImageAwesome
+                                                                Grid.Column="0"
+                                                                Width="30"
+                                                                Margin="10"
+                                                                HorizontalAlignment="Center"
+                                                                VerticalAlignment="Center">
+                                                                <fa:ImageAwesome.Style>
+                                                                    <Style TargetType="fa:ImageAwesome">
+                                                                        <Style.Triggers>
+
+                                                                            <DataTrigger Binding="{Binding Status, Mode=OneWay}" Value="Canceled">
+                                                                                <Setter Property="Icon" Value="TimesCircle" />
+                                                                                <Setter Property="Foreground" Value="Red" />
+                                                                                <Setter Property="Spin" Value="False" />
+                                                                            </DataTrigger>
+                                                                            <DataTrigger Binding="{Binding Status, Mode=OneWay}" Value="WaitingToRun">
+                                                                                <Setter Property="Icon" Value="Hourglass" />
+                                                                                <Setter Property="Foreground" Value="{DynamicResource Control.Disabled.Background}" />
+                                                                                <Setter Property="Spin" Value="False" />
+                                                                            </DataTrigger>
+                                                                            <DataTrigger Binding="{Binding Status, Mode=OneWay}" Value="RanToCompletion">
+                                                                                <Setter Property="Icon" Value="CheckCircle" />
+                                                                                <Setter Property="Foreground" Value="#20B759" />
+                                                                                <Setter Property="Spin" Value="False" />
+                                                                            </DataTrigger>
+                                                                            <DataTrigger Binding="{Binding Status, Mode=OneWay}" Value="Running">
+                                                                                <Setter Property="Icon" Value="Refresh" />
+                                                                                <Setter Property="Foreground" Value="{DynamicResource Common.HighLight.Hover.Background}" />
+                                                                                <Setter Property="Spin" Value="True" />
+                                                                            </DataTrigger>
+                                                                        </Style.Triggers>
+                                                                    </Style>
+                                                                </fa:ImageAwesome.Style>
+                                                            </fa:ImageAwesome>
+
+
+                                                            <StackPanel
+                                                                Grid.Column="1"
+                                                                Margin="5"
+                                                                Orientation="Vertical">
+                                                                <TextBlock
+                                                                    Margin="5"
+                                                                    FontSize="15"
+                                                                    FontWeight="Bold"
+                                                                    Text="{Binding Title}" />
+                                                                <ProgressBar
+                                                                    Height="2"
+                                                                    Margin="5,0"
+                                                                    Maximum="100"
+                                                                    Style="{StaticResource NormalStaticProgressBar}"
+                                                                    Value="{Binding Progress}" />
+                                                                <Grid>
+                                                                    <TextBlock Margin="5" Text="{Binding CreateTime}" />
+                                                                    <TextBlock
+                                                                        Margin="5"
+                                                                        HorizontalAlignment="Right"
+                                                                        Text="{Binding Progress, StringFormat=\{0\} %}" />
+                                                                </Grid>
+                                                                <TextBlock Margin="5" Text="{Binding StatusText}" />
+
+                                                            </StackPanel>
+                                                            <WrapPanel
+                                                                Grid.Column="2"
+                                                                Width="100"
+                                                                VerticalAlignment="Center"
+                                                                Orientation="Horizontal">
+                                                                <WrapPanel.Style>
+                                                                    <Style TargetType="WrapPanel">
+                                                                        <Setter Property="Visibility" Value="Hidden" />
+
+                                                                        <Style.Triggers>
+                                                                            <DataTrigger Binding="{Binding ElementName=rootGrid, Path=IsMouseOver}" Value="True">
+                                                                                <Setter Property="Visibility" Value="Visible" />
+                                                                            </DataTrigger>
+                                                                        </Style.Triggers>
+                                                                    </Style>
+                                                                </WrapPanel.Style>
+                                                                <Button
+                                                                    Click="CancelScanTask"
+                                                                    Content="取消"
+                                                                    IsEnabled="{Binding Running}"
+                                                                    Tag="{Binding CreateTime}" />
+                                                                <Button
+                                                                    Content="暂停"
+                                                                    IsEnabled="{Binding Running}"
+                                                                    Tag="{Binding CreateTime}" />
+                                                                <Button
+                                                                    Click="ShowScanDetail"
+                                                                    Content="详情"
+                                                                    IsEnabled="{Binding Running, Converter={StaticResource OppositeBooleanConverter}}"
+                                                                    Tag="{Binding CreateTime}" />
+                                                            </WrapPanel>
+                                                        </Grid>
+                                                    </Grid>
+
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                            <ItemsControl.ItemsPanel>
+                                                <ItemsPanelTemplate>
+                                                    <StackPanel Orientation="Vertical" />
+                                                </ItemsPanelTemplate>
+                                            </ItemsControl.ItemsPanel>
+
+                                        </ItemsControl>
+                                    </ScrollViewer>
+
+
+                                    <StackPanel Grid.Row="2" Orientation="Vertical">
+
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="auto" />
+                                            </Grid.ColumnDefinitions>
+                                            <ProgressBar
+                                                Grid.Column="0"
+                                                Height="4"
+                                                Margin="10,0"
+                                                Maximum="100"
+                                                Minimum="0"
+                                                Style="{StaticResource NormalStaticProgressBar}"
+                                                Value="{Binding DownLoadProgress}" />
+                                            <TextBlock
+                                                Grid.Column="1"
+                                                Margin="10,0"
+                                                Text="{Binding DownLoadProgress, StringFormat=\{0\} %}" />
+                                        </Grid>
+
+                                        <StackPanel Orientation="Horizontal">
+                                            <Button Content="暂停所有" Style="{StaticResource ButtonPrimary}" />
+                                            <Button Content="取消所有" Style="{StaticResource ButtonDanger}" />
+
+                                        </StackPanel>
+                                    </StackPanel>
+
+
+
+
+                                </Grid>
+                            </Grid>
+                        </Popup>
+                    </Grid>
+                    <Grid>
+                        <chao:PathMsg
+                            Name="msgPathMsg"
+                            MouseLeftButtonUp="ShowMessage"
+                            MsgCount="{Binding Message.Count}"
+                            Path="M864 64H160C107.072 64 64 107.072 64 160v608c0 52.928 43.072 96 96 96h61.92v123.232L443.84 864H864c52.928 0 96-43.072 96-96V160c0-52.928-43.072-96-96-96z m32 704a32 32 0 0 1-32 32H443.84c-10.912 0-21.664 2.816-31.072 8.064l-126.88 70.4V864c0-35.296-28.704-64-64-64H160c-17.632 0-32-14.336-32-32V160c0-17.632 14.368-32 32-32h704c17.664 0 32 14.368 32 32v608z M640 520H256a32 32 0 1 0 0 64h384a32 32 0 1 0 0-64zM768 296H256a32 32 0 0 0 0 64h512a32 32 0 1 0 0-64z"
+                            Style="{StaticResource NormalPathMsg}" />
+                        <Popup
+                            x:Name="msgPopup"
+                            Width="350"
+                            MaxHeight="600"
+                            AllowsTransparency="True"
+                            HorizontalOffset="-300"
+                            Placement="Top"
+                            PlacementTarget="{Binding ElementName=msgPathMsg}"
+                            PopupAnimation="Fade"
+                            StaysOpen="True"
+                            VerticalOffset="0">
+                            <Grid Margin="5">
+                                <Border
+                                    Margin="5"
+                                    Background="{DynamicResource Menu.Background}"
+                                    CornerRadius="0 0 5 5"
+                                    Effect="{StaticResource PopupDropShadowEffect}" />
+                                <Grid Margin="5">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="auto" />
+                                        <RowDefinition Height="*" />
+                                    </Grid.RowDefinitions>
+                                    <Grid
+                                        Grid.Row="0"
+                                        Height="35"
+                                        Background="{DynamicResource Window.Title.Background}">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="auto" />
+                                            <ColumnDefinition Width="auto" />
+                                        </Grid.ColumnDefinitions>
+
+                                        <TextBlock
+                                            Margin="10,0"
+                                            HorizontalAlignment="Left"
+                                            VerticalAlignment="Center"
+                                            Style="{StaticResource BaseTextBlock}"
+                                            Text="最近消息" />
+
+                                        <Border
+                                            Grid.Column="1"
+                                            Margin="0"
+                                            MouseLeftButtonUp="ClearMsg"
+                                            Style="{StaticResource ToolsBarBorderStyle}">
+
+                                            <Viewbox Width="15" Height="15">
+                                                <Path
+                                                    HorizontalAlignment="Center"
+                                                    VerticalAlignment="Center"
+                                                    Data="M187.118702 146.498562l771.355932 0.002047v60.796667l-771.355932-0.002046v-60.796668z m0 222.286666l771.355932 0.002046v60.796668l-771.355932-0.002047v-60.796667z m0 224.186945l406.576948 0.001023v60.796668l-406.576948-0.001023v-60.796668z m0 222.286666l406.576948 0.001023v60.796668l-406.576948-0.001024v-60.796667zM65.525366 146.497539h60.796668v60.796668H65.525366v-60.796668z m0 222.287689h60.796668v60.796667H65.525366v-60.796667z m0 224.186945h60.796668v60.796668H65.525366v-60.796668z m0 222.286666h60.796668v60.796667H65.525366v-60.796667z m873.494171 4.916986l-85.97614-85.97614 85.97614-85.976141-57.326637-57.326636-85.97614 85.97614-85.97614-85.97614-57.325613 57.325613 85.97614 85.97614-85.97614 85.97614 57.325613 57.326637 85.97614-85.97614 85.977164 85.97614"
+                                                    Fill="{Binding Foreground, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}" />
+                                            </Viewbox>
+                                        </Border>
+                                        <Border
+                                            Grid.Column="2"
+                                            Margin="5,0"
+                                            MouseLeftButtonUp="HideMsgPopup"
+                                            Style="{StaticResource ToolsBarBorderStyle}">
+
+                                            <Viewbox
+                                                Width="15"
+                                                Height="15"
+                                                RenderTransformOrigin="0.5,0.5">
+                                                <Viewbox.RenderTransform>
+                                                    <RotateTransform x:Name="rotateTransform" Angle="90" />
+                                                </Viewbox.RenderTransform>
+                                                <Path
+                                                    HorizontalAlignment="Center"
+                                                    VerticalAlignment="Center"
+                                                    Data="M312.889 995.556c-17.067 0-28.445-5.69-39.822-17.067-22.756-22.756-17.067-56.889 5.689-79.645L642.844 568.89c11.378-11.378 17.067-22.756 17.067-34.133 0-11.378-5.689-22.756-17.067-34.134L273.067 187.733c-22.756-22.755-28.445-56.889-5.69-79.644 22.756-22.756 56.89-28.445 79.645-5.689l364.09 312.889C745.243 443.733 768 489.244 768 534.756s-17.067 85.333-51.2 119.466L352.711 984.178c-11.378 5.689-28.444 11.378-39.822 11.378z"
+                                                    Fill="{Binding Foreground, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}" />
+                                            </Viewbox>
+                                        </Border>
+
+
+                                    </Grid>
+
+                                    <ScrollViewer
+                                        Grid.Row="1"
+                                        Margin="10"
+                                        HorizontalScrollBarVisibility="Hidden"
+                                        VerticalScrollBarVisibility="Auto">
+                                        <ItemsControl ItemsSource="{Binding Message}">
+
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <chao:MessageCard
+                                                        Width="280"
+                                                        Height="80"
+                                                        Margin="0,10"
+                                                        Foreground="{DynamicResource Global.Foreground}"
+                                                        Message="{Binding Text}"
+                                                        MessageType="{Binding Type}" />
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                            <ItemsControl.ItemsPanel>
+                                                <ItemsPanelTemplate>
+                                                    <StackPanel Orientation="Vertical" />
+                                                </ItemsPanelTemplate>
+                                            </ItemsControl.ItemsPanel>
+
+                                        </ItemsControl>
+                                    </ScrollViewer>
+
+
+
+
+
+
+                                </Grid>
+                            </Grid>
+                        </Popup>
+                    </Grid>
                 </StackPanel>
 
 
-                <Popup
-                    x:Name="msgPopup"
-                    Width="350"
-                    MaxHeight="600"
-                    AllowsTransparency="True"
-                    HorizontalOffset="-300"
-                    Placement="Top"
-                    PlacementTarget="{Binding ElementName=msgPathMsg}"
-                    PopupAnimation="Fade"
-                    StaysOpen="True"
-                    VerticalOffset="0">
-                    <Grid Margin="5">
-                        <Border
-                            Margin="5"
-                            Background="{DynamicResource Menu.Background}"
-                            CornerRadius="0 0 5 5"
-                            Effect="{StaticResource PopupDropShadowEffect}" />
-                        <Grid Margin="5">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="auto" />
-                                <RowDefinition Height="*" />
-                            </Grid.RowDefinitions>
-                            <Grid
-                                Grid.Row="0"
-                                Height="35"
-                                Background="{DynamicResource Window.Title.Background}">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="auto" />
-                                    <ColumnDefinition Width="auto" />
-                                </Grid.ColumnDefinitions>
 
-                                <TextBlock
-                                    Margin="10,0"
-                                    HorizontalAlignment="Left"
-                                    VerticalAlignment="Center"
-                                    Style="{StaticResource BaseTextBlock}"
-                                    Text="最近消息" />
-
-                                <Border
-                                    Grid.Column="1"
-                                    Margin="0"
-                                    MouseLeftButtonUp="ClearMsg"
-                                    Style="{StaticResource ToolsBarBorderStyle}">
-
-                                    <Viewbox Width="15" Height="15">
-                                        <Path
-                                            HorizontalAlignment="Center"
-                                            VerticalAlignment="Center"
-                                            Data="M187.118702 146.498562l771.355932 0.002047v60.796667l-771.355932-0.002046v-60.796668z m0 222.286666l771.355932 0.002046v60.796668l-771.355932-0.002047v-60.796667z m0 224.186945l406.576948 0.001023v60.796668l-406.576948-0.001023v-60.796668z m0 222.286666l406.576948 0.001023v60.796668l-406.576948-0.001024v-60.796667zM65.525366 146.497539h60.796668v60.796668H65.525366v-60.796668z m0 222.287689h60.796668v60.796667H65.525366v-60.796667z m0 224.186945h60.796668v60.796668H65.525366v-60.796668z m0 222.286666h60.796668v60.796667H65.525366v-60.796667z m873.494171 4.916986l-85.97614-85.97614 85.97614-85.976141-57.326637-57.326636-85.97614 85.97614-85.97614-85.97614-57.325613 57.325613 85.97614 85.97614-85.97614 85.97614 57.325613 57.326637 85.97614-85.97614 85.977164 85.97614"
-                                            Fill="{Binding Foreground, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}" />
-                                    </Viewbox>
-                                </Border>
-                                <Border
-                                    Grid.Column="2"
-                                    Margin="5,0"
-                                    MouseLeftButtonUp="HideMsgPopup"
-                                    Style="{StaticResource ToolsBarBorderStyle}">
-
-                                    <Viewbox
-                                        Width="15"
-                                        Height="15"
-                                        RenderTransformOrigin="0.5,0.5">
-                                        <Viewbox.RenderTransform>
-                                            <RotateTransform x:Name="rotateTransform" Angle="90" />
-                                        </Viewbox.RenderTransform>
-                                        <Path
-                                            HorizontalAlignment="Center"
-                                            VerticalAlignment="Center"
-                                            Data="M312.889 995.556c-17.067 0-28.445-5.69-39.822-17.067-22.756-22.756-17.067-56.889 5.689-79.645L642.844 568.89c11.378-11.378 17.067-22.756 17.067-34.133 0-11.378-5.689-22.756-17.067-34.134L273.067 187.733c-22.756-22.755-28.445-56.889-5.69-79.644 22.756-22.756 56.89-28.445 79.645-5.689l364.09 312.889C745.243 443.733 768 489.244 768 534.756s-17.067 85.333-51.2 119.466L352.711 984.178c-11.378 5.689-28.444 11.378-39.822 11.378z"
-                                            Fill="{Binding Foreground, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}" />
-                                    </Viewbox>
-                                </Border>
-
-
-                            </Grid>
-
-                            <ScrollViewer
-                                Grid.Row="1"
-                                Margin="10"
-                                HorizontalScrollBarVisibility="Hidden"
-                                VerticalScrollBarVisibility="Auto">
-                                <ItemsControl ItemsSource="{Binding Message}">
-
-                                    <ItemsControl.ItemTemplate>
-                                        <DataTemplate>
-                                            <chao:MessageCard
-                                                Width="280"
-                                                Height="80"
-                                                Margin="0,10"
-                                                Foreground="{DynamicResource Global.Foreground}"
-                                                Message="{Binding Text}"
-                                                MessageType="{Binding Type}" />
-                                        </DataTemplate>
-                                    </ItemsControl.ItemTemplate>
-                                    <ItemsControl.ItemsPanel>
-                                        <ItemsPanelTemplate>
-                                            <StackPanel Orientation="Vertical" />
-                                        </ItemsPanelTemplate>
-                                    </ItemsControl.ItemsPanel>
-
-                                </ItemsControl>
-                            </ScrollViewer>
-
-
-
-
-
-
-                        </Grid>
-                    </Grid>
-                </Popup>
 
 
 

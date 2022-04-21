@@ -1,4 +1,5 @@
 ﻿
+using ChaoControls.Style;
 using Jvedio.Common.Crawler;
 using Jvedio.Utils;
 using Microsoft.WindowsAPICodePack.Dialogs;
@@ -308,7 +309,8 @@ namespace Jvedio
 
                     else
                     {
-                        if (token != "") HandyControl.Controls.Growl.Error($"{Jvedio.Language.Resources.Message_FileNotExist}：{path}", token);
+                        //if (token != "") HandyControl.Controls.Growl.Error($"{Jvedio.Language.Resources.Message_FileNotExist}：{path}", token);
+                        MessageCard.Error($"{Jvedio.Language.Resources.Message_FileNotExist}：{path}");
                         return false;
                     }
                 }
@@ -321,6 +323,7 @@ namespace Jvedio
                     }
                     else
                     {
+                        MessageCard.Error($"{Jvedio.Language.Resources.NotExists}：{path}");
                         return false;
                     }
                 }

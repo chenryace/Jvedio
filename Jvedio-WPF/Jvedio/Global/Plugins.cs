@@ -9,12 +9,12 @@ namespace Jvedio.Global
 {
     public static class Plugins
     {
-        public static List<PluginInfo> Crawlers;
+        public static HashSet<PluginInfo> Crawlers { get; set; }
 
 
         static Plugins()
         {
-            Crawlers = new List<PluginInfo>();
+            Crawlers = new HashSet<PluginInfo>();
         }
 
 

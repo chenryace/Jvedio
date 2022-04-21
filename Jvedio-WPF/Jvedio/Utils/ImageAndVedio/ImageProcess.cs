@@ -16,6 +16,9 @@ using static Jvedio.GlobalVariable;
 using Jvedio.Utils;
 using Jvedio.Entity;
 using Jvedio.Entity.CommonSQL;
+using Jvedio.Core.Enums;
+using Jvedio.Core.Scan;
+using System.Text.RegularExpressions;
 
 namespace Jvedio
 {
@@ -32,18 +35,23 @@ namespace Jvedio
             movie.smallimage = smallimage;
             movie.bigimage = bigimage;
         }
+
+
+
+
+
+
         public static void SetImage(ref Video video, int imageMode = 0)
         {
             if (imageMode < 2)
             {
-                string bigImagePath = Video.parseImagePath(video.BigImagePath);
-                string smallImagePath = Video.parseImagePath(video.SmallImagePath);
-                BitmapImage smallimage = ReadImageFromFile(smallImagePath);
-                BitmapImage bigimage = ReadImageFromFile(bigImagePath);
+                BitmapImage smallimage = ReadImageFromFile(Video.getSmallImage(video));
+                BitmapImage bigimage = ReadImageFromFile(Video.getBigImage(video));
                 if (smallimage == null) smallimage = DefaultSmallImage;
                 if (bigimage == null) bigimage = DefaultBigImage;
                 video.SmallImage = smallimage;
                 video.BigImage = bigimage;
+
             }
             else if (imageMode == 2)
             {

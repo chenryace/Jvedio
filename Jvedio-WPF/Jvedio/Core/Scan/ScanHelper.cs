@@ -62,10 +62,11 @@ namespace Jvedio
                 {
                     foreach (var item in nfoPaths)
                     {
-                        DetailMovie movie = (DetailMovie)Movie.GetInfoFromNfo(item, minFileSize);
+                        Movie movie = Movie.GetInfoFromNfo(item, minFileSize);
                         if (movie != null)
                         {
                             Video video = movie.toVideo();
+                            video.Path = item;
                             video.LastScanDate = DateHelper.Now();
                             //video.Hash = Jvedio.Utils.Encrypt.Encrypt.FasterMd5(video.Path);
                             import.Add(video);

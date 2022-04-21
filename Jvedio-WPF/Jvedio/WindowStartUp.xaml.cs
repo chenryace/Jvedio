@@ -70,6 +70,7 @@ namespace Jvedio
             EnsureFileExists(); //判断文件是否存在
             EnsureDirExists();//创建文件夹
 
+
             GlobalVariable.InitVariable();// 初始化全局变量
             GlobalMapper.Init();// 初始化数据库连接
 
@@ -95,14 +96,17 @@ namespace Jvedio
             }
             GlobalVariable.CurrentDataType = (DataType)GlobalConfig.StartUp.SideIdx;
 
-            if (!Properties.Settings.Default.OpenDataBaseDefault)
+            if (Properties.Settings.Default.OpenDataBaseDefault)
+            {
+                LoadDataBase();
+
+            }
+            else
             {
                 vieModel_StartUp.Loading = false;
                 this.TitleHeight = 30;
             }
 
-            if (Properties.Settings.Default.OpenDataBaseDefault)
-                LoadDataBase();
 
 
         }
@@ -278,13 +282,14 @@ namespace Jvedio
 
         public void EnsureDirExists()
         {
+
             foreach (var item in InitDirs)
             {
                 FileHelper.TryCreateDir(item);
             }
             foreach (var item in PicPaths)
             {
-                FileHelper.TryCreateDir(Path.Combine(BasePicPath, item));
+                FileHelper.TryCreateDir(Path.Combine(PicPath, item));
             }
 
         }
@@ -319,10 +324,10 @@ namespace Jvedio
         private void DelSqlite(object sender, RoutedEventArgs e)
         {
             AppDatabase database = vieModel_StartUp.CurrentDatabases[listBox.SelectedIndex];
-            Msgbox msgbox = new Msgbox(this, $"确认删除 {database.Name}？");
+            Msgbox msgbox = new Msgbox(this, $"确认删除 {database.Name} 及其 {database.Count} 条数据、标签、翻译、标记等信息？");
             if (msgbox.ShowDialog() == true)
             {
-                appDatabaseMapper.deleteById(database.DBId);
+                database.deleteByID(database.DBId);
                 RefreshDatabase();
             }
         }
@@ -445,9 +450,12 @@ namespace Jvedio
         {
             //加载数据库
             long id = vieModel_StartUp.CurrentDBID;
-            if (listBox.SelectedIndex < 0) return;
-            AppDatabase info = vieModel_StartUp.CurrentDatabases[listBox.SelectedIndex];
-            id = info.DBId;
+            if (!Properties.Settings.Default.OpenDataBaseDefault)
+            {
+                AppDatabase info = vieModel_StartUp.CurrentDatabases[listBox.SelectedIndex];
+                id = info.DBId;
+            }
+
 
             vieModel_StartUp.Loading = true;
             //if (Properties.Settings.Default.ScanGivenPath)
