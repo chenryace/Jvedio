@@ -59,6 +59,12 @@ namespace Jvedio.Core.Net
         }
 
 
+        public void ClearDoneList()
+        {
+            DoneList.Clear();
+        }
+
+
         public void BeginWork()
         {
             Working = true;
@@ -86,22 +92,27 @@ namespace Jvedio.Core.Net
                     while (WorkingList.Count < MAX_TASK_COUNT && WaitingQueue.Count > 0)
                     {
                         DownLoadTask task = WaitingQueue.Dequeue();
-                        WorkingList.Add(task);
+                        if (task.Status == TaskStatus.WaitingToRun)
+                            WorkingList.Add(task);
+                        else
+                            DoneList.Add(task);
                     }
 
                     foreach (DownLoadTask task in WorkingList)
                     {
                         if (!task.Running) task.Start();
                     }
+
+                    float totalcount = DoneList.Count + WaitingQueue.Count + WorkingList.Count;
+                    this.Progress = Math.Round((float)DoneList.Count / totalcount * 100, 2);
+                    onWorking?.Invoke(this, null);
+                    await Task.Delay(CHECK_PERIOD);
+
                     if (WorkingList.Count == 0 && WaitingQueue.Count == 0)
                     {
                         Working = false;
                         break;
                     }
-                    float totalcount = DoneList.Count + WaitingQueue.Count + WorkingList.Count;
-                    this.Progress = Math.Round((float)DoneList.Count / totalcount * 100, 2);
-                    onWorking?.Invoke(this, null);
-                    await Task.Delay(CHECK_PERIOD);
                 }
             });
         }

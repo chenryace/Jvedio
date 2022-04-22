@@ -22,7 +22,7 @@ namespace Jvedio
     {
         public event EventHandler UpgradeCompleted;
         public event EventHandler onProgressChanged;
-        private ProgressBUpdateEventArgs DownLoadProgress;
+        //private ProgressBUpdateEventArgs DownLoadProgress;
         public bool StopUpgrade = false;
 
         public List<string> DownLoadList;
@@ -108,8 +108,8 @@ namespace Jvedio
             //新建临时文件夹
             if (!Directory.Exists(temppath)) Directory.CreateDirectory(temppath);
             await GetDownLoadList();
-            DownLoadProgress = new ProgressBUpdateEventArgs();
-            DownLoadProgress.maximum = DownLoadList.Count;
+            //DownLoadProgress = new ProgressBUpdateEventArgs();
+            //DownLoadProgress.maximum = DownLoadList.Count;
             foreach (var item in DownLoadList)
             {
                 if (StopUpgrade) return;
@@ -121,8 +121,8 @@ namespace Jvedio
                     //    //写入本地
                     //    if (streamResult != null) WriteFile(streamResult.FileByte, filepath);
                 }
-                DownLoadProgress.value += 1;
-                if (!StopUpgrade) onProgressChanged?.Invoke(this, DownLoadProgress);
+                //DownLoadProgress.value += 1;
+                //if (!StopUpgrade) onProgressChanged?.Invoke(this, DownLoadProgress);
             }
 
             //复制文件并覆盖 执行 cmd 命令

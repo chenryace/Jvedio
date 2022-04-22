@@ -101,12 +101,12 @@ namespace Jvedio
 
                 upgrade.onProgressChanged += (s, _) =>
                 {
-                    ProgressBUpdateEventArgs ev = _ as ProgressBUpdateEventArgs;
-                    IsUpgrading = true;
-                    if (ev.maximum != 0)
-                    {
-                        UpgradeProgressBar.Value = (int)(ev.value / ev.maximum * 100);
-                    }
+                    //ProgressBUpdateEventArgs ev = _ as ProgressBUpdateEventArgs;
+                    //IsUpgrading = true;
+                    //if (ev.maximum != 0)
+                    //{
+                    //    UpgradeProgressBar.Value = (int)(ev.value / ev.maximum * 100);
+                    //}
                 };
                 button.Style = (System.Windows.Style)App.Current.Resources["ButtonDanger"];
                 upgrade.Start();

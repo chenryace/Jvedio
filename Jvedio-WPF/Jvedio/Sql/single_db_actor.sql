@@ -28,8 +28,6 @@ create table actor_info(
     WebUrl  VARCHAR(2000),
     Grade FLOAT DEFAULT 0.0,
 
-    SmallImagePath TEXT,
-    PreviewImagePath TEXT,
     ExtraInfo TEXT,
     CreateDate VARCHAR(30) DEFAULT(STRFTIME('%Y-%m-%d %H:%M:%S', 'NOW', 'localtime')),
     UpdateDate VARCHAR(30) DEFAULT(STRFTIME('%Y-%m-%d %H:%M:%S', 'NOW', 'localtime'))

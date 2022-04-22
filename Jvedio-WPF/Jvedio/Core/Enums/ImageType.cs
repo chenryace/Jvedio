@@ -6,12 +6,13 @@ using System.Threading.Tasks;
 
 namespace Jvedio.Core.Enums
 {
-    //public enum TaskStatus
-    //{
-    //    None,
-    //    Running,
-    //    Complete,
-    //    Error,
-    //    Retry
-    //}
+    public enum ImageType
+    {
+        Small,
+        Big,
+        Preview,
+        ScreenShot,
+        Gif,
+        Actor
+    }
 }

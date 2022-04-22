@@ -44,6 +44,7 @@ using static Jvedio.Main.Msg;
 using System.Diagnostics;
 using Jvedio.Test;
 using Jvedio.Core.Net;
+using Jvedio.Core.CustomEventArgs;
 
 namespace Jvedio
 {
@@ -714,7 +715,7 @@ namespace Jvedio
 
 
 
-        public DownLoader DownLoader;
+        //public DownLoader DownLoader;
 
         public void StartDownload(List<Movie> movieslist, bool force = false)
         {
@@ -732,41 +733,41 @@ namespace Jvedio
             if (totalcount == 0) return;
 
             //添加到下载列表
-            DownLoader?.CancelDownload();
-            DownLoader = new DownLoader(movies, moviesFC2, true);
-            //UI更新
-            DownLoader.InfoUpdate += (s, e) =>
-            {
-                InfoUpdateEventArgs eventArgs = e as InfoUpdateEventArgs;
-                try
-                {
-                    try { Refresh(eventArgs, totalcount); }
-                    catch (TaskCanceledException ex) { Logger.LogE(ex); }
-                }
-                catch (Exception ex1)
-                {
-                    Console.WriteLine(ex1.StackTrace);
-                    Console.WriteLine(ex1.Message);
-                }
-            };
+            //DownLoader?.CancelDownload();
+            //DownLoader = new DownLoader(movies, moviesFC2, true);
+            ////UI更新
+            //DownLoader.InfoUpdate += (s, e) =>
+            //{
+            //    InfoUpdateEventArgs eventArgs = e as InfoUpdateEventArgs;
+            //    try
+            //    {
+            //        try { Refresh(eventArgs, totalcount); }
+            //        catch (TaskCanceledException ex) { Logger.LogE(ex); }
+            //    }
+            //    catch (Exception ex1)
+            //    {
+            //        Console.WriteLine(ex1.StackTrace);
+            //        Console.WriteLine(ex1.Message);
+            //    }
+            //};
 
-            //信息显示
-            DownLoader.MessageCallBack += (s, e) =>
-            {
-                MessageCallBackEventArgs eventArgs = e as MessageCallBackEventArgs;
-                if (eventArgs != null) msgCard.Error(eventArgs.Message);
-            };
+            ////信息显示
+            //DownLoader.MessageCallBack += (s, e) =>
+            //{
+            //    MessageCallBackEventArgs eventArgs = e as MessageCallBackEventArgs;
+            //    if (eventArgs != null) msgCard.Error(eventArgs.Message);
+            //};
 
-            DownLoader.StartThread();
+            //DownLoader.StartThread();
         }
 
         public async void RefreshCurrentPage(object sender, RoutedEventArgs e)
         {
-            if (DownLoader?.State == DownLoadState.DownLoading)
-            {
-                msgCard.Info(Jvedio.Language.Resources.Message_StopAndTry);
-                return;
-            }
+            //if (DownLoader?.State == DownLoadState.DownLoading)
+            //{
+            //    msgCard.Info(Jvedio.Language.Resources.Message_StopAndTry);
+            //    return;
+            //}
 
             //刷新文件夹
 
@@ -2061,27 +2062,27 @@ namespace Jvedio
 
         public void AsyncLoadGif()
         {
-            if (vieModel.CurrentVideoList == null) return;
-            DisposeGif("", true);
-            Task.Run(async () =>
-            {
-                for (int i = 0; i < vieModel.CurrentVideoList.Count; i++)
-                {
-                    Video video = vieModel.CurrentVideoList[i];
-                    string gifpath = Video.parseImagePath(video.GifImagePath);
-                    if (video.GifUri != null && !string.IsNullOrEmpty(video.GifUri.OriginalString)
-                        && video.GifUri.OriginalString.IndexOf("/NoPrinting_G.gif") < 0) continue;
-                    if (File.Exists(gifpath))
-                        video.GifUri = new Uri(gifpath);
-                    else
-                        video.GifUri = new Uri("pack://application:,,,/Resources/Picture/NoPrinting_G.gif");
-                    await App.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, (Action)delegate
-                    {
-                        vieModel.CurrentVideoList[i] = null;
-                        vieModel.CurrentVideoList[i] = video;
-                    });
-                }
-            });
+            //if (vieModel.CurrentVideoList == null) return;
+            //DisposeGif("", true);
+            //Task.Run(async () =>
+            //{
+            //    for (int i = 0; i < vieModel.CurrentVideoList.Count; i++)
+            //    {
+            //        Video video = vieModel.CurrentVideoList[i];
+            //        string gifpath = Video.parseImagePath(video.GifImagePath);
+            //        if (video.GifUri != null && !string.IsNullOrEmpty(video.GifUri.OriginalString)
+            //            && video.GifUri.OriginalString.IndexOf("/NoPrinting_G.gif") < 0) continue;
+            //        if (File.Exists(gifpath))
+            //            video.GifUri = new Uri(gifpath);
+            //        else
+            //            video.GifUri = new Uri("pack://application:,,,/Resources/Picture/NoPrinting_G.gif");
+            //        await App.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, (Action)delegate
+            //        {
+            //            vieModel.CurrentVideoList[i] = null;
+            //            vieModel.CurrentVideoList[i] = video;
+            //        });
+            //    }
+            //});
 
         }
 
@@ -2912,7 +2913,7 @@ namespace Jvedio
 
             // todo FilterMovieList
             //vieModel.FilterMovieList.Remove(arg);
-            int count = videoMapper.deleteVideoByIds(to_delete.Select(arg => arg.DataID.ToString()).ToList());
+            videoMapper.deleteVideoByIds(to_delete.Select(arg => arg.DataID.ToString()).ToList());
 
 
             // 关闭详情窗口
@@ -2929,7 +2930,7 @@ namespace Jvedio
                 }
             }
 
-            msgCard.Info($"{Jvedio.Language.Resources.SuccessDelete} {count}/{to_delete.Count} ");
+            msgCard.Info($"{Jvedio.Language.Resources.SuccessDelete} {to_delete.Count} ");
             //修复数字显示
             vieModel.CurrentCount -= to_delete.Count;
             vieModel.TotalCount -= to_delete.Count;
@@ -3051,13 +3052,26 @@ namespace Jvedio
             foreach (Video video in vieModel.SelectedVideo)
             {
                 DownLoadTask task = new DownLoadTask(video);
+                long vid = video.DataID;
                 task.onError += (s, ev) =>
                 {
                     msgCard.Error((ev as MessageCallBackEventArgs).Message);
                 };
-                Global.Download.Dispatcher.Enqueue(task);
+                task.onDownloadSuccess += (s, ev) =>
+                {
+                    DownLoadTask t = s as DownLoadTask;
+                    Dispatcher.Invoke(() =>
+                    {
+                        RefreshData(t.DataID);
+                    });
+                };
+
                 if (!vieModel.DownLoadTasks.Contains(task))
+                {
+                    Global.Download.Dispatcher.Enqueue(task);
                     vieModel.DownLoadTasks.Add(task);
+                }
+
             }
             if (!Global.Download.Dispatcher.Working)
                 Global.Download.Dispatcher.BeginWork();
@@ -3277,10 +3291,10 @@ namespace Jvedio
 
         public void StopDownLoad()
         {
-            if (DownLoader != null && DownLoader.State == DownLoadState.DownLoading) msgCard.Warning(Jvedio.Language.Resources.Message_Stop);
-            DownLoader?.CancelDownload();
-            downLoadActress?.CancelDownload();
-            this.Dispatcher.BeginInvoke((Action)delegate { vieModel.ProgressBarVisibility = Visibility.Hidden; });
+            //if (DownLoader != null && DownLoader.State == DownLoadState.DownLoading) msgCard.Warning(Jvedio.Language.Resources.Message_Stop);
+            //DownLoader?.CancelDownload();
+            ////downLoadActress?.CancelDownload();
+            //this.Dispatcher.BeginInvoke((Action)delegate { vieModel.ProgressBarVisibility = Visibility.Hidden; });
 
 
         }
@@ -3507,7 +3521,7 @@ namespace Jvedio
         }
 
 
-        DownLoadActress downLoadActress;
+        //DownLoadActress downLoadActress;
 
         /// <summary>
         /// 同步演员信息
@@ -6114,6 +6128,35 @@ namespace Jvedio
 
             }
         }
+        public void RefreshData(long dataID)
+        {
+            try
+            {
+                for (int i = 0; i < vieModel.CurrentVideoList.Count; i++)
+                {
+                    if (vieModel.CurrentVideoList[i]?.DataID == dataID)
+                    {
+                        vieModel.CurrentVideoList[i].SmallImage = null;
+                        vieModel.CurrentVideoList[i].BigImage = null;
+                        vieModel.CurrentVideoList[i] = null;
+                        Video video = videoMapper.SelectVideoByID(dataID);
+                        SetImage(ref video);
+                        Video.setTagStamps(ref video);// 设置标签戳
+                        Video.handleEmpty(ref video);// 设置标题和发行日期
+                        vieModel.CurrentVideoList[i] = video;
+                        vieModel.CurrentVideoList[i].SmallImage = video.SmallImage;
+                        vieModel.CurrentVideoList[i].BigImage = video.BigImage;
+                        break;
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
+        }
 
         public void BorderMouseEnter(object sender, MouseEventArgs e)
         {
@@ -6302,6 +6345,36 @@ namespace Jvedio
             ScanTask scanTask = vieModel.ScanTasks.Where(arg => arg.CreateTime.Equals(createTime)).FirstOrDefault();
             scanTask.Cancel();
         }
+        private void CancelDownloadTask(object sender, RoutedEventArgs e)
+        {
+            string dataID = (sender as Button).Tag.ToString();
+            DownLoadTask task = vieModel.DownLoadTasks.Where(arg => arg.DataID.ToString().Equals(dataID)).FirstOrDefault();
+            task.Cancel();
+        }
+
+        private void CancelDownloadTasks(object sender, RoutedEventArgs e)
+        {
+            foreach (DownLoadTask task in vieModel.DownLoadTasks)
+            {
+                task.Cancel();
+            }
+        }
+        private void PauseDownloadTask(object sender, RoutedEventArgs e)
+        {
+            Button button = sender as Button;
+            string dataID = (sender as Button).Tag.ToString();
+            DownLoadTask task = vieModel.DownLoadTasks.Where(arg => arg.DataID.ToString().Equals(dataID)).FirstOrDefault();
+            if (button.Content.ToString() == "暂停")
+            {
+                button.Content = "继续";
+                task.Pause();
+            }
+            else
+            {
+                button.Content = "暂停";
+            }
+
+        }
 
         private void ShowScanDetail(object sender, RoutedEventArgs e)
         {
@@ -6311,6 +6384,16 @@ namespace Jvedio
             {
                 Window_ScanDetail scanDetail = new Window_ScanDetail(scanTask.ScanResult);
                 scanDetail.Show();
+            }
+        }
+
+        private void ShowDownloadDetail(object sender, RoutedEventArgs e)
+        {
+            string dataID = (sender as Button).Tag.ToString();
+            DownLoadTask task = vieModel.DownLoadTasks.Where(arg => arg.DataID.ToString().Equals(dataID)).FirstOrDefault();
+            if (task.Status != System.Threading.Tasks.TaskStatus.Running)
+            {
+
             }
         }
 
@@ -6343,6 +6426,7 @@ namespace Jvedio
                     vieModel.DownLoadTasks.RemoveAt(i);
                 }
             }
+            Global.Download.Dispatcher.ClearDoneList();
         }
 
         private void RemoveCancelTask(object sender, RoutedEventArgs e)
@@ -6354,6 +6438,7 @@ namespace Jvedio
                     vieModel.DownLoadTasks.RemoveAt(i);
                 }
             }
+            Global.Download.Dispatcher.ClearDoneList();
         }
     }
 

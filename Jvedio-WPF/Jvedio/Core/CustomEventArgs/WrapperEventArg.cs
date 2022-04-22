@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Jvedio.Core
+namespace Jvedio.Core.CustomEventArgs
 {
     public class WrapperEventArg<T> : EventArgs
     {

@@ -5,6 +5,7 @@ using Jvedio.Utils.Common;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -36,11 +37,15 @@ namespace Jvedio.Entity
         public string WebType { get; set; }
         public string WebUrl { get; set; }
         public float Grade { get; set; }
-        public string SmallImagePath { get; set; }
-        public string PreviewImagePath { get; set; }
         public string ExtraInfo { get; set; }
         public string CreateDate { get; set; }
         public string UpdateDate { get; set; }
+
+        public ActorInfo()
+        {
+            Cup = 'Z';
+            Gender = Gender.Girl;
+        }
 
         [TableField(exist: false)]
         public long ImageID { get; set; }
@@ -88,10 +93,27 @@ namespace Jvedio.Entity
         public static void SetImage(ref ActorInfo actorInfo)
         {
             //加载图片
-            string smallImagePath = Video.parseImagePath(actorInfo.SmallImagePath);
+            string smallImagePath = actorInfo.getImagePath();
             BitmapImage smallimage = ImageProcess.ReadImageFromFile(smallImagePath);
             if (smallimage == null) smallimage = GlobalVariable.DefaultActorImage;
             actorInfo.SmallImage = smallimage;
+        }
+
+
+        public string getImagePath()
+        {
+            string result = "";
+            PathType pathType = (PathType)GlobalConfig.Settings.PicPathMode;
+            string basePicPath = GlobalConfig.Settings.PicPaths[pathType.ToString()].ToString();
+            if (pathType != PathType.RelativeToData)
+            {
+                if (pathType == PathType.RelativeToApp)
+                    basePicPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, basePicPath);
+                string saveDir = System.IO.Path.Combine(basePicPath, "Actresses");
+                if (!Directory.Exists(saveDir)) FileHelper.TryCreateDir(saveDir);
+                result = System.IO.Path.Combine(saveDir, $"{ActorName}.jpg");
+            }
+            return result;
         }
     }
 }

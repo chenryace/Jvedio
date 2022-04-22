@@ -36,10 +36,13 @@ namespace Jvedio.Core.Plugins.Crawler
                 Type classType = getPublicType(dll.GetTypes());
                 if (classType == null) continue;
                 Dictionary<string, string> info = getInfo(classType);
-                if (info == null || !info.ContainsKey("ServerType")) continue;
+                if (info == null || !info.ContainsKey("ServerName")) continue;
                 PluginInfo pluginInfo = PluginInfo.ParseDict(info);
                 if (pluginInfo != null)
+                {
+                    pluginInfo.Path = dllPath;
                     Global.Plugins.Crawlers.Add(pluginInfo);
+                }
             }
             Console.WriteLine(Global.Plugins.Crawlers);
         }

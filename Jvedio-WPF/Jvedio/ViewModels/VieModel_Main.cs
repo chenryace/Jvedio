@@ -39,6 +39,8 @@ using Jvedio.Core;
 using Jvedio.Mapper;
 using Jvedio.Core.Scan;
 using Jvedio.Core.Net;
+using Jvedio.Core.CustomEventArgs;
+using Jvedio.Style;
 
 namespace Jvedio.ViewModel
 {
@@ -1580,63 +1582,56 @@ namespace Jvedio.ViewModel
         private void AddSingleMovie()
         {
             Dialog_NewMovie dialog_NewMovie = new Dialog_NewMovie((Main)GetWindowByName("Main"));
-            var b = (bool)dialog_NewMovie.ShowDialog();
-            NewMovieDialogResult result = dialog_NewMovie.Result;
-
-            if (b && !string.IsNullOrEmpty(result.Text))
+            if ((bool)dialog_NewMovie.ShowDialog())
             {
-                List<string> IDList = GetIDListFromString(result.Text, result.VideoType);
-                foreach (var item in IDList)
+                NewVideoDialogResult result = dialog_NewMovie.Result;
+                if (!string.IsNullOrEmpty(result.Text))
                 {
-                    InsertID(item, result.VideoType);
+                    List<string> vidList = parseVIDList(result.Text, result.Prefix, result.VideoType);
+                    List<Video> videos = videoMapper.selectList(new SelectWrapper<Video>().Select("VID").In("VID", vidList));
+                    List<string> exists = new List<string>();
+                    if (videos != null && videos.Count > 0)
+                        exists = videos.Select(arg => arg.VID).ToList();
+                    vidList = vidList.Except(exists).ToList();
+                    foreach (string vid in vidList)
+                    {
+                        Video video = new Video()
+                        {
+                            VID = vid,
+                            DBId = GlobalConfig.Main.CurrentDBId,
+                            VideoType = result.VideoType,
+                            FirstScanDate = DateHelper.Now(),
+                            LastScanDate = DateHelper.Now(),
+                        };
+
+                        MetaData metaData = video.toMetaData();
+                        metaDataMapper.insert(metaData);
+                        videoMapper.insert(video);
+                    }
+                    Statistic();
+
                 }
             }
 
 
-        }
 
-        private void InsertID(string id, VideoType vedioType)
-        {
-            //Movie movie = DataBase.SelectMovieByID(id);
-            //if (movie != null)
-            //{
-            //    HandyControl.Controls.Growl.Info($"{id} {Jvedio.Language.Resources.Message_AlreadyExist}", "Main");
-            //}
-            //else
-            //{
-            //    Movie movie1 = new Movie()
-            //    {
-            //        id = id,
-            //        vediotype = (int)vedioType,
-            //        releasedate = "1900-01-01",
-            //        otherinfo = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
-            //    };
-            //    DataBase.InsertScanMovie(movie1);
-            //    MovieList.Insert(0, movie1);
-            //    CurrentMovieList.Insert(0, movie1);
-            //    FilterMovieList.Insert(0, movie1);
-            //}
         }
 
 
-        public List<string> GetIDListFromString(string str, VideoType vedioType)
+
+
+        public List<string> parseVIDList(string str, string prefix, VideoType vedioType)
         {
             List<string> result = new List<string>();
-            foreach (var item in str.Split(new string[] { System.Environment.NewLine }, StringSplitOptions.None))
+            foreach (var item in str.Split(new string[] { System.Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries))
             {
-                string id = item;
-                if (AutoAddPrefix && Prefix != "")
-                    id = Prefix + id;
-
-
+                string vid = (string.IsNullOrEmpty(prefix) ? "" : prefix) + item;
                 if (vedioType == VideoType.Europe)
-                    id = id.Replace(" ", "");
+                    vid = vid.Replace(" ", "");
                 else
-                    id = id.ToUpper().Replace(" ", "");
-
-
-
-                if (!string.IsNullOrEmpty(id) && !result.Contains(id)) result.Add(id);
+                    vid = vid.ToUpper().Replace(" ", "");
+                if (!string.IsNullOrEmpty(vid) && !result.Contains(vid))
+                    result.Add(vid);
             }
             return result;
         }
@@ -1665,8 +1660,8 @@ namespace Jvedio.ViewModel
                 SelectWrapper<Video> selectWrapper = getWrapper(searchType);
                 if (selectWrapper != null) wrapper.Join(selectWrapper);
 
-                string actor_join_sql = " join metadatas_to_actor on metadatas_to_actor.DataID=metadata.DataID " +
-                "JOIN actor_info on metadatas_to_actor.ActorID=actor_info.ActorID ";
+                string actor_join_sql = " join metadata_to_actor on metadata_to_actor.DataID=metadata.DataID " +
+                "JOIN actor_info on metadata_to_actor.ActorID=actor_info.ActorID ";
 
                 string label_join_sql = " join metadata_to_label on metadata_to_label.DataID=metadata.DataID ";
 
@@ -2201,8 +2196,6 @@ namespace Jvedio.ViewModel
             "WebType",
             "WebUrl",
             "actor_info.Grade",
-            "SmallImagePath",
-            "PreviewImagePath",
             "actor_info.ExtraInfo",
             "actor_info.CreateDate",
             "actor_info.UpdateDate",
@@ -2260,18 +2253,18 @@ namespace Jvedio.ViewModel
             ActorSetActorSortOrder(wrapper);
 
             string count_sql = "SELECT count(*) as Count " +
-                         "from (SELECT actor_info.ActorID FROM actor_info join metadatas_to_actor " +
-                         "on metadatas_to_actor.ActorID=actor_info.ActorID " +
+                         "from (SELECT actor_info.ActorID FROM actor_info join metadata_to_actor " +
+                         "on metadata_to_actor.ActorID=actor_info.ActorID " +
                          "join metadata " +
-                         "on metadatas_to_actor.DataID=metadata.DataID " +
+                         "on metadata_to_actor.DataID=metadata.DataID " +
                          $"WHERE metadata.DBId={GlobalConfig.Main.CurrentDBId} and metadata.DataType={0} " +
                          "GROUP BY actor_info.ActorID );";
 
             ActorTotalCount = actorMapper.selectCount(count_sql);
 
             string sql = $"{wrapper.Select(ActorSelectedField).toSelect(false)} FROM actor_info " +
-                $"join metadatas_to_actor on metadatas_to_actor.ActorID=actor_info.ActorID " +
-                $"join metadata on metadatas_to_actor.DataID=metadata.DataID " +
+                $"join metadata_to_actor on metadata_to_actor.ActorID=actor_info.ActorID " +
+                $"join metadata on metadata_to_actor.DataID=metadata.DataID " +
                 $"WHERE metadata.DBId={GlobalConfig.Main.CurrentDBId} and metadata.DataType={0} " +
                 $"GROUP BY actor_info.ActorID "
                 + wrapper.toOrder() + ActorToLimit();
@@ -2567,10 +2560,6 @@ namespace Jvedio.ViewModel
             "ImageUrls",
             "ReleaseDate",
             "LastScanDate",
-            "GifImagePath",
-            "BigImagePath",
-            "metadata_video.SmallImagePath",
-            "metadata_video.PreviewImagePath",
             "metadata_video.WebUrl",
             "metadata_video.WebType",
             "(select group_concat(TagID,',') from metadata_to_tagstamp where metadata_to_tagstamp.DataID=metadata.DataID)  as TagIDs ",
@@ -2971,10 +2960,10 @@ namespace Jvedio.ViewModel
 
 
                 string actor_count_sql = "SELECT count(*) as Count " +
-                            "from (SELECT actor_info.ActorID FROM actor_info join metadatas_to_actor " +
-                            "on metadatas_to_actor.ActorID=actor_info.ActorID " +
+                            "from (SELECT actor_info.ActorID FROM actor_info join metadata_to_actor " +
+                            "on metadata_to_actor.ActorID=actor_info.ActorID " +
                             "join metadata " +
-                            "on metadatas_to_actor.DataID=metadata.DataID " +
+                            "on metadata_to_actor.DataID=metadata.DataID " +
                             $"WHERE metadata.DBId={dbid} and metadata.DataType={0} " +
                             "GROUP BY actor_info.ActorID );";
                 AllActorCount = actorMapper.selectCount(actor_count_sql);

@@ -15,7 +15,7 @@ using System.Windows.Media.Animation;
 namespace Jvedio.Style
 {
 
-    public  class BaseDialog : Window
+    public class BaseDialog : Window
     {
 
         public bool showbutton = true;//是否显示取消按钮
@@ -24,7 +24,7 @@ namespace Jvedio.Style
         {
             this.Style = (System.Windows.Style)App.Current.Resources["BaseDialogStyle"];
             this.Loaded += delegate { InitEvent(); };//初始化载入事件
-            this.ContentRendered += (s, e) => 
+            this.ContentRendered += (s, e) =>
             {
                 ControlTemplate baseDialogControlTemplate = (ControlTemplate)App.Current.Resources["BaseDialogControlTemplate"];
                 StackPanel sp = (StackPanel)baseDialogControlTemplate.FindName("ButtonStackPanel", this);
@@ -91,11 +91,11 @@ namespace Jvedio.Style
             //边缘闪动
             ControlTemplate baseDialogControlTemplate = (ControlTemplate)App.Current.Resources["BaseDialogControlTemplate"];
             Border border = (Border)baseDialogControlTemplate.FindName("MainBorder", this);
-            DropShadowEffect dropShadowEffect1 = new DropShadowEffect() {Color=Colors.Red,BlurRadius= 20, Direction=-90,RenderingBias=RenderingBias.Quality,ShadowDepth=0 };
+            DropShadowEffect dropShadowEffect1 = new DropShadowEffect() { Color = Colors.Red, BlurRadius = 20, Direction = -90, RenderingBias = RenderingBias.Quality, ShadowDepth = 0 };
             DropShadowEffect dropShadowEffect2 = new DropShadowEffect() { Color = Colors.SkyBlue, BlurRadius = 20, Direction = -90, RenderingBias = RenderingBias.Quality, ShadowDepth = 0 };
 
 
-            for (int i = 0; i <3; i++)
+            for (int i = 0; i < 3; i++)
             {
                 if (!IsFlashing) break;
                 border.Effect = dropShadowEffect1;
@@ -103,17 +103,17 @@ namespace Jvedio.Style
                 border.Effect = dropShadowEffect2;
                 await Task.Delay(100);
             }
-            if(IsFlashing) border.Effect = dropShadowEffect1;
+            if (IsFlashing) border.Effect = dropShadowEffect1;
             IsFlashing = false;
             base.OnDeactivated(e);
         }
 
 
 
-        public  void FadeOut()
+        public void FadeOut()
         {
-                this.DialogResult = false;
-                this.Close();
+            this.DialogResult = false;
+            this.Close();
         }
 
 
@@ -129,19 +129,7 @@ namespace Jvedio.Style
     }
 
 
-    public class JvedioDialogResult
-    {
-        public string Text { get; set; }
-        public int Option { get; set; }
 
-
-        public JvedioDialogResult(string text,int option){
-            this.Text = text;
-            this.Option = option;
-        }
-
-
-    }
 
 
 

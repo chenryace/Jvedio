@@ -445,13 +445,8 @@ namespace Jvedio.Entity
             video.Outline = outline;
             video.Duration = runtime;
             video.SubSection = subsection.Replace(';', GlobalVariable.Separator);
-            video.WebType = source.Replace("jav", "");
+            video.WebType = source.Replace("jav", "").Replace("fc2adult", "fc2");
             video.WebUrl = sourceurl;
-            video.PreviewImagePath = "*PicPath*/ExtraPic/" + id;
-            video.ScreenShotPath = "*PicPath*/ScreenShot/" + id;
-            video.GifImagePath = "*PicPath*/Gif/" + $"{id}.gif";
-            video.BigImagePath = "*PicPath*/BigPic/" + $"{id}.jpg";
-            video.SmallImagePath = "*PicPath*/SmallPic/" + $"{id}.jpg";
             video.ImageUrls = json;
 
             return video;

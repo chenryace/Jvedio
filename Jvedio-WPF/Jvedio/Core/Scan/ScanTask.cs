@@ -15,6 +15,8 @@ using System.Threading.Tasks;
 using Jvedio.Core.SimpleORM;
 using Jvedio.Mapper;
 using static Jvedio.GlobalMapper;
+using Jvedio.Core.Net;
+using Jvedio.Core.CustomEventArgs;
 
 namespace Jvedio.Core.Scan
 {

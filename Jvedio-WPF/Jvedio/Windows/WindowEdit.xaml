@@ -86,6 +86,8 @@
                         </DockPanel>
                         <StackPanel Orientation="Horizontal" Visibility="{Binding TeenMode, Source={x:Static p:Settings.Default}, Mode=TwoWay, Converter={StaticResource BoolToOppositeVisibilityConverter}}">
                             <Label Content="{x:Static lang:Resources.VideoType}" Style="{StaticResource BaseInfoLabel}" />
+
+
                             <StackPanel Orientation="Horizontal">
                                 <RadioButton
                                     Content="{x:Static lang:Resources.Normal}"
@@ -95,14 +97,14 @@
                                     IsChecked="{Binding Path=CurrentVideo.VideoType, ConverterParameter=0, Converter={StaticResource VideoTypeConverter}, Mode=TwoWay}"
                                     Style="{StaticResource FlatRadioButton}" />
                                 <RadioButton
-                                    Content="{x:Static lang:Resources.Uncensored}"
+                                    Content="无修正"
                                     FocusVisualStyle="{x:Null}"
                                     FontSize="15"
                                     Foreground="{DynamicResource ForegroundSearch}"
                                     IsChecked="{Binding Path=CurrentVideo.VideoType, ConverterParameter=1, Converter={StaticResource VideoTypeConverter}, Mode=TwoWay}"
                                     Style="{StaticResource FlatRadioButton}" />
                                 <RadioButton
-                                    Content="{x:Static lang:Resources.Censored}"
+                                    Content="修正"
                                     FocusVisualStyle="{x:Null}"
                                     FontSize="15"
                                     Foreground="{DynamicResource ForegroundSearch}"

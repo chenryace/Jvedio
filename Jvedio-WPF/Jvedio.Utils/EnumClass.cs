@@ -15,12 +15,6 @@ namespace Jvedio.Utils
 
 
 
-    public enum ImageType { SmallImage, BigImage, ExtraImage, ActorImage }
-
-
-
-    public enum WebSite { Bus, BusEu, Library, DB, FC2, Jav321, DMM, MOO, None }
-
     public enum Skin { 黑色, 白色, 蓝色 }
 
     public enum MyLanguage { 中文, English, 日本語 }

@@ -191,7 +191,6 @@ namespace Jvedio.Entity
                 Hipline = hipline,
                 WebType = source.Replace("jav", ""),
                 WebUrl = string.IsNullOrEmpty(sourceurl) ? imageurl : sourceurl,
-                SmallImagePath = Path.Combine(GlobalVariable.BasePicPath, "Actresses", $"{name}.jpg"),
             };
             if (!string.IsNullOrEmpty(cup))
                 info.Cup = cup.ToCharArray()[0];

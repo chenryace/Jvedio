@@ -84,52 +84,26 @@ namespace Jvedio.ViewModel
         public void setServers()
         {
             CrawlerServers = new Dictionary<string, ObservableCollection<CrawlerServer>>();
-            List<string> serverTypes = Global.Plugins.Crawlers.Select(item => item.ServerType).ToList();
-            foreach (string serverType in serverTypes)
+            List<string> ServerNames = Global.Plugins.Crawlers.Select(item => item.ServerName).ToList();
+            foreach (string serverType in ServerNames)
             {
-                CrawlerServer crawlerServer = GlobalConfig.ServerConfig.CrawlerServers.Where(arg => arg.ServerType.ToLower() == serverType.ToLower()).FirstOrDefault();
+                CrawlerServer crawlerServer = GlobalConfig.ServerConfig.CrawlerServers.Where(arg => arg.ServerName.ToLower() == serverType.ToLower()).FirstOrDefault();
                 if (crawlerServer == null)
                 {
                     crawlerServer = new CrawlerServer();
-                    crawlerServer.ServerType = serverType;
+                    crawlerServer.ServerName = serverType;
                     CrawlerServers.Add(serverType, null);
                 }
                 else
                 {
                     ObservableCollection<CrawlerServer> crawlers = new ObservableCollection<CrawlerServer>();
-                    GlobalConfig.ServerConfig.CrawlerServers.Where(arg => arg.ServerType.ToLower() == serverType.ToLower()).
+                    GlobalConfig.ServerConfig.CrawlerServers.Where(arg => arg.ServerName.ToLower() == serverType.ToLower()).
                         ToList().ForEach(t => crawlers.Add(t));
                     CrawlerServers.Add(serverType, crawlers);
                 }
 
             }
 
-
-            //foreach (CrawlerServer crawlerServer in crawlerServers)
-            //{
-
-            //    if (CrawlerServers.ContainsKey(crawlerServer.ServerType))
-            //    {
-            //        if (!string.IsNullOrEmpty(crawlerServer.Url))
-            //            CrawlerServers[crawlerServer.ServerType].Add(crawlerServer);
-
-
-            //    }
-            //    else
-            //    {
-            //        if (string.IsNullOrEmpty(crawlerServer.Url))
-            //        {
-            //            CrawlerServers.Add(crawlerServer.ServerType, null);
-            //        }
-            //        else
-            //        {
-            //            ObservableCollection<CrawlerServer> servers = new ObservableCollection<CrawlerServer>() { crawlerServer };
-            //            CrawlerServers.Add(crawlerServer.ServerType, servers);
-
-            //        }
-
-            //    }
-            //}
             Console.WriteLine(CrawlerServers);
         }
 
@@ -148,7 +122,7 @@ namespace Jvedio.ViewModel
                         callback?.Invoke($"【{key}】 刮削器处地址为 {server.Url} 的 Headers 不合理，格式必须为：{format}");
                         return false;
                     }
-                    server.ServerType = key;
+                    server.ServerName = key;
                     if (server.Headers == null) server.Headers = "";
                     list.Add(server);
 

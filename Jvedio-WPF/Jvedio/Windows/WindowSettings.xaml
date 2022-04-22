@@ -941,7 +941,17 @@
                                     HorizontalAlignment="Left"
                                     FontSize="12"
                                     Style="{StaticResource BaseTextBlock}"
-                                    Text="{Binding CurrentPlugin.ServerType}" />
+                                    Text="{Binding CurrentPlugin.ServerName}" />
+                                <TextBlock
+                                    HorizontalAlignment="Left"
+                                    FontWeight="Bold"
+                                    Style="{StaticResource BaseTextBlock}"
+                                    Text="抓取的信息类型" />
+                                <TextBlock
+                                    HorizontalAlignment="Left"
+                                    FontSize="12"
+                                    Style="{StaticResource BaseTextBlock}"
+                                    Text="{Binding CurrentPlugin.InfoType}" />
                                 <TextBlock
                                     HorizontalAlignment="Left"
                                     FontWeight="Bold"

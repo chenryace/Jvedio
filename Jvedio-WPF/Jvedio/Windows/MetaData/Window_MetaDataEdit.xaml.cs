@@ -419,7 +419,7 @@ namespace Jvedio
             if (File.Exists(imgPath))
             {
                 vieModel.CurrentImage = ImageProcess.ReadImageFromFile(imgPath);
-                vieModel.CurrentGame.BigImagePath = imgPath;
+                //vieModel.CurrentGame.BigImagePath = imgPath;
             }
         }
     }

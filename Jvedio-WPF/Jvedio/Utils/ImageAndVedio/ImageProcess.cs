@@ -45,8 +45,8 @@ namespace Jvedio
         {
             if (imageMode < 2)
             {
-                BitmapImage smallimage = ReadImageFromFile(Video.getSmallImage(video));
-                BitmapImage bigimage = ReadImageFromFile(Video.getBigImage(video));
+                BitmapImage smallimage = ReadImageFromFile(video.getSmallImage());
+                BitmapImage bigimage = ReadImageFromFile(video.getBigImage());
                 if (smallimage == null) smallimage = DefaultSmallImage;
                 if (bigimage == null) bigimage = DefaultBigImage;
                 video.SmallImage = smallimage;
@@ -56,8 +56,8 @@ namespace Jvedio
             else if (imageMode == 2)
             {
 
-                string gifpath = Video.parseImagePath(video.GifImagePath);
-                if (File.Exists(gifpath)) video.GifUri = new Uri(gifpath);
+                //string gifpath = Video.parseImagePath(video.GifImagePath);
+                //if (File.Exists(gifpath)) video.GifUri = new Uri(gifpath);
             }
             //加载图片
 
@@ -66,15 +66,15 @@ namespace Jvedio
 
 
 
-        public static void SetGif(ref Video video)
-        {
-            //加载图片
-            string gifpath = Video.parseImagePath(video.GifImagePath);
-            if (File.Exists(gifpath))
-                video.GifUri = new Uri(gifpath);
-            else
-                video.GifUri = GlobalVariable.DefaultBigImage.UriSource;
-        }
+        //public static void SetGif(ref Video video)
+        //{
+        //    //加载图片
+        //    string gifpath = Video.parseImagePath(video.GifImagePath);
+        //    if (File.Exists(gifpath))
+        //        video.GifUri = new Uri(gifpath);
+        //    else
+        //        video.GifUri = GlobalVariable.DefaultBigImage.UriSource;
+        //}
 
         public static BitmapImage GetActorImage(string name)
         {
@@ -233,34 +233,34 @@ namespace Jvedio
         }
 
 
-        public static void SaveImage(string ID, byte[] ImageByte, ImageType imageType, string Url)
-        {
-            string FilePath;
-            string ImageDir;
-            if (imageType == ImageType.BigImage)
-            {
-                ImageDir = BasePicPath + $"BigPic\\";
-                FilePath = ImageDir + $"{ID}.jpg";
-            }
-            else if (imageType == ImageType.ExtraImage)
-            {
-                ImageDir = BasePicPath + $"ExtraPic\\{ID}\\";
-                FilePath = ImageDir + Path.GetFileName(new Uri(Url).LocalPath);
-            }
-            else if (imageType == ImageType.SmallImage)
-            {
-                ImageDir = BasePicPath + $"SmallPic\\";
-                FilePath = ImageDir + $"{ID}.jpg";
-            }
-            else
-            {
-                ImageDir = BasePicPath + $"Actresses\\";
-                FilePath = ImageDir + $"{ID}.jpg";
-            }
+        //public static void SaveImage(string ID, byte[] ImageByte, ImageType imageType, string Url)
+        //{
+        //    string FilePath;
+        //    string ImageDir;
+        //    if (imageType == ImageType.BigImage)
+        //    {
+        //        ImageDir = BasePicPath + $"BigPic\\";
+        //        FilePath = ImageDir + $"{ID}.jpg";
+        //    }
+        //    else if (imageType == ImageType.ExtraImage)
+        //    {
+        //        ImageDir = BasePicPath + $"ExtraPic\\{ID}\\";
+        //        FilePath = ImageDir + Path.GetFileName(new Uri(Url).LocalPath);
+        //    }
+        //    else if (imageType == ImageType.SmallImage)
+        //    {
+        //        ImageDir = BasePicPath + $"SmallPic\\";
+        //        FilePath = ImageDir + $"{ID}.jpg";
+        //    }
+        //    else
+        //    {
+        //        ImageDir = BasePicPath + $"Actresses\\";
+        //        FilePath = ImageDir + $"{ID}.jpg";
+        //    }
 
-            if (!Directory.Exists(ImageDir)) Directory.CreateDirectory(ImageDir);
-            FileProcess.ByteArrayToFile(ImageByte, FilePath);
-        }
+        //    if (!Directory.Exists(ImageDir)) Directory.CreateDirectory(ImageDir);
+        //    FileProcess.ByteArrayToFile(ImageByte, FilePath);
+        //}
 
 
         //TODO

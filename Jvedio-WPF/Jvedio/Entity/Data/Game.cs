@@ -28,9 +28,6 @@ namespace Jvedio.Entity.Data
         public string ExtraName { get; set; }
         public string Studio { get; set; }
         public string Publisher { get; set; }
-        public string GifImagePath { get; set; }
-        public string BigImagePath { get; set; }
-        public string SmallImagePath { get; set; }
         public string WebType { get; set; }
         public string WebUrl { get; set; }
         public string ExtraInfo { get; set; }

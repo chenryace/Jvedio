@@ -168,9 +168,7 @@ namespace Jvedio
 
         public static string[] NeedCookie = new[] { "DB", "DMM", "MOO" };
 
-        public static bool AutoAddPrefix = false;
-        public static string Prefix = "FC2-";
-        public static int DefaultNewMovieType = 0;
+
 
 
 

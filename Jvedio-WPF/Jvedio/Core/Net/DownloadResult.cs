@@ -4,13 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Jvedio.Core.Enums
+namespace Jvedio.Core.Net
 {
-    public enum VideoType
+    public class DownloadResult
     {
-        Normal,
-        UnCensored,
-        Censored,
-        Europe,
     }
 }

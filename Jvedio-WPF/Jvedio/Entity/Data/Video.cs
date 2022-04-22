@@ -5,11 +5,13 @@ using Jvedio.Core.SimpleORM;
 using Jvedio.Entity.CommonSQL;
 using Jvedio.Utils;
 using Jvedio.Utils.Common;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -121,17 +123,13 @@ namespace Jvedio.Entity
         }
         [TableField(exist: false)]
         public bool HasSubSection { get; set; }
-        public string PreviewImagePath { get; set; }
+
 
         [TableField(exist: false)]
         public ObservableCollection<string> PreviewImagePathList { get; set; }
 
         [TableField(exist: false)]
         public ObservableCollection<BitmapSource> PreviewImageList { get; set; }
-        public string ScreenShotPath { get; set; }
-        public string GifImagePath { get; set; }
-        public string BigImagePath { get; set; }
-        public string SmallImagePath { get; set; }
         public string ImageUrls { get; set; }
 
         public string WebType { get; set; }
@@ -208,25 +206,67 @@ namespace Jvedio.Entity
         [TableField(exist: false)]
         public List<Magnet> Magnets { get; set; }
 
-        public static string parseImagePath(string path)
+
+
+        public bool toDownload()
         {
-            PathType pathType = (PathType)GlobalConfig.Settings.PicPathMode;
-            string basePicPath = GlobalConfig.Settings.PicPaths[pathType.ToString()].ToString();
-            if (pathType == PathType.Absolute)
+            return this != null && (string.IsNullOrEmpty(Title) || string.IsNullOrEmpty(WebUrl));
+        }
+
+        public string getServerInfoType()
+        {
+            if (!string.IsNullOrEmpty(VID))
             {
-                if (string.IsNullOrEmpty(basePicPath) || !Directory.Exists(basePicPath))
+                if (VID.IndexOf("-") > 0)
                 {
-                    basePicPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Pic");
+                    string s = VID.Split('-')[0];
+                    if (s.Equals("FC2"))
+                    {
+                        return "FC";
+                    }
+                    else
+                    {
+                        return VideoType.ToString();
+                    }
                 }
             }
-            else if (pathType == PathType.RelativeToApp)
-            {
-                basePicPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, basePicPath);
-            }
-
-            if (path.StartsWith("*PicPath*")) return System.IO.Path.GetFullPath(basePicPath + path.Replace("*PicPath*", ""));
-            else return path;
+            return null;
         }
+
+
+        public string getImagePath(ImageType imageType, string ext = null)
+        {
+            string result = "";
+            PathType pathType = (PathType)GlobalConfig.Settings.PicPathMode;
+            string basePicPath = GlobalConfig.Settings.PicPaths[pathType.ToString()].ToString();
+            if (pathType != PathType.RelativeToData)
+            {
+                if (pathType == PathType.RelativeToApp)
+                    basePicPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, basePicPath);
+                string saveDir = "";
+                if (imageType == ImageType.Big)
+                    saveDir = System.IO.Path.Combine(basePicPath, "BigPic");
+                else if (imageType == ImageType.Small)
+                    saveDir = System.IO.Path.Combine(basePicPath, "SmallPic");
+                else if (imageType == ImageType.Preview)
+                    saveDir = System.IO.Path.Combine(basePicPath, "ExtraPic");
+                else if (imageType == ImageType.ScreenShot)
+                    saveDir = System.IO.Path.Combine(basePicPath, "ScreenShot");
+                else if (imageType == ImageType.Gif)
+                    saveDir = System.IO.Path.Combine(basePicPath, "Gif");
+                if (!Directory.Exists(saveDir)) FileHelper.TryCreateDir(saveDir);
+                if (!string.IsNullOrEmpty(VID))
+                    result = System.IO.Path.Combine(saveDir, $"{VID}{(string.IsNullOrEmpty(ext) ? "" : ext)}");
+                else
+                    result = System.IO.Path.Combine(saveDir, $"{Hash}{(string.IsNullOrEmpty(ext) ? "" : ext)}");
+            }
+            return result;
+        }
+
+
+
+
+
 
         public override string ToString()
         {
@@ -238,6 +278,16 @@ namespace Jvedio.Entity
             MetaData metaData = (MetaData)this;
             metaData.DataID = this.DataID;
             return metaData;
+        }
+
+
+        public Dictionary<string, string> toDictionary()
+        {
+            Dictionary<string, string> dict = new Dictionary<string, string>();
+            dict.Add("VideoType", VideoType.ToString());
+            dict.Add("DataID", DataID.ToString());
+            dict.Add("VID", VID);
+            return dict;
         }
 
         public override bool Equals(object obj)
@@ -277,14 +327,14 @@ namespace Jvedio.Entity
             return null;
         }
 
-        public static string getSmallImage(Video video)
+        public string getSmallImage()
         {
-            string smallImagePath = Video.parseImagePath(video.SmallImagePath);
+            string smallImagePath = getImagePath(ImageType.Small, ".jpg");
             PathType pathType = (PathType)GlobalConfig.Settings.PicPathMode;
-            if (pathType == PathType.RelativeToData && !string.IsNullOrEmpty(video.Path) && File.Exists(video.Path))
+            if (pathType == PathType.RelativeToData && !string.IsNullOrEmpty(Path) && File.Exists(Path))
             {
 
-                string basePicPath = System.IO.Path.GetDirectoryName(video.Path);
+                string basePicPath = System.IO.Path.GetDirectoryName(Path);
                 Dictionary<string, string> dict = (Dictionary<string, string>)GlobalConfig.Settings.PicPaths[pathType.ToString()];
                 string smallPath = System.IO.Path.Combine(basePicPath, dict["SmallImagePath"]);
                 smallImagePath = parseRelativeImageFileName(smallPath);
@@ -293,15 +343,15 @@ namespace Jvedio.Entity
             return smallImagePath;
         }
 
-        public static string getBigImage(Video video)
+        public string getBigImage()
         {
-            string bigImagePath = Video.parseImagePath(video.BigImagePath);
+            string bigImagePath = getImagePath(ImageType.Big, ".jpg");
 
             PathType pathType = (PathType)GlobalConfig.Settings.PicPathMode;
-            if (pathType == PathType.RelativeToData && !string.IsNullOrEmpty(video.Path) && File.Exists(video.Path))
+            if (pathType == PathType.RelativeToData && !string.IsNullOrEmpty(Path) && File.Exists(Path))
             {
 
-                string basePicPath = System.IO.Path.GetDirectoryName(video.Path);
+                string basePicPath = System.IO.Path.GetDirectoryName(Path);
                 Dictionary<string, string> dict = (Dictionary<string, string>)GlobalConfig.Settings.PicPaths[pathType.ToString()];
                 string bigPath = System.IO.Path.Combine(basePicPath, dict["BigImagePath"]);
 
@@ -311,14 +361,14 @@ namespace Jvedio.Entity
             return bigImagePath;
         }
 
-        public static string getExtraImage(Video video)
+        public string getExtraImage()
         {
-            string imagePath = Video.parseImagePath(video.PreviewImagePath);
+            string imagePath = getImagePath(ImageType.Preview);
 
             PathType pathType = (PathType)GlobalConfig.Settings.PicPathMode;
-            if (pathType == PathType.RelativeToData && !string.IsNullOrEmpty(video.Path) && File.Exists(video.Path))
+            if (pathType == PathType.RelativeToData && !string.IsNullOrEmpty(Path) && File.Exists(Path))
             {
-                string basePicPath = System.IO.Path.GetDirectoryName(video.Path);
+                string basePicPath = System.IO.Path.GetDirectoryName(Path);
                 Dictionary<string, string> dict = (Dictionary<string, string>)GlobalConfig.Settings.PicPaths[pathType.ToString()];
                 string path = System.IO.Path.Combine(basePicPath, dict["PreviewImagePath"]);
                 imagePath = parseRelativePath(path);
@@ -326,19 +376,69 @@ namespace Jvedio.Entity
             return imagePath;
         }
 
-        public static string getScreenShot(Video video)
+        public string getScreenShot()
         {
-            string imagePath = Video.parseImagePath(video.ScreenShotPath);
+            string imagePath = getImagePath(ImageType.ScreenShot);
 
             PathType pathType = (PathType)GlobalConfig.Settings.PicPathMode;
-            if (pathType == PathType.RelativeToData && !string.IsNullOrEmpty(video.Path) && File.Exists(video.Path))
+            if (pathType == PathType.RelativeToData && !string.IsNullOrEmpty(Path) && File.Exists(Path))
             {
-                string basePicPath = System.IO.Path.GetDirectoryName(video.Path);
+                string basePicPath = System.IO.Path.GetDirectoryName(Path);
                 Dictionary<string, string> dict = (Dictionary<string, string>)GlobalConfig.Settings.PicPaths[pathType.ToString()];
                 string path = System.IO.Path.Combine(basePicPath, dict["ScreenShotPath"]);
                 imagePath = parseRelativePath(path);
             }
             return imagePath;
+        }
+
+        public void parseDictInfo(Dictionary<string, object> dict)
+        {
+            if (dict == null || dict.Count == 0) return;
+            PropertyInfo[] propertyInfos = this.GetType().GetProperties();
+            foreach (PropertyInfo info in propertyInfos)
+            {
+                if (dict.ContainsKey(info.Name))
+                {
+                    object value = dict[info.Name];
+                    if (value == null) continue;
+                    if (value is List<string> list)
+                    {
+                        info.SetValue(this, string.Join(GlobalVariable.Separator.ToString(), list));
+                    }
+                    else if (value is string str)
+                    {
+                        if (info.PropertyType == typeof(string))
+                        {
+                            info.SetValue(this, str);
+                        }
+                        else if (info.PropertyType == typeof(int))
+                        {
+                            int.TryParse(str, out int val);
+                            info.SetValue(this, val);
+                        }
+                    }
+
+                }
+            }
+            // 图片地址
+            ImageUrls = parseImageUrlFromDict(dict);
+        }
+
+
+        private string parseImageUrlFromDict(Dictionary<string, object> dict)
+        {
+            if (dict == null || dict.Count == 0) return "";
+            Dictionary<string, object> result = new Dictionary<string, object>();
+            if (!string.IsNullOrEmpty(ImageUrls))
+            {
+                try { result = JsonConvert.DeserializeObject<Dictionary<string, object>>(ImageUrls); }
+                catch (Exception ex) { Console.WriteLine(ex.Message); }
+            }
+            if (dict.ContainsKey("SmallImageUrl")) result["SmallImageUrl"] = dict["SmallImageUrl"];
+            if (dict.ContainsKey("BigImageUrl")) result["BigImageUrl"] = dict["BigImageUrl"];
+            if (dict.ContainsKey("ExtraImageUrl")) result["ExtraImageUrl"] = dict["ExtraImageUrl"];
+            if (dict.ContainsKey("ActressImageUrl")) result["ActressImageUrl"] = dict["ActressImageUrl"];
+            return JsonConvert.SerializeObject(result);
         }
     }
 }

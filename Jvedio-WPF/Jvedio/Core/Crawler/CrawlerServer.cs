@@ -1,9 +1,12 @@
 ﻿using DynamicData.Annotations;
+using Jvedio.Common.Crawler.Entity;
+using Jvedio.Core.Plugins;
 using Jvedio.Utils;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 
 namespace Jvedio.Core.Crawler
@@ -20,7 +23,8 @@ namespace Jvedio.Core.Crawler
         }
 
 
-        public string ServerType { get; set; }
+
+        public string ServerName { get; set; }
         private string _Url;
         public string Url
         {
@@ -52,6 +56,11 @@ namespace Jvedio.Core.Crawler
             }
         }
 
+
+
+        /// <summary>
+        /// -1 不可用，1-可用，2-测试中
+        /// </summary>
         private int _Available;
         public int Available
         {
@@ -120,6 +129,37 @@ namespace Jvedio.Core.Crawler
                 return false;
             }
 
+        }
+
+        public static RequestHeader parseHeader(CrawlerServer server)
+        {
+            string header = server.Headers;
+            if (string.IsNullOrEmpty(header)) return null;
+            try
+            {
+                Dictionary<string, string> dict = JsonConvert.DeserializeObject<Dictionary<string, string>>(header);
+                RequestHeader result = new RequestHeader();
+
+                System.Reflection.PropertyInfo[] propertyInfos = result.GetType().GetProperties();
+                foreach (PropertyInfo info in propertyInfos)
+                {
+                    if (dict.ContainsKey(info.Name))
+                    {
+                        info.SetValue(result, dict[info.Name]);
+                    }
+                }
+                if (!string.IsNullOrEmpty(server.Cookies))
+                    result.Cookies = server.Cookies;
+                return result;
+
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+
+            return null;
         }
 
     }

@@ -26,7 +26,7 @@
     mc:Ignorable="d">
     <Window.Resources>
 
-        <local:ParseImagePathConverter x:Key="ParseImagePathConverter" />
+
         <local:TagStampsConverter x:Key="TagStampsConverter" />
         <local:IntToVedioTypeConverter x:Key="IntToVedioTypeConverter" />
         <local:VidioTypeToIntConverter x:Key="VidioTypeToIntConverter" />
@@ -266,11 +266,11 @@
                         VerticalAlignment="Top"
                         Orientation="Horizontal">
                         <Border
-                            IsEnabled="False"
                             Margin="10,5"
                             Padding="5"
                             CornerRadius="3"
                             Cursor="Hand"
+                            IsEnabled="False"
                             Style="{StaticResource BorderStyle}">
                             <TextBlock
                                 Grid.Column="1"
@@ -402,26 +402,11 @@
                                             Command="cmd:File.OpenSelectFile"
                                             CommandParameter="{Binding CurrentVideo.Path}"
                                             Header="{x:Static lang:Resources.Movie}" />
-                                        <MenuItem
-                                            Command="cmd:File.OpenSelectFile"
-                                            CommandParameter="{Binding CurrentVideo.BigImagePath, Converter={StaticResource ParseImagePathConverter}}"
-                                            Header="{x:Static lang:Resources.Poster}" />
-                                        <MenuItem
-                                            Command="cmd:File.OpenSelectFile"
-                                            CommandParameter="{Binding CurrentVideo.SmallImagePath, Converter={StaticResource ParseImagePathConverter}}"
-                                            Header="{x:Static lang:Resources.Thumbnail}" />
-                                        <MenuItem
-                                            Command="cmd:File.OpenSelectFile"
-                                            CommandParameter="{Binding CurrentVideo.GifImagePath, Converter={StaticResource ParseImagePathConverter}}"
-                                            Header="Gif" />
-                                        <MenuItem
-                                            Command="cmd:File.OpenDir"
-                                            CommandParameter="{Binding CurrentVideo.PreviewImagePath, Converter={StaticResource ParseImagePathConverter}, ConverterParameter=OnlyDir}"
-                                            Header="{x:Static lang:Resources.Preview}" />
-                                        <MenuItem
-                                            Command="cmd:File.OpenDir"
-                                            CommandParameter="{Binding CurrentVideo.ScreenShotPath, Converter={StaticResource ParseImagePathConverter}, ConverterParameter=OnlyDir}"
-                                            Header="{x:Static lang:Resources.ScreenShot}" />
+                                        <MenuItem Command="cmd:File.OpenSelectFile" Header="{x:Static lang:Resources.Poster}" />
+                                        <MenuItem Command="cmd:File.OpenSelectFile" Header="{x:Static lang:Resources.Thumbnail}" />
+                                        <MenuItem Command="cmd:File.OpenSelectFile" Header="Gif" />
+                                        <MenuItem Command="cmd:File.OpenDir" Header="{x:Static lang:Resources.Preview}" />
+                                        <MenuItem Command="cmd:File.OpenDir" Header="{x:Static lang:Resources.ScreenShot}" />
                                     </MenuItem>
 
                                     <MenuItem

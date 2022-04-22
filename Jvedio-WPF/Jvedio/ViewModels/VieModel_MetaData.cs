@@ -39,6 +39,8 @@ using Jvedio.Core;
 using Jvedio.Mapper;
 using Jvedio.Core.Scan;
 using Jvedio.Entity.Data;
+using Jvedio.Core.CustomEventArgs;
+using Jvedio.Style;
 
 namespace Jvedio.ViewModel
 {
@@ -1394,18 +1396,18 @@ namespace Jvedio.ViewModel
 
         private void AddSingleMovie()
         {
-            Dialog_NewMovie dialog_NewMovie = new Dialog_NewMovie((Main)GetWindowByName("Main"));
-            var b = (bool)dialog_NewMovie.ShowDialog();
-            NewMovieDialogResult result = dialog_NewMovie.Result;
+            //Dialog_NewMovie dialog_NewMovie = new Dialog_NewMovie((Main)GetWindowByName("Main"));
+            //var b = (bool)dialog_NewMovie.ShowDialog();
+            //JvedioDialogResult result = dialog_NewMovie.Result;
 
-            if (b && !string.IsNullOrEmpty(result.Text))
-            {
-                List<string> IDList = GetIDListFromString(result.Text, result.VideoType);
-                foreach (var item in IDList)
-                {
-                    InsertID(item, result.VideoType);
-                }
-            }
+            //if (b && !string.IsNullOrEmpty(result.Text))
+            //{
+            //    List<string> IDList = GetIDListFromString(result.Text, result.VideoType);
+            //    foreach (var item in IDList)
+            //    {
+            //        InsertID(item, result.VideoType);
+            //    }
+            //}
 
 
         }
@@ -1437,22 +1439,22 @@ namespace Jvedio.ViewModel
         public List<string> GetIDListFromString(string str, VideoType vedioType)
         {
             List<string> result = new List<string>();
-            foreach (var item in str.Split(new string[] { System.Environment.NewLine }, StringSplitOptions.None))
-            {
-                string id = item;
-                if (AutoAddPrefix && Prefix != "")
-                    id = Prefix + id;
+            //foreach (var item in str.Split(new string[] { System.Environment.NewLine }, StringSplitOptions.None))
+            //{
+            //    string id = item;
+            //    if (AutoAddPrefix && Prefix != "")
+            //        id = Prefix + id;
 
 
-                if (vedioType == VideoType.Europe)
-                    id = id.Replace(" ", "");
-                else
-                    id = id.ToUpper().Replace(" ", "");
+            //    if (vedioType == VideoType.Europe)
+            //        id = id.Replace(" ", "");
+            //    else
+            //        id = id.ToUpper().Replace(" ", "");
 
 
 
-                if (!string.IsNullOrEmpty(id) && !result.Contains(id)) result.Add(id);
-            }
+            //    if (!string.IsNullOrEmpty(id) && !result.Contains(id)) result.Add(id);
+            //}
             return result;
         }
 
@@ -1480,8 +1482,8 @@ namespace Jvedio.ViewModel
                 SelectWrapper<Video> selectWrapper = getWrapper(searchType);
                 if (selectWrapper != null) wrapper.Join(selectWrapper);
 
-                string actor_join_sql = " join metadatas_to_actor on metadatas_to_actor.DataID=metadata.DataID " +
-                "JOIN actor_info on metadatas_to_actor.ActorID=actor_info.ActorID ";
+                string actor_join_sql = " join metadata_to_actor on metadata_to_actor.DataID=metadata.DataID " +
+                "JOIN actor_info on metadata_to_actor.ActorID=actor_info.ActorID ";
 
                 string label_join_sql = " join metadata_to_label on metadata_to_label.DataID=metadata.DataID ";
 
@@ -2419,7 +2421,7 @@ namespace Jvedio.ViewModel
                 Game game = GameList.Where(arg => arg.DataID == dataID).FirstOrDefault();
                 if (game != null)
                 {
-                    MetaData.SetImage(ref data, game.BigImagePath);
+                    //MetaData.SetImage(ref data, game.BigImagePath);
                 }
             }
             MetaData.setTagStamps(ref data);// 设置标签戳

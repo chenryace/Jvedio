@@ -83,15 +83,8 @@ create table metadata_video(
     Outline TEXT,
     Duration INT DEFAULT 0,
     SubSection TEXT,
-    
     ImageUrls TEXT DEFAULT '',
     
-    PreviewImagePath TEXT,
-    ScreenShotPath TEXT,
-    GifImagePath TEXT,
-    BigImagePath TEXT,
-    SmallImagePath TEXT,
-
     WebType  VARCHAR(100),
     WebUrl  VARCHAR(2000),
 
@@ -158,13 +151,13 @@ COMMIT;
 -- 演员出演的作品和演员对应关系（多对多）
 -- 作品可以是：影视、写真、游戏等
 BEGIN;
-create table metadatas_to_actor(
+create table metadata_to_actor(
     ID INTEGER PRIMARY KEY autoincrement,
     ActorID INTEGER,
     DataID INT,
     unique(ActorID,DataID)
 );
-CREATE INDEX metadatas_to_actor_idx_ActorID ON metadatas_to_actor (ActorID,DataID);
-CREATE INDEX metadatas_to_actor_idx_DataID ON metadatas_to_actor (DataID,ActorID);
+CREATE INDEX metadata_to_actor_idx_ActorID ON metadata_to_actor (ActorID,DataID);
+CREATE INDEX metadata_to_actor_idx_DataID ON metadata_to_actor (DataID,ActorID);
 COMMIT;
 

@@ -23,9 +23,6 @@ create table metadata_game(
     Studio TEXT,
     Publisher TEXT,
 
-    GifImagePath TEXT,
-    BigImagePath TEXT,
-    SmallImagePath TEXT,
 
     WebType  VARCHAR(100),
     WebUrl  VARCHAR(2000),

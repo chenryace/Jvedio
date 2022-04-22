@@ -49,7 +49,7 @@ namespace Jvedio
         Main windowMain = GetWindowByName("Main") as Main;
         WindowEdit WindowEdit;
 
-        public DetailDownLoad DetailDownLoad;
+        //public DetailDownLoad DetailDownLoad;
         public List<long> DataIDs = new List<long>();
         public long DataID;
 
@@ -143,7 +143,7 @@ namespace Jvedio
                     if (cancelLoadImage) break;
                     ActorInfo actorInfo = vieModel.CurrentVideo.ActorInfos[i];
                     //加载图片
-                    string imagePath = Video.parseImagePath(actorInfo.SmallImagePath);
+                    string imagePath = actorInfo.getImagePath();
                     BitmapImage smallimage = ReadImageFromFile(imagePath);
                     if (smallimage == null) smallimage = DefaultActorImage;
                     actorInfo.SmallImage = smallimage;
@@ -465,8 +465,8 @@ namespace Jvedio
 
         public void StopDownLoad()
         {
-            if (DetailDownLoad != null && DetailDownLoad.IsDownLoading == true) ChaoControls.Style.MessageCard.Warning(Jvedio.Language.Resources.Message_CancelCurrentTask);
-            DetailDownLoad?.CancelDownload();
+            //if (DetailDownLoad != null && DetailDownLoad.IsDownLoading == true) ChaoControls.Style.MessageCard.Warning(Jvedio.Language.Resources.Message_CancelCurrentTask);
+            //DetailDownLoad?.CancelDownload();
         }
 
 
@@ -687,23 +687,23 @@ namespace Jvedio
 
         private void SetToSmallPic(object sender, RoutedEventArgs e)
         {
-            string path = getExtraImagePath(sender as FrameworkElement, 1);
-            videoMapper.updateFieldById("SmallImagePath", path, DataID);
-            windowMain?.RefreshImage(vieModel.CurrentVideo);
-            ChaoControls.Style.MessageCard.Info(Jvedio.Language.Resources.Message_Success);
+            //string path = getExtraImagePath(sender as FrameworkElement, 1);
+            //videoMapper.updateFieldById("SmallImagePath", path, DataID);
+            //windowMain?.RefreshImage(vieModel.CurrentVideo);
+            //ChaoControls.Style.MessageCard.Info(Jvedio.Language.Resources.Message_Success);
         }
 
 
         private void SetToBigAndSmallPic(object sender, RoutedEventArgs e)
         {
 
-            string path = getExtraImagePath(sender as FrameworkElement, 1);
-            // todo 绝对地址
-            videoMapper.updateFieldById("SmallImagePath", path, DataID);
-            videoMapper.updateFieldById("BigImagePath", path, DataID);
-            Refresh();
-            windowMain?.RefreshImage(vieModel.CurrentVideo);
-            ChaoControls.Style.MessageCard.Info(Jvedio.Language.Resources.Message_Success);
+            //string path = getExtraImagePath(sender as FrameworkElement, 1);
+            //// todo 绝对地址
+            //videoMapper.updateFieldById("SmallImagePath", path, DataID);
+            //videoMapper.updateFieldById("BigImagePath", path, DataID);
+            //Refresh();
+            //windowMain?.RefreshImage(vieModel.CurrentVideo);
+            //ChaoControls.Style.MessageCard.Info(Jvedio.Language.Resources.Message_Success);
 
         }
 
@@ -1322,10 +1322,6 @@ namespace Jvedio
                 {
                     vieModel.CurrentVideo.PreviewImageList[i] = null;
                 }
-                for (int i = 0; i < vieModel.CurrentVideo.ActorInfos.Count; i++)
-                {
-                    vieModel.CurrentVideo.ActorInfos[i].SmallImage = null;
-                }
             }
             GC.Collect();
             cancelLoadImage = false;
@@ -1338,7 +1334,7 @@ namespace Jvedio
             DisposeImage();
             vieModel.CurrentVideo.PreviewImageList = new ObservableCollection<BitmapSource>();
             vieModel.CurrentVideo.PreviewImagePathList = new ObservableCollection<string>();
-            string BigImagePath = Video.getBigImage(vieModel.CurrentVideo);
+            string BigImagePath = vieModel.CurrentVideo.getBigImage();
             if (!isScreenShot && File.Exists(BigImagePath))
             {
                 vieModel.CurrentVideo.PreviewImageList.Add(vieModel.CurrentVideo.BigImage);
@@ -1355,8 +1351,8 @@ namespace Jvedio
 
             //扫描预览图目录
             List<string> imagePathList = new List<string>();
-            string imagePath = Video.getExtraImage(vieModel.CurrentVideo);
-            if (isScreenShot) imagePath = Video.getScreenShot(vieModel.CurrentVideo);
+            string imagePath = vieModel.CurrentVideo.getExtraImage();
+            if (isScreenShot) imagePath = vieModel.CurrentVideo.getScreenShot();
             await Task.Run(() =>
             {
                 if (Directory.Exists(imagePath))

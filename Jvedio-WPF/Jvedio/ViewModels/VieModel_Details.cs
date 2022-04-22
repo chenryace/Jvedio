@@ -177,6 +177,26 @@ namespace Jvedio.ViewModel
 
         public void Load(long dataID)
         {
+            //释放图片内存
+            if (CurrentVideo != null)
+            {
+                CurrentVideo.SmallImage = null;
+                CurrentVideo.BigImage = null;
+                for (int i = 0; i < CurrentVideo.PreviewImageList.Count; i++)
+                {
+                    CurrentVideo.PreviewImageList[i] = null;
+                }
+            }
+            if (CurrentActorList != null)
+            {
+                for (int i = 0; i < CurrentActorList.Count; i++)
+                {
+                    CurrentActorList[i].SmallImage = null;
+                }
+            }
+
+            GC.Collect();
+
             windowDetails.DataID = dataID;
             //((WindowDetails)FileProcess.GetWindowByName("WindowDetails")).SetStatus(false);
             metaDataMapper.increaseFieldById("ViewCount", dataID); //访问次数+1
@@ -188,17 +208,9 @@ namespace Jvedio.ViewModel
             List<Magnet> magnets = magnetsMapper.selectList(new SelectWrapper<Magnet>().Eq("DataID", dataID));
             CurrentVideo.Magnets = magnets.OrderByDescending(arg => arg.Size).ThenByDescending(arg => arg.Releasedate).ThenByDescending(arg => string.Join(" ", arg.Tags).Length).ToList(); ;
 
-            //释放图片内存
-            CurrentVideo.SmallImage = null;
-            CurrentVideo.BigImage = null;
-            for (int i = 0; i < CurrentVideo.PreviewImageList.Count; i++)
-            {
-                CurrentVideo.PreviewImageList[i] = null;
-            }
-            //todo 释放演员头像
-            GC.Collect();
 
-            BitmapImage image = ImageProcess.BitmapImageFromFile(Video.getBigImage(CurrentVideo));
+
+            BitmapImage image = ImageProcess.BitmapImageFromFile(CurrentVideo.getBigImage());
             if (image == null) image = DefaultBigImage;
             CurrentVideo.BigImage = image;
             //MySqlite db = new MySqlite("Translate");

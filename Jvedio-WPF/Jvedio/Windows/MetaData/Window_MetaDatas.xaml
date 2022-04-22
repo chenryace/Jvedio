@@ -33,7 +33,7 @@
     <chao:BaseWindow.Resources>
 
         <!--  高清、中字、流出  -->
-        <local:ParseImagePathConverter x:Key="ParseImagePathConverter" />
+
         <local:TagStampsConverter x:Key="TagStampsConverter" />
         <local:MovieStampTypeToVisibilityConverter x:Key="MovieStampTypeToVisibilityConverter" />
         <local:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />

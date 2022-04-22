@@ -1,4 +1,5 @@
-﻿using Jvedio.Entity;
+﻿using Jvedio.Core.Enums;
+using Jvedio.Entity;
 using Jvedio.Style;
 using Jvedio.Utils;
 using Jvedio.ViewModel;
@@ -487,16 +488,16 @@ namespace Jvedio
             if (window != null) main = (Main)window;
 
 
-            if (main?.DownLoader != null)
-            {
-                if (main.DownLoader.State == DownLoadState.DownLoading | main.DownLoader.State == DownLoadState.Pause)
-                {
-                    Console.WriteLine("main.DownLoader.State   " + main.DownLoader.State);
-                    result = true;
-                }
+            //if (main?.DownLoader != null)
+            //{
+            //    if (main.DownLoader.State == DownLoadState.DownLoading | main.DownLoader.State == DownLoadState.Pause)
+            //    {
+            //        Console.WriteLine("main.DownLoader.State   " + main.DownLoader.State);
+            //        result = true;
+            //    }
 
 
-            }
+            //}
 
 
             return result;

@@ -351,18 +351,18 @@ namespace Jvedio.ViewModel
                 like_sql = $" and ActorName like '%{search}%' ";
 
             string count_sql = "SELECT count(*) as Count " +
-                         "from (SELECT actor_info.ActorID FROM actor_info join metadatas_to_actor " +
-                         "on metadatas_to_actor.ActorID=actor_info.ActorID " +
+                         "from (SELECT actor_info.ActorID FROM actor_info join metadata_to_actor " +
+                         "on metadata_to_actor.ActorID=actor_info.ActorID " +
                          "join metadata " +
-                         "on metadatas_to_actor.DataID=metadata.DataID " +
+                         "on metadata_to_actor.DataID=metadata.DataID " +
                          $"WHERE metadata.DBId={GlobalConfig.Main.CurrentDBId} and metadata.DataType={0} " +
                          like_sql + "GROUP BY actor_info.ActorID );";
 
             ActorTotalCount = actorMapper.selectCount(count_sql);
             SelectWrapper<ActorInfo> wrapper = new SelectWrapper<ActorInfo>();
             string sql = $"{wrapper.Select(VieModel_Main.ActorSelectedField).toSelect(false)} FROM actor_info " +
-                $"join metadatas_to_actor on metadatas_to_actor.ActorID=actor_info.ActorID " +
-                $"join metadata on metadatas_to_actor.DataID=metadata.DataID " +
+                $"join metadata_to_actor on metadata_to_actor.ActorID=actor_info.ActorID " +
+                $"join metadata on metadata_to_actor.DataID=metadata.DataID " +
                 $"WHERE metadata.DBId={GlobalConfig.Main.CurrentDBId} and metadata.DataType={0} " + like_sql +
                 $"GROUP BY actor_info.ActorID ORDER BY Count DESC"
                 + ActorToLimit();
@@ -380,7 +380,7 @@ namespace Jvedio.ViewModel
             {
                 ActorInfo actorInfo = ActorList[i];
                 //加载图片
-                string smallImagePath = Video.parseImagePath(actorInfo.SmallImagePath);
+                string smallImagePath = actorInfo.getImagePath();
                 BitmapImage smallimage = ReadImageFromFile(smallImagePath);
                 if (smallimage == null) smallimage = DefaultActorImage;
                 actorInfo.SmallImage = smallimage;

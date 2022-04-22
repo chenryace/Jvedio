@@ -71,7 +71,7 @@ namespace Jvedio
         {
             Dictionary<string, object> dict = new Dictionary<string, object>();
             if (server == null) return dict;
-            dict.Add("ServerType", serverName);
+            dict.Add("ServerName", serverName);
             dict.Add("Url", server.Url);
             dict.Add("Enabled", server.IsEnable);
             dict.Add("Available", 0);
@@ -497,14 +497,14 @@ namespace Jvedio
 
             if (insert_list.Count > 0)
             {
-                string sql = $"insert or ignore into metadatas_to_actor(ActorID,DataID) " +
+                string sql = $"insert or ignore into metadata_to_actor(ActorID,DataID) " +
                     $"values {string.Join(",", insert_list)};";
                 metaDataMapper.executeNonQuery(sql);
             }
 
             // 设置演员头像路径
-            string update_sql = "update actor_info set SmallImagePath='*PicPath*/Actresses/' || ActorName || '.jpg';";
-            actorMapper.executeNonQuery(update_sql);
+            //string update_sql = "update actor_info set SmallImagePath='*PicPath*/Actresses/' || ActorName || '.jpg';";
+            //actorMapper.executeNonQuery(update_sql);
         }
 
 

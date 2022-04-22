@@ -218,8 +218,8 @@ namespace Jvedio.ViewModel
                 CurrentGame = GlobalMapper.gameMapper.SelectByID(DataID);
                 oldLabels = CurrentGame.LabelList?.Select(arg => arg).ToList();
                 CurrentData = CurrentGame.toMetaData();
-                if (File.Exists(CurrentGame.BigImagePath))
-                    CurrentImage = ImageProcess.ReadImageFromFile(CurrentGame.BigImagePath);
+                //if (File.Exists(CurrentGame.BigImagePath))
+                //    CurrentImage = ImageProcess.ReadImageFromFile(CurrentGame.BigImagePath);
             }
             else if (CurrentDataType == Core.Enums.DataType.Comics)
             {

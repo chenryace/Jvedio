@@ -42,7 +42,9 @@ namespace Jvedio.Core.Config
             foreach (Dictionary<object, object> d in dicts)
             {
                 CrawlerServer server = new CrawlerServer();
-                server.ServerType = d["ServerType"].ToString();
+                server.ServerName = d["ServerName"].ToString();
+                if (!Global.Plugins.Crawlers.Where(arg => arg.ServerName.ToString().ToLower().Equals(server.ServerName.ToLower())).Any())
+                    continue;
                 server.Url = d["Url"].ToString();
                 server.Cookies = d["Cookies"].ToString();
                 server.Enabled = d["Enabled"].ToString().ToLower() == "true" ? true : false;
@@ -51,8 +53,10 @@ namespace Jvedio.Core.Config
                 int.TryParse(d["Available"].ToString(), out int available);
                 server.Available = available;
                 CrawlerServers.Add(server);
-            }
 
+
+            }
+            Console.WriteLine();
         }
         public override void Save()
         {

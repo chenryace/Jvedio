@@ -261,7 +261,16 @@
     <Compile Include="Core\Command\OpenWindow.cs" />
     <Compile Include="Core\Config\ServerConfig.cs" />
     <Compile Include="Core\Config\WindowConfig\Settings.cs" />
+    <Compile Include="Core\CustomEventArgs\ActressUpdateEventArgs.cs" />
+    <Compile Include="Core\CustomEventArgs\InfoUpdateEventArgs.cs" />
+    <Compile Include="Core\CustomEventArgs\MessageCallBackEventArgs.cs" />
+    <Compile Include="Core\Enums\DownLoadState.cs" />
+    <Compile Include="Core\Enums\ImageType.cs" />
+    <Compile Include="Core\Exceptions\CrawlerNotFoundException.cs" />
+    <Compile Include="Core\Net\ActorDownloader.cs" />
     <Compile Include="Core\Net\DownloadDispatcher.cs" />
+    <Compile Include="Core\Net\DownLoadProgress.cs" />
+    <Compile Include="Core\Net\DownloadResult.cs" />
     <Compile Include="Core\Net\DownLoadTask.cs" />
     <Compile Include="Core\Plugins\Crawler\CrawlerLoader.cs" />
     <Compile Include="Core\CustomSettingsProvider.cs" />
@@ -283,11 +292,12 @@
     <Compile Include="Core\Enums\VideoType.cs" />
     <Compile Include="Core\Enums\ViewMode.cs" />
     <Compile Include="Core\Enums\WindowState.cs" />
-    <Compile Include="Core\EventArgs\WrapperEventArg.cs" />
+    <Compile Include="Core\CustomEventArgs\WrapperEventArg.cs" />
     <Compile Include="Core\Exceptions\PrimaryKeyTypeException.cs" />
     <Compile Include="Core\Extensions\MenuItemExtensions.cs" />
     <Compile Include="Core\GlobalMapper.cs" />
     <Compile Include="Core\GlobalStyle.cs" />
+    <Compile Include="Core\Plugins\Plugin.cs" />
     <Compile Include="Core\Plugins\PluginInfo.cs" />
     <Compile Include="Core\Scan\ComicScan.cs" />
     <Compile Include="Core\Scan\GameScan.cs" />
@@ -447,7 +457,7 @@
     <Compile Include="Windows\DialogInput.xaml.cs">
       <DependentUpon>DialogInput.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Utils\Net\DownLoader.cs" />
+    <Compile Include="Core\Net\VideoDownLoader.cs" />
     <Compile Include="Utils\ImageAndVedio\ImageSlide.cs" />
     <Compile Include="Core\Crawler\Crawler.cs" />
     <Compile Include="Utils\Sqlite\DataBase.cs" />
@@ -642,6 +652,8 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Content Include="Sql\single_db_comic.sql" />
+    <Content Include="Sql\single_db_game.sql" />
     <Content Include="Sql\single_db_picture.sql" />
     <Content Include="Test\SqliteTest\main.py" />
     <Resource Include="Resources\Picture\Empty.png" />

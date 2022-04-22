@@ -217,27 +217,6 @@ namespace Jvedio
 
 
 
-    public class ParseImagePathConverter : IValueConverter
-    {
-        public object Convert(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture)
-        {
-            string path = "";
-            if (value == null || string.IsNullOrEmpty(value.ToString())) return null;
-            bool OnlyDir = false;
-            if (parameter != null && parameter.ToString() == "OnlyDir") OnlyDir = true;
-            path = Video.parseImagePath(value.ToString());
-            if (OnlyDir)
-                return System.IO.Path.GetDirectoryName(path);
-            else
-                return path;
-        }
-
-        public object ConvertBack(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture)
-        {
-            return null;
-        }
-    }
-
 
     public class TagStampsConverter : IValueConverter
     {

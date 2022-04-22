@@ -6,12 +6,11 @@ using System.Threading.Tasks;
 
 namespace Jvedio.Core.Enums
 {
-    //public enum TaskStatus
-    //{
-    //    None,
-    //    Running,
-    //    Complete,
-    //    Error,
-    //    Retry
-    //}
+    public enum DownLoadState
+    {
+        DownLoading,
+        Completed,
+        Pause,
+        Fail
+    }
 }

@@ -26,32 +26,36 @@ namespace Jvedio
     /// </summary>
     public partial class Dialog_NewMovie : Jvedio.Style.BaseDialog
     {
-        public NewMovieDialogResult Result { get; private set; }
+        public NewVideoDialogResult Result { get; private set; }
 
-        public Dialog_NewMovie(Window owner) : base(owner)
+
+        public bool AutoAddPrefix { get; set; }
+        public string Prefix { get; set; }
+        public VideoType VideoType { get; set; }
+        public Dialog_NewMovie(Window owner, bool autoAddPrefix = false, string prefix = "") : base(owner)
         {
             InitializeComponent();
-            RadioButtonStackPanel.Children.OfType<RadioButton>().ToList()[DefaultNewMovieType].IsChecked = true;
-            FC2Checked.IsChecked = AutoAddPrefix;
+            Prefix = prefix;
+            AutoAddPrefix = autoAddPrefix;
+            VideoType = VideoType.Censored;
+            autoPrefix.IsChecked = AutoAddPrefix;
             PrefixTextBox.Text = Prefix;
         }
 
         protected override void Confirm(object sender, RoutedEventArgs e)
         {
-            var rbs = RadioButtonStackPanel.Children.OfType<RadioButton>().ToList();
-            int idx = rbs.FindIndex(arg => arg.IsChecked == true);
-            Result = new NewMovieDialogResult(AddMovieTextBox.Text, idx);
+            Result = new NewVideoDialogResult(AddMovieTextBox.Text, AutoAddPrefix ? Prefix : "", VideoType);
             base.Confirm(sender, e);
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            WindowTools windowTools = (WindowTools)FileProcess.GetWindowByName("WindowTools");
-            if (windowTools == null) windowTools = new WindowTools();
-            windowTools.Show();
-            windowTools.Activate();
-            windowTools.TabControl.SelectedIndex = 0;
-            this.Close();
+            //WindowTools windowTools = (WindowTools)FileProcess.GetWindowByName("WindowTools");
+            //if (windowTools == null) windowTools = new WindowTools();
+            //windowTools.Show();
+            //windowTools.Activate();
+            //windowTools.TabControl.SelectedIndex = 0;
+            //this.Close();
         }
 
         private void BaseDialog_ContentRendered(object sender, EventArgs e)
@@ -60,43 +64,46 @@ namespace Jvedio
 
         }
 
-        private void SetFc2Checked(object sender, RoutedEventArgs e)
+        private void SetChecked(object sender, RoutedEventArgs e)
         {
             AutoAddPrefix = (bool)(sender as CheckBox).IsChecked;
         }
 
-        private void SetNewMovieType(object sender, RoutedEventArgs e)
-        {
-            var r = RadioButtonStackPanel.Children.OfType<RadioButton>().ToList();
-            for (int i = 0; i < r.Count; i++)
-            {
-                if ((bool)r[i].IsChecked)
-                {
-                    DefaultNewMovieType = i;
-                    break;
-                }
-            }
-        }
+
 
         private void PrefixTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            //Prefix = (sender as TextBox).Text;
+            Prefix = (sender as TextBox).Text;
         }
 
         private void PrefixTextBox_LostFocus(object sender, RoutedEventArgs e)
         {
             Prefix = (sender as TextBox).Text;
         }
-    }
 
-
-    public class NewMovieDialogResult : JvedioDialogResult
-    {
-
-        public VideoType VideoType { get; set; }
-        public NewMovieDialogResult(string text, int option) : base(text, option)
+        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            VideoType = (VideoType)(option + 1);
+            VideoType = (VideoType)((sender as ComboBox).SelectedIndex);
         }
     }
+
+
+
+    public class NewVideoDialogResult
+    {
+        public string Text { get; set; }
+        public string Prefix { get; set; }
+        public VideoType VideoType { get; set; }
+
+
+        public NewVideoDialogResult(string text, string prefix, VideoType videoType)
+        {
+            Text = text;
+            Prefix = prefix;
+            VideoType = videoType;
+
+        }
+    }
+
+
 }

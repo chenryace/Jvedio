@@ -11,7 +11,8 @@ namespace Jvedio.Core.Plugins
     {
 
 
-        public string ServerType { get; set; }
+        public string ServerName { get; set; }
+        public string InfoType { get; set; }
         public string Name { get; set; }
         public string Version { get; set; }
         public string Categories { get; set; }
@@ -22,6 +23,7 @@ namespace Jvedio.Core.Plugins
         public string MarkDown { get; set; }
         public string License { get; set; }
         public string PublishDate { get; set; }
+        public string Path { get; set; }
 
 
         public static PluginInfo ParseDict(Dictionary<string, string> dict)
@@ -43,12 +45,12 @@ namespace Jvedio.Core.Plugins
             if (obj == null) return false;
             PluginInfo other = obj as PluginInfo;
             if (other == null) return false;
-            return other.ServerType.Equals(ServerType) && other.Name.Equals(Name);
+            return other.ServerName.Equals(ServerName) && other.Name.Equals(Name);
         }
 
         public override int GetHashCode()
         {
-            return ServerType.GetHashCode() ^ Name.GetHashCode();
+            return ServerName.GetHashCode() ^ Name.GetHashCode();
         }
 
     }

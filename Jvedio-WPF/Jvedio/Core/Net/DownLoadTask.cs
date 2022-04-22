@@ -16,6 +16,9 @@ using Jvedio.Core.SimpleORM;
 using Jvedio.Mapper;
 using static Jvedio.GlobalMapper;
 using Jvedio.Core.Scan;
+using Jvedio.Core.Enums;
+using Jvedio.Core.Exceptions;
+using Jvedio.Common.Crawler;
 
 namespace Jvedio.Core.Net
 {
@@ -23,12 +26,14 @@ namespace Jvedio.Core.Net
     {
 
         public Stopwatch stopwatch { get; set; }
+        public bool Success { get; set; }
 
         protected CancellationTokenSource tokenCTS;
         protected CancellationToken token;
 
         public event EventHandler onError;
         public event EventHandler onCanceled;
+        public event EventHandler onDownloadSuccess;
 
         protected virtual void OnError(EventArgs e)
         {
@@ -37,6 +42,7 @@ namespace Jvedio.Core.Net
 
         }
 
+        public Dictionary<string, string> Error = new Dictionary<string, string>();
 
 
 
@@ -58,6 +64,7 @@ namespace Jvedio.Core.Net
         public DownLoadTask(MetaData data)
         {
             DataID = data.DataID;
+            DataType = data.DataType;
             Status = System.Threading.Tasks.TaskStatus.WaitingToRun;
             CreateTime = DateHelper.Now();
 
@@ -89,7 +96,9 @@ namespace Jvedio.Core.Net
 
 
         public long DataID { get; set; }
+        public DataType DataType { get; set; }
         public string Title { get; set; }
+        public bool OverrideInfo { get; set; }//强制下载覆盖信息
 
         #region "property"
 
@@ -108,6 +117,20 @@ namespace Jvedio.Core.Net
                 if (STATUS_TO_TEXT_DICT.ContainsKey(value))
                     StatusText = STATUS_TO_TEXT_DICT[value];
                 Running = value == TaskStatus.Running;
+                OnPropertyChanged();
+            }
+        }
+        public string _Message;
+        public string Message
+        {
+
+            get
+            {
+                return _Message;
+            }
+            set
+            {
+                _Message = value;
                 OnPropertyChanged();
             }
         }
@@ -219,16 +242,160 @@ namespace Jvedio.Core.Net
                 Progress = 0;
                 Console.WriteLine("开始下载！");
                 stopwatch.Start();
+                Dictionary<string, object> dict = null;
+                if (DataType == DataType.Video)
+                {
+                    Video video = videoMapper.SelectVideoByID(DataID);
 
-                await Task.Delay(1000);
-                try { CheckStatus(); }
-                catch (TaskCanceledException ex) { Console.WriteLine(ex.Message); return; }
-                Progress = 33.33f;
+                    // 判断是否需要下载，自动跳过已下载的信息
+                    if (video.toDownload() || OverrideInfo)
+                    {
+                        VideoDownLoader downLoader = new VideoDownLoader(video, token);
+                        if (!string.IsNullOrEmpty(video.VID))
+                        {
+                            // 有 VID 的
+                            try
+                            {
+                                dict = await downLoader.GetInfo();
+                            }
+                            catch (CrawlerNotFoundException ex)
+                            {
+                                // todo 显示到界面上
+                                Message = ex.Message;
+                            }
 
-                await Task.Delay(1000);
-                try { CheckStatus(); }
-                catch (TaskCanceledException ex) { Console.WriteLine(ex.Message); return; }
-                Progress = 66.66f;
+                        }
+                        else
+                        {
+                            // 无 VID 的
+
+
+
+
+                        }
+                        if (dict != null && dict.Count > 0)
+                        {
+                            Progress = 33f;
+                            if (dict.ContainsKey("Error"))
+                            {
+                                string error = dict["Error"].ToString();
+                                if (!string.IsNullOrEmpty(error))
+                                {
+                                    Message = error;
+                                    dict = null;
+                                }
+                            }
+                            else
+                            {
+                                // 1. 大图
+                                if (dict.ContainsKey("BigImageUrl"))
+                                {
+                                    string imageUrl = dict["BigImageUrl"].ToString();
+                                    string saveFileName = video.getImagePath(ImageType.Big, Path.GetExtension(imageUrl));
+                                    if (!File.Exists(saveFileName))
+                                    {
+                                        byte[] fileByte = downLoader.DownloadImage(imageUrl, (error) =>
+                                        {
+                                            if (!string.IsNullOrEmpty(error))
+                                                Error.Add("BigImageUrl",
+                                                    $"{DateHelper.Now()} [Error] {imageUrl} => {error}");
+                                        });
+                                        if (fileByte != null && fileByte.Length > 0)
+                                            FileProcess.ByteArrayToFile(fileByte, saveFileName);
+                                    }
+                                }
+                                Progress = 66f;
+                                // 2. 小图
+                                if (dict.ContainsKey("SmallImageUrl"))
+                                {
+                                    string imageUrl = dict["SmallImageUrl"].ToString();
+                                    string saveFileName = video.getImagePath(ImageType.Small, Path.GetExtension(imageUrl));
+                                    if (!File.Exists(saveFileName))
+                                    {
+                                        byte[] fileByte = downLoader.DownloadImage(imageUrl, (error) =>
+                                        {
+                                            if (!string.IsNullOrEmpty(error))
+                                                Error.Add("SmallImageUrl",
+                                                    $"{DateHelper.Now()} [Error] {imageUrl} => {error}");
+                                        });
+                                        if (fileByte != null && fileByte.Length > 0)
+                                            FileProcess.ByteArrayToFile(fileByte, saveFileName);
+                                    }
+                                }
+                                Progress = 77f;
+                                // 3. 演员信息和头像
+                                if (dict.ContainsKey("ActorNames") && dict.ContainsKey("ActressImageUrl"))
+                                {
+                                    if (dict["ActorNames"] is List<string> ActorNames && dict["ActressImageUrl"] is List<string> ActressImageUrl)
+                                    {
+                                        if (ActorNames != null && ActressImageUrl != null && ActorNames.Count == ActressImageUrl.Count)
+                                        {
+                                            for (int i = 0; i < ActorNames.Count; i++)
+                                            {
+                                                string actorName = ActorNames[i];
+                                                string imageUrl = ActressImageUrl[i];
+                                                bool insert = false;
+                                                ActorInfo actorInfo = actorMapper.selectOne(new SelectWrapper<ActorInfo>().Eq("ActorName", actorName));
+                                                if (actorInfo == null || actorInfo.ActorID <= 0)
+                                                {
+                                                    actorInfo = new ActorInfo();
+                                                    actorInfo.ActorName = actorName;
+                                                    actorMapper.insert(actorInfo);
+                                                }
+                                                // 保存信息
+                                                string sql = $"insert or ignore into metadata_to_actor (ActorID,DataID) values ({actorInfo.ActorID},{video.DataID})";
+                                                metaDataMapper.executeNonQuery(sql);
+                                                // 下载图片
+                                                string saveFileName = actorInfo.getImagePath();
+                                                if (!File.Exists(saveFileName))
+                                                {
+                                                    byte[] fileByte = downLoader.DownloadImage(imageUrl, (error) =>
+                                                    {
+                                                        if (!string.IsNullOrEmpty(error))
+                                                            Error.Add("ActressImageUrl",
+                                                                $"{DateHelper.Now()} [Error] {imageUrl} => {error}");
+                                                    });
+                                                    if (fileByte != null && fileByte.Length > 0)
+                                                        FileProcess.ByteArrayToFile(fileByte, saveFileName);
+                                                }
+                                            }
+                                        }
+
+                                    }
+                                }
+                                Progress = 88f;
+                                // 2. 更新
+                                video.parseDictInfo(dict);
+                                videoMapper.updateById(video);
+                                metaDataMapper.updateById(video.toMetaData());
+                                Success = true;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        Message = "跳过";
+                        dict = new Dictionary<string, object>();
+                    }
+
+
+                }
+
+                //try { CheckStatus(); }
+                //catch (TaskCanceledException ex) { Console.WriteLine(ex.Message); return; }
+                if (dict != null)
+                {
+                    Status = TaskStatus.RanToCompletion;
+                }
+                else
+                {
+                    Status = TaskStatus.Canceled;// 抛出异常的任务都自动取消
+                }
+
+
+
+
+
 
                 await Task.Delay(1000);
 
@@ -236,7 +403,7 @@ namespace Jvedio.Core.Net
                 Progress = 100.00f;
                 stopwatch.Stop();
                 ElapsedMilliseconds = stopwatch.ElapsedMilliseconds;
-                Status = TaskStatus.RanToCompletion;
+                if (Success) onDownloadSuccess?.Invoke(this, null);
             });
         }
 
@@ -264,7 +431,7 @@ namespace Jvedio.Core.Net
 
         public void Cancel()
         {
-            if (Status == TaskStatus.Running)
+            if (Status == TaskStatus.Running || Status == TaskStatus.WaitingToRun)
             {
                 Status = TaskStatus.Canceled;
                 tokenCTS.Cancel();

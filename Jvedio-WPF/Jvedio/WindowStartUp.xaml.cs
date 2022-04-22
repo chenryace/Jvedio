@@ -99,7 +99,6 @@ namespace Jvedio
             if (Properties.Settings.Default.OpenDataBaseDefault)
             {
                 LoadDataBase();
-
             }
             else
             {

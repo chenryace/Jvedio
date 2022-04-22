@@ -1,6 +1,7 @@
 ﻿using ChaoControls.Style;
 using DynamicData;
 using Jvedio.Core;
+using Jvedio.Core.CustomEventArgs;
 using Jvedio.Core.Enums;
 using Jvedio.Core.Scan;
 using Jvedio.Core.SimpleORM;
