@@ -17,6 +17,7 @@ using Jvedio.Mapper;
 using static Jvedio.GlobalMapper;
 using Jvedio.Core.Net;
 using Jvedio.Core.CustomEventArgs;
+using Jvedio.Core.CustomTask;
 
 namespace Jvedio.Core.Scan
 {
@@ -30,7 +31,7 @@ namespace Jvedio.Core.Scan
 
         public event EventHandler onError;
         public event EventHandler onCanceled;
-
+        private TaskLogger logger { get; set; }
 
         protected virtual void OnError(EventArgs e)
         {
@@ -82,6 +83,20 @@ namespace Jvedio.Core.Scan
             set
             {
                 _StatusText = value;
+                OnPropertyChanged();
+            }
+        }
+        public string _Message;
+        public string Message
+        {
+
+            get
+            {
+                return _Message;
+            }
+            set
+            {
+                _Message = value;
                 OnPropertyChanged();
             }
         }
@@ -201,17 +216,26 @@ namespace Jvedio.Core.Scan
             Task.Run(() =>
            {
                stopwatch.Start();
+               logger.Info("开始扫描任务");
                foreach (string path in ScanPaths)
                {
                    IEnumerable<string> paths = DirHelper.GetFileList(path, "*.*", (ex) =>
                    {
-
-                   });
+                       // 发生异常
+                       logger.Error(ex.Message);
+                   }, (dir) =>
+                   {
+                       Message = dir;
+                   }, tokenCTS);
                    FilePaths.AddRange(paths);
                }
 
                try { CheckStatus(); }
-               catch (TaskCanceledException ex) { Console.WriteLine(ex.Message); return; }
+               catch (TaskCanceledException ex)
+               {
+                   logger.Error(ex.Message);
+                   return;
+               }
 
                ScanHelper scanHelper = new ScanHelper();
 
@@ -219,7 +243,7 @@ namespace Jvedio.Core.Scan
                = scanHelper.parseMovie(FilePaths, FileExt, token, Properties.Settings.Default.ScanNfo);
 
                try { CheckStatus(); }
-               catch (TaskCanceledException ex) { Console.WriteLine(ex.Message); return; }
+               catch (TaskCanceledException ex) { logger.Error(ex.Message); return; }
 
                handleImport(parseResult.import);
                handleNotImport(parseResult.notImport);
@@ -237,6 +261,7 @@ namespace Jvedio.Core.Scan
 
         private void handleImport(List<Video> import)
         {
+            logger.Info("开始处理导入");
             // 分为 2 部分，有识别码和无识别码
             List<Video> noVidList = import.Where(arg => string.IsNullOrEmpty(arg.VID)).ToList();
             List<Video> vidList = import.Where(arg => !string.IsNullOrEmpty(arg.VID)).ToList();
@@ -380,6 +405,7 @@ namespace Jvedio.Core.Scan
         }
 
 
+        // todo
         private void handleNotImport(List<string> notImport)
         {
             foreach (string path in notImport)
@@ -419,6 +445,17 @@ namespace Jvedio.Core.Scan
                 Status = TaskStatus.Canceled;
                 tokenCTS.Cancel();
             }
+        }
+
+        // 持久化到硬盘
+        public void WriteToDisk()
+        {
+
+        }
+
+        public void Finished()
+        {
+            WriteToDisk();
         }
     }
 }

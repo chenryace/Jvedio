@@ -546,6 +546,7 @@ namespace Jvedio
                 App.Current.Windows[0].Opacity = 1;
 
             ////UpdateServersEnable();
+
             bool success = vieModel.SaveServers((msg) =>
              {
                  MessageCard.Error(msg);
@@ -555,7 +556,7 @@ namespace Jvedio
                 GlobalVariable.InitVariable();
                 ScanHelper.InitSearchPattern();
                 savePath();
-
+                saveSettings();
 
                 ChaoControls.Style.MessageCard.Success(Jvedio.Language.Resources.Message_Success);
             }
@@ -1165,6 +1166,7 @@ namespace Jvedio
             Properties.Settings.Default.Save();
 
             saveSettings();
+            GlobalConfig.Settings.Save();
         }
 
 
@@ -1172,7 +1174,9 @@ namespace Jvedio
         private void saveSettings()
         {
             GlobalConfig.Settings.PicPathMode = vieModel.PicPathMode;
-            GlobalConfig.Settings.Save();
+            GlobalConfig.Settings.DownloadPreviewImage = vieModel.DownloadPreviewImage;
+            GlobalConfig.Settings.OverrideInfo = vieModel.OverrideInfo;
+
         }
 
         private void CopyFFmpegUrl(object sender, MouseButtonEventArgs e)

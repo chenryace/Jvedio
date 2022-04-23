@@ -993,7 +993,10 @@
 
                     <WrapPanel Margin="20,5" Orientation="Horizontal">
 
-                        <CheckBox Content="{x:Static lang:Resources.SaveToNFO}" IsChecked="{Binding SaveInfoToNFO, Mode=TwoWay, Source={x:Static p:Settings.Default}}" />
+                        <CheckBox
+                            Margin="0"
+                            Content="{x:Static lang:Resources.SaveToNFO}"
+                            IsChecked="{Binding SaveInfoToNFO, Mode=TwoWay, Source={x:Static p:Settings.Default}}" />
 
 
 
@@ -1031,6 +1034,14 @@
                     </WrapPanel>
 
 
+                    <CheckBox
+                        Margin="20,5"
+                        Content="主界面同步时同时下载预览图"
+                        IsChecked="{Binding DownloadPreviewImage, Mode=TwoWay}" />
+                    <CheckBox
+                        Margin="20,5"
+                        Content="强制同步信息（不推荐）"
+                        IsChecked="{Binding OverrideInfo, Mode=TwoWay}" />
 
 
 

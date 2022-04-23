@@ -194,5 +194,10 @@ namespace Jvedio
             }
             return builder.ToString();
         }
+
+        private void ShowExceptions(object sender, RoutedEventArgs e)
+        {
+            new Dialog_Logs(this, string.Join(Environment.NewLine, ScanResult.Logs)).ShowDialog();
+        }
     }
 }

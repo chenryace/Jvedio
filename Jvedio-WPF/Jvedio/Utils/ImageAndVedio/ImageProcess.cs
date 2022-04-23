@@ -292,6 +292,23 @@ namespace Jvedio
             catch (Exception e) { Logger.LogF(e); }
             return null;
         }
+        public static BitmapImage BitmapImageFromByte(byte[] fileByte)
+        {
+            try
+            {
+                MemoryStream ms = new MemoryStream(fileByte);
+                BitmapImage bitmap = new BitmapImage();
+                bitmap.BeginInit();
+                bitmap.StreamSource = ms;
+                bitmap.CacheOption = BitmapCacheOption.OnLoad;//加载时才会将图像载入内存，因此不需要 ms.Close();
+                bitmap.EndInit();
+                bitmap.Freeze();
+                return bitmap;
+
+            }
+            catch (Exception e) { Logger.LogF(e); }
+            return null;
+        }
 
 
 

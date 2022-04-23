@@ -119,72 +119,13 @@ namespace Jvedio.Core.Net
             Dictionary<string, string> dataInfo = CurrentVideo.toDictionary();
 
             Plugin plugin = new Plugin(pluginInfo.Path, "GetInfo", new object[] { url, Header, dataInfo });
+            // 等待很久
             object o = await plugin.asyncInvokeMethod();
             if (o is Dictionary<string, object> d)
             {
                 return d;
             }
             return result;
-            //HttpResult httpResult = await HTTP.DownLoadFromNet(movie);
-            //if (httpResult != null)
-            //{
-            //    if (httpResult.Success)
-            //    {
-            //        InfoUpdate?.Invoke(this, new InfoUpdateEventArgs() { Movie = movie, progress = downLoadProgress.value, Success = httpResult.Success });//委托到主界面显示
-            //    }
-            //    else
-            //    {
-            //        string error = httpResult.Error != "" ? httpResult.Error : httpResult.StatusCode.ToStatusMessage();
-            //        MessageCallBack?.Invoke(this, new MessageCallBackEventArgs($" {movie.id} {Jvedio.Language.Resources.DownloadMessageFailFor}：{error}"));
-            //    }
-            //}
-
-            //DetailMovie dm = DataBase.SelectDetailMovieById(movie.id);
-
-            //if (dm == null)
-            //{
-            //    if (movie.id.ToUpper().StartsWith("FC2"))
-            //        SemaphoreFC2.Release();
-            //    else
-            //        Semaphore.Release();
-            //    return;
-            //}
-
-            //if (!File.Exists(BasePicPath + $"BigPic\\{dm.id}.jpg") || enforce)
-            //{
-            //    await HTTP.DownLoadImage(dm.bigimageurl, ImageType.BigImage, dm.id);//下载大图
-            //}
-
-
-
-            ////fc2 没有缩略图
-            //if (dm.id.IndexOf("FC2") >= 0)
-            //{
-            //    //复制海报图作为缩略图
-            //    if (File.Exists(BasePicPath + $"BigPic\\{dm.id}.jpg") && !File.Exists(BasePicPath + $"SmallPic\\{dm.id}.jpg"))
-            //    {
-            //        FileHelper.TryCopyFile(BasePicPath + $"BigPic\\{dm.id}.jpg", BasePicPath + $"SmallPic\\{dm.id}.jpg");
-            //    }
-
-            //}
-            //else
-            //{
-            //    if (!File.Exists(BasePicPath + $"SmallPic\\{dm.id}.jpg") || enforce)
-            //    {
-            //        await HTTP.DownLoadImage(dm.smallimageurl, ImageType.SmallImage, dm.id); //下载小图
-            //    }
-            //}
-            //dm.smallimage = ImageProcess.GetBitmapImage(dm.id, "SmallPic");
-            //InfoUpdate?.Invoke(this, new InfoUpdateEventArgs() { Movie = dm, progress = downLoadProgress.value, state = State });//委托到主界面显示
-            //dm.bigimage = ImageProcess.GetBitmapImage(dm.id, "BigPic");
-            //lock (downLoadProgress.lockobject) downLoadProgress.value += 1;//完全下载完一个影片
-            //InfoUpdate?.Invoke(this, new InfoUpdateEventArgs() { Movie = dm, progress = downLoadProgress.value, state = State, Success = true });//委托到主界面显示
-            //Task.Delay(Delay.MEDIUM).Wait();//每个线程之间暂停
-            //                                //取消阻塞
-            //if (movie.id.ToUpper().IndexOf("FC2") >= 0)
-            //    SemaphoreFC2.Release();
-            //else
-            //    Semaphore.Release();
 
         }
 

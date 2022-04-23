@@ -10,22 +10,24 @@ namespace Jvedio.Core.Net
     public class DownloadDispatcher
     {
 
-        public static int MAX_PRIORITY = 5;
-        public static int NORMAL_PRIORITY = 3;
-        public static int MIN_PRIORITY = 1;
+        // 优先级
+        private static int MAX_PRIORITY = 5;
+        private static int NORMAL_PRIORITY = 3;
+        private static int MIN_PRIORITY = 1;
 
-        public static int MAX_TASK_COUNT = 3;
-        public static int CHECK_PERIOD = 1000;
+        private static int MAX_TASK_COUNT = 3;// 每次同时下载的任务数量
+        private static int TASK_DELAY = 3000;// 每一批次下载后暂停的时间
+        private static int CHECK_PERIOD = 1000;  // 调度器运行周期
 
 
-        public bool Working = false;
-        public bool Cancel = false;
+        public bool Working = false;// 调度器是否在工作中
+        public bool Cancel = false;// 调度器是否被取消了
 
-        public double Progress { get; set; }
+        public double Progress { get; set; }// 总的工作进度
 
         public event EventHandler onWorking;
 
-
+        // 具有优先级的队列
         public static SimplePriorityQueue<DownLoadTask> WaitingQueue = new SimplePriorityQueue<DownLoadTask>();
         public static List<DownLoadTask> WorkingList = new List<DownLoadTask>();
         public static List<DownLoadTask> DoneList = new List<DownLoadTask>();
@@ -73,6 +75,7 @@ namespace Jvedio.Core.Net
                 while (true && !Cancel)
                 {
                     Console.WriteLine("调度器工作中...");
+                    // 检查工作队列中的任务是否完成
                     for (int i = WorkingList.Count - 1; i >= 0; i--)
                     {
                         if (Cancel) return;
@@ -82,13 +85,9 @@ namespace Jvedio.Core.Net
                             DoneList.Add(task);
                             WorkingList.RemoveAt(i);
                         }
-                        else if (task.Status == TaskStatus.WaitingForActivation)
-                        {
-                            WaitingQueue.Enqueue(task, NORMAL_PRIORITY);
-                            WorkingList.RemoveAt(i);
-                        }
                     }
-
+                    if (WorkingList.Count != 0) await Task.Delay(TASK_DELAY);
+                    // 将等待队列中的下载任务添加到工作队列
                     while (WorkingList.Count < MAX_TASK_COUNT && WaitingQueue.Count > 0)
                     {
                         DownLoadTask task = WaitingQueue.Dequeue();
@@ -100,7 +99,11 @@ namespace Jvedio.Core.Net
 
                     foreach (DownLoadTask task in WorkingList)
                     {
-                        if (!task.Running) task.Start();
+                        if (!task.Running && task.Status != TaskStatus.Canceled)
+                        {
+                            Console.WriteLine($" DataID ={ task.DataID} 将开始运行");
+                            task.Start();
+                        }
                     }
 
                     float totalcount = DoneList.Count + WaitingQueue.Count + WorkingList.Count;

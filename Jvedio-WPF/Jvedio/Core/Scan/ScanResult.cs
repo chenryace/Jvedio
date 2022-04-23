@@ -16,10 +16,12 @@ namespace Jvedio.Core.Scan
             Import = new List<string>();
             NotImport = new Dictionary<string, string>();
             FailNFO = new List<string>();
+            Logs = new List<string>();
         }
 
 
         public List<string> Update { get; set; }
+        public List<string> Logs { get; set; }
         public List<string> Import { get; set; }
 
         /// <summary>

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Jvedio.Core.Scan
+namespace Jvedio.Core.CustomTask
 {
     public interface ITask
     {
@@ -12,6 +12,8 @@ namespace Jvedio.Core.Scan
         void Stop();
         void Pause();
         void Cancel();
+
+        void Finished();
 
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Jvedio.Utils
@@ -19,38 +20,41 @@ namespace Jvedio.Utils
         /// <param name="fileSearchPattern"></param>
         /// <param name="rootFolderPath"></param>
         /// <returns></returns>
-        public static IEnumerable<string> GetFileList(string rootFolderPath, string fileSearchPattern = "*.*", Action<Exception> callBack = null)
+        public static IEnumerable<string> GetFileList(string rootFolderPath, string fileSearchPattern = "*.*",
+
+            Action<Exception> callBack = null, Action<string> scanDir = null, CancellationTokenSource cts = null)
         {
             Queue<string> pending = new Queue<string>();
             pending.Enqueue(rootFolderPath);
             string[] tmp;
             while (pending.Count > 0)
             {
+                if (cts != null && cts.IsCancellationRequested) break;
                 rootFolderPath = pending.Dequeue();
                 try
                 {
                     tmp = Directory.GetFiles(rootFolderPath, fileSearchPattern);
-                }
-                catch (UnauthorizedAccessException e)
-                {
-                    callBack?.Invoke(e);
-                    continue;
-                }
-                catch (IOException e)
-                {
-                    callBack?.Invoke(e);
-                    continue;
                 }
                 catch (Exception e)
                 {
                     callBack?.Invoke(e);
                     continue;
                 }
+
                 for (int i = 0; i < tmp.Length; i++)
                 {
                     yield return tmp[i];
                 }
-                tmp = Directory.GetDirectories(rootFolderPath);
+
+                try
+                {
+                    scanDir?.Invoke(rootFolderPath);
+                    tmp = Directory.GetDirectories(rootFolderPath);
+                }
+                catch (Exception ex)
+                {
+                    callBack?.Invoke(ex);
+                }
                 for (int i = 0; i < tmp.Length; i++)
                 {
                     pending.Enqueue(tmp[i]);
@@ -62,6 +66,19 @@ namespace Jvedio.Utils
             try
             {
                 Directory.Move(source, target);
+            }
+            catch (Exception ex)
+            {
+                Logger.LogF(ex);
+            }
+
+            return false;
+        }
+        public static bool TryDelete(string dir, bool recursive = true)
+        {
+            try
+            {
+                Directory.Delete(dir, recursive);
             }
             catch (Exception ex)
             {

@@ -265,6 +265,7 @@
     <Compile Include="Core\Command\OpenWindow.cs" />
     <Compile Include="Core\Config\ServerConfig.cs" />
     <Compile Include="Core\Config\WindowConfig\Settings.cs" />
+    <Compile Include="Core\CustomEventArgs\PreviewImageEventArgs.cs" />
     <Compile Include="Core\CustomEventArgs\ActressUpdateEventArgs.cs" />
     <Compile Include="Core\CustomEventArgs\InfoUpdateEventArgs.cs" />
     <Compile Include="Core\CustomEventArgs\MessageCallBackEventArgs.cs" />
@@ -306,7 +307,7 @@
     <Compile Include="Core\Scan\ComicScan.cs" />
     <Compile Include="Core\Scan\GameScan.cs" />
     <Compile Include="Core\Scan\PictureScan.cs" />
-    <Compile Include="Core\Scan\ITask.cs" />
+    <Compile Include="Core\CustomTask\ITask.cs" />
     <Compile Include="Core\Scan\ScanFactory.cs" />
     <Compile Include="Core\Scan\ScanResult.cs" />
     <Compile Include="Core\SimpleMarkDown\MarkDown.cs" />
@@ -328,6 +329,10 @@
     <Compile Include="Core\Config\WindowConfig\MetaData.cs" />
     <Compile Include="Core\Config\WindowConfig\Main.cs" />
     <Compile Include="Core\Config\WindowConfig\StartUp.cs" />
+    <Compile Include="Core\CustomTask\TaskLogger.cs" />
+    <Compile Include="DialogWindows\Dialog_Logs.xaml.cs">
+      <DependentUpon>Dialog_Logs.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Entity\Actor.cs" />
     <Compile Include="Entity\Actor\ActorInfo.cs" />
     <Compile Include="Entity\Actress.cs" />
@@ -539,6 +544,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="CustomStyle\ChaoControls\PathRadioButton.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="DialogWindows\Dialog_Logs.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

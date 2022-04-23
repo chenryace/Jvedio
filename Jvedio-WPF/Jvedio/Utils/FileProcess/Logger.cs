@@ -115,14 +115,19 @@ namespace Jvedio
                 var st = new StackTrace(x, true);
                 var frames = st.GetFrames();
                 var traceString = new StringBuilder();
-                foreach (var frame in new StackTrace(x, true).GetFrames())
+                StackFrame[] stackFrames = new StackTrace(x, true).GetFrames();
+                if (stackFrames != null && stackFrames.Length > 0)
                 {
-                    if (frame.GetFileLineNumber() < 1)
-                        continue;
-                    traceString.Append($"    {Jvedio.Language.Resources.File}: {frame.GetFileName()}");
-                    traceString.Append($" {Jvedio.Language.Resources.Method}: {frame.GetMethod().Name}");
-                    traceString.Append($" {Jvedio.Language.Resources.RowNumber}: {frame.GetFileLineNumber()}{Environment.NewLine}");
+                    foreach (var frame in stackFrames)
+                    {
+                        if (frame.GetFileLineNumber() < 1)
+                            continue;
+                        traceString.Append($"    {Jvedio.Language.Resources.File}: {frame.GetFileName()}");
+                        traceString.Append($" {Jvedio.Language.Resources.Method}: {frame.GetMethod().Name}");
+                        traceString.Append($" {Jvedio.Language.Resources.RowNumber}: {frame.GetFileLineNumber()}{Environment.NewLine}");
+                    }
                 }
+
                 return traceString.ToString();
             }
             catch (Exception ex)

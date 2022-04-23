@@ -2726,11 +2726,10 @@
                                                                                             Command="cmd:File.OpenSelectFile"
                                                                                             CommandParameter="{Binding Path}"
                                                                                             Header="{x:Static lang:Resources.Movie}" />
-                                                                                        <MenuItem Command="cmd:File.OpenSelectFile" Header="{x:Static lang:Resources.Poster}" />
-                                                                                        <MenuItem Command="cmd:File.OpenSelectFile" Header="{x:Static lang:Resources.Thumbnail}" />
-                                                                                        <MenuItem Command="cmd:File.OpenSelectFile" Header="Gif" />
-                                                                                        <MenuItem Command="cmd:File.OpenDir" Header="{x:Static lang:Resources.Preview}" />
-                                                                                        <MenuItem Command="cmd:File.OpenDir" Header="{x:Static lang:Resources.ScreenShot}" />
+                                                                                        <MenuItem Click="OpenPath" Header="{x:Static lang:Resources.Poster}" />
+                                                                                        <MenuItem Click="OpenPath" Header="{x:Static lang:Resources.Thumbnail}" />
+                                                                                        <MenuItem Click="OpenPath" Header="{x:Static lang:Resources.Preview}" />
+                                                                                        <MenuItem Click="OpenPath" Header="{x:Static lang:Resources.ScreenShot}" />
 
                                                                                     </MenuItem>
                                                                                     <MenuItem Name="TagMenuItems" Header="添加标记" />
@@ -4100,41 +4099,41 @@
                                                                 <ColumnDefinition Width="*" />
                                                                 <ColumnDefinition Width="auto" />
                                                             </Grid.ColumnDefinitions>
-                                                            <Viewbox
+                                                            <fa:ImageAwesome
                                                                 Grid.Column="0"
-                                                                Width="25"
+                                                                Width="30"
                                                                 Margin="10"
                                                                 HorizontalAlignment="Center"
                                                                 VerticalAlignment="Center">
-                                                                <Path RenderTransformOrigin="0.5,0.5">
-                                                                    <Path.RenderTransform>
-                                                                        <RotateTransform x:Name="transform" Angle="0" CenterX="0" CenterY="0" />
+                                                                <fa:ImageAwesome.Style>
+                                                                    <Style TargetType="fa:ImageAwesome">
+                                                                        <Style.Triggers>
 
-                                                                    </Path.RenderTransform>
-                                                                    <Path.Style>
-                                                                        <Style TargetType="Path">
-                                                                            <Style.Triggers>
-                                                                                <DataTrigger Binding="{Binding Status, Mode=OneWay}" Value="Running">
+                                                                            <DataTrigger Binding="{Binding Status, Mode=OneWay}" Value="Canceled">
+                                                                                <Setter Property="Icon" Value="TimesCircle" />
+                                                                                <Setter Property="Foreground" Value="Red" />
+                                                                                <Setter Property="Spin" Value="False" />
+                                                                            </DataTrigger>
+                                                                            <DataTrigger Binding="{Binding Status, Mode=OneWay}" Value="WaitingToRun">
+                                                                                <Setter Property="Icon" Value="Hourglass" />
+                                                                                <Setter Property="Foreground" Value="{DynamicResource Control.Disabled.Background}" />
+                                                                                <Setter Property="Spin" Value="False" />
+                                                                            </DataTrigger>
+                                                                            <DataTrigger Binding="{Binding Status, Mode=OneWay}" Value="RanToCompletion">
+                                                                                <Setter Property="Icon" Value="CheckCircle" />
+                                                                                <Setter Property="Foreground" Value="#20B759" />
+                                                                                <Setter Property="Spin" Value="False" />
+                                                                            </DataTrigger>
+                                                                            <DataTrigger Binding="{Binding Status, Mode=OneWay}" Value="Running">
+                                                                                <Setter Property="Icon" Value="Refresh" />
+                                                                                <Setter Property="Foreground" Value="{DynamicResource Common.HighLight.Hover.Background}" />
+                                                                                <Setter Property="Spin" Value="True" />
+                                                                            </DataTrigger>
+                                                                        </Style.Triggers>
+                                                                    </Style>
+                                                                </fa:ImageAwesome.Style>
 
-                                                                                    <Setter Property="Fill" Value="{DynamicResource Common.HighLight.Hover.Background}" />
-                                                                                    <Setter Property="Data" Value="M171.292444 548.977778a337.464889 337.464889 0 0 1 210.488889-367.445334c111.616-43.52 231.992889-22.698667 317.212445 39.480889L626.460444 338.488889l325.233778-1.251556L835.470222 0l-59.562666 96.426667C650.353778 15.075556 479.175111-11.491556 329.272889 46.933333 121.628444 127.886222 2.048 337.351111 25.6 549.034667h145.635556zM852.764444 465.009778a337.464889 337.464889 0 0 1-210.488888 367.502222c-102.627556 39.992889-215.836444 24.917333-302.819556-29.013333l65.536-106.211556-349.752889-20.48L203.093333 1024l62.065778-100.465778c125.553778 81.351111 279.608889 102.001778 429.511111 43.52 207.644444-80.952889 327.224889-290.304 303.616-502.044444h-145.635555z" />
-                                                                                </DataTrigger>
-                                                                                <DataTrigger Binding="{Binding Status}" Value="RanToCompletion">
-
-                                                                                    <Setter Property="Fill" Value="Green" />
-                                                                                    <Setter Property="Data" Value="M947.605 139.803c-15.766-15.763-39.836-14.107-57.1 0-133.71 109.263-541.798 419.618-541.798 419.618s-165.018-71.128-216.268-94.163c-20.338-9.14-41.328-15.766-57.101 0-15.763 15.763-15.763 41.326 0 57.087 0 0 242.992 244.252 244.157 245.415 8.052 8.052 18.652 11.867 29.212 11.693 10.554 0.175 21.154-3.64 29.211-11.693 1.159-1.163 427.18-428.238 569.686-570.87 15.759-15.772 15.768-41.324 0.001-57.087z m0 0" />
-                                                                                </DataTrigger>
-                                                                                <DataTrigger Binding="{Binding Status}" Value="Canceled">
-
-                                                                                    <Setter Property="Fill" Value="Red" />
-                                                                                    <Setter Property="Data" Value="M610.218667 505.6l398.08-387.413333a49.664 49.664 0 0 0 0-71.338667l-2.133334-2.133333a52.992 52.992 0 0 0-73.301333 0L534.784 432.64 136.704 44.373333a52.992 52.992 0 0 0-73.386667 0L61.269333 46.592a48.810667 48.810667 0 0 0 0 71.338667l398.165334 387.669333-398.165334 387.498667a49.664 49.664 0 0 0 0 71.253333l2.218667 2.133333c20.48 19.626667 52.821333 19.626667 73.301333 0l398.08-387.413333 398.08 387.413333c20.48 19.626667 52.906667 19.626667 73.386667 0l2.048-2.133333a49.664 49.664 0 0 0 0-71.253333l-398.08-387.413334z" />
-                                                                                </DataTrigger>
-                                                                            </Style.Triggers>
-                                                                        </Style>
-                                                                    </Path.Style>
-                                                                </Path>
-
-                                                            </Viewbox>
+                                                            </fa:ImageAwesome>
 
                                                             <StackPanel
                                                                 Grid.Column="1"
@@ -4142,12 +4141,27 @@
                                                                 Orientation="Vertical">
                                                                 <TextBlock Margin="5,10" Text="{Binding CreateTime}" />
 
-                                                                <TextBlock Margin="5,10" Text="{Binding StatusText}" />
+                                                                <Grid Width="180" HorizontalAlignment="Left">
+                                                                    <Grid.ColumnDefinitions>
+                                                                        <ColumnDefinition Width="auto" />
+                                                                        <ColumnDefinition Width="*" />
+                                                                    </Grid.ColumnDefinitions>
+                                                                    <!--<TextBlock
+                                                                        Grid.Column="0"
+                                                                        Margin="5,10"
+                                                                        Text="{Binding StatusText}" />-->
+                                                                    <TextBlock
+                                                                        Grid.Column="1"
+                                                                        Margin="5,10"
+                                                                        Text="{Binding Message}"
+                                                                        TextTrimming="WordEllipsis" />
+                                                                </Grid>
 
                                                             </StackPanel>
                                                             <StackPanel
                                                                 Grid.Column="2"
-                                                                Width="100"
+                                                                Width="auto"
+                                                                Margin="5,0"
                                                                 VerticalAlignment="Center"
                                                                 Orientation="Vertical">
                                                                 <StackPanel.Style>

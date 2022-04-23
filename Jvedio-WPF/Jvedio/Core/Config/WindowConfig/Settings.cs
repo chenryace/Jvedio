@@ -27,6 +27,8 @@ namespace Jvedio.Core.WindowConfig
         public string PicPathJson { get; set; }
 
         public Dictionary<string, object> PicPaths;
+        public bool DownloadPreviewImage { get; set; }
+        public bool OverrideInfo { get; set; }
 
 
     }

@@ -132,8 +132,9 @@ namespace Jvedio
             }
 
             // 移动文件
-
-            DirHelper.TryMoveDir(oldDataPath, Path.Combine(AllOldDataPath, "DataBase"));// 移动 DataBase
+            string targetDir = Path.Combine(AllOldDataPath, "DataBase");
+            if (Directory.Exists(targetDir)) DirHelper.TryDelete(targetDir);
+            DirHelper.TryMoveDir(oldDataPath, targetDir);// 移动 DataBase
             string[] moveFiles = { "SearchHistory", "ServersConfig", "RecentWatch",
                 "AI.sqlite", "Magnets.sqlite", "Translate.sqlite", "mylist.sqlite" };
 

@@ -426,13 +426,13 @@ namespace Jvedio.Entity
         }
         public Video toVideo()
         {
-            Dictionary<string, object> dict = new Dictionary<string, object>();
-            if (!string.IsNullOrEmpty(actressimageurl)) dict.Add("actress", actressimageurl.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries));
-            if (!string.IsNullOrEmpty(smallimageurl)) dict.Add("smallimage", smallimageurl);
-            if (!string.IsNullOrEmpty(bigimageurl)) dict.Add("bigimage", bigimageurl);
-            if (!string.IsNullOrEmpty(extraimageurl)) dict.Add("extraimages", extraimageurl.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries));
-            string json = "";
-            if (dict.Count > 0) json = JsonConvert.SerializeObject(dict);
+            //Dictionary<string, object> dict = new Dictionary<string, object>();
+            //if (!string.IsNullOrEmpty(actressimageurl)) dict.Add("ActressImageUrl", actressimageurl.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries));
+            //if (!string.IsNullOrEmpty(smallimageurl) && id.IndexOf("FC2-") < 0) dict.Add("SmallImageUrl", smallimageurl);
+            //if (!string.IsNullOrEmpty(bigimageurl)) dict.Add("BigImageUrl", bigimageurl);
+            //if (!string.IsNullOrEmpty(extraimageurl)) dict.Add("ExtraImageUrl", extraimageurl.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries));
+            //string json = "";
+            //if (dict.Count > 0) json = JsonConvert.SerializeObject(dict);
             MetaData data = toMetaData();
             var serializedParent = JsonConvert.SerializeObject(data);
             Video video = JsonConvert.DeserializeObject<Video>(serializedParent);
@@ -448,7 +448,7 @@ namespace Jvedio.Entity
             video.SubSection = subsection.Replace(';', GlobalVariable.Separator);
             video.WebType = source.Replace("jav", "").Replace("fc2adult", "fc2");
             video.WebUrl = sourceurl;
-            video.ImageUrls = json;
+            //video.ImageUrls = json;   // 让 ImageUrls 为空，这样子导入旧的数据库后就会自动同步新信息
 
             return video;
         }

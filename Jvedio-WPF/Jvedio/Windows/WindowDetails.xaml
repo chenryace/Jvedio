@@ -380,10 +380,7 @@
                             PreviewMouseWheel="Grid_PreviewMouseWheel">
                             <Grid.ContextMenu>
                                 <ContextMenu Opacity="0.8" PreviewKeyUp="ContextMenu_PreviewKeyUp">
-                                    <MenuItem
-                                        Click="DownLoad"
-                                        Header="{x:Static lang:Resources.Menu_SyncInfo}"
-                                        IsEnabled="False" />
+                                    <MenuItem Click="DownLoad" Header="{x:Static lang:Resources.Menu_SyncInfo}" />
                                     <MenuItem
                                         Header="{x:Static lang:Resources.Menu_SyncExtra}"
                                         IsEnabled="False"

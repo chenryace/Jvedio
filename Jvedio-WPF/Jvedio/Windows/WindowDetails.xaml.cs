@@ -35,6 +35,8 @@ using Jvedio.Utils.Visual;
 using Jvedio.Core.Scan;
 using Jvedio.CommonNet.Crawler;
 using Jvedio.CommonNet;
+using Jvedio.Core.Net;
+using Jvedio.Core.CustomEventArgs;
 
 namespace Jvedio
 {
@@ -234,33 +236,40 @@ namespace Jvedio
 
         public void DownLoad(object sender, RoutedEventArgs e)
         {
-            //if (!JvedioServers.IsProper())
-            //{
-            //    ChaoControls.Style.MessageCard.Error(Jvedio.Language.Resources.Message_UrlNotSet);
-
-            //}
-            //else
-            //{
-            //    if (windowMain.DownLoader?.State == DownLoadState.DownLoading)
-            //    {
-            //        ChaoControls.Style.MessageCard.Error(Jvedio.Language.Resources.MainIsDownloading);
-            //    }
-            //    else
-            //    {
-            //        if (DetailDownLoad == null)
-            //        {
-            //            Task.Run(() => { StartDownload(); });
-            //        }
-            //        else
-            //        {
-            //            if (!DetailDownLoad.IsDownLoading)
-            //            {
-            //                Task.Run(() => { StartDownload(); });
-            //            }
-            //        }
-            //    }
-
-            //}
+            Video video = vieModel.CurrentVideo;
+            DownLoadTask task = new DownLoadTask(video, true, GlobalConfig.Settings.OverrideInfo);// 详情页面下载预览图
+            long dataid = video.DataID;
+            task.onDownloadSuccess += (s, ev) =>
+            {
+                DownLoadTask t = s as DownLoadTask;
+                Dispatcher.Invoke(() =>
+                {
+                    if (dataid.Equals(vieModel.CurrentVideo.DataID))
+                        vieModel.Load(dataid);
+                    // 通知主界面刷新
+                    windowMain?.RefreshData(dataid);
+                });
+            };
+            task.onDownloadPreview += (s, ev) =>
+            {
+                DownLoadTask t = s as DownLoadTask;
+                PreviewImageEventArgs arg = ev as PreviewImageEventArgs;
+                Dispatcher.Invoke(() =>
+                {
+                    if (dataid.Equals(vieModel.CurrentVideo.DataID) && !vieModel.ShowScreenShot)
+                    {
+                        // 加入到列表
+                        if (vieModel.CurrentVideo.PreviewImagePathList == null) vieModel.CurrentVideo.PreviewImagePathList = new ObservableCollection<string>();
+                        if (vieModel.CurrentVideo.PreviewImageList == null) vieModel.CurrentVideo.PreviewImageList = new ObservableCollection<BitmapSource>();
+                        vieModel.CurrentVideo.PreviewImagePathList.Add(arg.Path);
+                        vieModel.CurrentVideo.PreviewImageList.Add(ImageProcess.BitmapImageFromByte(arg.FileByte));
+                    }
+                });
+            };
+            if (!Global.Download.Dispatcher.Working)
+                Global.Download.Dispatcher.BeginWork();
+            windowMain?.addToDownload(task);
+            windowMain?.setDownloadStatus();
         }
 
         public async void GetScreenShot(object sender, RoutedEventArgs e)

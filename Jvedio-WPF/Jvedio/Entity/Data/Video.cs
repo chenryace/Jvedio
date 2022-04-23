@@ -210,7 +210,11 @@ namespace Jvedio.Entity
 
         public bool toDownload()
         {
-            return this != null && (string.IsNullOrEmpty(Title) || string.IsNullOrEmpty(WebUrl));
+
+
+
+
+            return string.IsNullOrEmpty(Title) || string.IsNullOrEmpty(WebUrl) || string.IsNullOrEmpty(ImageUrls);
         }
 
         public string getServerInfoType()
@@ -391,9 +395,9 @@ namespace Jvedio.Entity
             return imagePath;
         }
 
-        public void parseDictInfo(Dictionary<string, object> dict)
+        public bool parseDictInfo(Dictionary<string, object> dict)
         {
-            if (dict == null || dict.Count == 0) return;
+            if (dict == null || dict.Count == 0) return false;
             PropertyInfo[] propertyInfos = this.GetType().GetProperties();
             foreach (PropertyInfo info in propertyInfos)
             {
@@ -422,6 +426,7 @@ namespace Jvedio.Entity
             }
             // 图片地址
             ImageUrls = parseImageUrlFromDict(dict);
+            return true;
         }
 
 
@@ -438,6 +443,7 @@ namespace Jvedio.Entity
             if (dict.ContainsKey("BigImageUrl")) result["BigImageUrl"] = dict["BigImageUrl"];
             if (dict.ContainsKey("ExtraImageUrl")) result["ExtraImageUrl"] = dict["ExtraImageUrl"];
             if (dict.ContainsKey("ActressImageUrl")) result["ActressImageUrl"] = dict["ActressImageUrl"];
+            if (dict.ContainsKey("ActorNames")) result["ActorNames"] = dict["ActorNames"];
             return JsonConvert.SerializeObject(result);
         }
     }

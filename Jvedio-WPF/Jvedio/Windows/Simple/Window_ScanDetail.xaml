@@ -111,12 +111,21 @@
 
         </DataGrid>
 
-        <Grid Grid.Row="2" Margin="10">
+        <StackPanel
+            Grid.Row="2"
+            Margin="10"
+            HorizontalAlignment="Right"
+            Orientation="Horizontal">
+            <Button
+                HorizontalAlignment="Right"
+                Click="ShowExceptions"
+                Content="查看异常"
+                Style="{StaticResource ButtonDanger}" />
             <Button
                 HorizontalAlignment="Right"
                 Click="Save"
                 Content="保存当前"
                 Style="{StaticResource ButtonSuccess}" />
-        </Grid>
+        </StackPanel>
     </Grid>
 </chao:BaseWindow>

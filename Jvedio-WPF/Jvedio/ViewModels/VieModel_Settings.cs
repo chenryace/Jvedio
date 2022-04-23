@@ -349,6 +349,29 @@ namespace Jvedio.ViewModel
 
 
 
+        private bool _DownloadPreviewImage = GlobalConfig.Settings.DownloadPreviewImage;
+
+        public bool DownloadPreviewImage
+        {
+            get { return _DownloadPreviewImage; }
+            set
+            {
+                _DownloadPreviewImage = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private bool _OverrideInfo = GlobalConfig.Settings.OverrideInfo;
+
+        public bool OverrideInfo
+        {
+            get { return _OverrideInfo; }
+            set
+            {
+                _OverrideInfo = value;
+                RaisePropertyChanged();
+            }
+        }
         private string _DataBase;
 
         public string DataBase

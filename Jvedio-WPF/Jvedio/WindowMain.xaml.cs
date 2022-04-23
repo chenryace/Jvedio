@@ -45,6 +45,7 @@ using System.Diagnostics;
 using Jvedio.Test;
 using Jvedio.Core.Net;
 using Jvedio.Core.CustomEventArgs;
+using Jvedio.CommonNet;
 
 namespace Jvedio
 {
@@ -3016,12 +3017,12 @@ namespace Jvedio
             // 超过 3 个网页，询问是否继续
             if (vieModel.SelectedVideo.Count >= 3 && new Msgbox(this, $"即将打开 {vieModel.SelectedVideo.Count} 个网页，是否继续？").ShowDialog() == false) return;
 
-            //foreach (Video video in vieModel.SelectedVideo)
-            //{
-            //    string url = video.WebUrl;
-            //    if (url.IsProperUrl())
-            //        FileHelper.TryOpenUrl(url);
-            //}
+            foreach (Video video in vieModel.SelectedVideo)
+            {
+                string url = video.WebUrl;
+                if (url.IsProperUrl())
+                    FileHelper.TryOpenUrl(url);
+            }
         }
 
 
@@ -3045,33 +3046,44 @@ namespace Jvedio
         }
 
 
+        public void downloadVideo(Video video)
+        {
+            DownLoadTask task = new DownLoadTask(video, GlobalConfig.Settings.DownloadPreviewImage, GlobalConfig.Settings.OverrideInfo);
+            long vid = video.DataID;
+            task.onError += (s, ev) =>
+            {
+                msgCard.Error((ev as MessageCallBackEventArgs).Message);
+            };
+            task.onDownloadSuccess += (s, ev) =>
+            {
+                DownLoadTask t = s as DownLoadTask;
+                Dispatcher.Invoke(() =>
+                {
+                    RefreshData(t.DataID);
+                });
+            };
+
+            addToDownload(task);
+
+        }
+
+        public void addToDownload(DownLoadTask task)
+        {
+            if (!vieModel.DownLoadTasks.Contains(task))
+            {
+                Global.Download.Dispatcher.Enqueue(task);
+                vieModel.DownLoadTasks.Add(task);
+            }
+        }
+
+
         private void DownLoadSelectMovie(object sender, RoutedEventArgs e)
         {
             handleMenuSelected(sender);
             vieModel.DownloadStatus = "Downloading";
             foreach (Video video in vieModel.SelectedVideo)
             {
-                DownLoadTask task = new DownLoadTask(video);
-                long vid = video.DataID;
-                task.onError += (s, ev) =>
-                {
-                    msgCard.Error((ev as MessageCallBackEventArgs).Message);
-                };
-                task.onDownloadSuccess += (s, ev) =>
-                {
-                    DownLoadTask t = s as DownLoadTask;
-                    Dispatcher.Invoke(() =>
-                    {
-                        RefreshData(t.DataID);
-                    });
-                };
-
-                if (!vieModel.DownLoadTasks.Contains(task))
-                {
-                    Global.Download.Dispatcher.Enqueue(task);
-                    vieModel.DownLoadTasks.Add(task);
-                }
-
+                downloadVideo(video);
             }
             if (!Global.Download.Dispatcher.Working)
                 Global.Download.Dispatcher.BeginWork();
@@ -3080,7 +3092,7 @@ namespace Jvedio
         }
 
 
-        private void setDownloadStatus()
+        public void setDownloadStatus()
         {
             if (!CheckingDownloadStatus)
             {
@@ -6391,10 +6403,7 @@ namespace Jvedio
         {
             string dataID = (sender as Button).Tag.ToString();
             DownLoadTask task = vieModel.DownLoadTasks.Where(arg => arg.DataID.ToString().Equals(dataID)).FirstOrDefault();
-            if (task.Status != System.Threading.Tasks.TaskStatus.Running)
-            {
-
-            }
+            new Dialog_Logs(this, string.Join(Environment.NewLine, task.Logs)).ShowDialog();
         }
 
 
@@ -6439,6 +6448,33 @@ namespace Jvedio
                 }
             }
             Global.Download.Dispatcher.ClearDoneList();
+        }
+
+        private void OpenPath(object sender, RoutedEventArgs e)
+        {
+            MenuItem menu = sender as MenuItem;
+            string header = menu.Header.ToString();
+            long dataID = GetIDFromMenuItem(sender, 1);
+            Video video = vieModel.CurrentVideoList.Where(arg => arg.DataID == dataID).FirstOrDefault();
+            if (header.Equals(Jvedio.Language.Resources.Poster))
+            {
+                FileHelper.TryOpenSelectPath(video.getBigImage());
+            }
+            else if (header.Equals(Jvedio.Language.Resources.Thumbnail))
+            {
+                FileHelper.TryOpenSelectPath(video.getSmallImage());
+            }
+            else if (header.Equals(Jvedio.Language.Resources.Preview))
+            {
+                FileHelper.TryOpenSelectPath(video.getExtraImage());
+            }
+            else if (header.Equals(Jvedio.Language.Resources.ScreenShot))
+            {
+                FileHelper.TryOpenSelectPath(video.getScreenShot());
+            }
+
+
+
         }
     }
 
