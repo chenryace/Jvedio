@@ -92,7 +92,7 @@
     </Reference>
     <Reference Include="ChaoControls.Style, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Visual_Studio_Project\chao-controls\ChaoControls.Style\bin\Debug\ChaoControls.Style.dll</HintPath>
+      <HintPath>Reference\ChaoControls.Style.dll</HintPath>
     </Reference>
     <Reference Include="Common">
       <HintPath>..\..\..\Jvedio-Crawler\Common\bin\Debug\Common.dll</HintPath>
@@ -652,6 +652,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Content Include="Reference\ChaoControls.Style.dll" />
     <Content Include="Sql\single_db_comic.sql" />
     <Content Include="Sql\single_db_game.sql" />
     <Content Include="Sql\single_db_picture.sql" />
