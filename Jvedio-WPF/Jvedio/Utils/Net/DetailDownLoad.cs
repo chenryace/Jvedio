@@ -18,8 +18,8 @@ using static Jvedio.GlobalVariable;
 using Jvedio.Utils;
 using Jvedio.Utils.Net;
 using Jvedio.Entity;
-using Jvedio.Common.Crawler.Entity;
-using Jvedio.Common.Crawler;
+using Jvedio.CommonNet.Entity;
+using Jvedio.CommonNet.Crawler;
 
 namespace Jvedio
 {

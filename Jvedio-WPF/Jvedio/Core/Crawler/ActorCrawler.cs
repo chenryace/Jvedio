@@ -11,8 +11,9 @@ using System.IO;
 using System.Net;
 using Jvedio.Utils.Net;
 using Jvedio.Core.Enums;
-using Jvedio.Common.Crawler.Entity;
-using Jvedio.Common.Crawler;
+using Jvedio.CommonNet.Entity;
+using Jvedio.CommonNet.Crawler;
+using Jvedio.CommonNet;
 
 namespace Jvedio
 {

@@ -1,6 +1,7 @@
 ﻿
 using ChaoControls.Style;
-using Jvedio.Common.Crawler;
+using Jvedio.CommonNet;
+using Jvedio.CommonNet.Crawler;
 using Jvedio.Utils;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using System;

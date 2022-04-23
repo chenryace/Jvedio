@@ -18,7 +18,7 @@ using static Jvedio.GlobalMapper;
 using Jvedio.Core.Scan;
 using Jvedio.Core.Enums;
 using Jvedio.Core.Exceptions;
-using Jvedio.Common.Crawler;
+using Jvedio.CommonNet.Crawler;
 
 namespace Jvedio.Core.Net
 {

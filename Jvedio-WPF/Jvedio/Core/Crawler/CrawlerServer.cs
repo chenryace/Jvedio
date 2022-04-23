@@ -1,5 +1,5 @@
 ﻿using DynamicData.Annotations;
-using Jvedio.Common.Crawler.Entity;
+using Jvedio.CommonNet.Entity;
 using Jvedio.Core.Plugins;
 using Jvedio.Utils;
 using Newtonsoft.Json;

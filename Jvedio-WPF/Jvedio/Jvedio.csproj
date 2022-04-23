@@ -94,8 +94,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Reference\ChaoControls.Style.dll</HintPath>
     </Reference>
-    <Reference Include="Common">
-      <HintPath>..\..\..\Jvedio-Crawler\Common\bin\Debug\Common.dll</HintPath>
+    <Reference Include="CommonNet, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Jvedio-Crawler\Common\bin\Debug\CommonNet.dll</HintPath>
     </Reference>
     <Reference Include="CommonServiceLocator, Version=2.0.2.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
       <HintPath>..\packages\CommonServiceLocator.2.0.2\lib\net47\CommonServiceLocator.dll</HintPath>
@@ -665,6 +666,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Content Include="Reference\ChaoControls.Style.dll" />
+    <Content Include="Reference\CommonNet.dll" />
     <Content Include="Sql\single_db_comic.sql" />
     <Content Include="Sql\single_db_game.sql" />
     <Content Include="Sql\single_db_picture.sql" />

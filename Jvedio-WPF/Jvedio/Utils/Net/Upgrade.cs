@@ -1,6 +1,7 @@
 ﻿using DynamicData.Annotations;
-using Jvedio.Common.Crawler;
-using Jvedio.Common.Crawler.Entity;
+using Jvedio.CommonNet;
+using Jvedio.CommonNet.Crawler;
+using Jvedio.CommonNet.Entity;
 using Jvedio.Utils.Encrypt;
 using Jvedio.Utils.Net;
 using System;

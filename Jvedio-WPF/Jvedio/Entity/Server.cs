@@ -1,5 +1,6 @@
 ﻿using DynamicData.Annotations;
-using Jvedio.Common.Crawler;
+using Jvedio.CommonNet;
+using Jvedio.CommonNet.Crawler;
 using Jvedio.Utils;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;

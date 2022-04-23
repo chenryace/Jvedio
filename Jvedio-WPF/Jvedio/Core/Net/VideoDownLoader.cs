@@ -17,8 +17,9 @@ using Jvedio.Core.Scan;
 using Jvedio.Core.Crawler;
 using Jvedio.Core.Exceptions;
 using Jvedio.Core.Plugins;
-using Jvedio.Common.Crawler.Entity;
-using Jvedio.Common.Crawler;
+using Jvedio.CommonNet.Entity;
+using Jvedio.CommonNet.Crawler;
+using Jvedio.CommonNet;
 
 namespace Jvedio.Core.Net
 {

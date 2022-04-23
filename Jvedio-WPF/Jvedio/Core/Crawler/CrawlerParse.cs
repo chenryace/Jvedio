@@ -12,7 +12,7 @@ using Jvedio.Utils;
 using Jvedio.Utils.Net;
 using Jvedio.Entity;
 using Jvedio.Core.Enums;
-using Jvedio.Common.Crawler;
+using Jvedio.CommonNet.Crawler;
 
 namespace Jvedio
 {

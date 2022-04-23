@@ -1,6 +1,7 @@
 ﻿using ChaoControls.Style;
 using FontAwesome.WPF;
-using Jvedio.Common.Crawler;
+using Jvedio.CommonNet;
+using Jvedio.CommonNet.Crawler;
 using Jvedio.Core.Crawler;
 using Jvedio.Core.Enums;
 using Jvedio.Core.SimpleMarkDown;

@@ -23,7 +23,7 @@ using System.Windows.Media.Animation;
 using System.Reflection;
 
 using Jvedio.Core.Plugins.Crawler;
-using Jvedio.Common.Crawler.Entity;
+using Jvedio.CommonNet.Entity;
 
 namespace Jvedio
 {
