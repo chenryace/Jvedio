@@ -526,6 +526,18 @@
     <Compile Include="Windows\Window_TagStamp.xaml.cs">
       <DependentUpon>Window_TagStamp.xaml</DependentUpon>
     </Compile>
+    <Page Include="CustomStyle\ChaoControls\Basic.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="CustomStyle\ChaoControls\Pagination.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="CustomStyle\ChaoControls\PathRadioButton.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="DialogWindows\Dialog_LoadPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

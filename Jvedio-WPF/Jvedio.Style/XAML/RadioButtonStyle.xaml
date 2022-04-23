@@ -4,18 +4,7 @@
     xmlns:chao="https://gitee.com/secret/chao-controls">
 
 
-    <Style x:Key="PathGroupRadioButton" TargetType="{x:Type chao:PathRadioButton}">
-        <Setter Property="Padding" Value="0" />
-        <Setter Property="MainText" Value="" />
-        <Setter Property="SubText" Value="" />
-        <Setter Property="CornerRadius" Value="5" />
-        <Setter Property="PathMargin" Value="5" />
-        <Setter Property="Margin" Value="0" />
-        <Setter Property="GroupName" Value="PathGroupRadioButton_Main" />
-        <Setter Property="TextVisibility" Value="Collapsed" />
-        <Setter Property="Foreground" Value="{DynamicResource Global.Foreground}" />
-        <Setter Property="CheckedBrush" Value="{DynamicResource Window.Side.Hover.Background}" />
-    </Style>
+
 
 
 
