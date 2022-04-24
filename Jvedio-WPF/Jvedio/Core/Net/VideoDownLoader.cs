@@ -20,6 +20,7 @@ using Jvedio.Core.Plugins;
 using Jvedio.CommonNet.Entity;
 using Jvedio.CommonNet.Crawler;
 using Jvedio.CommonNet;
+using Jvedio.Core.SimpleORM;
 
 namespace Jvedio.Core.Net
 {
@@ -56,31 +57,41 @@ namespace Jvedio.Core.Net
 
 
 
-        public string generateUrl(CrawlerServer server)
+        public (string url, string code) getUrlAndCode(CrawlerServer server)
         {
             string baseUrl = server.Url;
             string serverName = server.ServerName.ToUpper();
-            if (server.ServerName.Equals("BUS"))
+            string url = baseUrl;
+            string code = "";
+            string vid = CurrentVideo.VID;
+            if (serverName.Equals("BUS"))
             {
-                return $"{baseUrl}{CurrentVideo.VID}";
+                url = $"{baseUrl}{vid}";
+                code = vid;
             }
-            else if (server.ServerName.Equals("DB"))
+            else if (serverName.Equals("DB"))
+            {
+                url = baseUrl;
+                IWrapper<UrlCode> wrapper = new SelectWrapper<UrlCode>()
+                    .Eq("WebType", "db").Eq("ValueType", "video").Eq("LocalValue", vid);
+                UrlCode urlCode = GlobalMapper.urlCodeMapper.selectOne(wrapper);
+                if (urlCode != null)
+                    code = urlCode.RemoteValue;
+            }
+            else if (serverName.Equals("FC"))
+            {
+                // 后面必须要有 /
+                url = $"{baseUrl}article/{vid.Replace("FC2-", "")}/";
+            }
+            else if (serverName.Equals("BUS"))
             {
 
             }
-            else if (server.ServerName.Equals("FC"))
+            else if (serverName.Equals("BUS"))
             {
 
             }
-            else if (server.ServerName.Equals("BUS"))
-            {
-
-            }
-            else if (server.ServerName.Equals("BUS"))
-            {
-
-            }
-            return baseUrl;
+            return (url, code);
         }
 
 
@@ -97,7 +108,7 @@ namespace Jvedio.Core.Net
                 )
                 throw new CrawlerNotFoundException();
 
-            List<PluginInfo> pluginInfos = Global.Plugins.Crawlers.Where(arg => arg.InfoType.Split(',')
+            List<PluginInfo> pluginInfos = Global.Plugins.Crawlers.Where(arg => arg.Enabled && arg.InfoType.Split(',')
                                            .Select(item => item.ToLower()).Contains(InfoType)).ToList();
             if (pluginInfos.Count == 0)
                 throw new CrawlerNotFoundException();
@@ -106,17 +117,21 @@ namespace Jvedio.Core.Net
 
             // 一组支持刮削的网址列表
             List<CrawlerServer> crawlers = GlobalConfig.ServerConfig.CrawlerServers
-                    .Where(arg => arg.ServerName.ToLower().Equals(pluginInfo.ServerName.ToLower())).ToList();
+                    .Where(arg => arg.Enabled && arg.ServerName.ToLower().Equals(pluginInfo.ServerName.ToLower())).ToList();
 
             if (crawlers == null || crawlers.Count == 0) throw new CrawlerNotFoundException();
             crawlers = crawlers.Where(arg => arg.Enabled && arg.Available == 1 && !string.IsNullOrEmpty(arg.Url)).ToList();
             if (crawlers == null || crawlers.Count == 0) throw new CrawlerNotFoundException();
             crawlers = crawlers.OrderBy(arg => arg.ServerName).ToList();
             CrawlerServer crawler = crawlers[0];
-            string url = generateUrl(crawler);
+            (string url, string code) = getUrlAndCode(crawler);
             Header = CrawlerServer.parseHeader(crawler);
 
             Dictionary<string, string> dataInfo = CurrentVideo.toDictionary();
+            if (!dataInfo.ContainsKey("DataCode"))
+                dataInfo.Add("DataCode", code);
+            else
+                dataInfo["DataCode"] = code;
 
             Plugin plugin = new Plugin(pluginInfo.Path, "GetInfo", new object[] { url, Header, dataInfo });
             // 等待很久

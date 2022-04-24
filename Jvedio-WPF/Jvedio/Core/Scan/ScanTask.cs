@@ -447,7 +447,7 @@ namespace Jvedio.Core.Scan
             }
         }
 
-        // 持久化到硬盘
+        // todo 持久化到硬盘
         public void WriteToDisk()
         {
 

@@ -3074,6 +3074,10 @@ namespace Jvedio
                 Global.Download.Dispatcher.Enqueue(task);
                 vieModel.DownLoadTasks.Add(task);
             }
+            else
+            {
+                MessageCard.Info("任务已存在！");
+            }
         }
 
 

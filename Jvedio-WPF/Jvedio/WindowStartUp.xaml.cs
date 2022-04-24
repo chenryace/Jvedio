@@ -448,6 +448,7 @@ namespace Jvedio
 
         public async void LoadDataBase()
         {
+            if (listBox.SelectedIndex < 0) return;
             //加载数据库
             long id = vieModel_StartUp.CurrentDBID;
             if (!Properties.Settings.Default.OpenDataBaseDefault)

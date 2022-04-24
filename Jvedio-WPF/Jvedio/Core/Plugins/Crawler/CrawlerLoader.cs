@@ -1,10 +1,9 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Jvedio.Core.Plugins.Crawler
 {
@@ -21,7 +20,7 @@ namespace Jvedio.Core.Plugins.Crawler
 
         private static string BaseDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "plugins", "crawlers");
 
-        private static List<string> BaseDll = new List<string>() { "HtmlAgilityPack.dll", "Common.dll" };
+        private static List<string> BaseDll = new List<string>() { "HtmlAgilityPack.dll", "CommonNet.dll" };
 
 
         public static void loadAllCrawlers()
@@ -36,7 +35,8 @@ namespace Jvedio.Core.Plugins.Crawler
                 Type classType = getPublicType(dll.GetTypes());
                 if (classType == null) continue;
                 Dictionary<string, string> info = getInfo(classType);
-                if (info == null || !info.ContainsKey("ServerName")) continue;
+                if (info == null || !info.ContainsKey("ServerName") || !info.ContainsKey("Name")) continue;
+                if (string.IsNullOrEmpty(info["ServerName"]) || string.IsNullOrEmpty(info["Name"])) continue;
                 PluginInfo pluginInfo = PluginInfo.ParseDict(info);
                 if (pluginInfo != null)
                 {
@@ -44,38 +44,33 @@ namespace Jvedio.Core.Plugins.Crawler
                     Global.Plugins.Crawlers.Add(pluginInfo);
                 }
             }
-            Console.WriteLine(Global.Plugins.Crawlers);
+            setPluginEnabled();
         }
 
 
-
-        async void testWithAssembly()
+        private static void setPluginEnabled()
         {
-            //string dllPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "plugins", "crawlers", "BusCrawler.dll");
-            //string methodName = "GetInfo";
-            //object[] param = new object[] { url, cookies };
-            //if (File.Exists(dllPath))
-            //{
-            //    Assembly dll = Assembly.LoadFrom(dllPath);
-            //    Type classType = getPublicType(dll.GetTypes());
-            //    if (classType != null)
-            //    {
-            //        Dictionary<string, string> infos = getInfo(classType);
-            //        var instance = Activator.CreateInstance(classType, url, cookies, header);
-            //        MethodInfo methodInfo = classType.GetMethod(methodName);
-            //        if (methodInfo != null)
-            //        {
-            //            Console.WriteLine("开始爬取");
-            //            object result = await Task.Run(() =>
-            //            {
-            //                return methodInfo.Invoke(instance, null);
-            //            });
-            //            Console.WriteLine(result);
-            //            Console.WriteLine("爬取结束");
-            //        }
-            //    }
-            //}
+            if (Global.Plugins.Crawlers != null && Global.Plugins.Crawlers.Count > 0)
+            {
+                Dictionary<string, bool> dict = null; ;
+                string json = GlobalConfig.Settings.PluginEnabledJson;
+                try
+                {
+                    dict = JsonConvert.DeserializeObject<Dictionary<string, bool>>(json);
+                }
+                catch (Exception ex) { Console.WriteLine(ex); }
+                if (dict == null || dict.Count <= 0) return;
+
+                foreach (PluginInfo plugin in Global.Plugins.Crawlers)
+                {
+                    string uid = plugin.getUID();
+                    if (dict.ContainsKey(uid))
+                        plugin.Enabled = dict[uid];
+                }
+            }
         }
+
+
 
         private static Type getPublicType(Type[] types)
         {

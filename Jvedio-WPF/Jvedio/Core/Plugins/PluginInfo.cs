@@ -25,6 +25,14 @@ namespace Jvedio.Core.Plugins
         public string PublishDate { get; set; }
         public string Path { get; set; }
 
+        // 不在 dll 内的字段
+        public bool Enabled { get; set; }
+
+        public PluginInfo()
+        {
+            Enabled = true;
+        }
+
 
         public static PluginInfo ParseDict(Dictionary<string, string> dict)
         {
@@ -46,6 +54,11 @@ namespace Jvedio.Core.Plugins
             PluginInfo other = obj as PluginInfo;
             if (other == null) return false;
             return other.ServerName.Equals(ServerName) && other.Name.Equals(Name);
+        }
+
+        public string getUID()
+        {
+            return $"{ServerName}.{Name}";
         }
 
         public override int GetHashCode()

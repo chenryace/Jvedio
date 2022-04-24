@@ -4437,7 +4437,6 @@
                                                                 <Button
                                                                     Click="CancelDownloadTask"
                                                                     Content="取消"
-                                                                    IsEnabled="{Binding Running}"
                                                                     Tag="{Binding DataID}" />
                                                                 <!--<Button
                                                                     Click="PauseDownloadTask"
@@ -4447,7 +4446,6 @@
                                                                 <Button
                                                                     Click="ShowDownloadDetail"
                                                                     Content="详情"
-                                                                    IsEnabled="{Binding Running, Converter={StaticResource OppositeBooleanConverter}}"
                                                                     Tag="{Binding DataID}" />
                                                             </WrapPanel>
                                                         </Grid>

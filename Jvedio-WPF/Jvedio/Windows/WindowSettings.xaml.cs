@@ -4,6 +4,7 @@ using Jvedio.CommonNet;
 using Jvedio.CommonNet.Crawler;
 using Jvedio.Core.Crawler;
 using Jvedio.Core.Enums;
+using Jvedio.Core.Plugins;
 using Jvedio.Core.SimpleMarkDown;
 using Jvedio.Entity;
 using Jvedio.Style;
@@ -1301,9 +1302,17 @@ namespace Jvedio
             if (vieModel.CrawlerServers != null && vieModel.CrawlerServers.Count > 0)
             {
                 string serverType = vieModel.CrawlerServers.Keys.ToList()[idx];
+                int index = serverType.IndexOf('.');
+                string serverName = serverType.Substring(0, index);
+                string name = serverType.Substring(index + 1);
+                PluginInfo pluginInfo = Global.Plugins.Crawlers.Where(arg => arg.ServerName.Equals(serverName) && arg.Name.Equals(name)).FirstOrDefault();
+                if (pluginInfo != null && pluginInfo.Enabled) vieModel.PluginEnabled = true;
+                else vieModel.PluginEnabled = false;
+
                 ServersDataGrid.ItemsSource = null;
                 ServersDataGrid.ItemsSource = vieModel.CrawlerServers[serverType];
                 GlobalConfig.Settings.CrawlerSelectedIndex = idx;
+
             }
         }
 
@@ -1343,6 +1352,22 @@ namespace Jvedio
                     vieModel.BasePicPath = vieModel.PicPaths[type.ToString()].ToString();
             }
         }
+
+        private void SavePluginEnabled(object sender, RoutedEventArgs e)
+        {
+            GlobalConfig.Settings.PluginEnabled = new Dictionary<string, bool>();
+            bool enabled = (bool)(sender as Switch).IsChecked;
+            foreach (PluginInfo plugin in Global.Plugins.Crawlers)
+            {
+                if (plugin.getUID().Equals(vieModel.CurrentPlugin.getUID()))
+                    plugin.Enabled = enabled;
+                GlobalConfig.Settings.PluginEnabled.Add(plugin.getUID(), plugin.Enabled);
+            }
+            GlobalConfig.Settings.PluginEnabledJson = JsonConvert.SerializeObject(GlobalConfig.Settings.PluginEnabled);
+            vieModel.setServers();
+        }
+
+
     }
 
 

@@ -22,7 +22,7 @@ namespace Jvedio.Utils.Converter
         {
             string s = value as string;
 
-            if (s == null)
+            if (string.IsNullOrEmpty(s))
                 return null;
             if (s.IndexOf(",") > 0)
                 s = s.Split(',')[1];

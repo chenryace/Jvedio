@@ -210,10 +210,6 @@ namespace Jvedio.Entity
 
         public bool toDownload()
         {
-
-
-
-
             return string.IsNullOrEmpty(Title) || string.IsNullOrEmpty(WebUrl) || string.IsNullOrEmpty(ImageUrls);
         }
 

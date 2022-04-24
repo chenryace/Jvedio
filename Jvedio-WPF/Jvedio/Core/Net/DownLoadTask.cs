@@ -216,7 +216,7 @@ namespace Jvedio.Core.Net
 
 
         /// <summary>
-        /// 用于指示下载任务列表的取消按钮的 IsEnabled
+        /// 用于指示下载任务是否进行中
         /// </summary>
         public bool _Running;
         public bool Running
@@ -306,7 +306,7 @@ namespace Jvedio.Core.Net
                     }
 
 
-
+                    bool success = true;// 是否刮削到信息（包括db的部分信息）
                     Progress = 33f;
                     if ((dict != null && dict.ContainsKey("Error")))
                     {
@@ -316,6 +316,10 @@ namespace Jvedio.Core.Net
                             Message = error;
                             logger.Error(error);
                         }
+                        success = dict.ContainsKey("Title") && !string.IsNullOrEmpty(dict["Title"].ToString());
+                    }
+                    if (!success)
+                    {
                         dict = null;
                         // 发生了错误，停止下载
                         finalizeWithCancel();
@@ -328,6 +332,16 @@ namespace Jvedio.Core.Net
                         logger.Info($"保存入库");
                         videoMapper.updateById(video);
                         metaDataMapper.updateById(video.toMetaData());
+                        // 保存 dataCode
+                        if (dict.ContainsKey("DataCode") && dict.ContainsKey("WebType"))
+                        {
+                            UrlCode urlCode = new UrlCode();
+                            urlCode.LocalValue = video.VID;
+                            urlCode.RemoteValue = dict["DataCode"].ToString();
+                            urlCode.ValueType = "video";
+                            urlCode.WebType = dict["WebType"].ToString();
+                            urlCodeMapper.insert(urlCode, InsertMode.Replace);
+                        }
                         onDownloadSuccess?.Invoke(this, null);
                     }
                     else

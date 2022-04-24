@@ -84,27 +84,29 @@ namespace Jvedio.ViewModel
         public void setServers()
         {
             CrawlerServers = new Dictionary<string, ObservableCollection<CrawlerServer>>();
-            List<string> ServerNames = Global.Plugins.Crawlers.Select(item => item.ServerName).ToList();
-            foreach (string serverType in ServerNames)
+            foreach (PluginInfo plugin in Global.Plugins.Crawlers)
             {
-                CrawlerServer crawlerServer = GlobalConfig.ServerConfig.CrawlerServers.Where(arg => arg.ServerName.ToLower() == serverType.ToLower()).FirstOrDefault();
+                string serverName = plugin.ServerName;
+                string name = plugin.Name;
+                CrawlerServer crawlerServer = GlobalConfig.ServerConfig.CrawlerServers
+                    .Where(arg => arg.ServerName.ToLower() == serverName.ToLower() && arg.Name == name).FirstOrDefault();
                 if (crawlerServer == null)
                 {
                     crawlerServer = new CrawlerServer();
-                    crawlerServer.ServerName = serverType;
-                    CrawlerServers.Add(serverType, null);
+                    crawlerServer.ServerName = serverName;
+                    crawlerServer.Name = name;
+                    CrawlerServers.Add(plugin.getUID(), null);
                 }
                 else
                 {
                     ObservableCollection<CrawlerServer> crawlers = new ObservableCollection<CrawlerServer>();
-                    GlobalConfig.ServerConfig.CrawlerServers.Where(arg => arg.ServerName.ToLower() == serverType.ToLower()).
+                    GlobalConfig.ServerConfig.CrawlerServers.Where(arg => arg.ServerName.ToLower() == serverName.ToLower() && arg.Name == name).
                         ToList().ForEach(t => crawlers.Add(t));
-                    CrawlerServers.Add(serverType, crawlers);
+                    if (!CrawlerServers.ContainsKey(plugin.getUID()))
+                        CrawlerServers.Add(plugin.getUID(), crawlers);
                 }
 
             }
-
-            Console.WriteLine(CrawlerServers);
         }
 
         public bool SaveServers(Action<string> callback = null)
@@ -122,7 +124,9 @@ namespace Jvedio.ViewModel
                         callback?.Invoke($"【{key}】 刮削器处地址为 {server.Url} 的 Headers 不合理，格式必须为：{format}");
                         return false;
                     }
-                    server.ServerName = key;
+                    int idx = key.IndexOf('.');
+                    server.ServerName = key.Substring(0, idx);
+                    server.Name = key.Substring(idx + 1);
                     if (server.Headers == null) server.Headers = "";
                     list.Add(server);
 
@@ -150,8 +154,6 @@ namespace Jvedio.ViewModel
             ActorImagePath = dict["ActorImagePath"];
 
         }
-
-
 
 
         private string _ViewRenameFormat;
@@ -186,6 +188,17 @@ namespace Jvedio.ViewModel
             set
             {
                 _InstalledPlugins = value;
+                RaisePropertyChanged();
+            }
+        }
+        private bool _PluginEnabled;
+
+        public bool PluginEnabled
+        {
+            get { return _PluginEnabled; }
+            set
+            {
+                _PluginEnabled = value;
                 RaisePropertyChanged();
             }
         }

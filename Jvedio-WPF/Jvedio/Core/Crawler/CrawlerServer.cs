@@ -25,6 +25,7 @@ namespace Jvedio.Core.Crawler
 
 
         public string ServerName { get; set; }
+        public string Name { get; set; }
         private string _Url;
         public string Url
         {

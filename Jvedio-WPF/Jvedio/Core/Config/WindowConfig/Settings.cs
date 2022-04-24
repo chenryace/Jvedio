@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Jvedio.Core.Plugins;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -27,6 +28,8 @@ namespace Jvedio.Core.WindowConfig
         public string PicPathJson { get; set; }
 
         public Dictionary<string, object> PicPaths;
+        public string PluginEnabledJson { get; set; }
+        public Dictionary<string, bool> PluginEnabled;
         public bool DownloadPreviewImage { get; set; }
         public bool OverrideInfo { get; set; }
 

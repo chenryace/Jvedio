@@ -43,6 +43,7 @@ namespace Jvedio.Core.Config
             {
                 CrawlerServer server = new CrawlerServer();
                 server.ServerName = d["ServerName"].ToString();
+                server.Name = d["Name"].ToString();
                 if (!Global.Plugins.Crawlers.Where(arg => arg.ServerName.ToString().ToLower().Equals(server.ServerName.ToLower())).Any())
                     continue;
                 server.Url = d["Url"].ToString();
