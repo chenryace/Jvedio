@@ -464,6 +464,20 @@
     </Style>
 
 
+    <Style x:Key="BgHoverBorder" TargetType="Border">
+        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+        <Setter Property="CornerRadius" Value="0" />
+        <Setter Property="Background" Value="{DynamicResource Window.Title.Background}" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Opacity" Value="0.8" />
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{DynamicResource Window.Title.Hover.Background}" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+
     <Style
         x:Key="HoverBorder"
         BasedOn="{StaticResource RoundBorder}"

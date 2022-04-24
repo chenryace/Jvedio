@@ -494,6 +494,15 @@ namespace Jvedio
                 //vieModel.canRender = true;
             };
 
+            vieModel.ActorPageChangedCompleted += (s, ev) =>
+            {
+                // todo 需要引入 virtual wrapper，否则内存占用率一直很高，每页 40 个 => 1.3 G 左右
+                //GC.Collect();
+                if (Properties.Settings.Default.ActorEditMode) ActorSetSelected();
+
+                //vieModel.canRender = true;
+            };
+
 
 
             vieModel.OnCurrentMovieListRemove += (s, ev) =>
@@ -1988,6 +1997,7 @@ namespace Jvedio
             var rbs = ActorViewModeStackPanel.Children.OfType<PathRadioButton>().ToList();
             int idx = rbs.IndexOf(radioButton);
             Properties.Settings.Default.ActorViewMode = idx;
+            Properties.Settings.Default.ActorEditMode = false;
             Properties.Settings.Default.Save();
         }
 
@@ -4357,19 +4367,6 @@ namespace Jvedio
             WindowBatch.Show();
         }
 
-        private void Test(object sender, RoutedEventArgs e)
-        {
-            DoubleAnimation verticalAnimation = new DoubleAnimation();
-            verticalAnimation.From = 0;
-            verticalAnimation.To = 200;
-            verticalAnimation.Duration = FadeInterval;
-            Storyboard storyboard = new Storyboard();
-            storyboard.Children.Add(verticalAnimation);
-            Storyboard.SetTarget(verticalAnimation, MovieScrollViewer);
-            Storyboard.SetTargetProperty(verticalAnimation, new PropertyPath(ScrollViewerBehavior.VerticalOffsetProperty));
-            storyboard.Begin();
-
-        }
 
 
 
@@ -6277,12 +6274,7 @@ namespace Jvedio
             vieModel.Message.Clear();
         }
 
-        private void ShowSameActor(object sender, RoutedEventArgs e)
-        {
-            Button button = sender as Button;
-            long.TryParse(button.Tag.ToString(), out long actorID);
-            ShowSameActor(actorID);
-        }
+
 
 
         public void ShowSameActor(long actorID)
@@ -6303,16 +6295,7 @@ namespace Jvedio
 
         }
 
-        private void EditActor(object sender, RoutedEventArgs e)
-        {
-            Button button = sender as Button;
-            long.TryParse(button.Tag.ToString(), out long actorID);
-            if (actorID <= 0) return;
 
-            Window_EditActor window_EditActor = new Window_EditActor(actorID);
-            window_EditActor.ShowDialog();
-
-        }
 
         private void Rate_ValueChanged_2(object sender, FunctionEventArgs<double> e)
         {
@@ -6479,6 +6462,43 @@ namespace Jvedio
 
 
 
+        }
+
+
+        private void EditActor(object sender, RoutedEventArgs e)
+        {
+            Button button = sender as Button;
+            long.TryParse(button.Tag.ToString(), out long actorID);
+            if (actorID <= 0) return;
+
+            Window_EditActor window_EditActor = new Window_EditActor(actorID);
+            window_EditActor.ShowDialog();
+        }
+
+        private void ShowSameActor(object sender, RoutedEventArgs e)
+        {
+            Button button = sender as Button;
+            long.TryParse(button.Tag.ToString(), out long actorID);
+            ShowSameActor(actorID);
+        }
+
+        private void EditActor(object sender, MouseButtonEventArgs e)
+        {
+            Border button = sender as Border;
+            long.TryParse(button.Tag.ToString(), out long actorID);
+            if (actorID <= 0) return;
+
+            Window_EditActor window_EditActor = new Window_EditActor(actorID);
+            window_EditActor.ShowDialog();
+
+        }
+
+        private void ShowSameActor(object sender, MouseButtonEventArgs e)
+        {
+
+            Border button = sender as Border;
+            long.TryParse(button.Tag.ToString(), out long actorID);
+            ShowSameActor(actorID);
         }
     }
 

@@ -2401,10 +2401,11 @@ namespace Jvedio.ViewModel
 
         public void RandomDisplay()
         {
-            TextType = Jvedio.Language.Resources.ToolTip_RandomShow;
-            Statistic();
-            MovieList = DataBase.SelectMoviesBySql($"SELECT * FROM movie ORDER BY RANDOM() limit {Properties.Settings.Default.DisplayNumber}");
-            FlipOver();
+            //TextType = Jvedio.Language.Resources.ToolTip_RandomShow;
+            //Statistic();
+            //MovieList = DataBase.SelectMoviesBySql($"SELECT * FROM movie ORDER BY RANDOM() limit {Properties.Settings.Default.DisplayNumber}");
+            //FlipOver();
+            Select(true);
         }
 
 
@@ -2565,13 +2566,21 @@ namespace Jvedio.ViewModel
             "(select group_concat(TagID,',') from metadata_to_tagstamp where metadata_to_tagstamp.DataID=metadata.DataID)  as TagIDs ",
         };
 
-        public void setSortOrder<T>(IWrapper<T> wrapper)
+        public void setSortOrder<T>(IWrapper<T> wrapper, bool random = false)
         {
             if (wrapper == null) return;
             int.TryParse(Properties.Settings.Default.SortType, out int sortindex);
             string sortField = SortDict[sortindex];
-            if (Properties.Settings.Default.SortDescending) wrapper.Desc(sortField);
-            else wrapper.Asc(sortField);
+
+            if (random)
+                wrapper.Asc("RANDOM()");
+            else
+            {
+                if (Properties.Settings.Default.SortDescending) wrapper.Desc(sortField);
+                else wrapper.Asc(sortField);
+            }
+
+
         }
 
 
@@ -2616,7 +2625,7 @@ namespace Jvedio.ViewModel
             Select();
         }
 
-        public async void Select()
+        public async void Select(bool random = false)
         {
             Console.WriteLine("Select");
 
@@ -2648,7 +2657,8 @@ namespace Jvedio.ViewModel
 
 
 
-            setSortOrder(wrapper);
+            setSortOrder(wrapper, random);
+
             toLimit(wrapper);
             wrapper.Select(SelectFields);
             if (extraWrapper != null) wrapper.Join(extraWrapper);

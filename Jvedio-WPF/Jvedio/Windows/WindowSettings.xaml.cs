@@ -2,6 +2,7 @@
 using FontAwesome.WPF;
 using Jvedio.CommonNet;
 using Jvedio.CommonNet.Crawler;
+using Jvedio.CommonNet.Entity;
 using Jvedio.Core.Crawler;
 using Jvedio.Core.Enums;
 using Jvedio.Core.Plugins;
@@ -924,7 +925,10 @@ namespace Jvedio
 
         private async void CheckUrl(CrawlerServer server, Action<int> callback)
         {
-            string title = await HTTP.AsyncGetWebTitle(server.Url, server.Cookies);
+            // library 需要保证 Cookies 和 UserAgent完全一致
+            RequestHeader header = new RequestHeader();
+            if (server.isHeaderProper()) header = CrawlerServer.parseHeader(server);
+            string title = await HTTP.AsyncGetWebTitle(server.Url, header);
             if (string.IsNullOrEmpty(title))
             {
                 server.Available = -1;
@@ -1177,6 +1181,7 @@ namespace Jvedio
             GlobalConfig.Settings.PicPathMode = vieModel.PicPathMode;
             GlobalConfig.Settings.DownloadPreviewImage = vieModel.DownloadPreviewImage;
             GlobalConfig.Settings.OverrideInfo = vieModel.OverrideInfo;
+            GlobalConfig.Settings.AutoHandleHeader = vieModel.AutoHandleHeader;
 
         }
 
@@ -1243,30 +1248,6 @@ namespace Jvedio
                 return dgr.GetIndex();
         }
 
-        private void TextBox_GotFocus(object sender, RoutedEventArgs e)
-        {
-            //CurrentRowIndex = GetRowIndex(e);
-            //HandyControl.Controls.TextBox textBox = sender as HandyControl.Controls.TextBox;
-            //textBox.Background = (SolidColorBrush)Application.Current.Resources["ForegroundSearch"];
-            //textBox.Foreground = (SolidColorBrush)Application.Current.Resources["BackgroundMenu"];
-            //textBox.CaretBrush = (SolidColorBrush)Application.Current.Resources["BackgroundMenu"];
-        }
-
-
-        //修改地址
-        private void TextBox_LostFocus(object sender, RoutedEventArgs e)
-        {
-            //HandyControl.Controls.TextBox textBox = sender as HandyControl.Controls.TextBox;
-            //textBox.Background = Brushes.Transparent;
-            //textBox.Foreground = (SolidColorBrush)Application.Current.Resources["ForegroundGlobal"];
-
-            //if (CurrentRowIndex >= vieModel.Servers.Count || CurrentRowIndex < 0) return;
-
-            //if (textBox.Name == "url")
-            //    vieModel.Servers[CurrentRowIndex].Url = textBox.Text;
-            //else
-            //    vieModel.Servers[CurrentRowIndex].Cookie = textBox.Text;
-        }
 
 
         private void SetScanRe(object sender, RoutedEventArgs e)
@@ -1367,7 +1348,98 @@ namespace Jvedio
             vieModel.setServers();
         }
 
+        private void url_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            SearchBox searchBox = sender as SearchBox;
+            string cookies = searchBox.Text;
+            DialogInput dialogInput = new DialogInput(this, "请填入 cookie", cookies);
+            if (dialogInput.ShowDialog() == true)
+            {
+                searchBox.Text = dialogInput.Text;
+            }
+        }
 
+        CrawlerServer currentCrawlerServer;
+        private void url_PreviewMouseLeftButtonUp_1(object sender, MouseButtonEventArgs e)
+        {
+            setHeaderPopup.IsOpen = true;
+            //currentHeaderBox = sender as SearchBox;
+            //parsedTextbox.Text = currentHeaderBox.Text;
+            string serverType = getCurrentServerType();
+            currentCrawlerServer = vieModel.CrawlerServers[serverType][ServersDataGrid.SelectedIndex];
+        }
+
+        private void CancelHeader(object sender, RoutedEventArgs e)
+        {
+            setHeaderPopup.IsOpen = false;
+        }
+
+        private void ConfirmHeader(object sender, RoutedEventArgs e)
+        {
+            setHeaderPopup.IsOpen = false;
+            if (currentCrawlerServer != null)
+            {
+                currentCrawlerServer.Headers = parsedTextbox.Text.Replace("{" + Environment.NewLine + "    ", "{")
+                    .Replace(Environment.NewLine + "}", "}")
+                    .Replace($"\",{Environment.NewLine}    \"", "\",\"");
+                Dictionary<string, string> dict = JsonConvert.DeserializeObject<Dictionary<string, string>>(currentCrawlerServer.Headers);
+
+                if (dict.ContainsKey("Cookie")) currentCrawlerServer.Cookies = dict["Cookie"];
+            }
+
+
+
+        }
+
+        private void InputHeader_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (parsedTextbox != null)
+                parsedTextbox.Text = parse((sender as TextBox).Text);
+        }
+
+        private string parse(string text)
+        {
+            if (string.IsNullOrEmpty(text)) return "";
+            Dictionary<string, string> data = new Dictionary<string, string>();
+            string[] array = text.Split(Environment.NewLine.ToCharArray());
+            foreach (string item in array)
+            {
+                int idx = item.IndexOf(':');
+                if (idx <= 0 || idx >= item.Length - 1) continue;
+                string key = item.Substring(0, idx).Trim();
+                string value = item.Substring(idx + 1).Trim();
+
+
+                if (!data.ContainsKey(key)) data.Add(key, value);
+            }
+
+            if (vieModel.AutoHandleHeader)
+            {
+                data.Remove("Content-Encoding");
+                data.Remove("Accept-Encoding");
+                data.Remove("Host");
+
+                data = data.Where(arg => arg.Key.IndexOf(" ") < 0).ToDictionary(x => x.Key, y => y.Value);
+
+            }
+
+
+
+
+            string json = JsonConvert.SerializeObject(data);
+            if (json.Equals("{}"))
+                return json;
+
+            return json.Replace("{", "{" + Environment.NewLine + "    ")
+                .Replace("}", Environment.NewLine + "}")
+                .Replace("\",\"", $"\",{Environment.NewLine}    \"");
+        }
+
+        private void SetAutoHeader(object sender, RoutedEventArgs e)
+        {
+            if (parsedTextbox != null)
+                parsedTextbox.Text = parse(inputTextbox.Text);
+        }
     }
 
 

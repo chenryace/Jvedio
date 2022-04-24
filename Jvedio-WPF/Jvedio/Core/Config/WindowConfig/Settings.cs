@@ -32,6 +32,7 @@ namespace Jvedio.Core.WindowConfig
         public Dictionary<string, bool> PluginEnabled;
         public bool DownloadPreviewImage { get; set; }
         public bool OverrideInfo { get; set; }
+        public bool AutoHandleHeader { get; set; }
 
 
     }

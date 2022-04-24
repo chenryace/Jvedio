@@ -149,8 +149,16 @@ namespace Jvedio.Core.Crawler
                         info.SetValue(result, dict[info.Name]);
                     }
                 }
+
+                // user-agent
+                if (dict != null && dict.ContainsKey("User-Agent"))
+                    result.UserAgent = dict["User-Agent"];
                 if (!string.IsNullOrEmpty(server.Cookies))
                     result.Cookies = server.Cookies;
+
+
+
+
                 return result;
 
 

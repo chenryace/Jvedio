@@ -781,30 +781,32 @@
                                                     <TextBlock Style="{StaticResource BaseTextBlock}" Text="{x:Static lang:Resources.Director}" />
                                                     <TextBlock Style="{StaticResource BaseTextBlock}" Text="：" />
                                                     <Border
-                                                        Width="250"
+                                                        MaxWidth="250"
                                                         Margin="2"
                                                         MouseLeftButtonUp="ShowSameDirector"
                                                         Style="{StaticResource HoverBorder}">
                                                         <TextBlock
                                                             Style="{StaticResource BaseTextBlock}"
                                                             Text="{Binding CurrentVideo.Director}"
-                                                            TextWrapping="Wrap" />
+                                                            TextTrimming="WordEllipsis"
+                                                            TextWrapping="NoWrap" />
                                                     </Border>
                                                 </StackPanel>
 
 
-                                                <StackPanel Style="{StaticResource InfoStackPanel}" Tag="{Binding CurrentVideo.Tag}">
+                                                <StackPanel Style="{StaticResource InfoStackPanel}" Tag="{Binding CurrentVideo.Series}">
                                                     <TextBlock Style="{StaticResource BaseTextBlock}" Text="{x:Static lang:Resources.Tag}" />
                                                     <TextBlock Style="{StaticResource BaseTextBlock}" Text="：" />
                                                     <Border
-                                                        Width="250"
+                                                        MaxWidth="250"
                                                         Margin="2"
                                                         MouseLeftButtonUp="ShowSameSeries"
                                                         Style="{StaticResource HoverBorder}">
                                                         <TextBlock
                                                             Style="{StaticResource BaseTextBlock}"
                                                             Text="{Binding CurrentVideo.Series}"
-                                                            TextWrapping="WrapWithOverflow" />
+                                                            TextTrimming="WordEllipsis"
+                                                            TextWrapping="NoWrap" />
                                                     </Border>
                                                 </StackPanel>
 
@@ -855,14 +857,15 @@
                                                     <TextBlock Style="{StaticResource BaseTextBlock}" Text="制作" />
                                                     <TextBlock Style="{StaticResource BaseTextBlock}" Text="：" />
                                                     <Border
-                                                        Width="240"
+                                                        MaxWidth="250"
                                                         Margin="2"
                                                         MouseLeftButtonUp="ShowSameStudio"
                                                         Style="{StaticResource HoverBorder}">
                                                         <TextBlock
                                                             Style="{StaticResource BaseTextBlock}"
                                                             Text="{Binding CurrentVideo.Studio}"
-                                                            TextWrapping="Wrap" />
+                                                            TextTrimming="WordEllipsis"
+                                                            TextWrapping="NoWrap" />
                                                     </Border>
                                                 </StackPanel>
 
@@ -1012,12 +1015,14 @@
                                                             Click="TranslateMovie"
                                                             Content="{x:Static lang:Resources.Translate}"
                                                             Cursor="Hand"
+                                                            IsEnabled="False"
                                                             Style="{StaticResource ButtonPrimary}" />
                                                         <TextBox
                                                             Height="auto"
                                                             Margin="5,0"
                                                             Style="{StaticResource ViewTextBox}"
                                                             Text="{Binding CurrentVideo.Plot}"
+                                                            TextAlignment="Left"
                                                             TextWrapping="Wrap" />
                                                     </StackPanel>
 

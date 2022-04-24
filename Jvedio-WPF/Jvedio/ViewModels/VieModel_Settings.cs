@@ -167,6 +167,17 @@ namespace Jvedio.ViewModel
                 RaisePropertyChanged();
             }
         }
+        private bool _AutoHandleHeader = GlobalConfig.Settings.AutoHandleHeader;
+
+        public bool AutoHandleHeader
+        {
+            get { return _AutoHandleHeader; }
+            set
+            {
+                _AutoHandleHeader = value;
+                RaisePropertyChanged();
+            }
+        }
 
 
         private ObservableCollection<Theme> _ThemeList;

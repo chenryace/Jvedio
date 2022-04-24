@@ -265,6 +265,7 @@
     <Compile Include="Core\Command\OpenWindow.cs" />
     <Compile Include="Core\Config\ServerConfig.cs" />
     <Compile Include="Core\Config\WindowConfig\Settings.cs" />
+    <Compile Include="Core\Crawler\ActorSearch.cs" />
     <Compile Include="Core\CustomEventArgs\PreviewImageEventArgs.cs" />
     <Compile Include="Core\CustomEventArgs\ActressUpdateEventArgs.cs" />
     <Compile Include="Core\CustomEventArgs\InfoUpdateEventArgs.cs" />
@@ -422,7 +423,6 @@
     <Compile Include="Utils\FileProcess\DirHelper.cs" />
     <Compile Include="Utils\FileProcess\FileHelper.cs" />
     <Compile Include="Utils\FileProcess\StreamHelper.cs" />
-    <Compile Include="Core\Crawler\ActorCrawler.cs" />
     <Compile Include="Utils\Other\Comparer.cs" />
     <Compile Include="Utils\Other\Converter.cs" />
     <Compile Include="Utils\ImageAndVedio\FFmpegHelper.cs" />
@@ -468,11 +468,9 @@
     </Compile>
     <Compile Include="Core\Net\VideoDownLoader.cs" />
     <Compile Include="Utils\ImageAndVedio\ImageSlide.cs" />
-    <Compile Include="Core\Crawler\Crawler.cs" />
     <Compile Include="Utils\Sqlite\DataBase.cs" />
     <Compile Include="Utils\FileProcess\Identify.cs" />
     <Compile Include="Utils\FileProcess\Logger.cs" />
-    <Compile Include="Core\Crawler\CrawlerParse.cs" />
     <Compile Include="Utils\FileProcess\NFO.cs" />
     <Compile Include="Core\Scan\ScanHelper.cs" />
     <Compile Include="Utils\Config\WindowConfig.cs" />

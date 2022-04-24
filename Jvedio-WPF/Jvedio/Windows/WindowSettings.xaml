@@ -1268,8 +1268,6 @@
                                                                 HorizontalAlignment="Stretch"
                                                                 Background="Transparent"
                                                                 Foreground="{DynamicResource Global.Foreground}"
-                                                                GotFocus="TextBox_GotFocus"
-                                                                LostFocus="TextBox_LostFocus"
                                                                 PlaceHolder="网址"
                                                                 PlaceHolderForeground="Gray"
                                                                 Style="{StaticResource BaseSearchTextBox}"
@@ -1288,10 +1286,10 @@
                                                                 HorizontalAlignment="Stretch"
                                                                 Background="Transparent"
                                                                 Foreground="{DynamicResource Global.Foreground}"
-                                                                GotFocus="TextBox_GotFocus"
-                                                                LostFocus="TextBox_LostFocus"
+                                                                IsReadOnly="True"
                                                                 PlaceHolder="Cookies"
                                                                 PlaceHolderForeground="Gray"
+                                                                PreviewMouseLeftButtonUp="url_PreviewMouseLeftButtonUp"
                                                                 Style="{StaticResource BaseSearchTextBox}"
                                                                 Text="{Binding Cookies, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                                                         </DataTemplate>
@@ -1306,15 +1304,17 @@
                                                                 HorizontalAlignment="Stretch"
                                                                 Background="Transparent"
                                                                 Foreground="{DynamicResource Global.Foreground}"
-                                                                GotFocus="TextBox_GotFocus"
-                                                                LostFocus="TextBox_LostFocus"
+                                                                IsReadOnly="True"
                                                                 PlaceHolder="Headers"
                                                                 PlaceHolderForeground="Gray"
+                                                                PreviewMouseLeftButtonUp="url_PreviewMouseLeftButtonUp_1"
                                                                 Style="{StaticResource BaseSearchTextBox}"
                                                                 Text="{Binding Headers, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                                                         </DataTemplate>
                                                     </DataGridTemplateColumn.CellTemplate>
                                                 </DataGridTemplateColumn>
+
+
 
 
                                                 <DataGridTextColumn
@@ -1332,6 +1332,96 @@
 
 
                                         </DataGrid>
+
+                                        <Popup
+                                            x:Name="setHeaderPopup"
+                                            Width="800"
+                                            Height="300"
+                                            AllowsTransparency="True"
+                                            HorizontalOffset="0"
+                                            Placement="Center"
+                                            PlacementTarget="{Binding ElementName=ServersDataGrid}"
+                                            PopupAnimation="Fade"
+                                            StaysOpen="True"
+                                            VerticalOffset="0">
+                                            <Grid Margin="5">
+                                                <Border
+                                                    Margin="5"
+                                                    Background="{DynamicResource Menu.Background}"
+                                                    CornerRadius="0 0 5 5"
+                                                    Effect="{StaticResource PopupDropShadowEffect}" />
+                                                <Grid>
+
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition Height="*" />
+                                                        <RowDefinition Height="auto" />
+                                                    </Grid.RowDefinitions>
+
+                                                    <Grid Grid.Row="0">
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="5*" />
+                                                            <ColumnDefinition Width="5*" />
+                                                        </Grid.ColumnDefinitions>
+                                                        <TextBox
+                                                            x:Name="inputTextbox"
+                                                            Width="auto"
+                                                            Height="auto"
+                                                            Margin="10"
+                                                            Padding="5"
+                                                            HorizontalAlignment="Stretch"
+                                                            VerticalAlignment="Stretch"
+                                                            VerticalContentAlignment="Top"
+                                                            AcceptsReturn="True"
+                                                            Background="{DynamicResource Window.Title.Background}"
+                                                            Foreground="{DynamicResource Global.Foreground}"
+                                                            ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                                                            ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                                            Style="{StaticResource BaseTextBox}"
+                                                            Text=""
+                                                            TextAlignment="Left"
+                                                            TextChanged="InputHeader_TextChanged" />
+                                                        <TextBox
+                                                            x:Name="parsedTextbox"
+                                                            Grid.Column="1"
+                                                            Width="auto"
+                                                            Height="auto"
+                                                            Margin="10"
+                                                            Padding="5"
+                                                            HorizontalAlignment="Stretch"
+                                                            VerticalAlignment="Stretch"
+                                                            VerticalContentAlignment="Top"
+                                                            AcceptsReturn="True"
+                                                            Background="{DynamicResource Window.Title.Background}"
+                                                            Foreground="{DynamicResource Global.Foreground}"
+                                                            IsReadOnly="True"
+                                                            ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                                                            ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                                            Style="{StaticResource BaseTextBox}"
+                                                            Text=""
+                                                            TextAlignment="Left" />
+                                                    </Grid>
+
+                                                    <StackPanel
+                                                        Grid.Row="1"
+                                                        Margin="5"
+                                                        HorizontalAlignment="Right"
+                                                        Orientation="Horizontal">
+                                                        <CheckBox
+                                                            Click="SetAutoHeader"
+                                                            Content="自动识别"
+                                                            IsChecked="{Binding AutoHandleHeader, Mode=TwoWay}" />
+                                                        <Button
+                                                            Click="CancelHeader"
+                                                            Content="取消"
+                                                            Style="{StaticResource ButtonDanger}" />
+                                                        <Button
+                                                            Click="ConfirmHeader"
+                                                            Content="确认"
+                                                            Style="{StaticResource ButtonPrimary}" />
+                                                    </StackPanel>
+                                                </Grid>
+                                            </Grid>
+                                        </Popup>
 
                                     </StackPanel>
                                 </Grid>
