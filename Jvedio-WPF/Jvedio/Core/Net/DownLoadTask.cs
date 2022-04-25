@@ -369,7 +369,7 @@ namespace Jvedio.Core.Net
                         string saveFileName = video.getImagePath(ImageType.Big, Path.GetExtension(imageUrl));
                         if (!File.Exists(saveFileName))
                         {
-                            byte[] fileByte = downLoader.DownloadImage(imageUrl, (error) =>
+                            byte[] fileByte = await downLoader.DownloadImage(imageUrl, (error) =>
                             {
                                 if (!string.IsNullOrEmpty(error))
                                     logger.Error($"{imageUrl} => {error}");
@@ -403,7 +403,7 @@ namespace Jvedio.Core.Net
                         string saveFileName = video.getImagePath(ImageType.Small, Path.GetExtension(imageUrl));
                         if (!File.Exists(saveFileName))
                         {
-                            byte[] fileByte = downLoader.DownloadImage(imageUrl, (error) =>
+                            byte[] fileByte = await downLoader.DownloadImage(imageUrl, (error) =>
                             {
                                 if (!string.IsNullOrEmpty(error))
                                     logger.Error($"{imageUrl} => {error}");
@@ -453,7 +453,7 @@ namespace Jvedio.Core.Net
                                 string saveFileName = actorInfo.getImagePath();
                                 if (!File.Exists(saveFileName))
                                 {
-                                    byte[] fileByte = downLoader.DownloadImage(url, (error) =>
+                                    byte[] fileByte = await downLoader.DownloadImage(url, (error) =>
                                     {
                                         if (!string.IsNullOrEmpty(error))
                                             logger.Error($"{url} => {error}");
@@ -506,7 +506,7 @@ namespace Jvedio.Core.Net
                                 if (!File.Exists(saveFileName))
                                 {
                                     StatusText = $"下载预览图 {(i + 1)}/{imageUrls.Count}";
-                                    byte[] fileByte = downLoader.DownloadImage(url, (error) =>
+                                    byte[] fileByte = await downLoader.DownloadImage(url, (error) =>
                                     {
                                         if (!string.IsNullOrEmpty(error))
                                             logger.Error($"{url} => {error}");

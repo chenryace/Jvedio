@@ -1020,7 +1020,10 @@
                 Header="{x:Static lang:Resources.SyncInfo}">
                 <StackPanel>
 
-                    <WrapPanel Margin="20,5" Orientation="Horizontal">
+                    <WrapPanel
+                        Margin="20,5"
+                        IsEnabled="False"
+                        Orientation="Horizontal">
 
                         <CheckBox
                             Margin="0"
@@ -1076,11 +1079,11 @@
 
                     <chao:TogglePanel
                         Grid.Column="1"
-                        Margin="10"
+                        Margin="10,0"
                         Padding="0,5"
                         FontSize="16"
                         Header="刮削器列表"
-                        IsExpanded="True"
+                        IsExpanded="False"
                         LineWidth="0"
                         Style="{StaticResource BaseTogglePanel}">
                         <Grid>
@@ -1436,7 +1439,163 @@
 
 
 
+                    <chao:TogglePanel
+                        Margin="10,0"
+                        Padding="0,5"
+                        FontSize="15"
+                        Header="代理设置"
+                        IsExpanded="True"
+                        LineWidth="0"
+                        Style="{StaticResource BaseTogglePanel}">
+                        <StackPanel Orientation="Vertical">
 
+                            <StackPanel
+                                Name="proxyStackPanel"
+                                Margin="10"
+                                Orientation="Horizontal">
+                                <RadioButton
+                                    HorizontalAlignment="Left"
+                                    Content="不使用代理"
+                                    GroupName="enableProxy"
+                                    IsChecked="True"
+                                    Style="{StaticResource FlatRadioButton}" />
+                                <RadioButton
+                                    HorizontalAlignment="Left"
+                                    Content="使用系统代理"
+                                    GroupName="enableProxy"
+                                    Style="{StaticResource FlatRadioButton}" />
+                                <RadioButton
+                                    x:Name="customProxyRadioButton"
+                                    HorizontalAlignment="Left"
+                                    Content="自定义代理"
+                                    GroupName="enableProxy"
+                                    Style="{StaticResource FlatRadioButton}" />
+
+                            </StackPanel>
+
+                            <StackPanel Orientation="Vertical" Visibility="{Binding ElementName=customProxyRadioButton, Path=IsChecked, Converter={StaticResource bool2VisibilityConverter}}">
+                                <StackPanel
+                                    Name="proxyTypesStackPanel"
+                                    Margin="20,5"
+                                    Orientation="Horizontal">
+                                    <TextBlock
+                                        MinWidth="60"
+                                        Style="{StaticResource BaseTextBlock}"
+                                        Text="类型"
+                                        TextAlignment="Left"
+                                        ToolTip="[0-2000]" />
+                                    <RadioButton
+                                        Content="HTTP"
+                                        GroupName="proxyType"
+                                        IsChecked="True"
+                                        Style="{StaticResource FlatRadioButton}" />
+                                    <RadioButton
+                                        Content="SOCKS"
+                                        GroupName="proxyType"
+                                        Style="{StaticResource FlatRadioButton}" />
+                                </StackPanel>
+                                <StackPanel
+                                    Margin="20,5"
+                                    Orientation="Horizontal"
+                                    Visibility="Visible">
+                                    <TextBlock
+                                        MinWidth="60"
+                                        Style="{StaticResource BaseTextBlock}"
+                                        Text="服务器*"
+                                        TextAlignment="Left" />
+                                    <chao:SearchBox
+                                        MinWidth="400"
+                                        Style="{StaticResource BaseSearchTextBox}"
+                                        Text="{Binding ProxyServer, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+
+                                    <TextBlock
+                                        MinWidth="60"
+                                        Style="{StaticResource BaseTextBlock}"
+                                        Text="端口*"
+                                        TextAlignment="Left" />
+                                    <chao:SearchBox
+                                        MinWidth="200"
+                                        Style="{StaticResource BaseSearchTextBox}"
+                                        Text="{Binding ProxyPort, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+                                </StackPanel>
+                                <StackPanel
+                                    Margin="20,5"
+                                    Orientation="Horizontal"
+                                    Visibility="Visible">
+                                    <TextBlock
+                                        MinWidth="60"
+                                        Style="{StaticResource BaseTextBlock}"
+                                        Text="用户名"
+                                        TextAlignment="Left" />
+                                    <chao:SearchBox
+                                        MinWidth="400"
+                                        Style="{StaticResource BaseSearchTextBox}"
+                                        Text="{Binding ProxyUserName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+
+                                    <TextBlock
+                                        MinWidth="60"
+                                        Style="{StaticResource BaseTextBlock}"
+                                        Text="密码"
+                                        TextAlignment="Left" />
+                                    <chao:SearchBox
+                                        MinWidth="200"
+                                        Style="{StaticResource BaseSearchTextBox}"
+                                        Text="{Binding ProxyPwd, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+                                </StackPanel>
+
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <fa:ImageAwesome
+                                    Grid.Column="0"
+                                    Width="20"
+                                    Margin="20,4,0,0"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center">
+                                    <fa:ImageAwesome.Style>
+                                        <Style TargetType="fa:ImageAwesome">
+                                            <Style.Triggers>
+
+                                                <DataTrigger Binding="{Binding TestProxyStatus, Mode=OneWay}" Value="Canceled">
+                                                    <Setter Property="Icon" Value="TimesCircle" />
+                                                    <Setter Property="Foreground" Value="Red" />
+                                                    <Setter Property="Spin" Value="False" />
+                                                </DataTrigger>
+
+                                                <DataTrigger Binding="{Binding TestProxyStatus, Mode=OneWay}" Value="RanToCompletion">
+                                                    <Setter Property="Icon" Value="CheckCircle" />
+                                                    <Setter Property="Foreground" Value="#20B759" />
+                                                    <Setter Property="Spin" Value="False" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding TestProxyStatus, Mode=OneWay}" Value="Running">
+                                                    <Setter Property="Icon" Value="Refresh" />
+                                                    <Setter Property="Foreground" Value="{DynamicResource Common.HighLight.Hover.Background}" />
+                                                    <Setter Property="Spin" Value="True" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </fa:ImageAwesome.Style>
+
+                                </fa:ImageAwesome>
+                                <Button
+                                    MinWidth="100"
+                                    Margin="20,10"
+                                    HorizontalAlignment="Left"
+                                    Click="TestProxy"
+                                    Content="测试" />
+
+                                <TextBlock VerticalAlignment="Center" Text="测试地址" />
+                                <chao:SearchBox
+                                    Name="textProxyUrl"
+                                    MinWidth="200"
+                                    Style="{StaticResource BaseSearchTextBox}"
+                                    Text="http://www.google.com" />
+                            </StackPanel>
+                        </StackPanel>
+                    </chao:TogglePanel>
 
 
 

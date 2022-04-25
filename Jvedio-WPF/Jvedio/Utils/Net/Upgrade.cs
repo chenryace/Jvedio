@@ -46,41 +46,41 @@ namespace Jvedio
 
         private async Task<bool> GetDownLoadList()
         {
-            HttpResult httpResult = null;
-            try { httpResult = new BaseHttp().Send(list_url); }
-            catch (TimeoutException ex)
-            {
-                Logger.LogN(list_url + " => " + ex.Message);
-                return false;
-            }
-            if (httpResult == null || string.IsNullOrEmpty(httpResult.SourceCode)) return false;
-            Dictionary<string, string> filemd5 = new Dictionary<string, string>();
-            foreach (var item in httpResult.SourceCode.Split('\n'))
-            {
-                if (!string.IsNullOrEmpty(item) && item.IndexOf(' ') > 0)
-                {
-                    string[] info = item.Split(' ');
-                    if (!filemd5.ContainsKey(info[0])) filemd5.Add(info[0], info[1]);
-                }
-            }
-            List<string> filenamelist = filemd5.Keys.ToList();
-            DownLoadList = new List<string>();
-            filenamelist.ForEach(arg =>
-            {
-                string localfilepath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, arg);
-                if (File.Exists(localfilepath))
-                {
-                    //存在 => 校验
-                    if (Encrypt.GetFileMD5(localfilepath) != filemd5[arg])
-                    {
-                        DownLoadList.Add(arg);//md5 不一致 ，下载
-                    }
-                }
-                else
-                {
-                    DownLoadList.Add(arg); //不存在 =>下载
-                }
-            });
+            //HttpResult httpResult = null;
+            //try { httpResult = new BaseHttp().Send(list_url); }
+            //catch (TimeoutException ex)
+            //{
+            //    Logger.LogN(list_url + " => " + ex.Message);
+            //    return false;
+            //}
+            //if (httpResult == null || string.IsNullOrEmpty(httpResult.SourceCode)) return false;
+            //Dictionary<string, string> filemd5 = new Dictionary<string, string>();
+            //foreach (var item in httpResult.SourceCode.Split('\n'))
+            //{
+            //    if (!string.IsNullOrEmpty(item) && item.IndexOf(' ') > 0)
+            //    {
+            //        string[] info = item.Split(' ');
+            //        if (!filemd5.ContainsKey(info[0])) filemd5.Add(info[0], info[1]);
+            //    }
+            //}
+            //List<string> filenamelist = filemd5.Keys.ToList();
+            //DownLoadList = new List<string>();
+            //filenamelist.ForEach(arg =>
+            //{
+            //    string localfilepath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, arg);
+            //    if (File.Exists(localfilepath))
+            //    {
+            //        //存在 => 校验
+            //        if (Encrypt.GetFileMD5(localfilepath) != filemd5[arg])
+            //        {
+            //            DownLoadList.Add(arg);//md5 不一致 ，下载
+            //        }
+            //    }
+            //    else
+            //    {
+            //        DownLoadList.Add(arg); //不存在 =>下载
+            //    }
+            //});
             return true;
         }
 

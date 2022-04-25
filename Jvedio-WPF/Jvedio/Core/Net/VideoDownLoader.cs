@@ -21,6 +21,7 @@ using Jvedio.CommonNet.Entity;
 using Jvedio.CommonNet.Crawler;
 using Jvedio.CommonNet;
 using Jvedio.Core.SimpleORM;
+using System.Net;
 
 namespace Jvedio.Core.Net
 {
@@ -145,12 +146,18 @@ namespace Jvedio.Core.Net
         }
 
 
-        public byte[] DownloadImage(string url, Action<string> onError = null)
+        public async Task<byte[]> DownloadImage(string url, Action<string> onError = null)
         {
-            return HTTP.DownloadSmallFile(url, Header, null, (error) =>
+            try
             {
-                onError?.Invoke(error);
-            });
+                HttpResult httpResult = await HttpHelper.AsyncDownLoadFile(url, null);
+                return httpResult.FileByte;
+            }
+            catch (WebException ex)
+            {
+                onError?.Invoke(ex.Message);
+            }
+            return null;
         }
 
 

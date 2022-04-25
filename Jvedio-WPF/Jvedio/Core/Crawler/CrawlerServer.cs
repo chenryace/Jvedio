@@ -150,11 +150,11 @@ namespace Jvedio.Core.Crawler
                     }
                 }
 
-                // user-agent
-                if (dict != null && dict.ContainsKey("User-Agent"))
-                    result.UserAgent = dict["User-Agent"];
-                if (!string.IsNullOrEmpty(server.Cookies))
-                    result.Cookies = server.Cookies;
+                // todo
+                //if (dict != null && dict.ContainsKey("User-Agent"))
+                //    result.UserAgent = dict["User-Agent"];
+                //if (!string.IsNullOrEmpty(server.Cookies))
+                //    result.Cookies = server.Cookies;
 
 
 

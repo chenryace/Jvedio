@@ -433,6 +433,64 @@ namespace Jvedio.ViewModel
                 RaisePropertyChanged();
             }
         }
+        private string _ProxyServer = GlobalConfig.ProxyConfig.Server;
+
+        public string ProxyServer
+        {
+            get { return _ProxyServer; }
+            set
+            {
+                _ProxyServer = value;
+                RaisePropertyChanged();
+            }
+        }
+        private int _ProxyPort = (int)GlobalConfig.ProxyConfig.Port;
+
+        public int ProxyPort
+        {
+            get { return _ProxyPort; }
+            set
+            {
+                _ProxyPort = value;
+                RaisePropertyChanged();
+            }
+        }
+        private string _ProxyUserName = GlobalConfig.ProxyConfig.UserName;
+
+        public string ProxyUserName
+        {
+            get { return _ProxyUserName; }
+            set
+            {
+                _ProxyUserName = value;
+                RaisePropertyChanged();
+            }
+        }
+        private string _ProxyPwd = GlobalConfig.ProxyConfig.Password;
+
+        public string ProxyPwd
+        {
+            get { return _ProxyPwd; }
+            set
+            {
+                _ProxyPwd = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
+        private TaskStatus _TestProxyStatus;
+
+        public TaskStatus TestProxyStatus
+        {
+            get { return _TestProxyStatus; }
+            set
+            {
+                _TestProxyStatus = value;
+                RaisePropertyChanged();
+            }
+        }
+
 
 
 

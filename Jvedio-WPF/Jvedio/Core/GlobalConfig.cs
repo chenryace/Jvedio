@@ -18,6 +18,7 @@ namespace Jvedio
         public static MetaData MetaData = MetaData.createInstance();
         public static Jvedio.Core.WindowConfig.Settings Settings = Jvedio.Core.WindowConfig.Settings.createInstance();
         public static Jvedio.Core.Config.ServerConfig ServerConfig = Jvedio.Core.Config.ServerConfig.createInstance();
+        public static Jvedio.Core.Config.ProxyConfig ProxyConfig = Jvedio.Core.Config.ProxyConfig.createInstance();
 
         static GlobalConfig()
         {
@@ -28,6 +29,7 @@ namespace Jvedio
             MetaData.Read();
             ServerConfig.Read();
             Settings.Read();
+            ProxyConfig.Read();
             EnsurePicPaths();// 确保 PicPaths
         }
 

@@ -17,8 +17,10 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Reflection;
 using System.Security.Permissions;
 using System.Text.RegularExpressions;
@@ -773,6 +775,31 @@ namespace Jvedio
                 }
             }
 
+            // 设置代理选中
+            List<RadioButton> proxies = proxyStackPanel.Children.OfType<RadioButton>().ToList();
+            for (int i = 0; i < proxies.Count; i++)
+            {
+                if (i == GlobalConfig.ProxyConfig.ProxyMode) proxies[i].IsChecked = true;
+                int idx = i;
+                proxies[i].Click += (s, ev) =>
+                {
+                    GlobalConfig.ProxyConfig.ProxyMode = idx;
+                };
+            }
+            List<RadioButton> proxyTypes = proxyTypesStackPanel.Children.OfType<RadioButton>().ToList();
+            for (int i = 0; i < proxyTypes.Count; i++)
+            {
+                if (i == GlobalConfig.ProxyConfig.ProxyType) proxyTypes[i].IsChecked = true;
+                int idx = i;
+                proxyTypes[i].Click += (s, ev) =>
+                {
+                    GlobalConfig.ProxyConfig.ProxyType = idx;
+                };
+            }
+
+
+
+
 
 
 
@@ -928,7 +955,7 @@ namespace Jvedio
             // library 需要保证 Cookies 和 UserAgent完全一致
             RequestHeader header = new RequestHeader();
             if (server.isHeaderProper()) header = CrawlerServer.parseHeader(server);
-            string title = await HTTP.AsyncGetWebTitle(server.Url, header);
+            string title = await HttpHelper.AsyncGetWebTitle(server.Url, header);
             if (string.IsNullOrEmpty(title))
             {
                 server.Available = -1;
@@ -1172,6 +1199,7 @@ namespace Jvedio
 
             saveSettings();
             GlobalConfig.Settings.Save();
+            GlobalConfig.ProxyConfig.Save();
         }
 
 
@@ -1182,6 +1210,13 @@ namespace Jvedio
             GlobalConfig.Settings.DownloadPreviewImage = vieModel.DownloadPreviewImage;
             GlobalConfig.Settings.OverrideInfo = vieModel.OverrideInfo;
             GlobalConfig.Settings.AutoHandleHeader = vieModel.AutoHandleHeader;
+
+            // 代理
+            GlobalConfig.ProxyConfig.Server = vieModel.ProxyServer;
+            GlobalConfig.ProxyConfig.Port = vieModel.ProxyPort;
+            GlobalConfig.ProxyConfig.UserName = vieModel.ProxyUserName;
+            GlobalConfig.ProxyConfig.Password = vieModel.ProxyPwd;
+
 
         }
 
@@ -1337,7 +1372,7 @@ namespace Jvedio
         private void SavePluginEnabled(object sender, RoutedEventArgs e)
         {
             GlobalConfig.Settings.PluginEnabled = new Dictionary<string, bool>();
-            bool enabled = (bool)(sender as Switch).IsChecked;
+            bool enabled = (bool)(sender as ChaoControls.Style.Switch).IsChecked;
             foreach (PluginInfo plugin in Global.Plugins.Crawlers)
             {
                 if (plugin.getUID().Equals(vieModel.CurrentPlugin.getUID()))
@@ -1439,6 +1474,50 @@ namespace Jvedio
         {
             if (parsedTextbox != null)
                 parsedTextbox.Text = parse(inputTextbox.Text);
+        }
+
+        private async void TestProxy(object sender, RoutedEventArgs e)
+        {
+            vieModel.TestProxyStatus = TaskStatus.Running;
+            saveSettings();
+            Button button = sender as Button;
+            button.IsEnabled = false;
+            string url = textProxyUrl.Text;
+            //string url = "https://www.baidu.com";
+            //string url = "https://www.google.com";
+            IWebProxy proxy = GlobalConfig.ProxyConfig.GetWebProxy();
+
+
+
+            //WebProxy proxy = null;
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+
+            RequestHeader header = new RequestHeader();
+            header.WebProxy = proxy;
+
+            HttpResult httpResult = await HttpClient.Get(url, header);
+            if (httpResult != null)
+            {
+                if (httpResult.StatusCode == HttpStatusCode.OK)
+                {
+                    MessageCard.Success($"成功，延时：{stopwatch.ElapsedMilliseconds} ms");
+                    vieModel.TestProxyStatus = TaskStatus.RanToCompletion;
+                }
+                else
+                {
+                    MessageCard.Error(httpResult.Error);
+                    vieModel.TestProxyStatus = TaskStatus.Canceled;
+                }
+            }
+            else
+            {
+                MessageCard.Error("失败");
+                vieModel.TestProxyStatus = TaskStatus.Canceled;
+            }
+
+            stopwatch.Stop();
+            button.IsEnabled = true;
         }
     }
 
