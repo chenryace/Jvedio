@@ -2,14 +2,8 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Jvedio.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
-    <Setting Name="CloseToTaskBar" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">False</Value>
-    </Setting>
     <Setting Name="ShowImageMode" Type="System.String" Scope="User">
       <Value Profile="(Default)">0</Value>
-    </Setting>
-    <Setting Name="RandomDisplay" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="DisplayNumber" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">50</Value>
@@ -55,9 +49,6 @@
     </Setting>
     <Setting Name="DelFromDBIfDel" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
-    </Setting>
-    <Setting Name="ScanMinFileSize" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">1</Value>
     </Setting>
     <Setting Name="VideoType" Type="System.String" Scope="User">
       <Value Profile="(Default)">0</Value>
@@ -263,9 +254,6 @@
     <Setting Name="DataBasePath" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="OpenDataBaseDefault" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">False</Value>
-    </Setting>
     <Setting Name="UpgradeRequired" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
@@ -307,9 +295,6 @@
     </Setting>
     <Setting Name="RecentDays" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">3</Value>
-    </Setting>
-    <Setting Name="AutoDeleteNotExistMovie" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="HotKey_Modifiers" Type="System.UInt32" Scope="User">
       <Value Profile="(Default)">0</Value>
@@ -357,9 +342,6 @@
       <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="DetialWindowShowAllMovie" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">False</Value>
-    </Setting>
-    <Setting Name="ScanWhenRefresh" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="RenameFormat" Type="System.String" Scope="User">

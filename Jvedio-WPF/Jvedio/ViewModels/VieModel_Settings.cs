@@ -23,14 +23,10 @@ namespace Jvedio.ViewModel
 {
     public class VieModel_Settings : ViewModelBase
     {
-        Main main;
+
         public VieModel_Settings()
         {
-            main = ((Main)FileProcess.GetWindowByName("Main"));
-            DataBase = Path.GetFileNameWithoutExtension(Properties.Settings.Default.DataBasePath);
 
-            // todo
-            // DataBases = main?.vieModel.DataBases;
             ThemeList = new ObservableCollection<Theme>();
             foreach (Theme theme in ThemeLoader.Themes)
             {
@@ -48,27 +44,22 @@ namespace Jvedio.ViewModel
 
 
 
-        public void Reset()
+        public void LoadScanPath(AppDatabase db)
         {
             //读取配置文件
             ScanPath = new ObservableCollection<string>();
-            // todo
-            //foreach (var item in ReadScanPathFromConfig(DataBase))
-            //{
-            //    ScanPath.Add(item);
-            //}
+            try
+            {
+                List<string> list = JsonConvert.DeserializeObject<List<string>>(db.ScanPath);
+                if (list != null && list.Count > 0)
+                    list.ForEach(arg => ScanPath.Add(arg));
+            }
+            catch (Exception ex)
+            {
+                Logger.LogF(ex);
+            }
             if (ScanPath.Count == 0) ScanPath = null;
-            //GlobalVariable.InitVariable();
             Servers = new ObservableCollection<Server>();
-
-            //Type type = JvedioServers.GetType();
-            //foreach (var item in type.GetProperties())
-            //{
-            //    System.Reflection.PropertyInfo propertyInfo = type.GetProperty(item.Name);
-            //    Server server = (Server)propertyInfo.GetValue(JvedioServers);
-            //    if (server.Url != "")
-            //        Servers.Add(server);
-            //}
         }
 
 
@@ -156,6 +147,17 @@ namespace Jvedio.ViewModel
         }
 
 
+        private int _TabControlSelectedIndex = (int)GlobalConfig.Settings.TabControlSelectedIndex;
+
+        public int TabControlSelectedIndex
+        {
+            get { return _TabControlSelectedIndex; }
+            set
+            {
+                _TabControlSelectedIndex = value;
+                RaisePropertyChanged();
+            }
+        }
         private string _ViewRenameFormat;
 
         public string ViewRenameFormat
@@ -396,30 +398,6 @@ namespace Jvedio.ViewModel
                 RaisePropertyChanged();
             }
         }
-        private string _DataBase;
-
-        public string DataBase
-        {
-            get { return _DataBase; }
-            set
-            {
-                _DataBase = value;
-                RaisePropertyChanged();
-            }
-        }
-
-
-        private ObservableCollection<string> _DataBases = new ObservableCollection<string>();
-
-        public ObservableCollection<string> DataBases
-        {
-            get { return _DataBases; }
-            set
-            {
-                _DataBases = value;
-                RaisePropertyChanged();
-            }
-        }
 
 
         private Dictionary<string, ObservableCollection<CrawlerServer>> _CrawlerServers = new Dictionary<string, ObservableCollection<CrawlerServer>>();
@@ -490,7 +468,87 @@ namespace Jvedio.ViewModel
                 RaisePropertyChanged();
             }
         }
+        private int _HttpTimeout = (int)GlobalConfig.ProxyConfig.HttpTimeout;
 
+        public int HttpTimeout
+        {
+            get { return _HttpTimeout; }
+            set
+            {
+                _HttpTimeout = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
+
+        #region "扫描"
+
+        private double _MinFileSize = GlobalConfig.ScanConfig.MinFileSize;
+
+        public double MinFileSize
+        {
+            get { return _MinFileSize; }
+            set
+            {
+                _MinFileSize = value;
+                RaisePropertyChanged();
+            }
+        }
+        private bool _ScanOnStartUp = GlobalConfig.ScanConfig.ScanOnStartUp;
+
+        public bool ScanOnStartUp
+        {
+            get { return _ScanOnStartUp; }
+            set
+            {
+                _ScanOnStartUp = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        #endregion
+
+
+        #region "常规设置"
+
+        private bool _OpenDataBaseDefault = GlobalConfig.Settings.OpenDataBaseDefault;
+
+        public bool OpenDataBaseDefault
+        {
+            get { return _OpenDataBaseDefault; }
+            set
+            {
+                _OpenDataBaseDefault = value;
+                RaisePropertyChanged();
+            }
+        }
+        private bool _CloseToTaskBar = GlobalConfig.Settings.CloseToTaskBar;
+
+        public bool CloseToTaskBar
+        {
+            get { return _CloseToTaskBar; }
+            set
+            {
+                _CloseToTaskBar = value;
+                RaisePropertyChanged();
+            }
+        }
+        private bool _MainWindowVisiblie;
+
+        public bool MainWindowVisiblie
+        {
+            get { return _MainWindowVisiblie; }
+            set
+            {
+                _MainWindowVisiblie = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
+
+        #endregion
 
 
 

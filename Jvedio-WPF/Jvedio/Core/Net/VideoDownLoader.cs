@@ -96,12 +96,8 @@ namespace Jvedio.Core.Net
         }
 
 
-
-        public async Task<Dictionary<string, object>> GetInfo()
+        public (CrawlerServer, PluginInfo) getCrawlerServer()
         {
-            //下载信息
-            State = DownLoadState.DownLoading;
-            Dictionary<string, object> result = new Dictionary<string, object>();
             // 获取信息类型，并设置爬虫类型
 
             if (string.IsNullOrEmpty(InfoType) || GlobalConfig.ServerConfig.CrawlerServers.Count == 0
@@ -125,8 +121,19 @@ namespace Jvedio.Core.Net
             if (crawlers == null || crawlers.Count == 0) throw new CrawlerNotFoundException();
             crawlers = crawlers.OrderBy(arg => arg.ServerName).ToList();
             CrawlerServer crawler = crawlers[0];
+            return (crawler, pluginInfo);
+        }
+
+
+        public async Task<Dictionary<string, object>> GetInfo(Action<RequestHeader> callBack)
+        {
+            //下载信息
+            State = DownLoadState.DownLoading;
+            Dictionary<string, object> result = new Dictionary<string, object>();
+            (CrawlerServer crawler, PluginInfo pluginInfo) = getCrawlerServer();
             (string url, string code) = getUrlAndCode(crawler);
             Header = CrawlerServer.parseHeader(crawler);
+            callBack?.Invoke(Header);
 
             Dictionary<string, string> dataInfo = CurrentVideo.toDictionary();
             if (!dataInfo.ContainsKey("DataCode"))
@@ -136,7 +143,7 @@ namespace Jvedio.Core.Net
 
             Plugin plugin = new Plugin(pluginInfo.Path, "GetInfo", new object[] { url, Header, dataInfo });
             // 等待很久
-            object o = await plugin.asyncInvokeMethod();
+            object o = await plugin.InvokeAsyncMethod();
             if (o is Dictionary<string, object> d)
             {
                 return d;
@@ -146,11 +153,11 @@ namespace Jvedio.Core.Net
         }
 
 
-        public async Task<byte[]> DownloadImage(string url, Action<string> onError = null)
+        public async Task<byte[]> DownloadImage(string url, RequestHeader header, Action<string> onError = null)
         {
             try
             {
-                HttpResult httpResult = await HttpHelper.AsyncDownLoadFile(url, null);
+                HttpResult httpResult = await HttpHelper.AsyncDownLoadFile(url, header);
                 return httpResult.FileByte;
             }
             catch (WebException ex)

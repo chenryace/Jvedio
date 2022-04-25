@@ -316,17 +316,17 @@ namespace Jvedio
             if (Fanhao != "") return GetVIDByRegExp(Fanhao, @"C-\d+");
 
             //自定义增加正则
-            if (!string.IsNullOrEmpty(Properties.Settings.Default.ScanRe))
-            {
-                foreach (var item in Properties.Settings.Default.ScanRe.Split(';'))
-                {
-                    if (item?.Length > 0)
-                    {
-                        Fanhao = GetVIDByRegExp(FileName, item);
-                        if (Fanhao != "") return GetVIDByRegExp(Fanhao, item);
-                    }
-                }
-            }
+            //if (!string.IsNullOrEmpty(Properties.Settings.Default.ScanRe))
+            //{
+            //    foreach (var item in Properties.Settings.Default.ScanRe.Split(';'))
+            //    {
+            //        if (item?.Length > 0)
+            //        {
+            //            Fanhao = GetVIDByRegExp(FileName, item);
+            //            if (Fanhao != "") return GetVIDByRegExp(Fanhao, item);
+            //        }
+            //    }
+            //}
             return "";
         }
 

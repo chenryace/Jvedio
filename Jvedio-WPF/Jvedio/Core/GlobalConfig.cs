@@ -19,6 +19,7 @@ namespace Jvedio
         public static Jvedio.Core.WindowConfig.Settings Settings = Jvedio.Core.WindowConfig.Settings.createInstance();
         public static Jvedio.Core.Config.ServerConfig ServerConfig = Jvedio.Core.Config.ServerConfig.createInstance();
         public static Jvedio.Core.Config.ProxyConfig ProxyConfig = Jvedio.Core.Config.ProxyConfig.createInstance();
+        public static Jvedio.Core.Config.ScanConfig ScanConfig = Jvedio.Core.Config.ScanConfig.createInstance();
 
         static GlobalConfig()
         {
@@ -30,9 +31,14 @@ namespace Jvedio
             ServerConfig.Read();
             Settings.Read();
             ProxyConfig.Read();
+            ScanConfig.Read();
             EnsurePicPaths();// 确保 PicPaths
         }
 
+        public static void Init()
+        {
+            Console.WriteLine("初始化");
+        }
 
         static void EnsurePicPaths()
         {

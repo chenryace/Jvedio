@@ -9,6 +9,7 @@
 -- 启动界面管理
 -- DataType: 0-Video 1-Picture 2-Game 3-Comics
 -- Hide 是否隐藏 0-不隐藏，1 隐藏
+-- ScanPath 绑定的需要扫描的路径
 drop table if exists app_databases;
 BEGIN;
 create table app_databases (
@@ -19,7 +20,9 @@ create table app_databases (
     ImagePath TEXT DEFAULT '',
     ViewCount INT DEFAULT 0,
     Hide INT DEFAULT 0,
+    ScanPath TEXT,
 
+    ExtraInfo TEXT,
     CreateDate VARCHAR(30) DEFAULT(STRFTIME('%Y-%m-%d %H:%M:%S', 'NOW', 'localtime')),
     UpdateDate VARCHAR(30) DEFAULT(STRFTIME('%Y-%m-%d %H:%M:%S', 'NOW', 'localtime'))
 );

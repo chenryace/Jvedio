@@ -157,6 +157,7 @@ namespace Jvedio
             saveFileDialog.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
             saveFileDialog.FilterIndex = 2;
             saveFileDialog.RestoreDirectory = true;
+            saveFileDialog.FileName = DateTime.Now.ToString("yyyyMMddHHmmss") + ".txt";
 
             if (saveFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
@@ -178,11 +179,17 @@ namespace Jvedio
         private string generateOutput()
         {
             StringBuilder builder = new StringBuilder();
-            List<TextBlock> textBlocks = wrapPanel.Children.OfType<TextBlock>().ToList();
-            for (int i = 0; i < textBlocks.Count; i++)
+            List<StackPanel> stackPanels = wrapPanel.Children.OfType<StackPanel>().ToList();
+            for (int i = 0; i < stackPanels.Count; i++)
             {
-                builder.Append(textBlocks[i].Text);
-                if (i % 2 != 0) builder.Append(Environment.NewLine);
+                StackPanel stackPanel = stackPanels[i];
+                List<TextBlock> textBlocks = stackPanel.Children.OfType<TextBlock>().ToList();
+                for (int j = 0; j < textBlocks.Count; j++)
+                {
+                    builder.Append(textBlocks[j].Text);
+                }
+                builder.Append(Environment.NewLine);
+
             }
             builder.Append("详情：");
             builder.Append(Environment.NewLine);

@@ -40,7 +40,7 @@ namespace Jvedio
     /// </summary>
     public partial class Settings : ChaoControls.Style.BaseWindow
     {
-
+        private Main windowMain = GetWindowByName("Main") as Main;
         public const string ffmpeg_url = "https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-full.7z";
         public static string GrowlToken = "SettingsGrowl";
         public DetailMovie SampleMovie = new DetailMovie()
@@ -67,23 +67,21 @@ namespace Jvedio
             InitializeComponent();
             if (GlobalFont != null) this.FontFamily = GlobalFont;
             vieModel = new VieModel_Settings();
-
-
             this.DataContext = vieModel;
-            vieModel.Reset();
-
-
-
             //绑定事件
             foreach (var item in CheckedBoxWrapPanel.Children.OfType<ToggleButton>().ToList())
             {
                 item.Click += AddToRename;
             }
-            if (Properties.Settings.Default.SettingsIndex == 2)
-                TabControl.SelectedIndex = 0;
-            else
-                TabControl.SelectedIndex = Properties.Settings.Default.SettingsIndex;
 
+            if (windowMain == null)
+            {
+                vieModel.MainWindowVisiblie = false;
+            }
+            else
+            {
+                vieModel.MainWindowVisiblie = true;
+            }
         }
 
 
@@ -206,7 +204,7 @@ namespace Jvedio
                         Properties.Settings.Default.HotKey_Enable = true;
                         Properties.Settings.Default.HotKey_String = hotkeyTextBox.Text;
                         Properties.Settings.Default.Save();
-                        ChaoControls.Style.MessageCard.Success("设置热键成功");
+                        MessageCard.Success("设置热键成功");
                     }
 
                 }
@@ -227,26 +225,14 @@ namespace Jvedio
             var path = FileHelper.SelectPath(this);
             if (Directory.Exists(path))
             {
-                if (vieModel.ScanPath == null) { vieModel.ScanPath = new ObservableCollection<string>(); }
+                if (vieModel.ScanPath == null)
+                    vieModel.ScanPath = new ObservableCollection<string>();
                 if (!vieModel.ScanPath.Contains(path) && !vieModel.ScanPath.IsIntersectWith(path))
-                {
                     vieModel.ScanPath.Add(path);
-                    //保存
-                    FileProcess.SaveScanPathToConfig(vieModel.DataBase, vieModel.ScanPath?.ToList());
-                }
                 else
-                {
-                    ChaoControls.Style.MessageCard.Error(Jvedio.Language.Resources.FilePathIntersection);
-                }
 
-
+                    MessageCard.Error(Jvedio.Language.Resources.FilePathIntersection);
             }
-
-
-
-
-
-
 
         }
 
@@ -357,23 +343,19 @@ namespace Jvedio
 
         public void DelPath(object sender, RoutedEventArgs e)
         {
-            if (PathListBox.SelectedIndex != -1)
+            if (PathListBox.SelectedIndex >= 0)
             {
                 for (int i = PathListBox.SelectedItems.Count - 1; i >= 0; i--)
                 {
                     vieModel.ScanPath.Remove(PathListBox.SelectedItems[i].ToString());
                 }
             }
-            if (vieModel.ScanPath != null)
-                SaveScanPathToConfig(vieModel.DataBase, vieModel.ScanPath.ToList());
 
         }
 
         public void ClearPath(object sender, RoutedEventArgs e)
         {
-
             vieModel.ScanPath?.Clear();
-            SaveScanPathToConfig(vieModel.DataBase, new List<string>());
         }
 
 
@@ -461,18 +443,18 @@ namespace Jvedio
 
         private void ScanMinFileSizeTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            TextBox textBox = sender as TextBox;
-            int num = 0;
-            bool success = int.TryParse(textBox.Text, out num);
-            if (success)
-            {
-                num = int.Parse(textBox.Text);
-                if (num >= 0 & num <= 2000)
-                {
-                    Properties.Settings.Default.ScanMinFileSize = num;
-                    Properties.Settings.Default.Save();
-                }
-            }
+            //    TextBox textBox = sender as TextBox;
+            //    int num = 0;
+            //    bool success = int.TryParse(textBox.Text, out num);
+            //    if (success)
+            //    {
+            //        num = int.Parse(textBox.Text);
+            //        if (num >= 0 & num <= 2000)
+            //        {
+            //            //Properties.Settings.Default.ScanMinFileSize = num;
+            //            //Properties.Settings.Default.Save();
+            //        }
+            //    }
 
         }
 
@@ -549,7 +531,23 @@ namespace Jvedio
             else
                 App.Current.Windows[0].Opacity = 1;
 
-            ////UpdateServersEnable();
+            // 保存扫描库
+
+            if (DatabaseComboBox.ItemsSource != null && DatabaseComboBox.SelectedItem != null)
+            {
+                AppDatabase db = DatabaseComboBox.SelectedItem as AppDatabase;
+                List<string> list = new List<string>();
+                if (vieModel.ScanPath != null) list = vieModel.ScanPath.ToList();
+                db.ScanPath = JsonConvert.SerializeObject(list);
+                GlobalMapper.appDatabaseMapper.updateById(db);
+                int idx = DatabaseComboBox.SelectedIndex;
+
+                List<AppDatabase> appDatabases = windowMain?.vieModel.DataBases.ToList();
+                if (appDatabases != null && idx < windowMain.vieModel.DataBases.Count)
+                {
+                    windowMain.vieModel.DataBases[idx] = db;
+                }
+            }
 
             bool success = vieModel.SaveServers((msg) =>
              {
@@ -690,12 +688,28 @@ namespace Jvedio
         private void DatabaseComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (e.AddedItems.Count == 0) return;
-            vieModel.DataBase = e.AddedItems[0].ToString();
-            vieModel.Reset();
+            AppDatabase db = e.AddedItems[0] as AppDatabase;
+            vieModel.LoadScanPath(db);
+        }
 
 
 
-
+        private void setScanDatabases()
+        {
+            List<AppDatabase> appDatabases = windowMain?.vieModel.DataBases.ToList();
+            AppDatabase db = windowMain?.vieModel.CurrentAppDataBase;
+            if (appDatabases != null)
+            {
+                DatabaseComboBox.ItemsSource = appDatabases;
+                for (int i = 0; i < appDatabases.Count; i++)
+                {
+                    if (appDatabases[i].Equals(db))
+                    {
+                        DatabaseComboBox.SelectedIndex = i;
+                        break;
+                    }
+                }
+            }
         }
 
         private void Window_ContentRendered(object sender, EventArgs e)
@@ -704,20 +718,13 @@ namespace Jvedio
             // 设置 crawlerIndex
             serverListBox.SelectedIndex = (int)GlobalConfig.Settings.CrawlerSelectedIndex;
 
-
-
-
             //设置当前数据库
-            for (int i = 0; i < vieModel.DataBases?.Count; i++)
-            {
-                if (vieModel.DataBases[i].ToLower() == Path.GetFileNameWithoutExtension(Properties.Settings.Default.DataBasePath).ToLower())
-                {
-                    DatabaseComboBox.SelectedIndex = i;
-                    break;
-                }
-            }
+            setScanDatabases();
 
-            if (vieModel.DataBases?.Count == 1) DatabaseComboBox.Visibility = Visibility.Hidden;
+
+
+
+            //if (vieModel.DataBases?.Count == 1) DatabaseComboBox.Visibility = Visibility.Hidden;
 
             ShowViewRename(Properties.Settings.Default.RenameFormat);
 
@@ -834,26 +841,19 @@ namespace Jvedio
 
         private void PathListBox_Drop(object sender, DragEventArgs e)
         {
-            if (vieModel.ScanPath == null) { vieModel.ScanPath = new ObservableCollection<string>(); }
+            if (vieModel.ScanPath == null) vieModel.ScanPath = new ObservableCollection<string>();
             string[] dragdropFiles = (string[])e.Data.GetData(DataFormats.FileDrop);
             foreach (var item in dragdropFiles)
             {
                 if (!FileHelper.IsFile(item))
                 {
                     if (!vieModel.ScanPath.Contains(item) && !vieModel.ScanPath.IsIntersectWith(item))
-                    {
                         vieModel.ScanPath.Add(item);
-                    }
                     else
-                    {
-                        ChaoControls.Style.MessageCard.Error(Jvedio.Language.Resources.FilePathIntersection);
-                    }
+                        MessageCard.Error(Jvedio.Language.Resources.FilePathIntersection);
+
                 }
-
             }
-            //保存
-            FileProcess.SaveScanPathToConfig(vieModel.DataBase, vieModel.ScanPath.ToList());
-
         }
 
         private void Button_Click_3(object sender, RoutedEventArgs e)
@@ -907,14 +907,24 @@ namespace Jvedio
         private int CurrentRowIndex = 0;
         private void TestServer(object sender, RoutedEventArgs e)
         {
+
+
             int idx = CurrentRowIndex;
             string serverType = getCurrentServerType();
             if (string.IsNullOrEmpty(serverType)) return;
             ObservableCollection<CrawlerServer> list = vieModel.CrawlerServers[serverType];
+            CrawlerServer server = list[idx];
 
-            list[idx].Available = 2;
+            if (!server.isHeaderProper())
+            {
+                MessageCard.Error("Header 不合理");
+                return;
+            }
+
+
+            server.Available = 2;
             ServersDataGrid.IsEnabled = false;
-            CheckUrl(list[idx], (s) =>
+            CheckUrl(server, (s) =>
             {
                 ServersDataGrid.IsEnabled = true;
                 list[idx].LastRefreshDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
@@ -953,8 +963,7 @@ namespace Jvedio
         private async void CheckUrl(CrawlerServer server, Action<int> callback)
         {
             // library 需要保证 Cookies 和 UserAgent完全一致
-            RequestHeader header = new RequestHeader();
-            if (server.isHeaderProper()) header = CrawlerServer.parseHeader(server);
+            RequestHeader header = CrawlerServer.parseHeader(server);
             string title = await HttpHelper.AsyncGetWebTitle(server.Url, header);
             if (string.IsNullOrEmpty(title))
             {
@@ -1194,18 +1203,20 @@ namespace Jvedio
 
         private void Window_Closing(object sender, CancelEventArgs e)
         {
-            Properties.Settings.Default.SettingsIndex = TabControl.SelectedIndex;
-            Properties.Settings.Default.Save();
-
             saveSettings();
             GlobalConfig.Settings.Save();
             GlobalConfig.ProxyConfig.Save();
+            GlobalConfig.ScanConfig.Save();
         }
 
 
 
         private void saveSettings()
         {
+            GlobalConfig.Settings.TabControlSelectedIndex = vieModel.TabControlSelectedIndex;
+            GlobalConfig.Settings.OpenDataBaseDefault = vieModel.OpenDataBaseDefault;
+            GlobalConfig.Settings.CloseToTaskBar = vieModel.CloseToTaskBar;
+
             GlobalConfig.Settings.PicPathMode = vieModel.PicPathMode;
             GlobalConfig.Settings.DownloadPreviewImage = vieModel.DownloadPreviewImage;
             GlobalConfig.Settings.OverrideInfo = vieModel.OverrideInfo;
@@ -1216,8 +1227,13 @@ namespace Jvedio
             GlobalConfig.ProxyConfig.Port = vieModel.ProxyPort;
             GlobalConfig.ProxyConfig.UserName = vieModel.ProxyUserName;
             GlobalConfig.ProxyConfig.Password = vieModel.ProxyPwd;
+            GlobalConfig.ProxyConfig.HttpTimeout = vieModel.HttpTimeout;
 
 
+
+            // 扫描
+            GlobalConfig.ScanConfig.MinFileSize = vieModel.MinFileSize;
+            GlobalConfig.ScanConfig.ScanOnStartUp = vieModel.ScanOnStartUp;
         }
 
         private void CopyFFmpegUrl(object sender, MouseButtonEventArgs e)
@@ -1419,7 +1435,7 @@ namespace Jvedio
                     .Replace($"\",{Environment.NewLine}    \"", "\",\"");
                 Dictionary<string, string> dict = JsonConvert.DeserializeObject<Dictionary<string, string>>(currentCrawlerServer.Headers);
 
-                if (dict.ContainsKey("Cookie")) currentCrawlerServer.Cookies = dict["Cookie"];
+                if (dict.ContainsKey("cookie")) currentCrawlerServer.Cookies = dict["cookie"];
             }
 
 
@@ -1441,7 +1457,7 @@ namespace Jvedio
             {
                 int idx = item.IndexOf(':');
                 if (idx <= 0 || idx >= item.Length - 1) continue;
-                string key = item.Substring(0, idx).Trim();
+                string key = item.Substring(0, idx).Trim().ToLower();
                 string value = item.Substring(idx + 1).Trim();
 
 
@@ -1450,9 +1466,9 @@ namespace Jvedio
 
             if (vieModel.AutoHandleHeader)
             {
-                data.Remove("Content-Encoding");
-                data.Remove("Accept-Encoding");
-                data.Remove("Host");
+                data.Remove("content-encoding");
+                data.Remove("accept-encoding");
+                data.Remove("host");
 
                 data = data.Where(arg => arg.Key.IndexOf(" ") < 0).ToDictionary(x => x.Key, y => y.Value);
 
@@ -1485,7 +1501,6 @@ namespace Jvedio
             string url = textProxyUrl.Text;
             //string url = "https://www.baidu.com";
             //string url = "https://www.google.com";
-            IWebProxy proxy = GlobalConfig.ProxyConfig.GetWebProxy();
 
 
 
@@ -1494,6 +1509,8 @@ namespace Jvedio
             stopwatch.Start();
 
             RequestHeader header = new RequestHeader();
+            IWebProxy proxy = GlobalConfig.ProxyConfig.GetWebProxy();
+            header.TimeOut = GlobalConfig.ProxyConfig.HttpTimeout * 1000;// 转为 ms
             header.WebProxy = proxy;
 
             HttpResult httpResult = await HttpClient.Get(url, header);
@@ -1518,6 +1535,16 @@ namespace Jvedio
 
             stopwatch.Stop();
             button.IsEnabled = true;
+        }
+
+        private void ShowHeaderHelp(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ShowScanReHelp(object sender, MouseButtonEventArgs e)
+        {
+            //MessageCard.Info("在扫描时，对于视频 VID 的识别，例如填写正则为 .*钢铁侠.* 则只要文件名含有钢铁侠，");
         }
     }
 

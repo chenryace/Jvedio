@@ -50,7 +50,8 @@ namespace Jvedio.Core.Plugins.Crawler
 
         private static void setPluginEnabled()
         {
-            if (Global.Plugins.Crawlers != null && Global.Plugins.Crawlers.Count > 0)
+            if (Global.Plugins.Crawlers != null && Global.Plugins.Crawlers.Count > 0
+                && !string.IsNullOrEmpty(GlobalConfig.Settings.PluginEnabledJson))
             {
                 Dictionary<string, bool> dict = null; ;
                 string json = GlobalConfig.Settings.PluginEnabledJson;

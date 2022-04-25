@@ -5,10 +5,12 @@ using System.Configuration;
 using System.Data;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Threading;
 using HandyControl.Tools;
@@ -25,7 +27,7 @@ namespace Jvedio
 
         protected override void OnStartup(StartupEventArgs e)
         {
-
+            Console.WriteLine("***************OnStartup***************");
             bool createNew;
             ProgramStarted = new EventWaitHandle(false, EventResetMode.AutoReset, "Jvedio", out createNew);
             //if (!createNew)
@@ -45,6 +47,16 @@ namespace Jvedio
             //SetLanguageDictionary();
             base.OnStartup(e);
         }
+
+
+        protected override void OnExit(ExitEventArgs e)
+        {
+            Console.WriteLine("***************OnExit***************");
+            base.OnExit(e);
+        }
+
+
+
 
         private void SetLanguageDictionary()
         {

@@ -33,6 +33,10 @@ namespace Jvedio.Core.WindowConfig
         public bool DownloadPreviewImage { get; set; }
         public bool OverrideInfo { get; set; }
         public bool AutoHandleHeader { get; set; }
+        public long TabControlSelectedIndex { get; set; }
+        public bool OpenDataBaseDefault { get; set; }
+        public bool CloseToTaskBar { get; set; }
+        public long DefaultDBID { get; set; }
 
 
     }

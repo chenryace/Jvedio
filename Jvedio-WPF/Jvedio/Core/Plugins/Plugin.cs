@@ -40,7 +40,36 @@ namespace Jvedio.Core.Plugins
             }
             return null;
         }
-        public async Task<object> asyncInvokeMethod()
+        public async Task<object> InvokeAsyncMethod()
+        {
+            if (File.Exists(DllPath))
+            {
+                Assembly dll = Assembly.LoadFrom(DllPath);
+                Type classType = getPublicType(dll.GetTypes());
+                if (classType != null)
+                {
+                    Dictionary<string, string> infos = getInfo(classType);
+                    var instance = Activator.CreateInstance(classType, Params);
+                    MethodInfo methodInfo = classType.GetMethod(MethodName);
+                    if (methodInfo != null)
+                    {
+                        try
+                        {
+                            return await (Task<Dictionary<string, object>>)methodInfo.Invoke(instance, null);
+                            //return result;
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine(ex.Message);
+                            return null;
+                        }
+
+                    }
+                }
+            }
+            return null;
+        }
+        public async Task<object> AsyncInvokeMethod()
         {
             if (File.Exists(DllPath))
             {

@@ -17,7 +17,8 @@ namespace Jvedio
 {
     public class ScanHelper
     {
-        public static double MinFileSize = Properties.Settings.Default.ScanMinFileSize * 1024 * 1024;//最小文件大小吗，单位 B
+        //public static double MinFileSize = Properties.Settings.Default.ScanMinFileSize * 1024 * 1024;//最小文件大小吗，单位 B
+        public static double MinFileSize = 1 * 1024 * 1024;//最小文件大小吗，单位 B
         public static List<string> FilePattern = new List<string>();//文件格式
                                                                     //public static string PictureExtension = "ani;bmp;gif;ico;jpe;jpeg;jpg;pcx;png;psd;tga;tif;tiff;webp;wmf";
 

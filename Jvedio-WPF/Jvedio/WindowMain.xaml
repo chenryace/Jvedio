@@ -667,6 +667,7 @@
             <hc:NotifyIcon.ContextMenu>
                 <ContextMenu>
                     <MenuItem Click="ShowMainWindow" Header="{x:Static lang:Resources.OpenJvedio}" />
+                    <MenuItem Click="ShowSettings" Header="{x:Static lang:Resources.Settings}" />
                     <MenuItem Click="Notify_Close" Header="{x:Static lang:Resources.Exit}" />
                 </ContextMenu>
             </hc:NotifyIcon.ContextMenu>
@@ -1777,6 +1778,7 @@
                                                     </Viewbox>
                                                 </Border>
                                                 <Border
+                                                    IsEnabled="False"
                                                     MouseLeftButtonUp="ShowFilterGrid"
                                                     Style="{StaticResource ToolsBarBorderStyle}"
                                                     ToolTip="{x:Static lang:Resources.Filter}">
@@ -1904,7 +1906,7 @@
                                             Grid.Row="1"
                                             HorizontalAlignment="Stretch"
                                             IsEnabled="{Binding IsLoadingFilter, Converter={StaticResource OppositeBooleanConverter}, FallbackValue=True}"
-                                            Visibility="Visible">
+                                            Visibility="Collapsed">
 
 
                                             <Grid.RowDefinitions>

@@ -35,7 +35,7 @@
             x:Key="MyListBoxItemStyle"
             BasedOn="{StaticResource NormalListBoxItem}"
             TargetType="ListBoxItem">
-            <Setter Property="Padding" Value="5" />
+            <Setter Property="Padding" Value="10,5" />
         </Style>
 
 
@@ -137,7 +137,7 @@
             Margin="5"
             Background="Transparent"
             BorderBrush="{DynamicResource BackgroundSearch}"
-            SelectedIndex="0"
+            SelectedIndex="{Binding TabControlSelectedIndex, Mode=TwoWay}"
             Style="{DynamicResource BaseHcTabControlStyle}"
             TabStripPlacement="Top">
             <TabItem
@@ -146,29 +146,24 @@
                 Header="{x:Static lang:Resources.Basic}">
                 <StackPanel>
                     <WrapPanel Margin="5" Orientation="Vertical">
-                        <CheckBox
-                            Content="{x:Static lang:Resources.CloseToBar}"
-                            IsChecked="{Binding CloseToTaskBar, Mode=TwoWay, Source={x:Static p:Settings.Default}}"
-                            IsEnabled="False" />
+                        <CheckBox Content="{x:Static lang:Resources.CloseToBar}" IsChecked="{Binding CloseToTaskBar, Mode=TwoWay}" />
                         <CheckBox Content="{x:Static lang:Resources.TeenMode}" IsChecked="{Binding TeenMode, Mode=TwoWay, Source={x:Static p:Settings.Default}}" />
+
                         <CheckBox
-                            Content="{x:Static lang:Resources.RandomWhenStartUp}"
-                            IsChecked="{Binding RandomDisplay, Mode=TwoWay, Source={x:Static p:Settings.Default}}"
+                            Content="{x:Static lang:Resources.NotShowLibrary}"
+                            IsChecked="{Binding OpenDataBaseDefault, Mode=TwoWay}"
                             IsEnabled="False" />
-                        <CheckBox Content="{x:Static lang:Resources.NotShowLibrary}" IsChecked="{Binding OpenDataBaseDefault, Mode=TwoWay, Source={x:Static p:Settings.Default}}" />
-                        <CheckBox
-                            Content="{x:Static lang:Resources.AutoDelete}"
-                            IsChecked="{Binding AutoDeleteNotExistMovie, Mode=TwoWay, Source={x:Static p:Settings.Default}}"
-                            IsEnabled="False" />
+
                         <CheckBox Content="{x:Static lang:Resources.DeleteFileWhenDeleteInfo}" IsChecked="{Binding DelInfoAfterDelFile, Mode=TwoWay, Source={x:Static p:Settings.Default}}" />
-                        <CheckBox
-                            Content="{x:Static lang:Resources.ScanWhenRefresh}"
-                            IsChecked="{Binding ScanWhenRefresh, Mode=TwoWay, Source={x:Static p:Settings.Default}}"
-                            IsEnabled="False" />
+
                     </WrapPanel>
 
-                    <StackPanel Margin="5,0" Orientation="Horizontal">
+                    <StackPanel
+                        Margin="5,0"
+                        Orientation="Horizontal"
+                        Visibility="{Binding MainWindowVisiblie, Converter={StaticResource bool2VisibilityConverter}}">
                         <CheckBox
+                            MinWidth="95"
                             VerticalContentAlignment="Center"
                             Checked="CheckBox_Checked"
                             Content="{x:Static lang:Resources.BossKey}"
@@ -188,32 +183,24 @@
                             Style="{StaticResource ButtonStyleFill}" />
                     </StackPanel>
 
-                    <StackPanel
-                        Margin="20,5"
-                        IsEnabled="False"
-                        Orientation="Horizontal">
+                    <StackPanel Margin="20,5" Orientation="Horizontal">
                         <Label Content="{x:Static lang:Resources.Language}" Style="{StaticResource InfoLabel}" />
-                        <RadioButton
-                            Click="SetLanguage"
-                            Content="中文"
-                            FocusVisualStyle="{x:Null}"
-                            GroupName="LangRadioButton"
-                            IsChecked="{Binding Language, ConverterParameter=中文, Converter={StaticResource LanguageTypeEnumConverter}, Mode=TwoWay}"
-                            Style="{StaticResource FlatRadioButton}" />
-                        <RadioButton
-                            Click="SetLanguage"
-                            Content="English"
-                            FocusVisualStyle="{x:Null}"
-                            GroupName="LangRadioButton"
-                            IsChecked="{Binding Language, ConverterParameter=English, Converter={StaticResource LanguageTypeEnumConverter}, Mode=TwoWay}"
-                            Style="{StaticResource FlatRadioButton}" />
-                        <RadioButton
-                            Click="SetLanguage"
-                            Content="日本語"
-                            FocusVisualStyle="{x:Null}"
-                            GroupName="LangRadioButton"
-                            IsChecked="{Binding Language, ConverterParameter=日本語, Converter={StaticResource LanguageTypeEnumConverter}, Mode=TwoWay}"
-                            Style="{StaticResource FlatRadioButton}" />
+                        <ComboBox
+                            Name="LanguageComboBox"
+                            Grid.Column="1"
+                            Height="30"
+                            MinWidth="200"
+                            Margin="5"
+                            HorizontalAlignment="Stretch"
+                            Background="{DynamicResource Window.Side.Background}"
+                            BorderBrush="{DynamicResource Window.Side.Hover.Background}"
+                            FontSize="16"
+                            Foreground="{DynamicResource Global.Foreground}"
+                            ItemContainerStyle="{StaticResource BaseComboBoxItemStyle}"
+                            SelectionChanged="DatabaseComboBox_SelectionChanged"
+                            Style="{StaticResource NormalComboBox}"
+                            Tag="{DynamicResource Window.Side.Hover.Background}"
+                            ToolTip="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Text}" />
                     </StackPanel>
 
 
@@ -238,7 +225,8 @@
                         HorizontalAlignment="Left"
                         FontSize="15"
                         Header="{x:Static lang:Resources.ShowOtherOptions}"
-                        IsExpanded="True"
+                        IsEnabled="False"
+                        IsExpanded="False"
                         LineWidth="0"
                         Style="{StaticResource BaseTogglePanel}">
                         <StackPanel Orientation="Vertical">
@@ -547,7 +535,7 @@
             <TabItem
                 Background="Transparent"
                 FontSize="15"
-                Header="{x:Static lang:Resources.Scan}">
+                Header="扫描与导入">
                 <StackPanel>
 
                     <StackPanel
@@ -575,42 +563,62 @@
                         Margin="20,5"
                         Orientation="Horizontal"
                         Visibility="Visible">
-                        <Label
-                            Content="{x:Static lang:Resources.FileSize}"
-                            Style="{StaticResource InfoLabel}"
+                        <TextBlock
+                            MinWidth="200"
+                            Style="{StaticResource BaseTextBlock}"
+                            Text="扫描的文件大小"
+                            TextAlignment="Left"
                             ToolTip="[0-2000]" />
-                        <hc:TextBox
-                            Style="{StaticResource BaseHcTextBox}"
-                            Text="{Binding ScanMinFileSize, Mode=OneWay, Source={x:Static p:Settings.Default}}"
+                        <chao:SearchBox
+                            MinWidth="100"
+                            ShowClearButton="False"
+                            Style="{StaticResource BaseSearchTextBox}"
+                            Text="{Binding MinFileSize, Mode=TwoWay}"
+                            TextAlignment="Center"
                             TextChanged="ScanMinFileSizeTextBox_TextChanged"
                             ToolTip="[0-2000]" />
-                        <Label Content="MB" Style="{StaticResource InfoLabel}" />
+                        <TextBlock Style="{StaticResource BaseTextBlock}" Text="MB" />
                     </StackPanel>
                     <StackPanel
                         Margin="20,5"
                         IsEnabled="False"
                         Orientation="Horizontal"
                         Visibility="Visible">
-                        <Label
-                            Content="{x:Static lang:Resources.ScanRe}"
-                            Style="{StaticResource InfoLabel}"
+                        <TextBlock
+                            MinWidth="200"
+                            Style="{StaticResource BaseTextBlock}"
+                            Text="视频识别码的正则表达式"
+                            TextAlignment="Left"
                             ToolTip="[0-2000]" />
-                        <TextBox
-                            Width="380"
+                        <chao:SearchBox
                             MinWidth="400"
-                            Margin="10,0"
-                            hc:InfoElement.Necessary="True"
-                            hc:InfoElement.Placeholder="{x:Static lang:Resources.UseSemToSplitRe}"
-                            hc:InfoElement.Title=""
-                            hc:InfoElement.TitleWidth="140"
-                            Background="{DynamicResource BackgroundTitle}"
-                            BorderThickness="0"
-                            CaretBrush="{DynamicResource ForegroundSearch}"
-                            FontSize="15"
-                            Foreground="{DynamicResource ForegroundSearch}"
                             LostFocus="SetScanRe"
-                            Style="{StaticResource TextBoxExtend}"
+                            PlaceHolder="正则表达式，使用英文分号分割每个正则"
+                            PlaceHolderForeground="{DynamicResource Control.Disabled.Background}"
+                            Style="{StaticResource BaseSearchTextBox}"
                             Text="{Binding ScanRe, Source={x:Static p:Settings.Default}, Mode=OneWay}" />
+                        <Border
+                            Width="30"
+                            Height="30"
+                            Margin="10,5"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Center"
+                            Panel.ZIndex="20"
+                            CornerRadius="5"
+                            PreviewMouseLeftButtonUp="ShowScanReHelp"
+                            Style="{StaticResource RoundBorder}"
+                            Tag="{DynamicResource Window.Title.Hover.Background}">
+                            <Viewbox
+                                Width="20"
+                                Height="auto"
+                                VerticalAlignment="Center">
+                                <Path
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Data="M563.363941 572.337203c-0.662107-10.635221 5.985569-21.937638 19.948145-33.908274 13.962576-11.964496 29.591164-25.264407 46.879625-39.893592 17.288461-14.628162 33.242474-31.083949 47.872273-49.365314 14.630823-18.286482 22.606806-39.397289 23.936137-63.332421 1.330354-25.932626-1.329331-50.199309-7.977007-72.810283-6.647676-22.604834-17.620026-42.050722-32.910909-58.33971-15.297023-16.290011-35.079386-29.258371-59.347087-38.900985-24.267702-9.636474-52.694294-14.45727-85.274661-14.45727-40.563514 0-74.308452 7.148817-101.239931 21.441335-26.925339 14.293541-48.705279 31.581276-65.326516 51.864228-16.621237 20.276812-28.26081 41.222867-34.908486 62.829977-6.647676 21.60711-9.641996 39.727817-8.974772 54.358025 0.662107 17.282618 6.150328 29.92045 16.455454 37.897122 10.305126 7.976672 21.442235 12.135388 33.413373 12.466939 11.964998 0.331551 22.937348-2.989077 32.910909-9.973142 9.973561-6.984065 14.960341-17.121959 14.960341-30.416753 0-7.982812 2.493902-17.790178 7.480682-29.424146s11.805356-22.771633 20.450609-33.411971c8.643207-10.635221 19.115139-19.615757 31.416819-26.924209 12.30168-7.315616 26.098473-10.971889 41.39038-10.971889 29.921706 0 53.857842 7.480368 71.81455 22.440082 17.950567 14.959713 26.263233 33.742499 24.934925 56.348356 0 11.302417-3.325885 21.772886-9.973561 31.4155-6.652793 9.642614-15.131241 18.948561-25.43739 27.929096-10.304103 8.974395-21.276452 17.949814-32.910909 26.924209-11.639573 8.974395-22.606806 18.286482-32.917049 27.929096-10.304103 9.636474-18.949356 20.111037-25.927574 31.4155-6.984358 11.302417-10.806567 23.603581-11.474814 36.898375l0.998789 37.903262c0 9.973142 4.656239 19.444864 13.962576 28.4254 9.311454 8.975419 21.613134 13.796214 36.906064 14.458293 15.29293-0.662079 27.427804-5.64865 36.403599-14.959713 8.974772-9.30697 13.134686-19.947308 12.467463-31.911804L563.365987 572.337203zM512.496324 817.685098c17.289484 0 31.753501-5.814426 43.387957-17.453511 11.639573-11.633968 17.454243-25.761734 17.454243-42.387389 0-17.287735-5.81467-31.747051-17.454243-43.386136-11.634456-11.633968-26.098473-17.453511-43.387957-17.453511-17.283344 0-31.747361 5.819542-43.381817 17.453511-11.639573 11.639085-17.454243 26.098401-17.454243 43.386136 0 16.625656 5.81467 30.753421 17.454243 42.387389C480.748964 811.870672 495.212981 817.685098 512.496324 817.685098zM511.503676 65.687048c61.834849 0 119.851582 11.799744 174.04099 35.403325 54.194524 23.604604 101.570473 55.522548 142.127847 95.746668 40.56249 40.225143 72.476657 87.433328 95.750687 141.625578 23.27403 54.187133 34.908486 112.201431 34.908486 174.033685 0 61.838394-11.634456 119.6818-34.908486 173.543521-23.27403 53.855582-55.188196 101.063767-95.750687 141.619438-40.557374 40.560788-87.933322 72.473615-142.127847 95.746668-54.189408 23.273053-112.206141 34.907021-174.04099 34.907021-61.840989 0-119.686823-11.633968-173.550806-34.907021-53.857842-23.273053-101.068009-55.18588-141.625382-95.746668-40.56249-40.555671-72.476657-87.763856-95.750687-141.619438C77.302771 632.17708 65.668315 574.333674 65.668315 512.496304c0-61.832254 11.634456-119.846552 34.908486-174.033685 23.27403-54.19225 55.188196-101.400435 95.750687-141.625578 40.557374-40.22412 87.76754-72.142064 141.625382-95.746668C391.816852 77.486792 449.662687 65.687048 511.503676 65.687048z"
+                                    Fill="{Binding Foreground, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}" />
+                            </Viewbox>
+                        </Border>
                     </StackPanel>
 
                     <StackPanel
@@ -621,21 +629,50 @@
                         <hc:TextBox Style="{StaticResource BaseHcTextBox}" Text="{Binding SubSectionFeature, Mode=TwoWay, Source={x:Static p:Settings.Default}}" />
                     </StackPanel>
 
+                    <CheckBox
+                        Margin="25,5"
+                        HorizontalAlignment="Left"
+                        Content="{x:Static lang:Resources.ImportNFOWhenScan}"
+                        IsChecked="{Binding ScanNfo, Mode=TwoWay, Source={x:Static p:Settings.Default}}" />
+
+
+
+
                     <StackPanel
                         Margin="5,0"
-                        IsEnabled="False"
-                        Orientation="Vertical">
-                        <StackPanel Orientation="Horizontal">
-                            <CheckBox Content="{x:Static lang:Resources.ScanDirWhenStartUp}" IsChecked="{Binding ScanGivenPath, Mode=TwoWay, Source={x:Static p:Settings.Default}}" />
+                        Orientation="Vertical"
+                        Visibility="{Binding MainWindowVisiblie, Converter={StaticResource bool2VisibilityConverter}}">
+                        <StackPanel Margin="10" Orientation="Horizontal">
+                            <CheckBox Content="{x:Static lang:Resources.ScanDirWhenStartUp}" IsChecked="{Binding ScanOnStartUp, Mode=TwoWay}" />
+
+                            <TextBlock
+                                Margin="50,0,5,0"
+                                Style="{StaticResource BaseTextBlock}"
+                                Text="切换库" />
+
+
                             <ComboBox
-                                x:Name="DatabaseComboBox"
-                                MinWidth="150"
-                                MaxWidth="300"
-                                Margin="20,5"
+                                Name="DatabaseComboBox"
+                                Grid.Column="1"
+                                Height="30"
+                                MinWidth="200"
+                                Margin="5"
+                                HorizontalAlignment="Stretch"
+                                Background="{DynamicResource Window.Side.Background}"
+                                BorderBrush="{DynamicResource Window.Side.Hover.Background}"
+                                DisplayMemberPath="Name"
+                                FontSize="16"
+                                Foreground="{DynamicResource Global.Foreground}"
+                                ItemContainerStyle="{StaticResource BaseComboBoxItemStyle}"
                                 ItemsSource="{Binding DataBases}"
+                                SelectedValuePath="DBId"
                                 SelectionChanged="DatabaseComboBox_SelectionChanged"
-                                Style="{StaticResource SideComboBoxStyle}"
-                                ToolTip="{Binding Text, RelativeSource={RelativeSource Mode=Self}}" />
+                                Style="{StaticResource NormalComboBox}"
+                                Tag="{DynamicResource Window.Side.Hover.Background}"
+                                ToolTip="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Text}" />
+
+
+
                         </StackPanel>
 
 
@@ -645,6 +682,7 @@
                                 Height="200"
                                 HorizontalAlignment="Stretch"
                                 VerticalAlignment="Top"
+                                d:ItemsSource="{d:SampleData ItemCount=5}"
                                 AllowDrop="True"
                                 DragOver="PathListBox_DragOver"
                                 Drop="PathListBox_Drop"
@@ -657,10 +695,15 @@
                                 <ListBox.ItemTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal">
-                                            <Image Width="20" Source="pack://application:,,,/Resources/Picture/folder.png" />
+                                            <Image
+                                                Width="20"
+                                                Margin="1"
+                                                Source="pack://application:,,,/Resources/Picture/folder.png" />
                                             <TextBlock
+                                                Margin="2,0"
+                                                VerticalAlignment="Center"
                                                 FontSize="15"
-                                                Foreground="{DynamicResource ForegroundSearch}"
+                                                Foreground="{DynamicResource Global.Foreground}"
                                                 Text="{Binding}" />
                                         </StackPanel>
                                     </DataTemplate>
@@ -708,13 +751,6 @@
 
                         </StackPanel>
                     </StackPanel>
-
-                    <CheckBox
-                        Margin="20,0"
-                        HorizontalAlignment="Left"
-                        Content="{x:Static lang:Resources.ImportNFOWhenScan}"
-                        IsChecked="{Binding ScanNfo, Mode=TwoWay, Source={x:Static p:Settings.Default}}" />
-
 
 
                 </StackPanel>
@@ -777,7 +813,7 @@
                                 LineWidth="0"
                                 Style="{StaticResource BaseTogglePanel}">
                                 <ListBox
-                                    Height="300"
+                                    Height="auto"
                                     VerticalAlignment="Stretch"
                                     d:ItemsSource="{d:SampleData ItemCount=5}"
                                     Background="Transparent"
@@ -1076,6 +1112,26 @@
                         IsChecked="{Binding OverrideInfo, Mode=TwoWay}" />
 
 
+                    <StackPanel Margin="20,5" Orientation="Horizontal">
+                        <TextBlock
+                            MinWidth="60"
+                            Style="{StaticResource BaseTextBlock}"
+                            Text="请求超时"
+                            TextAlignment="Left"
+                            ToolTip="[0-2000]" />
+                        <chao:SearchBox
+                            MinWidth="50"
+                            Padding="0"
+                            ShowClearButton="False"
+                            Style="{StaticResource BaseSearchTextBox}"
+                            Text="{Binding HttpTimeout, Mode=TwoWay}"
+                            TextAlignment="Center" />
+                        <TextBlock
+                            MinWidth="60"
+                            Style="{StaticResource BaseTextBlock}"
+                            Text="s"
+                            TextAlignment="Left" />
+                    </StackPanel>
 
                     <chao:TogglePanel
                         Grid.Column="1"
@@ -1083,7 +1139,7 @@
                         Padding="0,5"
                         FontSize="16"
                         Header="刮削器列表"
-                        IsExpanded="False"
+                        IsExpanded="True"
                         LineWidth="0"
                         Style="{StaticResource BaseTogglePanel}">
                         <Grid>
@@ -1094,7 +1150,6 @@
                             <Border
                                 Grid.Column="0"
                                 MinWidth="100"
-                                MaxHeight="300"
                                 Padding="0,10"
                                 HorizontalAlignment="Left"
                                 Background="{DynamicResource Window.Side.Background}"
@@ -1280,7 +1335,10 @@
                                                 </DataGridTemplateColumn>
 
 
-                                                <DataGridTemplateColumn Width="150" Header="Cookies">
+                                                <DataGridTemplateColumn
+                                                    Width="150"
+                                                    Header="Cookies"
+                                                    Visibility="Collapsed">
                                                     <DataGridTemplateColumn.CellTemplate>
                                                         <DataTemplate>
                                                             <chao:SearchBox
@@ -1356,11 +1414,23 @@
                                                 <Grid>
 
                                                     <Grid.RowDefinitions>
+                                                        <RowDefinition Height="auto" />
                                                         <RowDefinition Height="*" />
                                                         <RowDefinition Height="auto" />
                                                     </Grid.RowDefinitions>
+                                                    <StackPanel
+                                                        Grid.Row="0"
+                                                        Margin="20,20,0,0"
+                                                        Orientation="Horizontal">
+                                                        <TextBlock VerticalAlignment="Center" Text="请复制浏览器中的所有请求头到此" />
+                                                        <Button
+                                                            Margin="20,0"
+                                                            VerticalAlignment="Center"
+                                                            Click="ShowHeaderHelp"
+                                                            Content="教程" />
+                                                    </StackPanel>
 
-                                                    <Grid Grid.Row="0">
+                                                    <Grid Grid.Row="1">
                                                         <Grid.ColumnDefinitions>
                                                             <ColumnDefinition Width="5*" />
                                                             <ColumnDefinition Width="5*" />
@@ -1405,7 +1475,7 @@
                                                     </Grid>
 
                                                     <StackPanel
-                                                        Grid.Row="1"
+                                                        Grid.Row="2"
                                                         Margin="5"
                                                         HorizontalAlignment="Right"
                                                         Orientation="Horizontal">
@@ -1457,12 +1527,12 @@
                                     HorizontalAlignment="Left"
                                     Content="不使用代理"
                                     GroupName="enableProxy"
-                                    IsChecked="True"
                                     Style="{StaticResource FlatRadioButton}" />
                                 <RadioButton
                                     HorizontalAlignment="Left"
                                     Content="使用系统代理"
                                     GroupName="enableProxy"
+                                    IsChecked="True"
                                     Style="{StaticResource FlatRadioButton}" />
                                 <RadioButton
                                     x:Name="customProxyRadioButton"
@@ -1606,15 +1676,11 @@
                         Padding="0,5"
                         FontSize="15"
                         Header="其他"
+                        IsExpanded="True"
                         LineWidth="0"
-                        Style="{StaticResource BaseTogglePanel}">
+                        Style="{StaticResource BaseTogglePanel}"
+                        Visibility="Collapsed">
                         <StackPanel Orientation="Vertical">
-
-
-
-
-
-
 
                             <StackPanel Margin="10,10" Orientation="Horizontal">
 

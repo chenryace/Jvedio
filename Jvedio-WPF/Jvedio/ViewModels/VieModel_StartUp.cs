@@ -101,6 +101,16 @@ namespace Jvedio.ViewModel
                 RaisePropertyChanged();
             }
         }
+        private string _LoadingText;
+        public string LoadingText
+        {
+            get { return _LoadingText; }
+            set
+            {
+                _LoadingText = value;
+                RaisePropertyChanged();
+            }
+        }
 
         #endregion
 

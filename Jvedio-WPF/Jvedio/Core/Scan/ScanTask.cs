@@ -30,8 +30,10 @@ namespace Jvedio.Core.Scan
         public static List<string> PICTURE_EXTENSIONS_LIST = PICTURE_EXTENSIONS.Split(',').Select(arg => "." + arg).ToList();
 
         public event EventHandler onError;
+        public event EventHandler onScanning;
         public event EventHandler onCanceled;
         private TaskLogger logger { get; set; }
+        private List<string> Logs = new List<string>();
 
         protected virtual void OnError(EventArgs e)
         {
@@ -192,6 +194,7 @@ namespace Jvedio.Core.Scan
             stopwatch = new Stopwatch();
             ScanResult = new ScanResult();
             ScanResult.ScanDate = DateHelper.Now();
+            logger = new TaskLogger(Logs);
         }
 
 
@@ -226,6 +229,7 @@ namespace Jvedio.Core.Scan
                    }, (dir) =>
                    {
                        Message = dir;
+                       onScanning?.Invoke(this, new MessageCallBackEventArgs(dir));
                    }, tokenCTS);
                    FilePaths.AddRange(paths);
                }
@@ -234,6 +238,7 @@ namespace Jvedio.Core.Scan
                catch (TaskCanceledException ex)
                {
                    logger.Error(ex.Message);
+                   Status = TaskStatus.Canceled;
                    return;
                }
 
@@ -243,7 +248,12 @@ namespace Jvedio.Core.Scan
                = scanHelper.parseMovie(FilePaths, FileExt, token, Properties.Settings.Default.ScanNfo);
 
                try { CheckStatus(); }
-               catch (TaskCanceledException ex) { logger.Error(ex.Message); return; }
+               catch (TaskCanceledException ex)
+               {
+                   logger.Error(ex.Message);
+                   Status = TaskStatus.Canceled;
+                   return;
+               }
 
                handleImport(parseResult.import);
                handleNotImport(parseResult.notImport);
@@ -269,7 +279,7 @@ namespace Jvedio.Core.Scan
 
             // 1. 处理有识别码的
             string sql = VideoMapper.BASE_SQL;
-            sql = "select metadata.DataID,VID,Hash,Size,Path " + sql;
+            sql = "select metadata.DataID,VID,Hash,Size,Path " + sql + $" and metadata.DBId={GlobalConfig.Main.CurrentDBId}";
             List<Dictionary<string, object>> list = videoMapper.select(sql);
             List<Video> existVideos = videoMapper.toEntity<Video>(list, typeof(Video).GetProperties(), false);
 
@@ -404,13 +414,11 @@ namespace Jvedio.Core.Scan
             }
         }
 
-
-        // todo
         private void handleNotImport(List<string> notImport)
         {
             foreach (string path in notImport)
             {
-                ScanResult.NotImport.Add(path, "文件大小少于设置值");
+                ScanResult.NotImport.Add(path, "文件过小或忽略的文件拓展名");
             }
         }
         private void handleFailNFO(List<string> failNFO)

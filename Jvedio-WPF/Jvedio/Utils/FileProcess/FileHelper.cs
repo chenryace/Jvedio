@@ -212,14 +212,15 @@ namespace Jvedio
 
         public static string SelectPath(Window window, string InitialDirectory = null)
         {
-            string path = AppDomain.CurrentDomain.BaseDirectory;
-            if (!string.IsNullOrEmpty(InitialDirectory)) path = InitialDirectory;
+
             var dialog = new CommonOpenFileDialog();
             string result = "";
             dialog.Title = Jvedio.Language.Resources.ChooseDir;
             dialog.IsFolderPicker = true;
-            dialog.InitialDirectory = path;
+            if (!string.IsNullOrEmpty(InitialDirectory))
+                dialog.InitialDirectory = InitialDirectory;
             dialog.ShowHiddenItems = true;
+            dialog.RestoreDirectory = true;
             if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
             {
                 result = dialog.FileName;

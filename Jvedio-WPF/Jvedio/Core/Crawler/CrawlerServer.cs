@@ -134,41 +134,31 @@ namespace Jvedio.Core.Crawler
 
         public static RequestHeader parseHeader(CrawlerServer server)
         {
+            RequestHeader result = new RequestHeader();
+            result.WebProxy = GlobalConfig.ProxyConfig.GetWebProxy();
+            result.TimeOut = GlobalConfig.ProxyConfig.HttpTimeout * 1000;// 转为 ms
             string header = server.Headers;
             if (string.IsNullOrEmpty(header)) return null;
             try
             {
                 Dictionary<string, string> dict = JsonConvert.DeserializeObject<Dictionary<string, string>>(header);
-                RequestHeader result = new RequestHeader();
 
-                System.Reflection.PropertyInfo[] propertyInfos = result.GetType().GetProperties();
-                foreach (PropertyInfo info in propertyInfos)
+                if (dict != null && dict.Count > 0)
                 {
-                    if (dict.ContainsKey(info.Name))
-                    {
-                        info.SetValue(result, dict[info.Name]);
-                    }
+                    if (!dict.ContainsKey("cookie") && !string.IsNullOrEmpty(server.Cookies))
+                        dict.Add("cookie", server.Cookies);
+
+                    result.Headers = dict;
+
+
                 }
-
-                // todo
-                //if (dict != null && dict.ContainsKey("User-Agent"))
-                //    result.UserAgent = dict["User-Agent"];
-                //if (!string.IsNullOrEmpty(server.Cookies))
-                //    result.Cookies = server.Cookies;
-
-
-
-
                 return result;
-
-
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex);
             }
-
-            return null;
+            return result;
         }
 
     }

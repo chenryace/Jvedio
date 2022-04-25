@@ -267,6 +267,7 @@
     <Compile Include="Core\Command\File.cs" />
     <Compile Include="Core\Command\OpenWindow.cs" />
     <Compile Include="Core\Config\ProxyConfig.cs" />
+    <Compile Include="Core\Config\ScanConfig.cs" />
     <Compile Include="Core\Config\ServerConfig.cs" />
     <Compile Include="Core\Config\WindowConfig\Settings.cs" />
     <Compile Include="Core\Crawler\ActorSearch.cs" />

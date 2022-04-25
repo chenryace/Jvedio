@@ -270,11 +270,10 @@
                             Padding="5"
                             CornerRadius="3"
                             Cursor="Hand"
-                            IsEnabled="False"
+                            MouseLeftButtonUp="DownLoadInfo"
                             Style="{StaticResource BorderStyle}">
                             <TextBlock
                                 Grid.Column="1"
-                                MouseLeftButtonUp="DownLoadInfo"
                                 Style="{StaticResource BaseTextBlock}"
                                 Text="同步信息" />
                         </Border>

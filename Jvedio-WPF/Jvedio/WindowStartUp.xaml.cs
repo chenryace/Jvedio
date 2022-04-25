@@ -24,6 +24,9 @@ using System.Reflection;
 
 using Jvedio.Core.Plugins.Crawler;
 using Jvedio.CommonNet.Entity;
+using Jvedio.Core.Scan;
+using Newtonsoft.Json;
+using Jvedio.Core.CustomEventArgs;
 
 namespace Jvedio
 {
@@ -41,8 +44,6 @@ namespace Jvedio
         {
 
             InitializeComponent();
-            //testMapper();
-
             this.Width = SystemParameters.PrimaryScreenWidth * 2 / 3;
             this.Height = SystemParameters.PrimaryScreenHeight * 2 / 3;
 
@@ -74,7 +75,7 @@ namespace Jvedio
             GlobalVariable.InitVariable();// 初始化全局变量
             GlobalMapper.Init();// 初始化数据库连接
 
-
+            GlobalConfig.Init();// 初始化全局配置
             await MoveOldFiles();//迁移旧文件并迁移到新数据库
             ThemeLoader.loadAllThemes(); //加载主题
             CrawlerLoader.loadAllCrawlers();// 初始化爬虫
@@ -96,12 +97,16 @@ namespace Jvedio
             }
             GlobalVariable.CurrentDataType = (DataType)GlobalConfig.StartUp.SideIdx;
 
-            if (Properties.Settings.Default.OpenDataBaseDefault)
+            // todo 
+            GlobalConfig.Settings.OpenDataBaseDefault = false;
+            if (GlobalConfig.Settings.OpenDataBaseDefault)
             {
+                tabControl.SelectedIndex = 0;
                 LoadDataBase();
             }
             else
             {
+                tabControl.SelectedIndex = 1;
                 vieModel_StartUp.Loading = false;
                 this.TitleHeight = 30;
             }
@@ -118,7 +123,6 @@ namespace Jvedio
             // 迁移公共数据
             Jvedio4ToJvedio5.MoveAI();
             string[] files = FileHelper.TryScanDIr(oldDataPath, "*.sqlite", SearchOption.TopDirectoryOnly);
-            Jvedio4ToJvedio5.MoveScanPathConfig(files);
             Jvedio4ToJvedio5.MoveServersConfig();
             bool success = await Jvedio4ToJvedio5.MoveDatabases(files);
             if (success && files != null && files.Length > 0)
@@ -129,6 +133,8 @@ namespace Jvedio
                 Jvedio4ToJvedio5.MoveTranslate();
                 Jvedio4ToJvedio5.MoveMyList();// 清单和 Label 合并，统一为 Label
                 Jvedio4ToJvedio5.MoveSearchHistory();
+                Jvedio4ToJvedio5.MoveScanPathConfig(files);
+                GlobalConfig.Settings.OpenDataBaseDefault = false;
             }
 
             // 移动文件
@@ -448,46 +454,80 @@ namespace Jvedio
 
         public async void LoadDataBase()
         {
-            if (listBox.SelectedIndex < 0) return;
+            if (vieModel_StartUp.CurrentDatabases == null || vieModel_StartUp.CurrentDatabases.Count <= 0)
+                return;
+
             //加载数据库
             long id = vieModel_StartUp.CurrentDBID;
-            if (!Properties.Settings.Default.OpenDataBaseDefault)
+            AppDatabase database = null;
+            if (!GlobalConfig.Settings.OpenDataBaseDefault)
             {
-                AppDatabase info = vieModel_StartUp.CurrentDatabases[listBox.SelectedIndex];
-                id = info.DBId;
+                if (listBox.SelectedIndex >= 0)
+                {
+                    database = vieModel_StartUp.CurrentDatabases[listBox.SelectedIndex];
+                    id = database.DBId;
+                    GlobalConfig.Settings.DefaultDBID = id;
+                }
+                else
+                {
+                    return;
+                }
+
+            }
+            else
+            {
+                // 默认打开上一次的库
+                id = GlobalConfig.Settings.DefaultDBID;
             }
 
-
-            vieModel_StartUp.Loading = true;
-            //if (Properties.Settings.Default.ScanGivenPath)
-            //{
-            //    try
-            //    {
-            //        await Task.Run(() =>
-            //        {
-
-            //            this.Dispatcher.BeginInvoke(new Action(() =>
-            //            {
-            //                //statusText.Text = Jvedio.Language.Resources.Status_ScanDir; 
-            //            }), System.Windows.Threading.DispatcherPriority.Background);
-            //            List<string> filepaths = Scan.ScanPaths(ReadScanPathFromConfig(Path.GetFileNameWithoutExtension(Properties.Settings.Default.DataBasePath)), ct);
-            //            Scan.InsertWithNfo(filepaths, ct);
-            //        }, cts.Token);
-            //    }
-            //    catch (Exception ex)
-            //    {
-            //        Logger.LogF(ex);
-            //    }
-
-            //}
+            // 检测该 id 是否在数据库中存在
+            //List<AppDatabase> appDatabases = appDatabaseMapper.selectList();
+            //if (appDatabases.Count <= 0 || !appDatabases.Where(arg => arg.DBId == id).Any()) return;
+            if (database == null)
+            {
+                MessageCard.Error("无此数据库");
+                return;
+            }
             vieModel_StartUp.Loading = false;
             // 次数+1
             appDatabaseMapper.increaseFieldById("ViewCount", id);
             vieModel_StartUp.CurrentDBID = id;
             GlobalConfig.StartUp.CurrentDBID = vieModel_StartUp.CurrentDBID;
             GlobalConfig.Main.CurrentDBId = id;
-            //启动主窗口
 
+            // 是否需要扫描
+            ScanTask scanTask = null;
+            if (GlobalConfig.ScanConfig.ScanOnStartUp)
+            {
+                if (database != null && !string.IsNullOrEmpty(database.ScanPath))
+                {
+                    tabControl.SelectedIndex = 0;
+
+                    this.TitleHeight = 0;
+                    List<string> toScan = new List<string>();
+                    try { toScan = JsonConvert.DeserializeObject<List<string>>(database.ScanPath); }
+                    catch (Exception ex) { Console.WriteLine(ex.Message); }
+                    scanTask = new ScanTask(toScan, null, ScanTask.VIDEO_EXTENSIONS_LIST);
+                    scanTask.onScanning += (s, ev) =>
+                    {
+                        Dispatcher.Invoke(() =>
+                        {
+                            vieModel_StartUp.LoadingText = (ev as MessageCallBackEventArgs).Message;
+                        });
+                    };
+                    scanTask.Start();
+                    while (scanTask.Running)
+                    {
+                        await Task.Delay(100);
+                        Console.WriteLine("扫描中");
+                    }
+                }
+            }
+
+
+
+
+            //启动主窗口
             if (CurrentDataType == DataType.Video)
             {
                 Main main = GetWindowByName("Main") as Main;
@@ -502,6 +542,12 @@ namespace Jvedio
                     main.setComboboxID();
                 }
                 main.Show();
+                if (scanTask != null)
+                {
+                    if (main.vieModel.ScanTasks == null)
+                        main.vieModel.ScanTasks = new System.Collections.ObjectModel.ObservableCollection<ScanTask>();
+                    main.vieModel.ScanTasks.Add(scanTask);
+                }
             }
             else
             {

@@ -104,17 +104,8 @@ namespace Jvedio
         {
             InitializeComponent();
             FilterGrid.Visibility = Visibility.Collapsed;
-
-
             vieModel = new VieModel_Main();
             this.DataContext = vieModel;
-
-            //InitImage();
-
-            //Properties.Settings.Default.Selected_Background = "#FF8000";
-            //Properties.Settings.Default.Selected_BorderBrush = "#FF8000";
-            //Properties.Settings.Default.DisplayNumber = 5;
-
             BindingEvent();// 绑定控件事件
 
             // 初始化任务栏的进度条
@@ -280,7 +271,7 @@ namespace Jvedio
         protected override void OnSourceInitialized(EventArgs e)
         {
             base.OnSourceInitialized(e);
-
+            Console.WriteLine("***************OnSourceInitialized***************");
 
             //热键
             _windowHandle = new WindowInteropHelper(this).Handle;
@@ -296,7 +287,10 @@ namespace Jvedio
             {
                 UnregisterHotKey(_windowHandle, HOTKEY_ID);//取消之前的热键
                 bool success = RegisterHotKey(_windowHandle, HOTKEY_ID, modifier, vk);
-                if (!success) { MessageBox.Show(Jvedio.Language.Resources.HotKeyConflict, Jvedio.Language.Resources.HotKeyConflict); }
+                if (!success)
+                {
+                    MessageBox.Show(Jvedio.Language.Resources.HotKeyConflict, Jvedio.Language.Resources.HotKeyConflict);
+                }
             }
 
         }
@@ -360,6 +354,7 @@ namespace Jvedio
 
         protected override void OnClosed(EventArgs e)
         {
+            //Console.WriteLine("***************OnClosed***************");
             _source.RemoveHook(HwndHook);
             UnregisterHotKey(_windowHandle, HOTKEY_ID);//取消热键
             vieModel.HideToIcon = false;//隐藏图标
@@ -591,15 +586,7 @@ namespace Jvedio
         {
             Task.Run(() =>
             {
-
-                // todo 随机展示
-                if (Properties.Settings.Default.RandomDisplay)
-                    vieModel.RandomDisplay();
-                else
-                    vieModel.Reset();
-
-
-
+                vieModel.Reset();
                 Dispatcher.BeginInvoke(DispatcherPriority.Background, (Action)delegate
                 {
                     ItemsControl itemsControl;
@@ -791,63 +778,9 @@ namespace Jvedio
                 catch (ObjectDisposedException ex) { Console.WriteLine(ex.Message); }
 
             }
-            else
-            {
-                if (Properties.Settings.Default.ScanWhenRefresh)
-                {
-                    vieModel.IsScanning = true;
-                    await ScanWhenRefresh();
-                    vieModel.IsScanning = false;
-                }
-            }
+
             CancelSelect();
-            await Task.Run(() =>
-            {
-                if (Properties.Settings.Default.ScanWhenRefresh)
-                    vieModel.Reset();
-                else
-                    vieModel.FlipOver();
-            });
         }
-
-        public async Task<bool> ScanWhenRefresh()
-        {
-            //vieModel.IsScanning = true;
-            //RefreshScanCTS = new CancellationTokenSource();
-            //RefreshScanCTS.Token.Register(() => { Console.WriteLine("取消任务"); this.Cursor = Cursors.Arrow; });
-            //RefreshScanCT = RefreshScanCTS.Token;
-            //await Task.Run(() =>
-            //{
-            //    List<string> filepaths = Scan.ScanPaths(ReadScanPathFromConfig(System.IO.Path.GetFileNameWithoutExtension(Properties.Settings.Default.DataBasePath)), RefreshScanCT);
-            //    double num = Scan.InsertWithNfo(filepaths, RefreshScanCT);
-            //    vieModel.IsScanning = false;
-
-            //    if (Properties.Settings.Default.AutoDeleteNotExistMovie)
-            //    {
-            //        //删除不存在影片
-            //        var movies = DataBase.SelectMoviesBySql("select * from movie");
-            //        movies.ForEach(movie =>
-            //        {
-            //            if (!File.Exists(movie.filepath))
-            //            {
-            //                DataBase.DeleteByField("movie", "id", movie.id);
-            //            }
-            //        });
-
-            //    }
-
-            //    this.Dispatcher.BeginInvoke(new Action(() =>
-            //    {
-            //        //vieModel.Reset();
-            //        if (num > 0) msgCard.Info($"{Jvedio.Language.Resources.Message_ScanNum} {num} --- {Jvedio.Language.Resources.Message_ViewLog}");
-            //    }), System.Windows.Threading.DispatcherPriority.Render);
-
-
-            //}, RefreshScanCTS.Token);
-            //RefreshScanCTS.Dispose();
-            return true;
-        }
-
 
         public void CancelSelect()
         {
@@ -1034,7 +967,7 @@ namespace Jvedio
 
         private void Window_Closed(object sender, EventArgs e)
         {
-            if (!IsToUpdate && Properties.Settings.Default.CloseToTaskBar && this.IsVisible == true)
+            if (!IsToUpdate && GlobalConfig.Settings.CloseToTaskBar && this.IsVisible == true)
             {
                 vieModel.HideToIcon = true;
                 this.Hide();
@@ -1064,11 +997,11 @@ namespace Jvedio
 
 
 
-                WindowTools windowTools = null;
-                foreach (Window item in App.Current.Windows)
-                {
-                    if (item.GetType().Name == "WindowTools") windowTools = item as WindowTools;
-                }
+                //WindowTools windowTools = null;
+                //foreach (Window item in App.Current.Windows)
+                //{
+                //    if (item.GetType().Name == "WindowTools") windowTools = item as WindowTools;
+                //}
 
 
 
@@ -3265,7 +3198,7 @@ namespace Jvedio
             Properties.Settings.Default.ActorEditMode = false;
             Properties.Settings.Default.Save();
 
-            if (!IsToUpdate && Properties.Settings.Default.CloseToTaskBar && this.IsVisible == true)
+            if (!IsToUpdate && GlobalConfig.Settings.CloseToTaskBar && this.IsVisible == true)
             {
                 e.Cancel = true;
                 vieModel.HideToIcon = true;
@@ -3274,7 +3207,7 @@ namespace Jvedio
             }
 
             GlobalConfig.Main?.Save();
-
+            GlobalConfig.Settings?.Save();
 
         }
 
@@ -4821,144 +4754,8 @@ namespace Jvedio
         }
 
 
-        private void EditListItem(object sender, EventArgs e)
-        {
-            MenuItem menuItem = sender as MenuItem;
-
-            ContextMenu contextMenu = menuItem.Parent as ContextMenu;
-            RadioButton radioButton = contextMenu.PlacementTarget as RadioButton;
-
-            string oldName = radioButton.Content.ToString();
 
 
-            var r = new DialogInput(this, Jvedio.Language.Resources.InputTitle3, oldName);
-            if (r.ShowDialog() == true)
-            {
-                string text = r.Text;
-                if (text != "" & text != "+" & text.IndexOf(" ") < 0)
-                {
-                    if (vieModel.MyList.Where(arg => arg.Name == text).Count() > 0)
-                    {
-                        msgCard.Error(Jvedio.Language.Resources.Message_AlreadyExist);
-                        return;
-                    }
-                    //重命名
-                    if (Rename(oldName, text))
-                    {
-                        radioButton.Content = text;
-                        for (int i = 0; i < vieModel.MyList.Count; i++)
-                        {
-                            if (vieModel.MyList[i].Name == oldName)
-                            {
-                                vieModel.MyList[i].Name = text;
-                            }
-                        }
-                    }
-
-                }
-
-            }
-        }
-
-        private bool Rename(string oldName, string newName)
-        {
-            MySqlite dB = new MySqlite("mylist");
-            if (!dB.IsTableExist(oldName))
-            {
-                dB.CloseDB();
-                return false;
-            }
-            try
-            {
-                dB.CreateTable($"ALTER TABLE {oldName} RENAME TO {newName}");
-            }
-            catch
-            {
-                msgCard.Error(Jvedio.Language.Resources.NotSupport);
-                return false;
-            }
-            finally
-            {
-                dB.CloseDB();
-            }
-            return true;
-        }
-
-        public RadioButton ListRadibutton;
-
-        private void RemoveListItem(object sender, EventArgs e)
-        {
-            MenuItem menuItem = sender as MenuItem;
-            ContextMenu contextMenu = menuItem.Parent as ContextMenu;
-            ListRadibutton = contextMenu.PlacementTarget as RadioButton;
-
-            if (ListRadibutton == null) return;
-            if (new Msgbox(this, Jvedio.Language.Resources.IsToRemove).ShowDialog() == true)
-            {
-
-                string listName = ListRadibutton.Content.ToString();
-                MyListItem myListItem = vieModel.MyList.Where(arg => arg.Name == listName).FirstOrDefault();
-                vieModel.MyList.Remove(myListItem);
-                ReMoveFromMyList(listName);
-                vieModel.CurrentVideoList.Clear();
-            }
-
-        }
-
-
-        private void AddListItem(object sender, RoutedEventArgs e)
-        {
-            //var r = new DialogInput(this, Jvedio.Language.Resources.InputTitle4);
-            //if (r.ShowDialog() == true)
-            //{
-            //    string text = r.Text;
-            //    if (text != "" & text != "+" & text.IndexOf(" ") < 0)
-            //    {
-            //        if (vieModel.MyList.Where(arg => arg.Name == text).Count() > 0)
-            //        {
-            //            msgCard.Error(Jvedio.Language.Resources.Message_AlreadyExist);
-            //            return;
-            //        }
-            //        if (AddToMyList(text)) vieModel.MyList.Add(new MyListItem(text, 0));
-            //        ListItemsControl.ItemsSource = null;
-            //        ListItemsControl.ItemsSource = vieModel.MyList;
-            //    }
-
-            //}
-        }
-
-        private bool AddToMyList(string name)
-        {
-            MySqlite dB = new MySqlite("mylist");
-            if (dB.IsTableExist(name))
-            {
-                dB.CloseDB();
-                return false;
-            }
-            name = DataBase.SQLITETABLE_MOVIE.Replace("movie", name);
-            try
-            {
-                if (!dB.IsTableExist(name)) dB.CreateTable(name);
-            }
-            catch
-            {
-                msgCard.Error(Jvedio.Language.Resources.NotSupport);
-                return false;
-            }
-            finally
-            {
-                dB.CloseDB();
-            }
-            return true;
-
-        }
-
-        private void ReMoveFromMyList(string name)
-        {
-            MySqlite dB = new MySqlite("mylist");
-            if (dB.IsTableExist(name)) dB.DeleteTable(name);
-            dB.CloseDB();
-        }
 
 
         private void refreshTagStamp(ref Video video, long newTagID)
@@ -5040,23 +4837,7 @@ namespace Jvedio
         }
 
 
-        private void MyListItemClick(object sender, EventArgs e)
-        {
-            //MenuItem menuItem = sender as MenuItem;
-            //string table = menuItem.Header.ToString();
-            //string id = GetIDFromMenuItem(sender, 1);
-            //Movie CurrentMovie = GetMovieFromVieModel(id);
-            //if (!vieModel.SelectedVideo.Select(g => g.id).ToList().Contains(CurrentMovie.id)) vieModel.SelectedVideo.Add(CurrentMovie);
-            //foreach (Movie movie in vieModel.SelectedVideo)
-            //{
-            //    Movie newMovie = DataBase.SelectMovieByID(movie.id);
-            //    MySqlite dB = new MySqlite("mylist");
-            //    dB.InsertFullMovie(newMovie, table);
-            //    dB.CloseDB();
-            //    InitMyList();
-            //}
 
-        }
 
         private void Rate_ValueChanged_1(object sender, HandyControl.Data.FunctionEventArgs<double> e)
         {
@@ -6499,6 +6280,11 @@ namespace Jvedio
             Border button = sender as Border;
             long.TryParse(button.Tag.ToString(), out long actorID);
             ShowSameActor(actorID);
+        }
+
+        private void ShowSettings(object sender, RoutedEventArgs e)
+        {
+            OpenSet_MouseDown(null, null);
         }
     }
 

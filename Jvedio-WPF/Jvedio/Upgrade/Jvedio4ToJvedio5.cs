@@ -36,11 +36,21 @@ namespace Jvedio
                     List<string> list = collection.Cast<string>().ToList();
                     dict.Add(name, list);
                 }
-                string json = JsonConvert.SerializeObject(dict);
-                AppConfig appConfig = new AppConfig();
-                appConfig.ConfigName = "ScanPaths";
-                appConfig.ConfigValue = json;
-                appConfigMapper.insert(appConfig, InsertMode.Replace);
+
+                List<AppDatabase> appDatabases = appDatabaseMapper.selectList();
+
+
+                foreach (string name in dict.Keys)
+                {
+                    if (string.IsNullOrEmpty(name) || dict[name].Count <= 0) continue;
+                    AppDatabase db = appDatabases.Where(arg => arg.Name.Equals(name)).FirstOrDefault();
+                    if (db != null)
+                    {
+                        string json = JsonConvert.SerializeObject(dict[name]);
+                        db.ScanPath = json;
+                        appDatabaseMapper.updateById(db);
+                    }
+                }
 
             }
         }
@@ -83,30 +93,30 @@ namespace Jvedio
 
         public static void MoveServersConfig()
         {
-            string ServersConfigPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "ServersConfig");
-            if (File.Exists(ServersConfigPath))
-            {
-                List<Dictionary<string, object>> list = new List<Dictionary<string, object>>();
-                Servers servers = ServerConfig.Instance.ReadAll();
-                if (servers != null && !servers.AlreadyLoad)
-                {
-                    list.Add(getFromServer(servers.Bus, "BUS"));
-                    list.Add(getFromServer(servers.BusEurope, "BUSEUROPE"));
-                    list.Add(getFromServer(servers.Library, "LIBRARY"));
-                    list.Add(getFromServer(servers.FC2, "FC2"));
-                    list.Add(getFromServer(servers.Jav321, "JAV321"));
-                    list.Add(getFromServer(servers.DMM, "DMM"));
-                    list.Add(getFromServer(servers.DB, "DB"));
-                    list.Add(getFromServer(servers.MOO, "MOO"));
-                    string json = JsonConvert.SerializeObject(list);
-                    AppConfig appConfig = new AppConfig();
-                    appConfig.ConfigName = "Servers";
-                    appConfig.ConfigValue = json;
-                    appConfigMapper.insert(appConfig, InsertMode.Replace);
-                }
+            //string ServersConfigPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "ServersConfig");
+            //if (File.Exists(ServersConfigPath))
+            //{
+            //    List<Dictionary<string, object>> list = new List<Dictionary<string, object>>();
+            //    Servers servers = ServerConfig.Instance.ReadAll();
+            //    if (servers != null && !servers.AlreadyLoad)
+            //    {
+            //        list.Add(getFromServer(servers.Bus, "BUS"));
+            //        list.Add(getFromServer(servers.BusEurope, "BUSEUROPE"));
+            //        list.Add(getFromServer(servers.Library, "LIBRARY"));
+            //        list.Add(getFromServer(servers.FC2, "FC2"));
+            //        list.Add(getFromServer(servers.Jav321, "JAV321"));
+            //        list.Add(getFromServer(servers.DMM, "DMM"));
+            //        list.Add(getFromServer(servers.DB, "DB"));
+            //        list.Add(getFromServer(servers.MOO, "MOO"));
+            //        string json = JsonConvert.SerializeObject(list);
+            //        AppConfig appConfig = new AppConfig();
+            //        appConfig.ConfigName = "Servers";
+            //        appConfig.ConfigValue = json;
+            //        appConfigMapper.insert(appConfig, InsertMode.Replace);
+            //    }
 
 
-            }
+            //}
         }
 
 

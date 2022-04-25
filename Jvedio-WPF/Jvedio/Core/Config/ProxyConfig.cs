@@ -11,8 +11,14 @@ namespace Jvedio.Core.Config
 {
     public class ProxyConfig : AbstractConfig
     {
-        public ProxyConfig() : base("ProxyConfig")
+
+        static int DEFAULT_TIMEOUT = 10;
+
+        private ProxyConfig() : base("ProxyConfig")
         {
+            ProxyMode = 1;
+            ProxyType = 1;
+            HttpTimeout = DEFAULT_TIMEOUT;
         }
 
         private static ProxyConfig _instance = null;
@@ -36,6 +42,25 @@ namespace Jvedio.Core.Config
         public long Port { get; set; }
         public string UserName { get; set; }
         public string Password { get; set; }
+        private long _HttpTimeout = 10;
+        public long HttpTimeout
+        {
+            get
+            {
+                return _HttpTimeout;
+            }
+            set
+            {
+                if (value <= 0)
+                    _HttpTimeout = DEFAULT_TIMEOUT;
+                else
+                    _HttpTimeout = value;
+            }
+        }
+
+
+
+
 
 
         public IWebProxy GetWebProxy()

@@ -25,18 +25,6 @@ namespace Jvedio.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool CloseToTaskBar {
-            get {
-                return ((bool)(this["CloseToTaskBar"]));
-            }
-            set {
-                this["CloseToTaskBar"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0")]
         public string ShowImageMode {
             get {
@@ -44,18 +32,6 @@ namespace Jvedio.Properties {
             }
             set {
                 this["ShowImageMode"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool RandomDisplay {
-            get {
-                return ((bool)(this["RandomDisplay"]));
-            }
-            set {
-                this["RandomDisplay"] = value;
             }
         }
         
@@ -236,18 +212,6 @@ namespace Jvedio.Properties {
             }
             set {
                 this["DelFromDBIfDel"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("1")]
-        public int ScanMinFileSize {
-            get {
-                return ((int)(this["ScanMinFileSize"]));
-            }
-            set {
-                this["ScanMinFileSize"] = value;
             }
         }
         
@@ -1069,18 +1033,6 @@ namespace Jvedio.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool OpenDataBaseDefault {
-            get {
-                return ((bool)(this["OpenDataBaseDefault"]));
-            }
-            set {
-                this["OpenDataBaseDefault"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
         public bool UpgradeRequired {
             get {
@@ -1244,18 +1196,6 @@ namespace Jvedio.Properties {
             }
             set {
                 this["RecentDays"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool AutoDeleteNotExistMovie {
-            get {
-                return ((bool)(this["AutoDeleteNotExistMovie"]));
-            }
-            set {
-                this["AutoDeleteNotExistMovie"] = value;
             }
         }
         
@@ -1448,18 +1388,6 @@ namespace Jvedio.Properties {
             }
             set {
                 this["DetialWindowShowAllMovie"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool ScanWhenRefresh {
-            get {
-                return ((bool)(this["ScanWhenRefresh"]));
-            }
-            set {
-                this["ScanWhenRefresh"] = value;
             }
         }
         
