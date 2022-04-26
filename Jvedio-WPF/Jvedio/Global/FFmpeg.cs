@@ -1,4 +1,5 @@
 ﻿using Jvedio.Core.CustomTask;
+using Jvedio.Core.FFmpeg;
 using Jvedio.Core.Net;
 using System;
 using System.Collections.Generic;
@@ -8,13 +9,13 @@ using System.Threading.Tasks;
 
 namespace Jvedio.Global
 {
-    public static class Download
+    public static class FFmpeg
     {
-        public static TaskDispatcher<DownLoadTask> Dispatcher { get; set; }
+        public static TaskDispatcher<ScreenShotTask> Dispatcher { get; set; }
 
-        static Download()
+        static FFmpeg()
         {
-            Dispatcher = TaskDispatcher<DownLoadTask>.createInstance();
+            Dispatcher = TaskDispatcher<ScreenShotTask>.createInstance();
         }
 
 

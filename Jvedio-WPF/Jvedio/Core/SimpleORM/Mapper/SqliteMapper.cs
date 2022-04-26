@@ -12,7 +12,6 @@ namespace Jvedio.Core.SimpleORM
 {
     public class SqliteMapper<T> : AbstractMapper<T>
     {
-        // todo 多 select 下会导致 datareader 报错
         // todo 排它锁下的读问题：database is locked
         // 需要一个连接池
         protected SQLiteCommand cmd;
@@ -65,8 +64,14 @@ namespace Jvedio.Core.SimpleORM
             if (string.IsNullOrEmpty(sql)) return 0;
             cmd.CommandText = sql;
             Console.WriteLine(DateHelper.Now() + " => " + sql);
-            try { return cmd.ExecuteNonQuery(); }
-            catch { throw; }
+            try
+            {
+                return cmd.ExecuteNonQuery();
+            }
+            catch
+            {
+                throw;
+            }
         }
 
         public override string selectLastInsertRowId()
@@ -127,6 +132,8 @@ namespace Jvedio.Core.SimpleORM
             if (string.IsNullOrEmpty(sql)) sql = $"select * from {TableName}";
             return select(sql);
         }
+
+        // todo 数据库排它锁
         public override List<Dictionary<string, object>> select(string sql)
         {
             if (TableName == null) return null;
@@ -194,7 +201,6 @@ namespace Jvedio.Core.SimpleORM
             {
                 cmd.Connection = cn;
                 Log.Info(sql);
-
                 using (SQLiteDataReader reader = cmd.ExecuteReader())
                 {
                     while (reader.Read())

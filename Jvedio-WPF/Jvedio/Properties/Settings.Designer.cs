@@ -769,30 +769,6 @@ namespace Jvedio.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("1")]
-        public double Opacity_Main {
-            get {
-                return ((double)(this["Opacity_Main"]));
-            }
-            set {
-                this["Opacity_Main"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string FFMPEG_Path {
-            get {
-                return ((string)(this["FFMPEG_Path"]));
-            }
-            set {
-                this["FFMPEG_Path"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
         public bool SearchImmediately {
             get {
@@ -812,30 +788,6 @@ namespace Jvedio.Properties {
             }
             set {
                 this["ActorDisplayNum"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("10")]
-        public int ScreenShotNum {
-            get {
-                return ((int)(this["ScreenShotNum"]));
-            }
-            set {
-                this["ScreenShotNum"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string Language {
-            get {
-                return ((string)(this["Language"]));
-            }
-            set {
-                this["Language"] = value;
             }
         }
         
@@ -1100,54 +1052,6 @@ namespace Jvedio.Properties {
             }
             set {
                 this["Timeout_stream"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("20")]
-        public int ScreenShot_ThreadNum {
-            get {
-                return ((int)(this["ScreenShot_ThreadNum"]));
-            }
-            set {
-                this["ScreenShot_ThreadNum"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("20")]
-        public int ScreenShot_TimeOut {
-            get {
-                return ((int)(this["ScreenShot_TimeOut"]));
-            }
-            set {
-                this["ScreenShot_TimeOut"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool SaveInfoToNFO {
-            get {
-                return ((bool)(this["SaveInfoToNFO"]));
-            }
-            set {
-                this["SaveInfoToNFO"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string NFOSavePath {
-            get {
-                return ((string)(this["NFOSavePath"]));
-            }
-            set {
-                this["NFOSavePath"] = value;
             }
         }
         
@@ -1453,30 +1357,6 @@ namespace Jvedio.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public int ScreenShotIgnoreStart {
-            get {
-                return ((int)(this["ScreenShotIgnoreStart"]));
-            }
-            set {
-                this["ScreenShotIgnoreStart"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public int ScreenShotIgnoreEnd {
-            get {
-                return ((int)(this["ScreenShotIgnoreEnd"]));
-            }
-            set {
-                this["ScreenShotIgnoreEnd"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
         public bool ShowFileNameIfTitleEmpty {
             get {
@@ -1520,42 +1400,6 @@ namespace Jvedio.Properties {
             }
             set {
                 this["MovieOpacity"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("280")]
-        public int Gif_Width {
-            get {
-                return ((int)(this["Gif_Width"]));
-            }
-            set {
-                this["Gif_Width"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("170")]
-        public int Gif_Height {
-            get {
-                return ((int)(this["Gif_Height"]));
-            }
-            set {
-                this["Gif_Height"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool Gif_AutoHeight {
-            get {
-                return ((bool)(this["Gif_AutoHeight"]));
-            }
-            set {
-                this["Gif_AutoHeight"] = value;
             }
         }
         
@@ -1616,18 +1460,6 @@ namespace Jvedio.Properties {
             }
             set {
                 this["SkipExistGif"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool OverriteNFO {
-            get {
-                return ((bool)(this["OverriteNFO"]));
-            }
-            set {
-                this["OverriteNFO"] = value;
             }
         }
         
@@ -1832,6 +1664,30 @@ namespace Jvedio.Properties {
             }
             set {
                 this["ShowCreateDateIfReleaseDateEmpty"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public long SelectedLanguage {
+            get {
+                return ((long)(this["SelectedLanguage"]));
+            }
+            set {
+                this["SelectedLanguage"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool DisplayPage {
+            get {
+                return ((bool)(this["DisplayPage"]));
+            }
+            set {
+                this["DisplayPage"] = value;
             }
         }
     }

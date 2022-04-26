@@ -41,6 +41,7 @@ using Jvedio.Core.Scan;
 using Jvedio.Core.Net;
 using Jvedio.Core.CustomEventArgs;
 using Jvedio.Style;
+using Jvedio.Core.FFmpeg;
 
 namespace Jvedio.ViewModel
 {
@@ -523,6 +524,16 @@ namespace Jvedio.ViewModel
                 RaisePropertyChanged();
             }
         }
+        private ObservableCollection<ScreenShotTask> _ScreenShotTasks = new ObservableCollection<ScreenShotTask>();
+        public ObservableCollection<ScreenShotTask> ScreenShotTasks
+        {
+            get { return _ScreenShotTasks; }
+            set
+            {
+                _ScreenShotTasks = value;
+                RaisePropertyChanged();
+            }
+        }
 
         private double _DownLoadProgress = 0;
         public double DownLoadProgress
@@ -531,6 +542,16 @@ namespace Jvedio.ViewModel
             set
             {
                 _DownLoadProgress = value;
+                RaisePropertyChanged();
+            }
+        }
+        private double _ScreenShotProgress = 0;
+        public double ScreenShotProgress
+        {
+            get { return _ScreenShotProgress; }
+            set
+            {
+                _ScreenShotProgress = value;
                 RaisePropertyChanged();
             }
         }

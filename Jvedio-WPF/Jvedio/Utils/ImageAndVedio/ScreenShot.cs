@@ -37,7 +37,7 @@ namespace Jvedio
             if (string.IsNullOrEmpty(cutoffTime)) return;
             SemaphoreScreenShot.WaitOne();
 
-            string str = $"\"{Properties.Settings.Default.FFMPEG_Path}\" -y -threads 1 -ss {cutoffTime} -i \"{filePath}\" -f image2 -frames:v 1 \"{output}\"";
+            string str = $"\"{GlobalConfig.FFmpegConfig.Path}\" -y -threads 1 -ss {cutoffTime} -i \"{filePath}\" -f image2 -frames:v 1 \"{output}\"";
             string error = await new FFmpegHelper(str).Run();
             SemaphoreScreenShot.Release();
             SingleScreenShotCompleted?.Invoke(this, new ScreenShotEventArgs(str, output, error));
@@ -56,9 +56,9 @@ namespace Jvedio
 
                 int duration = Properties.Settings.Default.Gif_Duration;
 
-                int width = Properties.Settings.Default.Gif_Width;
-                int height = Properties.Settings.Default.Gif_Height;
-                if (Properties.Settings.Default.Gif_AutoHeight)
+                int width = (int)GlobalConfig.FFmpegConfig.GifWidth;
+                int height = (int)GlobalConfig.FFmpegConfig.GifHeight;
+                if (GlobalConfig.FFmpegConfig.GifAutoHeight)
                 {
                     (double w, double h) = MediaParse.GetWidthHeight(filePath);
                     if (w != 0) height = (int)(h / w * (double)width);
@@ -70,7 +70,7 @@ namespace Jvedio
                 if (height <= 0 || height > 1080) height = 170;
 
                 if (string.IsNullOrEmpty(cutoffTime)) return false;
-                string str = $"\"{Properties.Settings.Default.FFMPEG_Path}\" -y -t {duration} -ss {cutoffTime} -i \"{filePath}\" -s {width}x{height}  \"{GifPath}\"";
+                string str = $"\"{GlobalConfig.FFmpegConfig.Path}\" -y -t {duration} -ss {cutoffTime} -i \"{filePath}\" -s {width}x{height}  \"{GifPath}\"";
                 string error = await new FFmpegHelper(str, duration * 5).Run();
                 SingleScreenShotCompleted?.Invoke(this, new ScreenShotEventArgs(str, GifPath, error));
                 return true;
@@ -88,9 +88,9 @@ namespace Jvedio
             await Task.Run(() =>
             {
 
-                if (!File.Exists(Properties.Settings.Default.FFMPEG_Path)) { result = false; message = Jvedio.Language.Resources.Message_SetFFmpeg; return; }
+                if (!File.Exists(GlobalConfig.FFmpegConfig.Path)) { result = false; message = Jvedio.Language.Resources.Message_SetFFmpeg; return; }
 
-                int num = Properties.Settings.Default.ScreenShot_ThreadNum;// n 个线程截图
+                int num = (int)GlobalConfig.FFmpegConfig.ThreadNum;// n 个线程截图
                 string ScreenShotPath = "";
                 ScreenShotPath = BasePicPath + "ScreenShot\\" + movie.id;
 
@@ -140,7 +140,7 @@ namespace Jvedio
             bool result = true;
             string message = "";
             string GifPath = BasePicPath + "Gif\\" + movie.id + ".gif";
-            if (!File.Exists(Properties.Settings.Default.FFMPEG_Path)) { result = false; message = Jvedio.Language.Resources.Message_SetFFmpeg; return (result, message); }
+            if (!File.Exists(GlobalConfig.FFmpegConfig.Path)) { result = false; message = Jvedio.Language.Resources.Message_SetFFmpeg; return (result, message); }
             if (!Directory.Exists(BasePicPath + "Gif\\")) Directory.CreateDirectory(BasePicPath + "Gif\\");
             if (!File.Exists(movie.filepath)) { result = false; message = Jvedio.Language.Resources.NotExists; return (result, message); }
             string[] cutoffArray = MediaParse.GetCutOffArray(movie.filepath); //获得影片长度数组

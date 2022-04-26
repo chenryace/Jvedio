@@ -267,6 +267,7 @@
     <Compile Include="Core\Command\File.cs" />
     <Compile Include="Core\Command\OpenWindow.cs" />
     <Compile Include="Core\Config\ProxyConfig.cs" />
+    <Compile Include="Core\Config\FFmpegConfig.cs" />
     <Compile Include="Core\Config\ScanConfig.cs" />
     <Compile Include="Core\Config\ServerConfig.cs" />
     <Compile Include="Core\Config\WindowConfig\Settings.cs" />
@@ -275,17 +276,19 @@
     <Compile Include="Core\CustomEventArgs\ActressUpdateEventArgs.cs" />
     <Compile Include="Core\CustomEventArgs\InfoUpdateEventArgs.cs" />
     <Compile Include="Core\CustomEventArgs\MessageCallBackEventArgs.cs" />
+    <Compile Include="Core\CustomTask\AbstractTask.cs" />
     <Compile Include="Core\Enums\DownLoadState.cs" />
     <Compile Include="Core\Enums\ImageType.cs" />
     <Compile Include="Core\Exceptions\CrawlerNotFoundException.cs" />
+    <Compile Include="Core\FFmpeg\ScreenShotTask.cs" />
     <Compile Include="Core\Net\ActorDownloader.cs" />
-    <Compile Include="Core\Net\DownloadDispatcher.cs" />
+    <Compile Include="Core\CustomTask\TaskDispatcher.cs" />
     <Compile Include="Core\Net\DownLoadProgress.cs" />
     <Compile Include="Core\Net\DownloadResult.cs" />
     <Compile Include="Core\Net\DownLoadTask.cs" />
     <Compile Include="Core\Plugins\Crawler\CrawlerLoader.cs" />
     <Compile Include="Core\CustomSettingsProvider.cs" />
-    <Compile Include="Core\DataBase\CommonConnection.cs" />
+    <Compile Include="Core\DataBase\Connection.cs" />
     <Compile Include="Core\DataBase\MysqlConnection.cs" />
     <Compile Include="Core\Enums\ComicType.cs" />
     <Compile Include="Core\Enums\DataBaseType.cs" />
@@ -394,6 +397,7 @@
     <Compile Include="DialogWindows\Dialog_About.xaml.cs">
       <DependentUpon>Dialog_About.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Global\FFmpeg.cs" />
     <Compile Include="Global\Download.cs" />
     <Compile Include="Global\Plugins.cs" />
     <Compile Include="Mapper\ActorMapper.cs" />
@@ -427,6 +431,7 @@
     <Compile Include="Utils\FileProcess\ClipBoard.cs" />
     <Compile Include="Utils\FileProcess\DirHelper.cs" />
     <Compile Include="Utils\FileProcess\FileHelper.cs" />
+    <Compile Include="Utils\FileProcess\NFOHelper.cs" />
     <Compile Include="Utils\FileProcess\StreamHelper.cs" />
     <Compile Include="Utils\Other\Comparer.cs" />
     <Compile Include="Utils\Other\Converter.cs" />
@@ -1020,6 +1025,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Entity\Base\" />
+    <Folder Include="Global\Dispatcher\" />
     <Folder Include="Test\ScanTest\NFO\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

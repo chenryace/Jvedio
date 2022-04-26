@@ -1,4 +1,5 @@
 ﻿using Jvedio.Core.Attributes;
+using Jvedio.Core.DataBase;
 using Jvedio.Core.Enums;
 using Jvedio.Core.Exceptions;
 using Jvedio.Utils.Common;
@@ -85,7 +86,10 @@ namespace Jvedio.Core.SimpleORM
         {
             if (entity == null) return -1;
             string sqltext = generateBatchInsertSql(new List<T> { entity }, mode);
-            return executeNonQuery(sqltext);
+            lock (Connection.WriteLock)
+            {
+                return executeNonQuery(sqltext);
+            }
         }
 
 
@@ -149,7 +153,10 @@ namespace Jvedio.Core.SimpleORM
         {
             if (collections == null || collections.Count == 0) return 0;
             string sqltext = generateBatchInsertSql(collections, mode);
-            return executeNonQuery(sqltext);
+            lock (Connection.WriteLock)
+            {
+                return executeNonQuery(sqltext);
+            }
         }
 
 
@@ -159,7 +166,11 @@ namespace Jvedio.Core.SimpleORM
         {
             if (entity == null) return false;
             string sqltext = generateInsertSql(entity);
-            int insert = (int)executeNonQuery(sqltext);
+            int insert = 0;
+            lock (Connection.WriteLock)
+            {
+                insert = (int)executeNonQuery(sqltext);
+            }
             if (insert > 0)
             {
                 string id = selectLastInsertRowId();

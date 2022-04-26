@@ -16,6 +16,24 @@ using System.Windows.Media.Imaging;
 /// </summary>
 namespace Jvedio.Utils.Converter
 {
+    public class RoundNumberConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            if (value == null || string.IsNullOrEmpty(value.ToString())) return null;
+            int round = 2;
+            if (parameter != null && !string.IsNullOrEmpty(parameter.ToString()))
+                int.TryParse(parameter.ToString(), out round);
+            double.TryParse(value.ToString(), out double v);
+            return Math.Round(v, round);
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
     public class Base64ImageConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)

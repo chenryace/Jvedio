@@ -2725,7 +2725,7 @@
 
                                                                                     </MenuItem>
                                                                                     <MenuItem Click="EditInfo" Header="{x:Static lang:Resources.Menu_EditInfo}" />
-                                                                                    <MenuItem Header="{x:Static lang:Resources.Menu_Advance}" IsEnabled="False">
+                                                                                    <MenuItem Header="{x:Static lang:Resources.Menu_Advance}">
                                                                                         <MenuItem Click="TranslateMovie" Header="{x:Static lang:Resources.Menu_Translate}" />
                                                                                         <MenuItem Click="GenerateSmallImage" Header="{x:Static lang:Resources.Menu_GenerateThumbnail}" />
                                                                                         <MenuItem Click="GenerateActor" Header="{x:Static lang:Resources.Menu_GenerateActressImage}" />
@@ -3020,7 +3020,7 @@
                                     <Grid
                                         Grid.Row="2"
                                         Panel.ZIndex="5"
-                                        Visibility="{Binding DisplayStatusBar, Converter={StaticResource BoolToVis}, Mode=TwoWay, Source={x:Static p:Settings.Default}}">
+                                        Visibility="{Binding DisplayPage, Converter={StaticResource BoolToVis}, Mode=TwoWay, Source={x:Static p:Settings.Default}}">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="*" />
                                             <ColumnDefinition Width="auto" />
@@ -3932,7 +3932,8 @@
             <Grid
                 Grid.Row="2"
                 Height="30"
-                Background="{DynamicResource Window.Title.Background}">
+                Background="{DynamicResource Window.Title.Background}"
+                Visibility="{Binding DisplayStatusBar, Converter={StaticResource BoolToVis}, Mode=TwoWay, Source={x:Static p:Settings.Default}}">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="auto" />
@@ -3951,6 +3952,296 @@
                     Grid.Column="2"
                     Margin="5,0"
                     Orientation="Horizontal">
+
+                    <Grid>
+                        <chao:PathMsg
+                            Name="screenShotPathMsg"
+                            MouseLeftButtonUp="ShowScreenShotPopup"
+                            MsgCount="{Binding ScreenShotTasks.Count}"
+                            Path="M443.972267 437.316267L200.157867 117.3504a39.355733 39.355733 0 0 1 5.5296-53.6576 36.4544 36.4544 0 0 1 51.8144 3.754667l254.088533 291.908266 254.0544-291.9424a36.932267 36.932267 0 0 1 51.882667-3.754666 39.287467 39.287467 0 0 1 5.597866 53.76l-243.8144 319.931733 151.381334 174.1824a185.002667 185.002667 0 0 1 223.675733 81.749333 184.0128 184.0128 0 0 1-43.008 233.984 184.388267 184.388267 0 0 1-237.704533-2.7648 183.978667 183.978667 0 0 1-37.341867-234.973866 32.768 32.768 0 0 1-3.754667-4.608l-120.968533-158.378667-67.6864-89.1904 0.068267-0.034133z m-49.493334 57.002666l70.929067 92.8768-74.205867 97.621334c-1.4336 1.365333-2.389333 3.310933-3.754666 4.676266a184.490667 184.490667 0 0 1-275.114667 237.738667 184.558933 184.558933 0 0 1 180.736-315.733333l101.376-117.213867zM240.776533 894.976a110.011733 110.011733 0 0 0 91.5456-64.443733 111.616 111.616 0 0 0-11.707733-111.616 111.5136 111.5136 0 0 0-102.7072-44.373334 110.523733 110.523733 0 0 0-96.221867 121.4464 110.045867 110.045867 0 0 0 119.0912 98.986667z m541.7984 0a110.421333 110.421333 0 0 0 102.7072-44.3392 110.660267 110.660267 0 0 0-25.258666-155.921067 110.011733 110.011733 0 0 0-54.613334-19.729066 110.455467 110.455467 0 0 0-119.534933 98.542933 111.274667 111.274667 0 0 0 96.699733 121.4464z"
+                            Style="{StaticResource NormalPathMsg}" />
+                        <Popup
+                            x:Name="screenShotStatusPopup"
+                            Width="500"
+                            MaxHeight="600"
+                            AllowsTransparency="True"
+                            HorizontalOffset="-450"
+                            Placement="Top"
+                            PlacementTarget="{Binding ElementName=downloadPathMsg}"
+                            PopupAnimation="Fade"
+                            StaysOpen="True"
+                            VerticalOffset="0">
+                            <Grid Margin="5">
+                                <Border
+                                    Margin="5"
+                                    Background="{DynamicResource Menu.Background}"
+                                    CornerRadius="0 0 5 5"
+                                    Effect="{StaticResource PopupDropShadowEffect}" />
+                                <Grid Margin="5">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="auto" />
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="auto" />
+                                    </Grid.RowDefinitions>
+                                    <Grid
+                                        Grid.Row="0"
+                                        Height="35"
+                                        Background="{DynamicResource Window.Title.Background}">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="auto" />
+                                            <ColumnDefinition Width="auto" />
+                                        </Grid.ColumnDefinitions>
+
+                                        <TextBlock
+                                            Margin="10,0"
+                                            HorizontalAlignment="Left"
+                                            VerticalAlignment="Center"
+                                            Style="{StaticResource BaseTextBlock}"
+                                            Text="截图任务" />
+
+                                        <Button
+                                            Grid.Column="1"
+                                            BorderThickness="0"
+                                            Click="ShowContextMenu"
+                                            Content="清除列表"
+                                            Style="{StaticResource FlatButton}">
+                                            <Button.ContextMenu>
+                                                <ContextMenu HorizontalOffset="-70" VerticalOffset="5">
+                                                    <MenuItem
+                                                        Click="RemoveCompleteScreenShot"
+                                                        Header="已完成"
+                                                        IsCheckable="False" />
+                                                    <MenuItem
+                                                        Click="RemoveCancelScreenShot"
+                                                        Header="已取消"
+                                                        IsCheckable="False" />
+                                                </ContextMenu>
+                                            </Button.ContextMenu>
+                                        </Button>
+
+                                        <Border
+                                            Grid.Column="2"
+                                            Margin="5,0"
+                                            MouseLeftButtonUp="HideScreenShotPopup"
+                                            Style="{StaticResource ToolsBarBorderStyle}">
+
+                                            <Viewbox
+                                                Width="15"
+                                                Height="15"
+                                                RenderTransformOrigin="0.5,0.5">
+                                                <Viewbox.RenderTransform>
+                                                    <RotateTransform Angle="90" />
+                                                </Viewbox.RenderTransform>
+                                                <Path
+                                                    HorizontalAlignment="Center"
+                                                    VerticalAlignment="Center"
+                                                    Data="M312.889 995.556c-17.067 0-28.445-5.69-39.822-17.067-22.756-22.756-17.067-56.889 5.689-79.645L642.844 568.89c11.378-11.378 17.067-22.756 17.067-34.133 0-11.378-5.689-22.756-17.067-34.134L273.067 187.733c-22.756-22.755-28.445-56.889-5.69-79.644 22.756-22.756 56.89-28.445 79.645-5.689l364.09 312.889C745.243 443.733 768 489.244 768 534.756s-17.067 85.333-51.2 119.466L352.711 984.178c-11.378 5.689-28.444 11.378-39.822 11.378z"
+                                                    Fill="{Binding Foreground, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}" />
+                                            </Viewbox>
+                                        </Border>
+
+
+                                    </Grid>
+
+                                    <ScrollViewer
+                                        Grid.Row="1"
+                                        Margin="10"
+                                        HorizontalScrollBarVisibility="Hidden"
+                                        VerticalScrollBarVisibility="Auto">
+                                        <ItemsControl ItemsSource="{Binding ScreenShotTasks}">
+
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Grid Name="rootGrid">
+                                                        <Border
+                                                            Margin="5"
+                                                            Background="{DynamicResource Menu.Background}"
+                                                            CornerRadius="0 0 5 5"
+                                                            Effect="{StaticResource PopupDropShadowEffect}" />
+                                                        <Grid Margin="5">
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="auto" />
+                                                                <ColumnDefinition Width="*" />
+                                                                <ColumnDefinition Width="auto" />
+                                                            </Grid.ColumnDefinitions>
+
+                                                            <fa:ImageAwesome
+                                                                Grid.Column="0"
+                                                                Width="30"
+                                                                Margin="10"
+                                                                HorizontalAlignment="Center"
+                                                                VerticalAlignment="Center">
+                                                                <fa:ImageAwesome.Style>
+                                                                    <Style TargetType="fa:ImageAwesome">
+                                                                        <Style.Triggers>
+
+                                                                            <DataTrigger Binding="{Binding Status, Mode=OneWay}" Value="Canceled">
+                                                                                <Setter Property="Icon" Value="TimesCircle" />
+                                                                                <Setter Property="Foreground" Value="Red" />
+                                                                                <Setter Property="Spin" Value="False" />
+                                                                            </DataTrigger>
+                                                                            <DataTrigger Binding="{Binding Status, Mode=OneWay}" Value="WaitingToRun">
+                                                                                <Setter Property="Icon" Value="Hourglass" />
+                                                                                <Setter Property="Foreground" Value="{DynamicResource Control.Disabled.Background}" />
+                                                                                <Setter Property="Spin" Value="False" />
+                                                                            </DataTrigger>
+                                                                            <DataTrigger Binding="{Binding Status, Mode=OneWay}" Value="RanToCompletion">
+                                                                                <Setter Property="Icon" Value="CheckCircle" />
+                                                                                <Setter Property="Foreground" Value="#20B759" />
+                                                                                <Setter Property="Spin" Value="False" />
+                                                                            </DataTrigger>
+                                                                            <DataTrigger Binding="{Binding Status, Mode=OneWay}" Value="Running">
+                                                                                <Setter Property="Icon" Value="Refresh" />
+                                                                                <Setter Property="Foreground" Value="{DynamicResource Common.HighLight.Hover.Background}" />
+                                                                                <Setter Property="Spin" Value="True" />
+                                                                            </DataTrigger>
+                                                                        </Style.Triggers>
+                                                                    </Style>
+                                                                </fa:ImageAwesome.Style>
+                                                            </fa:ImageAwesome>
+
+
+                                                            <StackPanel
+                                                                Grid.Column="1"
+                                                                MaxWidth="280"
+                                                                Margin="5"
+                                                                Orientation="Vertical">
+                                                                <TextBlock
+                                                                    Margin="5"
+                                                                    HorizontalAlignment="Left"
+                                                                    FontSize="15"
+                                                                    FontWeight="Bold"
+                                                                    Text="{Binding Title}"
+                                                                    TextTrimming="WordEllipsis"
+                                                                    ToolTip="{Binding Title}" />
+                                                                <ProgressBar
+                                                                    Height="2"
+                                                                    Margin="5,0"
+                                                                    Maximum="100"
+                                                                    Value="{Binding Progress}">
+                                                                    <ProgressBar.Style>
+                                                                        <Style BasedOn="{StaticResource NormalStaticProgressBar}" TargetType="ProgressBar">
+                                                                            <Style.Triggers>
+
+
+
+                                                                                <DataTrigger Binding="{Binding Status, Mode=OneWay}" Value="RanToCompletion">
+                                                                                    <Setter Property="Visibility" Value="Hidden" />
+                                                                                </DataTrigger>
+
+                                                                            </Style.Triggers>
+                                                                        </Style>
+                                                                    </ProgressBar.Style>
+                                                                </ProgressBar>
+                                                                <Grid>
+                                                                    <TextBlock Margin="5" Text="{Binding CreateTime}" />
+                                                                    <TextBlock
+                                                                        Margin="5"
+                                                                        HorizontalAlignment="Right"
+                                                                        Text="{Binding Progress, StringFormat=\{0\} %}">
+                                                                        <TextBlock.Style>
+                                                                            <Style TargetType="TextBlock">
+                                                                                <Style.Triggers>
+                                                                                    <DataTrigger Binding="{Binding Status, Mode=OneWay}" Value="RanToCompletion">
+                                                                                        <Setter Property="Visibility" Value="Hidden" />
+                                                                                    </DataTrigger>
+
+                                                                                </Style.Triggers>
+                                                                            </Style>
+                                                                        </TextBlock.Style>
+                                                                    </TextBlock>
+                                                                </Grid>
+                                                                <StackPanel Margin="5" Orientation="Horizontal">
+                                                                    <TextBlock Text="{Binding StatusText}" />
+                                                                    <TextBlock Foreground="Red" Text="{Binding Message, StringFormat='   {0} '}" />
+
+                                                                </StackPanel>
+
+
+
+                                                            </StackPanel>
+                                                            <WrapPanel
+                                                                Grid.Column="2"
+                                                                Width="100"
+                                                                VerticalAlignment="Center"
+                                                                Orientation="Horizontal">
+                                                                <WrapPanel.Style>
+                                                                    <Style TargetType="WrapPanel">
+                                                                        <Setter Property="Visibility" Value="Hidden" />
+
+                                                                        <Style.Triggers>
+                                                                            <DataTrigger Binding="{Binding ElementName=rootGrid, Path=IsMouseOver}" Value="True">
+                                                                                <Setter Property="Visibility" Value="Visible" />
+                                                                            </DataTrigger>
+                                                                        </Style.Triggers>
+                                                                    </Style>
+                                                                </WrapPanel.Style>
+                                                                <Button
+                                                                    Click="CancelScreenShotTask"
+                                                                    Content="取消"
+                                                                    Tag="{Binding DataID}" />
+                                                                <!--<Button
+                                                                    Click="PauseDownloadTask"
+                                                                    Content="暂停"
+                                                                    IsEnabled="{Binding Running}"
+                                                                    Tag="{Binding DataID}" />-->
+                                                                <Button
+                                                                    Click="ShowScreenShotDetail"
+                                                                    Content="详情"
+                                                                    Tag="{Binding DataID}" />
+                                                            </WrapPanel>
+                                                        </Grid>
+                                                    </Grid>
+
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                            <ItemsControl.ItemsPanel>
+                                                <ItemsPanelTemplate>
+                                                    <StackPanel Orientation="Vertical" />
+                                                </ItemsPanelTemplate>
+                                            </ItemsControl.ItemsPanel>
+
+                                        </ItemsControl>
+                                    </ScrollViewer>
+
+
+                                    <StackPanel Grid.Row="2" Orientation="Vertical">
+
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="auto" />
+                                            </Grid.ColumnDefinitions>
+                                            <ProgressBar
+                                                Grid.Column="0"
+                                                Height="4"
+                                                Margin="10,0"
+                                                Maximum="100"
+                                                Minimum="0"
+                                                Style="{StaticResource NormalStaticProgressBar}"
+                                                Value="{Binding ScreenShotProgress}" />
+                                            <TextBlock
+                                                Grid.Column="1"
+                                                Margin="10,0"
+                                                Text="{Binding ScreenShotProgress, StringFormat=\{0\} %}" />
+                                        </Grid>
+
+                                        <StackPanel Orientation="Horizontal">
+                                            <Button
+                                                Click="CancelScreenShotTasks"
+                                                Content="取消所有"
+                                                Style="{StaticResource ButtonDanger}" />
+                                        </StackPanel>
+                                    </StackPanel>
+
+
+
+
+                                </Grid>
+                            </Grid>
+                        </Popup>
+                    </Grid>
                     <Grid>
                         <Border
                             Name="msgScan"
@@ -4197,12 +4488,10 @@
                                                                 <Button
                                                                     Click="CancelScanTask"
                                                                     Content="取消"
-                                                                    IsEnabled="{Binding Running}"
                                                                     Tag="{Binding CreateTime}" />
                                                                 <Button
                                                                     Click="ShowScanDetail"
                                                                     Content="详情"
-                                                                    IsEnabled="{Binding Running, Converter={StaticResource OppositeBooleanConverter}}"
                                                                     Tag="{Binding CreateTime}" />
                                                             </StackPanel>
                                                         </Grid>

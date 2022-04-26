@@ -6,8 +6,14 @@ using System.Threading.Tasks;
 
 namespace Jvedio.Core.DataBase
 {
-    public class CommonConnection<T>
+    public class Connection
     {
+        public static object WriteLock { get; set; }
+
+        static Connection()
+        {
+            WriteLock = new object();
+        }
 
     }
 }

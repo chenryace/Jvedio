@@ -23,7 +23,7 @@ namespace Jvedio.ViewModel
 {
     public class VieModel_Settings : ViewModelBase
     {
-
+        Jvedio.Settings settings = GetWindowByName("Settings") as Settings;
         public VieModel_Settings()
         {
 
@@ -545,12 +545,194 @@ namespace Jvedio.ViewModel
                 RaisePropertyChanged();
             }
         }
+        private int _SelectedLanguage = (int)GlobalConfig.Settings.SelectedLanguage;
+
+        public int SelectedLanguage
+        {
+            get { return _SelectedLanguage; }
+            set
+            {
+                _SelectedLanguage = value;
+                settings?.SetLanguage();
+                RaisePropertyChanged();
+            }
+        }
 
 
 
         #endregion
 
 
+
+        #region "nfo"
+        private bool _SaveInfoToNFO = GlobalConfig.Settings.SaveInfoToNFO;
+
+        public bool SaveInfoToNFO
+        {
+            get { return _SaveInfoToNFO; }
+            set
+            {
+                _SaveInfoToNFO = value;
+                RaisePropertyChanged();
+            }
+        }
+        private bool _OverriteNFO = GlobalConfig.Settings.OverriteNFO;
+
+        public bool OverriteNFO
+        {
+            get { return _OverriteNFO; }
+            set
+            {
+                _OverriteNFO = value;
+                RaisePropertyChanged();
+            }
+        }
+        private string _NFOSavePath = GlobalConfig.Settings.NFOSavePath;
+
+        public string NFOSavePath
+        {
+            get { return _NFOSavePath; }
+            set
+            {
+                _NFOSavePath = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
+
+
+
+        #endregion
+
+        #region "ffmpeg"
+        private string _FFMPEG_Path = GlobalConfig.FFmpegConfig.Path;
+
+        public string FFMPEG_Path
+        {
+            get { return _FFMPEG_Path; }
+            set
+            {
+                _FFMPEG_Path = value;
+                RaisePropertyChanged();
+            }
+        }
+        private int _ScreenShot_ThreadNum = (int)GlobalConfig.FFmpegConfig.ThreadNum;
+
+        public int ScreenShot_ThreadNum
+        {
+            get { return _ScreenShot_ThreadNum; }
+            set
+            {
+                _ScreenShot_ThreadNum = value;
+                RaisePropertyChanged();
+            }
+        }
+        private int _ScreenShot_TimeOut = (int)GlobalConfig.FFmpegConfig.TimeOut;
+
+        public int ScreenShot_TimeOut
+        {
+            get { return _ScreenShot_TimeOut; }
+            set
+            {
+                _ScreenShot_TimeOut = value;
+                RaisePropertyChanged();
+            }
+        }
+        private int _ScreenShotNum = (int)GlobalConfig.FFmpegConfig.ScreenShotNum;
+
+        public int ScreenShotNum
+        {
+            get { return _ScreenShotNum; }
+            set
+            {
+                _ScreenShotNum = value;
+                RaisePropertyChanged();
+            }
+        }
+        private int _ScreenShotIgnoreStart = (int)GlobalConfig.FFmpegConfig.ScreenShotIgnoreStart;
+
+        public int ScreenShotIgnoreStart
+        {
+            get { return _ScreenShotIgnoreStart; }
+            set
+            {
+                _ScreenShotIgnoreStart = value;
+                RaisePropertyChanged();
+            }
+        }
+        private int _ScreenShotIgnoreEnd = (int)GlobalConfig.FFmpegConfig.ScreenShotIgnoreEnd;
+
+        public int ScreenShotIgnoreEnd
+        {
+            get { return _ScreenShotIgnoreEnd; }
+            set
+            {
+                _ScreenShotIgnoreEnd = value;
+                RaisePropertyChanged();
+            }
+        }
+        private bool _SkipExistGif = GlobalConfig.FFmpegConfig.SkipExistGif;
+
+        public bool SkipExistGif
+        {
+            get { return _SkipExistGif; }
+            set
+            {
+                _SkipExistGif = value;
+                RaisePropertyChanged();
+            }
+        }
+        private bool _GifAutoHeight = GlobalConfig.FFmpegConfig.GifAutoHeight;
+
+        public bool GifAutoHeight
+        {
+            get { return _GifAutoHeight; }
+            set
+            {
+                _GifAutoHeight = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private int _GifWidth = (int)GlobalConfig.FFmpegConfig.GifWidth;
+
+        public int GifWidth
+        {
+            get { return _GifWidth; }
+            set
+            {
+                _GifWidth = value;
+                RaisePropertyChanged();
+            }
+        }
+        private int _GifHeight = (int)GlobalConfig.FFmpegConfig.GifHeight;
+
+        public int GifHeight
+        {
+            get { return _GifHeight; }
+            set
+            {
+                _GifHeight = value;
+                RaisePropertyChanged();
+            }
+        }
+        private int _GifDuration = (int)GlobalConfig.FFmpegConfig.GifDuration;
+
+        public int GifDuration
+        {
+            get { return _GifDuration; }
+            set
+            {
+                _GifDuration = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
+
+
+        #endregion
 
 
 

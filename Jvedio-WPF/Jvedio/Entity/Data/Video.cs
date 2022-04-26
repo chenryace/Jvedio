@@ -442,5 +442,30 @@ namespace Jvedio.Entity
             if (dict.ContainsKey("ActorNames")) result["ActorNames"] = dict["ActorNames"];
             return JsonConvert.SerializeObject(result);
         }
+
+
+        public void SaveNfo()
+        {
+            if (!GlobalConfig.Settings.SaveInfoToNFO) return;
+            string dir = GlobalConfig.Settings.NFOSavePath;
+            bool overrideInfo = GlobalConfig.Settings.OverrideInfo; ;
+
+            string saveName = $"{VID.ToProperFileName()}.nfo";
+            if (string.IsNullOrEmpty(VID)) saveName = $"{System.IO.Path.GetFileNameWithoutExtension(Path)}.nfo";
+
+            string saveFileName = "";
+
+            if (Directory.Exists(dir))
+                saveFileName = System.IO.Path.Combine(dir, saveName);
+
+            //与视频同路径，视频存在才行
+            if (!Directory.Exists(dir) && File.Exists(Path))
+                saveFileName = System.IO.Path.Combine(new FileInfo(Path).DirectoryName, saveName);
+
+            if (string.IsNullOrEmpty(saveFileName)) return;
+            if (overrideInfo || !File.Exists(saveFileName))
+                NFOHelper.SaveToNFO(this, saveFileName);
+
+        }
     }
 }

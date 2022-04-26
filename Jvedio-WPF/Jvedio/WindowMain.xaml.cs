@@ -46,6 +46,7 @@ using Jvedio.Test;
 using Jvedio.Core.Net;
 using Jvedio.Core.CustomEventArgs;
 using Jvedio.CommonNet;
+using Jvedio.Core.FFmpeg;
 
 namespace Jvedio
 {
@@ -204,6 +205,11 @@ namespace Jvedio
             Global.Download.Dispatcher.onWorking += (s, e) =>
             {
                 vieModel.DownLoadProgress = Global.Download.Dispatcher.Progress;
+            };
+
+            Global.Download.Dispatcher.onWorking += (s, e) =>
+            {
+                vieModel.ScreenShotProgress = Global.Download.Dispatcher.Progress;
             };
 
         }
@@ -643,7 +649,8 @@ namespace Jvedio
         {
             vieModel.HideToIcon = false;
             this.Show();
-            double opacity = Properties.Settings.Default.Opacity_Main >= 0.5 ? Properties.Settings.Default.Opacity_Main : 1;
+            //double opacity = Properties.Settings.Default.Opacity_Main >= 0.5 ? Properties.Settings.Default.Opacity_Main : 1;
+            double opacity = 1;
             var anim = new DoubleAnimation(1, opacity, (Duration)FadeInterval, FillBehavior.Stop);
             anim.Completed += (s, _) => this.Opacity = opacity;
             this.BeginAnimation(UIElement.OpacityProperty, anim);
@@ -1056,7 +1063,8 @@ namespace Jvedio
         {
             if (Properties.Settings.Default.EnableWindowFade)
             {
-                double opacity = Properties.Settings.Default.Opacity_Main;
+                //double opacity = Properties.Settings.Default.Opacity_Main;
+                double opacity = 1;
                 var anim = new DoubleAnimation(0, (Duration)FadeInterval, FillBehavior.Stop);
                 anim.Completed += (s, _) => this.WindowState = System.Windows.WindowState.Minimized;
                 this.BeginAnimation(UIElement.OpacityProperty, anim);
@@ -1720,6 +1728,10 @@ namespace Jvedio
         {
             downloadStatusPopup.IsOpen = true;
         }
+        public void ShowScreenShotPopup(object sender, MouseButtonEventArgs e)
+        {
+            screenShotStatusPopup.IsOpen = true;
+        }
 
 
 
@@ -2308,7 +2320,7 @@ namespace Jvedio
 
         public async void GenerateGif(object sender, RoutedEventArgs e)
         {
-            //if (!File.Exists(Properties.Settings.Default.FFMPEG_Path))
+            //if (!File.Exists(GlobalConfig.FFmpegConfig.Path))
             //{
             //    msgCard.Info(Jvedio.Language.Resources.Message_SetFFmpeg);
             //    return;
@@ -2364,21 +2376,21 @@ namespace Jvedio
 
         private async void ScreenShot(object sender, MouseButtonEventArgs e)
         {
-            MenuItem menuItem = sender as MenuItem;
-            ContextMenu contextMenu = menuItem.Parent as ContextMenu;
-            contextMenu.IsOpen = false;
-            await Task.Run(async () =>
-            {
-                await Task.Delay(300);
-            });
-            Window_ScreenShot window_ScreenShot = new Window_ScreenShot(this, ImageProcess.GetScreenShot());
-            window_ScreenShot.ShowDialog();
+            //MenuItem menuItem = sender as MenuItem;
+            //ContextMenu contextMenu = menuItem.Parent as ContextMenu;
+            //contextMenu.IsOpen = false;
+            //await Task.Run(async () =>
+            //{
+            //    await Task.Delay(300);
+            //});
+            //Window_ScreenShot window_ScreenShot = new Window_ScreenShot(this, ImageProcess.GetScreenShot());
+            //window_ScreenShot.ShowDialog();
         }
 
         public async void GenerateScreenShot(object sender, RoutedEventArgs e)
         {
 
-            //if (!File.Exists(Properties.Settings.Default.FFMPEG_Path))
+            //if (!File.Exists(GlobalConfig.FFmpegConfig.Path))
             //{
             //    msgCard.Info(Jvedio.Language.Resources.Message_SetFFmpeg);
             //    return;
@@ -6131,10 +6143,23 @@ namespace Jvedio
             DownLoadTask task = vieModel.DownLoadTasks.Where(arg => arg.DataID.ToString().Equals(dataID)).FirstOrDefault();
             task.Cancel();
         }
+        private void CancelScreenShotTask(object sender, RoutedEventArgs e)
+        {
+            string dataID = (sender as Button).Tag.ToString();
+            ScreenShotTask task = vieModel.ScreenShotTasks.Where(arg => arg.DataID.ToString().Equals(dataID)).FirstOrDefault();
+            task.Cancel();
+        }
 
         private void CancelDownloadTasks(object sender, RoutedEventArgs e)
         {
             foreach (DownLoadTask task in vieModel.DownLoadTasks)
+            {
+                task.Cancel();
+            }
+        }
+        private void CancelScreenShotTasks(object sender, RoutedEventArgs e)
+        {
+            foreach (ScreenShotTask task in vieModel.ScreenShotTasks)
             {
                 task.Cancel();
             }
@@ -6173,6 +6198,12 @@ namespace Jvedio
             DownLoadTask task = vieModel.DownLoadTasks.Where(arg => arg.DataID.ToString().Equals(dataID)).FirstOrDefault();
             new Dialog_Logs(this, string.Join(Environment.NewLine, task.Logs)).ShowDialog();
         }
+        private void ShowScreenShotDetail(object sender, RoutedEventArgs e)
+        {
+            string dataID = (sender as Button).Tag.ToString();
+            ScreenShotTask task = vieModel.ScreenShotTasks.Where(arg => arg.DataID.ToString().Equals(dataID)).FirstOrDefault();
+            new Dialog_Logs(this, string.Join(Environment.NewLine, task.Logs)).ShowDialog();
+        }
 
 
 
@@ -6187,6 +6218,10 @@ namespace Jvedio
         private void HideDownloadPopup(object sender, MouseButtonEventArgs e)
         {
             downloadStatusPopup.IsOpen = false;
+        }
+        private void HideScreenShotPopup(object sender, MouseButtonEventArgs e)
+        {
+            screenShotStatusPopup.IsOpen = false;
         }
 
         private void ShowContextMenu(object sender, RoutedEventArgs e)
@@ -6213,6 +6248,29 @@ namespace Jvedio
                 if (vieModel.DownLoadTasks[i].Status == System.Threading.Tasks.TaskStatus.Canceled)
                 {
                     vieModel.DownLoadTasks.RemoveAt(i);
+                }
+            }
+            Global.Download.Dispatcher.ClearDoneList();
+        }
+        private void RemoveCompleteScreenShot(object sender, RoutedEventArgs e)
+        {
+            for (int i = vieModel.ScreenShotTasks.Count - 1; i >= 0; i--)
+            {
+                if (vieModel.ScreenShotTasks[i].Status == System.Threading.Tasks.TaskStatus.RanToCompletion)
+                {
+                    vieModel.ScreenShotTasks.RemoveAt(i);
+                }
+            }
+            Global.Download.Dispatcher.ClearDoneList();
+        }
+
+        private void RemoveCancelScreenShot(object sender, RoutedEventArgs e)
+        {
+            for (int i = vieModel.ScreenShotTasks.Count - 1; i >= 0; i--)
+            {
+                if (vieModel.ScreenShotTasks[i].Status == System.Threading.Tasks.TaskStatus.Canceled)
+                {
+                    vieModel.ScreenShotTasks.RemoveAt(i);
                 }
             }
             Global.Download.Dispatcher.ClearDoneList();

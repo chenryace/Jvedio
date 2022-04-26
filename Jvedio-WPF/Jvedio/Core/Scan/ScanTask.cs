@@ -21,52 +21,25 @@ using Jvedio.Core.CustomTask;
 
 namespace Jvedio.Core.Scan
 {
-    public class ScanTask : ITask, INotifyPropertyChanged
+    public class ScanTask : AbstractTask
     {
 
         public static string VIDEO_EXTENSIONS = "3g2,3gp,3gp2,3gpp,amr,amv,asf,avi,bdmv,bik,d2v,divx,drc,dsa,dsm,dss,dsv,evo,f4v,flc,fli,flic,flv,hdmov,ifo,ivf,m1v,m2p,m2t,m2ts,m2v,m4b,m4p,m4v,mkv,mp2v,mp4,mp4v,mpe,mpeg,mpg,mpls,mpv2,mpv4,mov,mts,ogm,ogv,pss,pva,qt,ram,ratdvd,rm,rmm,rmvb,roq,rpm,smil,smk,swf,tp,tpr,ts,vob,vp6,webm,wm,wmp,wmv";
         public static string PICTURE_EXTENSIONS = "bmp,gif,ico,jpe,jpeg,jpg,png";
         public static List<string> VIDEO_EXTENSIONS_LIST = VIDEO_EXTENSIONS.Split(',').Select(arg => "." + arg).ToList();
         public static List<string> PICTURE_EXTENSIONS_LIST = PICTURE_EXTENSIONS.Split(',').Select(arg => "." + arg).ToList();
-
-        public event EventHandler onError;
         public event EventHandler onScanning;
-        public event EventHandler onCanceled;
-        private TaskLogger logger { get; set; }
-        private List<string> Logs = new List<string>();
 
-        protected virtual void OnError(EventArgs e)
-        {
-            EventHandler error = onError;
-            error?.Invoke(this, e);
 
-        }
+
 
         #region "property"
 
 
-        public TaskStatus _Status;
-        public TaskStatus Status
-        {
-
-            get
-            {
-                return _Status;
-            }
-            set
-            {
-                _Status = value;
-                if (STATUS_TO_TEXT_DICT.ContainsKey(value))
-                    StatusText = STATUS_TO_TEXT_DICT[value];
-                Running = value == TaskStatus.Running;
-                OnPropertyChanged();
-            }
-        }
-
         public ScanResult ScanResult { get; set; }
 
 
-        public static Dictionary<TaskStatus, string> STATUS_TO_TEXT_DICT = new Dictionary<TaskStatus, string>()
+        public static new Dictionary<TaskStatus, string> STATUS_TO_TEXT_DICT = new Dictionary<TaskStatus, string>()
         {
 
             {TaskStatus.Running,"扫描中..."},
@@ -74,91 +47,19 @@ namespace Jvedio.Core.Scan
             {TaskStatus.RanToCompletion,"已完成"},
         };
 
-        public string _StatusText;
-        public string StatusText
-        {
-
-            get
-            {
-                return _StatusText;
-            }
-            set
-            {
-                _StatusText = value;
-                OnPropertyChanged();
-            }
-        }
-        public string _Message;
-        public string Message
-        {
-
-            get
-            {
-                return _Message;
-            }
-            set
-            {
-                _Message = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public bool _Running;
-        public bool Running
-        {
-
-            get
-            {
-                return _Running;
-            }
-            set
-            {
-                _Running = value;
-                OnPropertyChanged();
-            }
-        }
 
 
-        public string _CreateTime;
-        public string CreateTime
-        {
-
-            get
-            {
-                return _CreateTime;
-            }
-            set
-            {
-                _CreateTime = value;
-                OnPropertyChanged();
-            }
-        }
 
         #endregion
-        public Stopwatch stopwatch { get; set; }
 
-        public long ElapsedMilliseconds { get; set; }
 
         public List<string> ScanPaths { get; set; }
         public List<string> FilePaths { get; set; }
 
         public List<string> FileExt { get; set; }
 
-        protected CancellationTokenSource tokenCTS;
-        protected CancellationToken token;
 
-        public System.IO.SearchOption SearchOption { get; set; }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-
-        public ScanTask(List<string> scanPaths, List<string> filePaths, IEnumerable<string> fileExt = null)
+        public ScanTask(List<string> scanPaths, List<string> filePaths, IEnumerable<string> fileExt = null) : base()
         {
             if (scanPaths != null && scanPaths.Count > 0)
                 ScanPaths = scanPaths.Where(arg => Directory.Exists(arg)).ToList();
@@ -183,19 +84,9 @@ namespace Jvedio.Core.Scan
             if (FilePaths == null) FilePaths = new List<string>();
             if (FileExt == null) FileExt = VIDEO_EXTENSIONS_LIST;// 默认导入视频
 
-            tokenCTS = new CancellationTokenSource();
-            tokenCTS.Token.Register(() =>
-            {
-                Console.WriteLine("取消任务");
-                onCanceled?.Invoke(this, null);
-            });
-            token = tokenCTS.Token;
-
-            stopwatch = new Stopwatch();
-            ScanResult = new ScanResult();
-            ScanResult.ScanDate = DateHelper.Now();
-            logger = new TaskLogger(Logs);
         }
+
+
 
 
 

@@ -79,6 +79,9 @@ namespace Jvedio
             await MoveOldFiles();//迁移旧文件并迁移到新数据库
             ThemeLoader.loadAllThemes(); //加载主题
             CrawlerLoader.loadAllCrawlers();// 初始化爬虫
+
+
+
             if (GlobalFont != null) this.FontFamily = GlobalFont;
             SetSkin(Properties.Settings.Default.Themes);//设置皮肤
             InitAppData();// 初始化应用数据

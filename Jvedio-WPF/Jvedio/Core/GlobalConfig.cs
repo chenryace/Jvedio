@@ -3,6 +3,7 @@ using Jvedio.Core.WindowConfig;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,6 +21,7 @@ namespace Jvedio
         public static Jvedio.Core.Config.ServerConfig ServerConfig = Jvedio.Core.Config.ServerConfig.createInstance();
         public static Jvedio.Core.Config.ProxyConfig ProxyConfig = Jvedio.Core.Config.ProxyConfig.createInstance();
         public static Jvedio.Core.Config.ScanConfig ScanConfig = Jvedio.Core.Config.ScanConfig.createInstance();
+        public static Jvedio.Core.Config.FFmpegConfig FFmpegConfig = Jvedio.Core.Config.FFmpegConfig.createInstance();
 
         static GlobalConfig()
         {
@@ -28,16 +30,22 @@ namespace Jvedio
             Edit.Read();
             Detail.Read();
             MetaData.Read();
-            ServerConfig.Read();
             Settings.Read();
             ProxyConfig.Read();
             ScanConfig.Read();
+            FFmpegConfig.Read();
             EnsurePicPaths();// 确保 PicPaths
         }
 
         public static void Init()
         {
             Console.WriteLine("初始化");
+
+            //配置 ffmpeg 路径
+            if (!File.Exists(GlobalConfig.FFmpegConfig.Path) && File.Exists("ffmpeg.exe"))
+            {
+                GlobalConfig.FFmpegConfig.Path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "ffmpeg.exe");
+            }
         }
 
         static void EnsurePicPaths()

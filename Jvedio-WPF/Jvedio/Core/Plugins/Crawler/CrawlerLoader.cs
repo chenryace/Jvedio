@@ -45,6 +45,7 @@ namespace Jvedio.Core.Plugins.Crawler
                 }
             }
             setPluginEnabled();
+            GlobalConfig.ServerConfig.Read();// 必须在加载所有爬虫插件后在初始化
         }
 
 

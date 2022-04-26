@@ -38,6 +38,14 @@ namespace Jvedio.Core.WindowConfig
         public bool CloseToTaskBar { get; set; }
         public long DefaultDBID { get; set; }
 
+        /// <summary>
+        /// 0-中文 1-English 2-日語
+        /// </summary>
+        public long SelectedLanguage { get; set; }
+        public bool SaveInfoToNFO { get; set; }
+        public bool OverriteNFO { get; set; }
+        public string NFOSavePath { get; set; }
+
 
     }
 }

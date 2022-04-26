@@ -341,32 +341,32 @@ namespace Jvedio
             //优化一下速度
             if ((bool)cb[3].IsChecked)
             {
-                if (Properties.Settings.Default.SaveInfoToNFO)
-                {
-                    var detailMovies = db.SelectDetailMoviesBySql("select * from movie");
-                    await Task.Run(() =>
-                    {
-                        try
-                        {
-                            vieModel_DBManagement.ProgressBarValue = 0;
-                            for (int i = 0; i < detailMovies.Count; i++)
-                            {
-                                ct.ThrowIfCancellationRequested();
-                                FileProcess.SaveNfo(detailMovies[i]);
-                                if (detailMovies.Count > 0) vieModel_DBManagement.ProgressBarValue = (int)((double)(i + 1) / (double)detailMovies.Count * 100);
-                            }
-                        }
-                        catch (OperationCanceledException ex)
-                        {
-                            Console.WriteLine($"{nameof(OperationCanceledException)} thrown with message: {ex.Message}");
-                        }
-                    }, ct);
-                    MessageCard.Success($"{Jvedio.Language.Resources.Message_Success}");
-                }
-                else
-                {
-                    MessageCard.Success($"{Jvedio.Language.Resources.setnfo}");
-                }
+                //if (Properties.Settings.Default.SaveInfoToNFO)
+                //{
+                //    var detailMovies = db.SelectDetailMoviesBySql("select * from movie");
+                //    await Task.Run(() =>
+                //    {
+                //        try
+                //        {
+                //            vieModel_DBManagement.ProgressBarValue = 0;
+                //            for (int i = 0; i < detailMovies.Count; i++)
+                //            {
+                //                ct.ThrowIfCancellationRequested();
+                //                FileProcess.SaveNfo(detailMovies[i]);
+                //                if (detailMovies.Count > 0) vieModel_DBManagement.ProgressBarValue = (int)((double)(i + 1) / (double)detailMovies.Count * 100);
+                //            }
+                //        }
+                //        catch (OperationCanceledException ex)
+                //        {
+                //            Console.WriteLine($"{nameof(OperationCanceledException)} thrown with message: {ex.Message}");
+                //        }
+                //    }, ct);
+                //    MessageCard.Success($"{Jvedio.Language.Resources.Message_Success}");
+                //}
+                //else
+                //{
+                //    MessageCard.Success($"{Jvedio.Language.Resources.setnfo}");
+                //}
 
             }
             db.CloseDB();

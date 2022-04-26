@@ -175,21 +175,21 @@ namespace Jvedio
         {
             int start = -1;
             int end = -1;
-            switch (Properties.Settings.Default.Language)
+            switch (GlobalConfig.Settings.SelectedLanguage)
             {
 
-                case "中文":
+                case 0:
                     end = content.IndexOf("--English--");
                     if (end == -1) return content;
                     else return content.Substring(0, end).Replace("--中文--", "");
 
-                case "English":
+                case 1:
                     start = content.IndexOf("--English--");
                     end = content.IndexOf("--日本語--");
                     if (end == -1 || start == -1) return content;
                     else return content.Substring(start, end - start).Replace("--English--", "");
 
-                case "日本語":
+                case 2:
                     start = content.IndexOf("--日本語--");
                     if (start == -1) return content;
                     else return content.Substring(start).Replace("--日本語--", "");

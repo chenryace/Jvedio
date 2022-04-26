@@ -295,11 +295,7 @@ namespace Jvedio
             GenreUncensored[6] = Resource_String.GenreUncensored.Split('|')[6];
             GenreUncensored[7] = Resource_String.GenreUncensored.Split('|')[7];
 
-            //配置 ffmpeg 路径
-            if (!File.Exists(Properties.Settings.Default.FFMPEG_Path) && File.Exists("ffmpeg.exe"))
-            {
-                Properties.Settings.Default.FFMPEG_Path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "ffmpeg.exe");
-            }
+
 
         }
 

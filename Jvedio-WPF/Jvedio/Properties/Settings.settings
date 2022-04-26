@@ -188,23 +188,11 @@
     <Setting Name="Search_Content" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="Opacity_Main" Type="System.Double" Scope="User">
-      <Value Profile="(Default)">1</Value>
-    </Setting>
-    <Setting Name="FFMPEG_Path" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
-    </Setting>
     <Setting Name="SearchImmediately" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="ActorDisplayNum" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">50</Value>
-    </Setting>
-    <Setting Name="ScreenShotNum" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">10</Value>
-    </Setting>
-    <Setting Name="Language" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
     </Setting>
     <Setting Name="DisPlayNoStamp" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
@@ -271,18 +259,6 @@
     </Setting>
     <Setting Name="Timeout_stream" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">20</Value>
-    </Setting>
-    <Setting Name="ScreenShot_ThreadNum" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">20</Value>
-    </Setting>
-    <Setting Name="ScreenShot_TimeOut" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">20</Value>
-    </Setting>
-    <Setting Name="SaveInfoToNFO" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">False</Value>
-    </Setting>
-    <Setting Name="NFOSavePath" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
     </Setting>
     <Setting Name="SideGridWidth" Type="System.Double" Scope="User">
       <Value Profile="(Default)">200</Value>
@@ -359,12 +335,6 @@
     <Setting Name="AddLabelTagWhenRename" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
-    <Setting Name="ScreenShotIgnoreStart" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">0</Value>
-    </Setting>
-    <Setting Name="ScreenShotIgnoreEnd" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">0</Value>
-    </Setting>
     <Setting Name="ShowFileNameIfTitleEmpty" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
@@ -376,15 +346,6 @@
     </Setting>
     <Setting Name="MovieOpacity" Type="System.Double" Scope="User">
       <Value Profile="(Default)">1</Value>
-    </Setting>
-    <Setting Name="Gif_Width" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">280</Value>
-    </Setting>
-    <Setting Name="Gif_Height" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">170</Value>
-    </Setting>
-    <Setting Name="Gif_AutoHeight" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="HalfCutOFf" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
@@ -400,9 +361,6 @@
     </Setting>
     <Setting Name="SkipExistGif" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
-    </Setting>
-    <Setting Name="OverriteNFO" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="DisplayNavigation" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
@@ -453,6 +411,12 @@
       <Value Profile="(Default)">0</Value>
     </Setting>
     <Setting Name="ShowCreateDateIfReleaseDateEmpty" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="SelectedLanguage" Type="System.Int64" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="DisplayPage" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
   </Settings>

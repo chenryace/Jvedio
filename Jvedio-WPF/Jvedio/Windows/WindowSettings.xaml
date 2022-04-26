@@ -29,6 +29,7 @@
 
         <local:CookieNothingConverter x:Key="CookieNothingConverter" />
         <converter:Base64ImageConverter x:Key="Base64ImageConverter" />
+        <converter:RoundNumberConverter x:Key="RoundNumberConverter" />
 
 
         <Style
@@ -197,10 +198,14 @@
                             FontSize="16"
                             Foreground="{DynamicResource Global.Foreground}"
                             ItemContainerStyle="{StaticResource BaseComboBoxItemStyle}"
-                            SelectionChanged="DatabaseComboBox_SelectionChanged"
+                            SelectedIndex="{Binding SelectedLanguage}"
                             Style="{StaticResource NormalComboBox}"
                             Tag="{DynamicResource Window.Side.Hover.Background}"
-                            ToolTip="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Text}" />
+                            ToolTip="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Text}">
+                            <ComboBoxItem Content="中文" />
+                            <ComboBoxItem Content="English" />
+                            <ComboBoxItem Content="日本語" />
+                        </ComboBox>
                     </StackPanel>
 
 
@@ -1056,43 +1061,35 @@
                 Header="{x:Static lang:Resources.SyncInfo}">
                 <StackPanel>
 
-                    <WrapPanel
-                        Margin="20,5"
-                        IsEnabled="False"
-                        Orientation="Horizontal">
+                    <WrapPanel Margin="20,5" Orientation="Horizontal">
 
                         <CheckBox
                             Margin="0"
                             Content="{x:Static lang:Resources.SaveToNFO}"
-                            IsChecked="{Binding SaveInfoToNFO, Mode=TwoWay, Source={x:Static p:Settings.Default}}" />
+                            IsChecked="{Binding SaveInfoToNFO, Mode=TwoWay}" />
 
 
 
 
-                        <StackPanel Orientation="Horizontal" Visibility="{Binding SaveInfoToNFO, Converter={StaticResource BoolToVis}, Mode=OneWay, Source={x:Static p:Settings.Default}}">
-                            <!--<StackPanel Orientation="Horizontal" Visibility="Visible">-->
-                            <TextBox
+                        <!--<StackPanel Orientation="Horizontal" Visibility="{Binding SaveInfoToNFO, Converter={StaticResource BoolToVis}, Mode=OneWay, Source={x:Static p:Settings.Default}}">-->
+                        <StackPanel Orientation="Horizontal" Visibility="Visible">
+                            <chao:SearchBox
                                 Width="380"
                                 MinWidth="400"
                                 Margin="10,0"
-                                hc:InfoElement.Necessary="True"
-                                hc:InfoElement.Placeholder="{x:Static lang:Resources.ToolTip_SameAsVedio}"
-                                hc:InfoElement.Title=""
-                                hc:InfoElement.TitleWidth="140"
                                 Background="{DynamicResource BackgroundTitle}"
-                                BorderThickness="0"
-                                CaretBrush="{DynamicResource ForegroundSearch}"
                                 FontSize="15"
-                                Foreground="{DynamicResource ForegroundSearch}"
-                                Style="{StaticResource TextBoxExtend}"
-                                Text="{Binding NFOSavePath, Source={x:Static p:Settings.Default}}" />
+                                PlaceHolder="{x:Static lang:Resources.ToolTip_SameAsVedio}"
+                                PlaceHolderForeground="{DynamicResource Control.Disabled.Background}"
+                                Style="{StaticResource BaseSearchTextBox}"
+                                Text="{Binding NFOSavePath, Mode=TwoWay}" />
 
                             <Button
                                 HorizontalAlignment="Left"
-                                Click="Button_Click_3"
+                                Click="SelectNfoPath"
                                 Content="{x:Static lang:Resources.ChooseDir}"
                                 Style="{StaticResource ButtonStyleFill}" />
-                            <CheckBox Content="{x:Static lang:Resources.overwrite}" IsChecked="{Binding OverriteNFO, Mode=TwoWay, Source={x:Static p:Settings.Default}}" />
+                            <CheckBox Content="{x:Static lang:Resources.overwrite}" IsChecked="{Binding OverriteNFO, Mode=TwoWay}" />
 
                         </StackPanel>
 
@@ -1799,16 +1796,26 @@
                         HorizontalAlignment="Left"
                         Orientation="Vertical">
                         <CheckBox Content="{x:Static lang:Resources.ImageStretch}" IsChecked="{Binding MainImageAutoMode, Mode=TwoWay, Source={x:Static p:Settings.Default}}" />
+                        <CheckBox Content="翻页调节栏" IsChecked="{Binding DisplayPage, Mode=TwoWay, Source={x:Static p:Settings.Default}}" />
                         <CheckBox Content="{x:Static lang:Resources.StatusBar}" IsChecked="{Binding DisplayStatusBar, Mode=TwoWay, Source={x:Static p:Settings.Default}}" />
                         <CheckBox Content="{x:Static lang:Resources.FunctionBar}" IsChecked="{Binding DisplayFunBar, Mode=TwoWay, Source={x:Static p:Settings.Default}}" />
                         <CheckBox Content="{x:Static lang:Resources.Navigation}" IsChecked="{Binding DisplayNavigation, Mode=TwoWay, Source={x:Static p:Settings.Default}}" />
 
-                        <CheckBox Content="{x:Static lang:Resources.Filter}" IsChecked="{Binding ShowFilter, Mode=TwoWay, Source={x:Static p:Settings.Default}}" />
+                        <CheckBox
+                            Content="{x:Static lang:Resources.Filter}"
+                            IsChecked="{Binding ShowFilter, Mode=TwoWay, Source={x:Static p:Settings.Default}}"
+                            IsEnabled="False" />
 
                         <CheckBox Content="{x:Static lang:Resources.ShowFIlename}" IsChecked="{Binding ShowFileNameIfTitleEmpty, Mode=TwoWay, Source={x:Static p:Settings.Default}}" />
                         <CheckBox Content="发行日期为空显示创建日期" IsChecked="{Binding ShowCreateDateIfReleaseDateEmpty, Mode=TwoWay, Source={x:Static p:Settings.Default}}" />
-                        <CheckBox Content="{x:Static lang:Resources.ShowTranslation}" IsChecked="{Binding TitleShowTranslate, Mode=TwoWay, Source={x:Static p:Settings.Default}}" />
-                        <CheckBox Content="{x:Static lang:Resources.ShowTranslate2}" IsChecked="{Binding PlotShowTranslate, Mode=TwoWay, Source={x:Static p:Settings.Default}}" />
+                        <CheckBox
+                            Content="{x:Static lang:Resources.ShowTranslation}"
+                            IsChecked="{Binding TitleShowTranslate, Mode=TwoWay, Source={x:Static p:Settings.Default}}"
+                            IsEnabled="False" />
+                        <CheckBox
+                            Content="{x:Static lang:Resources.ShowTranslate2}"
+                            IsChecked="{Binding PlotShowTranslate, Mode=TwoWay, Source={x:Static p:Settings.Default}}"
+                            IsEnabled="False" />
                         <CheckBox Content="{x:Static lang:Resources.DetailViewAll}" IsChecked="{Binding DetialWindowShowAllMovie, Mode=TwoWay, Source={x:Static p:Settings.Default}}" />
                     </StackPanel>
 
@@ -1858,29 +1865,9 @@
                         Margin="15,5"
                         HorizontalAlignment="Left"
                         Content="{x:Static lang:Resources.FadeInOut}"
-                        IsChecked="{Binding EnableWindowFade, Mode=TwoWay, Source={x:Static p:Settings.Default}}" />
-                    <WrapPanel
-                        Margin="15,5"
-                        HorizontalAlignment="Left"
-                        Orientation="Horizontal">
-                        <Label Content="{x:Static lang:Resources.Opacity}" Style="{StaticResource InfoLabel}" />
-                        <Slider
-                            x:Name="OpacitySlider"
-                            Width="200"
-                            Margin="5,0"
-                            VerticalAlignment="Center"
-                            Cursor="Hand"
-                            IsSnapToTickEnabled="True"
-                            LargeChange="0.1"
-                            Maximum="1"
-                            Minimum="0.5"
-                            SmallChange="0.05"
-                            TickFrequency="0.05"
-                            TickPlacement="None"
-                            Value="{Binding Opacity_Main, Mode=TwoWay, Source={x:Static p:Settings.Default}}" />
-                        <Label Content="{Binding Value, ElementName=OpacitySlider}" Style="{StaticResource InfoLabel}" />
+                        IsChecked="{Binding EnableWindowFade, Mode=TwoWay, Source={x:Static p:Settings.Default}}"
+                        IsEnabled="False" />
 
-                    </WrapPanel>
                 </StackPanel>
             </TabItem>
 
@@ -2158,7 +2145,7 @@
                 Background="Transparent"
                 FontSize="15"
                 Header="{x:Static lang:Resources.VedioProcessing}">
-                <StackPanel IsEnabled="False">
+                <StackPanel>
                     <CheckBox
                         Margin="20,5"
                         HorizontalAlignment="Left"
@@ -2167,198 +2154,60 @@
                         IsChecked="{Binding ScreenShotToExtraPicPath, Mode=TwoWay, Source={x:Static p:Settings.Default}}"
                         Visibility="Collapsed" />
 
-                    <StackPanel Margin="20,5" Orientation="Horizontal">
+                    <StackPanel Margin="10,5" Orientation="Horizontal">
                         <TextBlock
-                            Margin="10,5"
+                            MinWidth="150"
+                            Margin="2"
                             Style="{StaticResource BaseTextBlock}"
-                            Text="{x:Static lang:Resources.FFmpegPath}" />
-                        <Border
-                            Margin="0"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Panel.ZIndex="5"
-                            CornerRadius="5"
-                            Cursor="Hand"
-                            MouseLeftButtonUp="CopyFFmpegUrl"
-                            Style="{StaticResource BorderStyle}">
-                            <Image
-                                Height="20"
-                                Margin="5"
-                                Source="pack://application:,,,/Resources/Picture/download.png" />
-                        </Border>
+                            Text="{x:Static lang:Resources.FFmpegPath}"
+                            TextAlignment="Left" />
+                        <chao:SearchBox
+                            MinWidth="400"
+                            Style="{StaticResource BaseSearchTextBox}"
+                            Text="{Binding FFMPEG_Path, Mode=TwoWay}" />
+
+
                         <Button
                             Margin="10,5"
                             Click="SetFFMPEGPath"
-                            Content="{x:Static lang:Resources.ChooseFFmpeg}"
+                            Content="{x:Static lang:Resources.ChooseFile}"
                             Style="{StaticResource ButtonStyleFill}" />
 
-                        <hc:TextBox Style="{StaticResource BaseHcTextBox}" Text="{Binding FFMPEG_Path, Mode=TwoWay, Source={x:Static p:Settings.Default}}" />
 
-
-                    </StackPanel>
-
-                    <Label
-                        Margin="20,0"
-                        HorizontalAlignment="Left"
-                        Content="{x:Static lang:Resources.ScreenShot}"
-                        Style="{StaticResource LabelPrimary}" />
-
-
-                    <StackPanel Margin="20,5" Orientation="Horizontal">
-                        <Slider
-                            x:Name="ScreenshotNumSlider"
-                            Width="200"
-                            VerticalAlignment="Center"
-                            LargeChange="2"
-                            Maximum="30"
-                            Minimum="1"
-                            SmallChange="1"
-                            TickFrequency="1"
-                            Value="{Binding ScreenShotNum, Mode=TwoWay, Source={x:Static p:Settings.Default}}" />
                         <TextBlock
-                            Width="30"
+                            Cursor="Hand"
+                            Foreground="LightSkyBlue"
+                            MouseLeftButtonUp="CopyFFmpegUrl"
                             Style="{StaticResource BaseTextBlock}"
-                            Text="{Binding Value, ElementName=ScreenshotNumSlider, Mode=OneWay}" />
-                        <TextBlock Style="{StaticResource BaseTextBlock}" Text="{x:Static lang:Resources.ScreenShotNumber}" />
+                            Text="前往下载"
+                            TextDecorations="Underline" />
+
+
+
 
                     </StackPanel>
-                    <StackPanel Margin="20,5" Orientation="Horizontal">
-
-                        <Slider
-                            x:Name="ScreenShotIgnoreSlider1"
-                            Width="200"
-                            VerticalAlignment="Center"
-                            LargeChange="2"
-                            Maximum="10"
-                            Minimum="0"
-                            SmallChange="1"
-                            TickFrequency="1"
-                            Value="{Binding ScreenShotIgnoreStart, Mode=TwoWay, Source={x:Static p:Settings.Default}}" />
-                        <TextBlock
-                            Width="30"
-                            Style="{StaticResource BaseTextBlock}"
-                            Text="{Binding ElementName=ScreenShotIgnoreSlider1, Mode=OneWay, Path=Value}" />
-                        <TextBlock Style="{StaticResource BaseTextBlock}" Text="{x:Static lang:Resources.SkipBegin}" />
-                    </StackPanel>
-                    <StackPanel Margin="20,5" Orientation="Horizontal">
-
-                        <Slider
-                            x:Name="ScreenShotIgnoreSlider2"
-                            Width="200"
-                            VerticalAlignment="Center"
-                            LargeChange="2"
-                            Maximum="10"
-                            Minimum="0"
-                            SmallChange="1"
-                            TickFrequency="1"
-                            Value="{Binding ScreenShotIgnoreEnd, Mode=TwoWay, Source={x:Static p:Settings.Default}}" />
-                        <TextBlock
-                            Width="30"
-                            Style="{StaticResource BaseTextBlock}"
-                            Text="{Binding ElementName=ScreenShotIgnoreSlider2, Mode=OneWay, Path=Value}" />
-                        <TextBlock Style="{StaticResource BaseTextBlock}" Text="{x:Static lang:Resources.SkipEnd}" />
-                    </StackPanel>
-
-                    <Label
-                        Margin="20,0"
-                        HorizontalAlignment="Left"
-                        Content="GIF"
-                        Style="{StaticResource LabelPrimary}" />
-                    <WrapPanel
-                        Margin="15,5"
-                        HorizontalAlignment="Left"
-                        Orientation="Horizontal">
-                        <Label Content="{x:Static lang:Resources.Resolution}" Style="{StaticResource InfoLabel}" />
-                        <Slider
-                            x:Name="GifSlider1"
-                            Width="200"
-                            Margin="5,0"
-                            VerticalAlignment="Center"
-                            Cursor="Hand"
-                            IsSnapToTickEnabled="True"
-                            LargeChange="10"
-                            Maximum="1980"
-                            Minimum="50"
-                            SmallChange="1"
-                            TickFrequency="1"
-                            TickPlacement="None"
-                            Value="{Binding Gif_Width, Mode=TwoWay, Source={x:Static p:Settings.Default}}" />
-                        <TextBlock Style="{StaticResource BaseTextBlock}" Text="{Binding Value, ElementName=GifSlider1, StringFormat={}{0} px}" />
-                        <Slider
-                            x:Name="GifSlider2"
-                            Width="200"
-                            Margin="5,0"
-                            VerticalAlignment="Center"
-                            Cursor="Hand"
-                            IsEnabled="{Binding Gif_AutoHeight, Mode=TwoWay, Source={x:Static p:Settings.Default}, Converter={StaticResource OppositeBooleanConverter}}"
-                            IsSnapToTickEnabled="True"
-                            LargeChange="10"
-                            Maximum="1080"
-                            Minimum="50"
-                            SmallChange="1"
-                            TickFrequency="1"
-                            TickPlacement="None"
-                            Value="{Binding Gif_Height, Mode=TwoWay, Source={x:Static p:Settings.Default}}" />
-                        <TextBlock Style="{StaticResource BaseTextBlock}" Text="{Binding Value, ElementName=GifSlider2, StringFormat={}{0} px}" />
-                        <CheckBox
-                            Margin="20,10"
-                            Content="{x:Static lang:Resources.AutoHeight}"
-                            IsChecked="{Binding Gif_AutoHeight, Mode=TwoWay, Source={x:Static p:Settings.Default}}" />
 
 
-                    </WrapPanel>
-
-                    <WrapPanel
-                        Margin="15,5"
-                        HorizontalAlignment="Left"
-                        Orientation="Horizontal">
-                        <Label Content="{x:Static lang:Resources.Duration}" Style="{StaticResource InfoLabel}" />
-                        <Slider
-                            x:Name="GifDurationSlider1"
-                            Width="200"
-                            Margin="5,0"
-                            VerticalAlignment="Center"
-                            Cursor="Hand"
-                            IsSnapToTickEnabled="True"
-                            LargeChange="2"
-                            Maximum="20"
-                            Minimum="1"
-                            SmallChange="1"
-                            TickFrequency="1"
-                            TickPlacement="None"
-                            Value="{Binding Gif_Duration, Mode=TwoWay, Source={x:Static p:Settings.Default}}" />
-                        <TextBlock Style="{StaticResource BaseTextBlock}" Text="{Binding Value, ElementName=GifDurationSlider1, StringFormat={}{0} s}" />
-                    </WrapPanel>
-
-                    <CheckBox
-                        Margin="20,10"
-                        HorizontalAlignment="Left"
-                        Content="{x:Static lang:Resources.SkipExistGif}"
-                        IsChecked="{Binding SkipExistGif, Mode=TwoWay, Source={x:Static p:Settings.Default}}" />
 
 
-                    <WrapPanel
-                        Margin="20,10"
-                        Orientation="Horizontal"
-                        Visibility="Collapsed">
+                    <WrapPanel Margin="10,10" Orientation="Horizontal">
                         <TextBlock
                             Height="auto"
-                            Margin="20,2"
-                            VerticalAlignment="Center"
-                            FontSize="15"
-                            Foreground="{DynamicResource ForegroundGlobal}"
-                            Style="{StaticResource TextBlockTitle}"
-                            Text="线程数量" />
+                            MinWidth="150"
+                            Margin="2"
+                            Style="{StaticResource BaseTextBlock}"
+                            Text="线程数"
+                            TextAlignment="Left" />
                         <Slider
                             x:Name="ThreadNumSlider"
-                            Width="100"
+                            Width="200"
                             VerticalAlignment="Center"
                             LargeChange="2"
                             Maximum="10"
                             Minimum="1"
                             SmallChange="1"
                             TickFrequency="1"
-                            Value="{Binding ScreenShot_ThreadNum, Mode=TwoWay, Source={x:Static p:Settings.Default}}" />
+                            Value="{Binding ScreenShot_ThreadNum, Mode=TwoWay}" />
 
 
                         <TextBlock
@@ -2375,28 +2224,24 @@
 
 
                     </WrapPanel>
-                    <WrapPanel
-                        Margin="20,10"
-                        Orientation="Horizontal"
-                        Visibility="Collapsed">
+                    <WrapPanel Margin="10,10" Orientation="Horizontal">
                         <TextBlock
                             Height="auto"
-                            Margin="20,2"
-                            VerticalAlignment="Center"
-                            FontSize="15"
-                            Foreground="{DynamicResource ForegroundGlobal}"
-                            Style="{StaticResource TextBlockTitle}"
-                            Text="截图超时" />
+                            MinWidth="150"
+                            Margin="2"
+                            Style="{StaticResource BaseTextBlock}"
+                            Text="任务超时"
+                            TextAlignment="Left" />
                         <Slider
                             x:Name="ScreenShotTimeoutSlider"
-                            Width="100"
+                            Width="200"
                             VerticalAlignment="Center"
                             LargeChange="2"
                             Maximum="60"
                             Minimum="2"
                             SmallChange="1"
                             TickFrequency="1"
-                            Value="{Binding ScreenShot_TimeOut, Mode=TwoWay, Source={x:Static p:Settings.Default}}" />
+                            Value="{Binding ScreenShot_TimeOut, Mode=TwoWay}" />
 
 
                         <TextBlock
@@ -2413,6 +2258,162 @@
 
 
                     </WrapPanel>
+
+
+
+                    <chao:TogglePanel
+                        Grid.Column="1"
+                        Margin="10,0,0,0"
+                        Padding="0,5"
+                        FontSize="16"
+                        Header="{x:Static lang:Resources.ScreenShot}"
+                        IsExpanded="True"
+                        LineWidth="0"
+                        Style="{StaticResource BaseTogglePanel}">
+                        <StackPanel Orientation="Vertical">
+                            <StackPanel Margin="20,5" Orientation="Horizontal">
+                                <Slider
+                                    x:Name="ScreenshotNumSlider"
+                                    Width="200"
+                                    VerticalAlignment="Center"
+                                    LargeChange="2"
+                                    Maximum="30"
+                                    Minimum="1"
+                                    SmallChange="1"
+                                    TickFrequency="1"
+                                    Value="{Binding ScreenShotNum, Mode=TwoWay}" />
+                                <TextBlock
+                                    Width="30"
+                                    Style="{StaticResource BaseTextBlock}"
+                                    Text="{Binding Value, ElementName=ScreenshotNumSlider, Mode=OneWay}" />
+                                <TextBlock Style="{StaticResource BaseTextBlock}" Text="{x:Static lang:Resources.ScreenShotNumber}" />
+
+                            </StackPanel>
+                            <StackPanel Margin="20,5" Orientation="Horizontal">
+
+                                <Slider
+                                    x:Name="ScreenShotIgnoreSlider1"
+                                    Width="200"
+                                    VerticalAlignment="Center"
+                                    LargeChange="2"
+                                    Maximum="10"
+                                    Minimum="0"
+                                    SmallChange="1"
+                                    TickFrequency="1"
+                                    Value="{Binding ScreenShotIgnoreStart, Mode=TwoWay}" />
+                                <TextBlock
+                                    Width="30"
+                                    Style="{StaticResource BaseTextBlock}"
+                                    Text="{Binding ElementName=ScreenShotIgnoreSlider1, Mode=OneWay, Path=Value}" />
+                                <TextBlock Style="{StaticResource BaseTextBlock}" Text="{x:Static lang:Resources.SkipBegin}" />
+                            </StackPanel>
+                            <StackPanel Margin="20,5" Orientation="Horizontal">
+
+                                <Slider
+                                    x:Name="ScreenShotIgnoreSlider2"
+                                    Width="200"
+                                    VerticalAlignment="Center"
+                                    LargeChange="2"
+                                    Maximum="10"
+                                    Minimum="0"
+                                    SmallChange="1"
+                                    TickFrequency="1"
+                                    Value="{Binding ScreenShotIgnoreEnd, Mode=TwoWay}" />
+                                <TextBlock
+                                    Width="30"
+                                    Style="{StaticResource BaseTextBlock}"
+                                    Text="{Binding ElementName=ScreenShotIgnoreSlider2, Mode=OneWay, Path=Value}" />
+                                <TextBlock Style="{StaticResource BaseTextBlock}" Text="{x:Static lang:Resources.SkipEnd}" />
+                            </StackPanel>
+                        </StackPanel>
+                    </chao:TogglePanel>
+
+                    <chao:TogglePanel
+                        Grid.Column="1"
+                        Margin="10,0,0,0"
+                        Padding="0,5"
+                        FontSize="16"
+                        Header="GIF"
+                        IsExpanded="True"
+                        LineWidth="0"
+                        Style="{StaticResource BaseTogglePanel}">
+                        <StackPanel Orientation="Vertical">
+                            <CheckBox
+                                Margin="10"
+                                HorizontalAlignment="Left"
+                                Content="{x:Static lang:Resources.SkipExistGif}"
+                                IsChecked="{Binding SkipExistGif, Mode=TwoWay}" />
+
+
+                            <WrapPanel
+                                Margin="15,5"
+                                HorizontalAlignment="Left"
+                                Orientation="Horizontal">
+                                <Label Content="{x:Static lang:Resources.Resolution}" Style="{StaticResource InfoLabel}" />
+                                <Slider
+                                    x:Name="GifSlider1"
+                                    Width="200"
+                                    Margin="5,0"
+                                    VerticalAlignment="Center"
+                                    Cursor="Hand"
+                                    IsSnapToTickEnabled="True"
+                                    LargeChange="10"
+                                    Maximum="1980"
+                                    Minimum="50"
+                                    SmallChange="1"
+                                    TickFrequency="1"
+                                    TickPlacement="None"
+                                    Value="{Binding GifWidth, Mode=TwoWay}" />
+                                <TextBlock Style="{StaticResource BaseTextBlock}" Text="{Binding Value, ElementName=GifSlider1, StringFormat={}{0} px}" />
+                                <Slider
+                                    x:Name="GifSlider2"
+                                    Width="200"
+                                    Margin="5,0"
+                                    VerticalAlignment="Center"
+                                    Cursor="Hand"
+                                    IsEnabled="{Binding GifAutoHeight, Converter={StaticResource OppositeBooleanConverter}}"
+                                    IsSnapToTickEnabled="True"
+                                    LargeChange="10"
+                                    Maximum="1080"
+                                    Minimum="50"
+                                    SmallChange="1"
+                                    TickFrequency="1"
+                                    TickPlacement="None"
+                                    Value="{Binding GifHeight, Mode=TwoWay}" />
+                                <TextBlock Style="{StaticResource BaseTextBlock}" Text="{Binding Value, ElementName=GifSlider2, StringFormat={}{0} px}" />
+                                <CheckBox
+                                    Margin="20,10"
+                                    Content="{x:Static lang:Resources.AutoHeight}"
+                                    IsChecked="{Binding GifAutoHeight, Mode=TwoWay}" />
+
+
+                            </WrapPanel>
+
+                            <WrapPanel
+                                Margin="15,5"
+                                HorizontalAlignment="Left"
+                                Orientation="Horizontal">
+                                <Label Content="{x:Static lang:Resources.Duration}" Style="{StaticResource InfoLabel}" />
+                                <Slider
+                                    x:Name="GifDurationSlider1"
+                                    Width="200"
+                                    Margin="5,0"
+                                    VerticalAlignment="Center"
+                                    Cursor="Hand"
+                                    IsSnapToTickEnabled="True"
+                                    LargeChange="2"
+                                    Maximum="20"
+                                    Minimum="1"
+                                    SmallChange="1"
+                                    TickFrequency="1"
+                                    TickPlacement="None"
+                                    Value="{Binding GifDuration, Mode=TwoWay}" />
+                                <TextBlock Style="{StaticResource BaseTextBlock}" Text="{Binding Value, ElementName=GifDurationSlider1, StringFormat={}{0} s}" />
+                            </WrapPanel>
+                        </StackPanel>
+                    </chao:TogglePanel>
+
+
 
                 </StackPanel>
             </TabItem>
@@ -2451,7 +2452,7 @@
                             TickFrequency="0.05"
                             TickPlacement="None"
                             Value="{Binding MovieOpacity, Mode=TwoWay, Source={x:Static p:Settings.Default}}" />
-                        <Label Content="{Binding MovieOpacity, Mode=OneWay, Source={x:Static p:Settings.Default}}" Style="{StaticResource InfoLabel}" />
+                        <Label Content="{Binding MovieOpacity, Mode=OneWay, Source={x:Static p:Settings.Default}, Converter={StaticResource RoundNumberConverter}, ConverterParameter=2}" Style="{StaticResource InfoLabel}" />
 
                     </WrapPanel>
 
@@ -2705,6 +2706,7 @@
                 HorizontalAlignment="Left"
                 Click="Restore"
                 Content="{x:Static lang:Resources.Restore}"
+                IsEnabled="False"
                 Style="{StaticResource ButtonStyleFill}" />
 
             <Button

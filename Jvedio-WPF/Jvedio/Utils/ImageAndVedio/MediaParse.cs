@@ -44,8 +44,8 @@ namespace Jvedio
         /// <returns></returns>
         public static string[] GetCutOffArray(string path)
         {
-            if (Properties.Settings.Default.ScreenShotNum <= 0 || Properties.Settings.Default.ScreenShotNum > 30) Properties.Settings.Default.ScreenShotNum = 10;
-            string[] result = new string[Properties.Settings.Default.ScreenShotNum];
+            if (GlobalConfig.FFmpegConfig.ScreenShotNum <= 0 || GlobalConfig.FFmpegConfig.ScreenShotNum > 30) GlobalConfig.FFmpegConfig.ScreenShotNum = 10;
+            string[] result = new string[GlobalConfig.FFmpegConfig.ScreenShotNum];
             string Duration = GetVideoDuration(path);
             double Second = DurationToSecond(Duration);
             Second = GetProperSecond(Second);
@@ -70,10 +70,10 @@ namespace Jvedio
             else
             {
                 // 按照秒 n 等分
-                uint splitLength = (uint)(Second / Properties.Settings.Default.ScreenShotNum);
+                uint splitLength = (uint)(Second / GlobalConfig.FFmpegConfig.ScreenShotNum);
                 for (int i = 0; i < result.Length; i++)
                 {
-                    result[i] = SecondToDuration(Properties.Settings.Default.ScreenShotIgnoreStart * 60 + splitLength * i);//加上跳过开头的部分
+                    result[i] = SecondToDuration(GlobalConfig.FFmpegConfig.ScreenShotIgnoreStart * 60 + splitLength * i);//加上跳过开头的部分
                 }
                 return result;
             }
@@ -89,13 +89,13 @@ namespace Jvedio
         public static double GetProperSecond(double second)
         {
             double Second = second;
-            if (Properties.Settings.Default.ScreenShotIgnoreStart > 0)
+            if (GlobalConfig.FFmpegConfig.ScreenShotIgnoreStart > 0)
             {
-                Second -= Properties.Settings.Default.ScreenShotIgnoreStart * 60;
+                Second -= GlobalConfig.FFmpegConfig.ScreenShotIgnoreStart * 60;
             }
-            if (Properties.Settings.Default.ScreenShotIgnoreEnd > 0)
+            if (GlobalConfig.FFmpegConfig.ScreenShotIgnoreEnd > 0)
             {
-                Second -= Properties.Settings.Default.ScreenShotIgnoreEnd * 60;
+                Second -= GlobalConfig.FFmpegConfig.ScreenShotIgnoreEnd * 60;
             }
             return Second;
         }

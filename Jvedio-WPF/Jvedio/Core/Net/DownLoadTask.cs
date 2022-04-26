@@ -26,19 +26,13 @@ using Jvedio.CommonNet.Entity;
 
 namespace Jvedio.Core.Net
 {
-    public class DownLoadTask : ITask, INotifyPropertyChanged
+    public class DownLoadTask : AbstractTask
     {
 
-        public Stopwatch stopwatch { get; set; }
-        public bool Success { get; set; }
-        public bool Canceld { get; set; }
+        /// <summary>
+        /// 是否下载预览图
+        /// </summary>
         public bool DownloadPreview { get; set; }
-
-        protected CancellationTokenSource tokenCTS;
-        protected CancellationToken token;
-
-        public event EventHandler onError;
-        public event EventHandler onCanceled;
         public event EventHandler onDownloadSuccess;
         public event EventHandler onDownloadPreview;
 
@@ -51,28 +45,6 @@ namespace Jvedio.Core.Net
             public static int SMALL_IMAGE = 50;
         }
 
-        protected virtual void OnError(EventArgs e)
-        {
-            EventHandler error = onError;
-            error?.Invoke(this, e);
-
-        }
-
-        public List<string> Logs = new List<string>();
-        private TaskLogger logger { get; set; }
-
-
-
-
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
         public DownLoadTask(Video video, bool downloadPreview = false, bool overrideInfo = false) : this(video.toMetaData())
         {
             Title = string.IsNullOrEmpty(video.VID) ? video.Title : video.VID;
@@ -82,24 +54,10 @@ namespace Jvedio.Core.Net
 
 
 
-        public DownLoadTask(MetaData data)
+        public DownLoadTask(MetaData data) : base()
         {
             DataID = data.DataID;
             DataType = data.DataType;
-            Status = System.Threading.Tasks.TaskStatus.WaitingToRun;
-            CreateTime = DateHelper.Now();
-
-            tokenCTS = new CancellationTokenSource();
-            tokenCTS.Token.Register(() =>
-            {
-                Console.WriteLine("取消任务");
-                onCanceled?.Invoke(this, null);
-            });
-            token = tokenCTS.Token;
-
-            stopwatch = new Stopwatch();
-            logger = new TaskLogger(Logs);
-
         }
 
         public override bool Equals(object obj)
@@ -122,145 +80,8 @@ namespace Jvedio.Core.Net
         public string Title { get; set; }
         public bool OverrideInfo { get; set; }//强制下载覆盖信息
 
-        #region "property"
 
-
-        public TaskStatus _Status;
-        public TaskStatus Status
-        {
-
-            get
-            {
-                return _Status;
-            }
-            set
-            {
-                _Status = value;
-                if (STATUS_TO_TEXT_DICT.ContainsKey(value))
-                    StatusText = STATUS_TO_TEXT_DICT[value];
-                OnPropertyChanged();
-            }
-        }
-        public string _Message;
-        public string Message
-        {
-
-            get
-            {
-                return _Message;
-            }
-            set
-            {
-                _Message = value;
-                OnPropertyChanged();
-            }
-        }
-
-
-
-        public static Dictionary<TaskStatus, string> STATUS_TO_TEXT_DICT = new Dictionary<TaskStatus, string>()
-        {
-
-            {TaskStatus.WaitingToRun,"等待中..."},
-            {TaskStatus.Running,"下载中..."},
-            {TaskStatus.Canceled,"已取消"},
-            {TaskStatus.RanToCompletion,"已完成"},
-        };
-
-        public string _StatusText;
-        public string StatusText
-        {
-
-            get
-            {
-                return _StatusText;
-            }
-            set
-            {
-                _StatusText = value;
-                logger?.Info(value);
-                OnPropertyChanged();
-            }
-        }
-
-
-        public long _ElapsedMilliseconds;
-        public long ElapsedMilliseconds
-        {
-
-            get
-            {
-                return _ElapsedMilliseconds;
-            }
-            set
-            {
-                _ElapsedMilliseconds = value;
-                OnPropertyChanged();
-            }
-        }
-        public float _Progress;
-        public float Progress
-        {
-
-            get
-            {
-                return _Progress;
-            }
-            set
-            {
-                _Progress = value;
-                OnPropertyChanged();
-            }
-        }
-
-
-
-
-        /// <summary>
-        /// 用于指示下载任务是否进行中
-        /// </summary>
-        public bool _Running;
-        public bool Running
-        {
-
-            get
-            {
-                return _Running;
-            }
-            set
-            {
-                _Running = value;
-                OnPropertyChanged();
-            }
-        }
-
-
-        public string _CreateTime;
-        public string CreateTime
-        {
-
-            get
-            {
-                return _CreateTime;
-            }
-            set
-            {
-                _CreateTime = value;
-                OnPropertyChanged();
-            }
-        }
-
-        #endregion
-
-        public void Start()
-        {
-            Status = TaskStatus.Running;
-            CreateTime = DateHelper.Now();
-            Running = true;
-            doWrok();
-        }
-
-        public virtual void doWrok()
+        public override void doWrok()
         {
             Task.Run(async () =>
             {
@@ -332,6 +153,7 @@ namespace Jvedio.Core.Net
                     if (downloadInfo)
                     {
                         logger.Info($"保存入库");
+                        // 并发锁
                         videoMapper.updateById(video);
                         metaDataMapper.updateById(video.toMetaData());
                         // 保存 dataCode
@@ -344,6 +166,10 @@ namespace Jvedio.Core.Net
                             urlCode.WebType = dict["WebType"].ToString();
                             urlCodeMapper.insert(urlCode, InsertMode.Replace);
                         }
+                        // 保存 nfo
+                        video.SaveNfo();
+
+
                         onDownloadSuccess?.Invoke(this, null);
                     }
                     else
@@ -555,14 +381,7 @@ namespace Jvedio.Core.Net
 
 
 
-        private void finalizeWithCancel()
-        {
-            Status = TaskStatus.Canceled;// 抛出异常的任务都自动取消
-            stopwatch.Stop();
-            ElapsedMilliseconds = stopwatch.ElapsedMilliseconds;
-            Success = false;
-            logger.Info($"总计耗时：{ElapsedMilliseconds} ms");
-        }
+
 
 
         private object getInfoFromExist(string type, Video video, Dictionary<string, object> dict)
@@ -593,46 +412,6 @@ namespace Jvedio.Core.Net
                 }
             }
             return null;
-        }
-
-
-        public void CheckStatus()
-        {
-            if (Status == TaskStatus.Canceled)
-            {
-                stopwatch.Stop();
-                ElapsedMilliseconds = stopwatch.ElapsedMilliseconds;
-                throw new TaskCanceledException();
-            }
-
-        }
-
-
-        public void Stop()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Pause()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Cancel()
-        {
-            if (Status == TaskStatus.Running || Status == TaskStatus.WaitingToRun)
-            {
-                Status = TaskStatus.Canceled;
-                Running = false;
-                tokenCTS.Cancel();
-                Canceld = true;
-                logger.Info("已取消");
-            }
-        }
-
-        public void Finished()
-        {
-            throw new NotImplementedException();
         }
     }
 }

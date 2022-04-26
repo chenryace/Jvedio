@@ -115,26 +115,6 @@ namespace Jvedio
         }
 
 
-        public static void SaveInfo(Dictionary<string, string> Info, string id, int vt = 1)
-        {
-            if (Info == null || string.IsNullOrEmpty(id)) return;
-            //保存信息
-            if (!Info.ContainsKey("id")) Info.Add("id", id);
-            if (!Info.ContainsKey("vediotype")) Info.Add("vediotype", vt.ToString());
-            DataBase.UpdateInfoFromNet(Info);
-            DetailMovie detailMovie = DataBase.SelectDetailMovieById(id);
-            SaveNfo(detailMovie);
-        }
-
-        public static void SavePartialInfo(Dictionary<string, string> Info, string key, string id)
-        {
-            //保存信息
-            if (!Info.ContainsKey("id")) Info.Add("id", id);
-            if (!Info.ContainsKey(key)) return;
-            DataBase.UpdateMovieByID(id, key, Info[key], "String");
-            DetailMovie detailMovie = DataBase.SelectDetailMovieById(id);
-            SaveNfo(detailMovie);
-        }
 
         public static string Unicode2String(string unicode)
         {
@@ -143,33 +123,7 @@ namespace Jvedio
         }
 
 
-        public static void SaveNfo(DetailMovie detailMovie)
-        {
-            if (!Properties.Settings.Default.SaveInfoToNFO) return;
-            if (Directory.Exists(Properties.Settings.Default.NFOSavePath))
-            {
-                //固定位置
-                string savepath = Path.Combine(Properties.Settings.Default.NFOSavePath, $"{detailMovie.id.ToProperFileName()}.nfo");
-                if (!File.Exists(savepath))
-                    NFOHelper.SaveToNFO(detailMovie, savepath);
-                else if (Properties.Settings.Default.OverriteNFO)
-                    NFOHelper.SaveToNFO(detailMovie, savepath);
-            }
-            else
-            {
-                //与视频同路径，视频存在才行
-                string path = detailMovie.filepath;
-                if (File.Exists(path))
-                {
-                    string savepath = Path.Combine(new FileInfo(path).DirectoryName, $"{detailMovie.id.ToProperFileName()}.nfo");
-                    if (!File.Exists(savepath))
-                        NFOHelper.SaveToNFO(detailMovie, savepath);
-                    else if (Properties.Settings.Default.OverriteNFO)
-                        NFOHelper.SaveToNFO(detailMovie, savepath);
-                }
-            }
 
-        }
 
 
         /// <summary>

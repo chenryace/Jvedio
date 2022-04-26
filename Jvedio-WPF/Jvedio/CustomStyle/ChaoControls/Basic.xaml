@@ -22,7 +22,7 @@
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="Height" Value="auto" />
         <Setter Property="ShowClearButton" Value="True" />
-        <Setter Property="FontFamily" Value="Times New Romans" />
+        <Setter Property="FontFamily" Value="微软雅黑" />
         <Setter Property="FontSize" Value="14" />
         <Setter Property="PlaceHolder" Value="" />
         <Setter Property="Foreground" Value="{DynamicResource Global.Foreground}" />

@@ -103,7 +103,7 @@ namespace Jvedio
         {
             return await Task.Run(() =>
             {
-                if (!File.Exists(Properties.Settings.Default.FFMPEG_Path)) return false;
+                if (!File.Exists(GlobalConfig.FFmpegConfig.Path)) return false;
 
                 Movie movie = DataBase.SelectMovieByID(id);
                 int SemaphoreNum = vieModel.ScreenShot_Num;
@@ -141,7 +141,7 @@ namespace Jvedio
 
         public void BeginScreenShot(object o)
         {
-            if (!File.Exists(Properties.Settings.Default.FFMPEG_Path))
+            if (!File.Exists(GlobalConfig.FFmpegConfig.Path))
             {
                 return;
             }
@@ -161,7 +161,7 @@ namespace Jvedio
             p.StartInfo.RedirectStandardError = true;//重定向标准错误输出
             p.StartInfo.CreateNoWindow = true;//不显示程序窗口
             p.Start();//启动程序
-            string str = $"\"{Properties.Settings.Default.FFMPEG_Path}\" -y -threads 1 -ss {cutoffTime} -i \"{filePath}\" -f image2 -frames:v 1 \"{ScreenShotPath}\\ScreenShot-{i.PadLeft(2, '0')}.jpg\"";
+            string str = $"\"{GlobalConfig.FFmpegConfig.Path}\" -y -threads 1 -ss {cutoffTime} -i \"{filePath}\" -f image2 -frames:v 1 \"{ScreenShotPath}\\ScreenShot-{i.PadLeft(2, '0')}.jpg\"";
             p.StandardInput.WriteLine(str + "&exit");
             p.StandardInput.AutoFlush = true;
             _ = p.StandardOutput.ReadToEnd();
@@ -196,7 +196,7 @@ namespace Jvedio
                 if (!Directory.Exists(GifSavePath)) Directory.CreateDirectory(GifSavePath);
                 GifSavePath += id + ".gif";
                 if (string.IsNullOrEmpty(cutoffTime)) return false;
-                if (!File.Exists(Properties.Settings.Default.FFMPEG_Path)) return false;
+                if (!File.Exists(GlobalConfig.FFmpegConfig.Path)) return false;
 
                 System.Diagnostics.Process p = new System.Diagnostics.Process();
                 p.StartInfo.FileName = "cmd.exe";
@@ -210,7 +210,7 @@ namespace Jvedio
                 int width = vieModel.Gif_Width;
                 int height = vieModel.Gif_Height;
 
-                string str = $"\"{Properties.Settings.Default.FFMPEG_Path}\" -y -t {vieModel.Gif_Length} -ss {cutoffTime} -i \"{filePath}\" -s {width}x{height}  \"{GifSavePath}\"";
+                string str = $"\"{GlobalConfig.FFmpegConfig.Path}\" -y -t {vieModel.Gif_Length} -ss {cutoffTime} -i \"{filePath}\" -s {width}x{height}  \"{GifSavePath}\"";
                 Console.WriteLine(str);
                 p.StandardInput.WriteLine(str + "&exit");
                 p.StandardInput.AutoFlush = true;
@@ -489,7 +489,7 @@ namespace Jvedio
 
             int idx = TabControl.SelectedIndex;
 
-            if ((idx == 1 || idx == 2) && !File.Exists(Properties.Settings.Default.FFMPEG_Path))
+            if ((idx == 1 || idx == 2) && !File.Exists(GlobalConfig.FFmpegConfig.Path))
             {
                 MessageCard.Error(Jvedio.Language.Resources.Message_SetFFmpeg);
                 return;

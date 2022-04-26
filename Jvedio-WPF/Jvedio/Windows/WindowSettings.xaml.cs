@@ -41,7 +41,8 @@ namespace Jvedio
     public partial class Settings : ChaoControls.Style.BaseWindow
     {
         private Main windowMain = GetWindowByName("Main") as Main;
-        public const string ffmpeg_url = "https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-full.7z";
+        //public const string ffmpeg_url = "https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-full.7z";
+        public const string ffmpeg_url = "https://www.gyan.dev/ffmpeg/builds/";
         public static string GrowlToken = "SettingsGrowl";
         public DetailMovie SampleMovie = new DetailMovie()
         {
@@ -434,7 +435,7 @@ namespace Jvedio
                 num = int.Parse(textBox.Text);
                 if (num > 0 & num <= 20)
                 {
-                    Properties.Settings.Default.ScreenShotNum = num;
+                    GlobalConfig.FFmpegConfig.ScreenShotNum = num;
                     Properties.Settings.Default.Save();
                 }
             }
@@ -526,10 +527,10 @@ namespace Jvedio
 
         private void SaveSettings(object sender, RoutedEventArgs e)
         {
-            if (Properties.Settings.Default.Opacity_Main >= 0.5)
-                App.Current.Windows[0].Opacity = Properties.Settings.Default.Opacity_Main;
-            else
-                App.Current.Windows[0].Opacity = 1;
+            //if (Properties.Settings.Default.Opacity_Main >= 0.5)
+            //    App.Current.Windows[0].Opacity = Properties.Settings.Default.Opacity_Main;
+            //else
+            //    App.Current.Windows[0].Opacity = 1;
 
             // 保存扫描库
 
@@ -595,7 +596,7 @@ namespace Jvedio
                 if (File.Exists(exePath))
                 {
                     if (new FileInfo(exePath).Name.ToLower() == "ffmpeg.exe")
-                        Properties.Settings.Default.FFMPEG_Path = exePath;
+                        vieModel.FFMPEG_Path = exePath;
                 }
             }
         }
@@ -617,47 +618,46 @@ namespace Jvedio
 
 
 
-        private void SetLanguage(object sender, RoutedEventArgs e)
+        public void SetLanguage()
         {
             //https://blog.csdn.net/fenglailea/article/details/45888799
-            Properties.Settings.Default.Language = (sender as RadioButton).Content.ToString();
-            Properties.Settings.Default.Save();
-            string language = Properties.Settings.Default.Language;
+
+            long language = vieModel.SelectedLanguage;
             string hint = "";
-            if (language == "English")
+            if (language == 1)
                 hint = "Take effect after restart";
-            else if (language == "日本語")
+            else if (language == 2)
                 hint = "再起動後に有効になります";
             else
                 hint = "重启后生效";
-            ChaoControls.Style.MessageCard.Success(hint);
-
-
-            //SetLanguageDictionary();
-
-
+            MessageCard.Success(hint);
+            SetLanguageDictionary();
         }
 
         private void SetLanguageDictionary()
         {
             //设置语言
-            string language = Jvedio.Properties.Settings.Default.Language;
+            long language = GlobalConfig.Settings.SelectedLanguage;
             switch (language)
             {
-                case "日本語":
-                    Jvedio.Language.Resources.Culture = new System.Globalization.CultureInfo("ja-JP");
-                    break;
-                case "中文":
+
+                case 0:
                     Jvedio.Language.Resources.Culture = new System.Globalization.CultureInfo("zh-CN");
                     break;
-                case "English":
+                case 1:
                     Jvedio.Language.Resources.Culture = new System.Globalization.CultureInfo("en-US");
+                    break;
+
+                case 2:
+                    Jvedio.Language.Resources.Culture = new System.Globalization.CultureInfo("ja-JP");
                     break;
                 default:
                     Jvedio.Language.Resources.Culture = new System.Globalization.CultureInfo("en-US");
                     break;
             }
-            //Jvedio.Language.Resources.Culture.ClearCachedData();
+            Jvedio.Language.Resources.Culture.ClearCachedData();
+            Properties.Settings.Default.SelectedLanguage = vieModel.SelectedLanguage;
+            Properties.Settings.Default.Save();
         }
 
         private void Border_MouseLeftButtonUp1(object sender, MouseButtonEventArgs e)
@@ -856,21 +856,19 @@ namespace Jvedio
             }
         }
 
-        private void Button_Click_3(object sender, RoutedEventArgs e)
+        private void SelectNfoPath(object sender, RoutedEventArgs e)
         {
             //选择NFO存放位置
             var path = FileHelper.SelectPath(this);
             if (Directory.Exists(path))
             {
-                if (path.Substring(path.Length - 1, 1) != "\\") { path = path + "\\"; }
-                Properties.Settings.Default.NFOSavePath = path;
-
+                if (!path.EndsWith("\\")) path = path + "\\";
+                vieModel.NFOSavePath = path;
             }
             else
             {
-                ChaoControls.Style.MessageCard.Error(Jvedio.Language.Resources.Message_CanNotBeNull);
+                MessageCard.Error(Jvedio.Language.Resources.Message_CanNotBeNull);
             }
-
         }
 
 
@@ -964,22 +962,38 @@ namespace Jvedio
         {
             // library 需要保证 Cookies 和 UserAgent完全一致
             RequestHeader header = CrawlerServer.parseHeader(server);
-            string title = await HttpHelper.AsyncGetWebTitle(server.Url, header);
-            if (string.IsNullOrEmpty(title))
+            try
             {
+                string title = await HttpHelper.AsyncGetWebTitle(server.Url, header);
+                if (string.IsNullOrEmpty(title))
+                {
+                    server.Available = -1;
+                }
+                else
+                {
+                    server.Available = 1;
+                }
+                await Dispatcher.BeginInvoke((Action)delegate
+                {
+                    ServersDataGrid.Items.Refresh();
+                    if (!string.IsNullOrEmpty(title))
+                        MessageCard.Success(title);
+                });
+                callback.Invoke(0);
+
+            }
+            catch (WebException ex)
+            {
+                MessageCard.Error(ex.Message);
                 server.Available = -1;
+                await Dispatcher.BeginInvoke((Action)delegate
+                {
+                    ServersDataGrid.Items.Refresh();
+                });
+                callback.Invoke(0);
             }
-            else
-            {
-                server.Available = 1;
-            }
-            await Dispatcher.BeginInvoke((Action)delegate
-            {
-                ServersDataGrid.Items.Refresh();
-                if (!string.IsNullOrEmpty(title))
-                    MessageCard.Success(title);
-            });
-            callback.Invoke(0);
+
+
         }
 
 
@@ -1207,6 +1221,7 @@ namespace Jvedio
             GlobalConfig.Settings.Save();
             GlobalConfig.ProxyConfig.Save();
             GlobalConfig.ScanConfig.Save();
+            GlobalConfig.FFmpegConfig.Save();
         }
 
 
@@ -1216,6 +1231,11 @@ namespace Jvedio
             GlobalConfig.Settings.TabControlSelectedIndex = vieModel.TabControlSelectedIndex;
             GlobalConfig.Settings.OpenDataBaseDefault = vieModel.OpenDataBaseDefault;
             GlobalConfig.Settings.CloseToTaskBar = vieModel.CloseToTaskBar;
+            GlobalConfig.Settings.SelectedLanguage = vieModel.SelectedLanguage;
+            GlobalConfig.Settings.SaveInfoToNFO = vieModel.SaveInfoToNFO;
+            GlobalConfig.Settings.NFOSavePath = vieModel.NFOSavePath;
+            GlobalConfig.Settings.OverriteNFO = vieModel.OverriteNFO;
+            GlobalConfig.Settings.AutoHandleHeader = vieModel.AutoHandleHeader;
 
             GlobalConfig.Settings.PicPathMode = vieModel.PicPathMode;
             GlobalConfig.Settings.DownloadPreviewImage = vieModel.DownloadPreviewImage;
@@ -1234,6 +1254,20 @@ namespace Jvedio
             // 扫描
             GlobalConfig.ScanConfig.MinFileSize = vieModel.MinFileSize;
             GlobalConfig.ScanConfig.ScanOnStartUp = vieModel.ScanOnStartUp;
+
+            // ffmpeg
+            GlobalConfig.FFmpegConfig.Path = vieModel.FFMPEG_Path;
+            GlobalConfig.FFmpegConfig.ThreadNum = vieModel.ScreenShot_ThreadNum;
+            GlobalConfig.FFmpegConfig.TimeOut = vieModel.ScreenShot_TimeOut;
+            GlobalConfig.FFmpegConfig.ScreenShotNum = vieModel.ScreenShotNum;
+            GlobalConfig.FFmpegConfig.ScreenShotIgnoreStart = vieModel.ScreenShotIgnoreStart;
+            GlobalConfig.FFmpegConfig.ScreenShotIgnoreEnd = vieModel.ScreenShotIgnoreEnd;
+            GlobalConfig.FFmpegConfig.SkipExistGif = vieModel.SkipExistGif;
+            GlobalConfig.FFmpegConfig.GifAutoHeight = vieModel.GifAutoHeight;
+            GlobalConfig.FFmpegConfig.GifWidth = vieModel.GifWidth;
+            GlobalConfig.FFmpegConfig.GifHeight = vieModel.GifHeight;
+            GlobalConfig.FFmpegConfig.GifDuration = vieModel.GifDuration;
+
         }
 
         private void CopyFFmpegUrl(object sender, MouseButtonEventArgs e)
@@ -1546,6 +1580,8 @@ namespace Jvedio
         {
             //MessageCard.Info("在扫描时，对于视频 VID 的识别，例如填写正则为 .*钢铁侠.* 则只要文件名含有钢铁侠，");
         }
+
+
     }
 
 

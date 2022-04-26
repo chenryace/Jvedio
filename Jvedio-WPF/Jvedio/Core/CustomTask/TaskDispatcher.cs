@@ -1,13 +1,14 @@
-﻿using Priority_Queue;
+﻿using Jvedio.Core.CustomTask;
+using Priority_Queue;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Jvedio.Core.Net
+namespace Jvedio.Core.CustomTask
 {
-    public class DownloadDispatcher
+    public class TaskDispatcher<T> where T : AbstractTask
     {
 
         // 优先级
@@ -28,23 +29,23 @@ namespace Jvedio.Core.Net
         public event EventHandler onWorking;
 
         // 具有优先级的队列
-        public static SimplePriorityQueue<DownLoadTask> WaitingQueue = new SimplePriorityQueue<DownLoadTask>();
-        public static List<DownLoadTask> WorkingList = new List<DownLoadTask>();
-        public static List<DownLoadTask> DoneList = new List<DownLoadTask>();
+        public static SimplePriorityQueue<T> WaitingQueue = new SimplePriorityQueue<T>();
+        public static List<T> WorkingList = new List<T>();
+        public static List<T> DoneList = new List<T>();
 
-        private static DownloadDispatcher instance = null;
+        private static TaskDispatcher<T> instance = null;
 
-        private DownloadDispatcher() { }
+        private TaskDispatcher() { }
 
 
-        public static DownloadDispatcher createInstance()
+        public static TaskDispatcher<T> createInstance()
         {
-            if (instance == null) instance = new DownloadDispatcher();
+            if (instance == null) instance = new TaskDispatcher<T>();
             return instance;
         }
 
 
-        public void Enqueue(DownLoadTask task)
+        public void Enqueue(T task)
         {
             if (!WaitingQueue.Contains(task))
                 WaitingQueue.Enqueue(task, NORMAL_PRIORITY);
@@ -54,7 +55,7 @@ namespace Jvedio.Core.Net
         {
             Cancel = true;
             Working = false;
-            foreach (DownLoadTask task in WorkingList)
+            foreach (T task in WorkingList)
             {
                 task.Cancel();
             }
@@ -79,7 +80,7 @@ namespace Jvedio.Core.Net
                     for (int i = WorkingList.Count - 1; i >= 0; i--)
                     {
                         if (Cancel) return;
-                        DownLoadTask task = WorkingList[i];
+                        T task = WorkingList[i];
                         if (task.Status == TaskStatus.RanToCompletion || task.Status == TaskStatus.Canceled)
                         {
                             DoneList.Add(task);
@@ -90,18 +91,17 @@ namespace Jvedio.Core.Net
                     // 将等待队列中的下载任务添加到工作队列
                     while (WorkingList.Count < MAX_TASK_COUNT && WaitingQueue.Count > 0)
                     {
-                        DownLoadTask task = WaitingQueue.Dequeue();
+                        T task = WaitingQueue.Dequeue();
                         if (task.Status == TaskStatus.WaitingToRun)
                             WorkingList.Add(task);
                         else
                             DoneList.Add(task);
                     }
 
-                    foreach (DownLoadTask task in WorkingList)
+                    foreach (T task in WorkingList)
                     {
                         if (!task.Running && task.Status != TaskStatus.Canceled)
                         {
-                            Console.WriteLine($" DataID ={ task.DataID} 将开始运行");
                             task.Start();
                         }
                     }

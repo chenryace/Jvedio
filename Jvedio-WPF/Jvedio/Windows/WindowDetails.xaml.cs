@@ -274,7 +274,7 @@ namespace Jvedio
 
         public async void GetScreenShot(object sender, RoutedEventArgs e)
         {
-            //if (!File.Exists(Properties.Settings.Default.FFMPEG_Path)) { ChaoControls.Style.MessageCard.Info(Jvedio.Language.Resources.Message_SetFFmpeg); return; }
+            //if (!File.Exists(GlobalConfig.FFmpegConfig.Path)) { ChaoControls.Style.MessageCard.Info(Jvedio.Language.Resources.Message_SetFFmpeg); return; }
 
             //if (((MenuItem)(sender)).Parent is MenuItem mnu)
             //{

@@ -44,7 +44,7 @@ namespace Jvedio
             TaskScheduler.UnobservedTaskException += TaskScheduler_UnobservedTaskException;
             //非UI线程未捕获异常处理事件
             AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
-            //SetLanguageDictionary();
+            SetLanguageDictionary();
             base.OnStartup(e);
         }
 
@@ -61,18 +61,18 @@ namespace Jvedio
         private void SetLanguageDictionary()
         {
             //设置语言
-            string language = Jvedio.Properties.Settings.Default.Language;
+            long language = Jvedio.Properties.Settings.Default.SelectedLanguage;
             string lang = "en-US";
             switch (language)
             {
 
-                case "中文":
+                case 0:
                     lang = "zh-CN";
                     break;
-                case "English":
+                case 1:
                     lang = "en-US";
                     break;
-                case "日本語":
+                case 2:
                     lang = "ja-JP";
                     break;
                 default:
@@ -81,22 +81,22 @@ namespace Jvedio
                     if (name == "ja-JP".ToUpper())
                     {
                         lang = "ja-JP";
-                        Jvedio.Properties.Settings.Default.Language = "日本語";
+                        Jvedio.Properties.Settings.Default.SelectedLanguage = 2;
                     }
                     else if (name == "zh-CN".ToUpper())
                     {
                         lang = "zh-CN";
-                        Jvedio.Properties.Settings.Default.Language = "中文";
+                        Jvedio.Properties.Settings.Default.SelectedLanguage = 0;
                     }
                     else if (name == "en-US".ToUpper())
                     {
                         lang = "en-US";
-                        Jvedio.Properties.Settings.Default.Language = "English";
+                        Jvedio.Properties.Settings.Default.SelectedLanguage = 1;
                     }
                     else
                     {
                         lang = "en-US";
-                        Jvedio.Properties.Settings.Default.Language = "English";
+                        Jvedio.Properties.Settings.Default.SelectedLanguage = 1;
                     }
                     break;
             }

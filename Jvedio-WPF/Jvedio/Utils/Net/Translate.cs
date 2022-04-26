@@ -32,17 +32,17 @@ namespace Jvedio
         {
             string from = "auto";
             string to = "zh-CHS";
-            string language = Jvedio.Properties.Settings.Default.Language;
+            long language = GlobalConfig.Settings.SelectedLanguage;
             switch (language)
             {
 
-                case "中文":
+                case 0:
                     to = "zh-CHS";
                     break;
-                case "English":
+                case 1:
                     to = "en";
                     break;
-                case "日本語":
+                case 2:
                     to = "ja";
                     break;
                 default:
