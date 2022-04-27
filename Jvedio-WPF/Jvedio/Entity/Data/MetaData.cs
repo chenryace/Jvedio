@@ -172,6 +172,12 @@ namespace Jvedio.Entity
             if (image == null) image = GlobalVariable.DefaultBigImage;
             data.ViewImage = image;
         }
+        public static void SetImage(ref Video video, string imgPath)
+        {
+            BitmapImage image = ImageProcess.ReadImageFromFile(imgPath);
+            if (image == null) image = GlobalVariable.DefaultBigImage;
+            video.ViewImage = image;
+        }
         public static void handleEmpty(ref MetaData data)
         {
             if (Properties.Settings.Default.ShowFileNameIfTitleEmpty

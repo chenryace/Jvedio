@@ -200,9 +200,11 @@ namespace Jvedio.Core.SimpleORM
             using (SQLiteCommand cmd = new SQLiteCommand(sql))
             {
                 cmd.Connection = cn;
+
                 Log.Info(sql);
                 using (SQLiteDataReader reader = cmd.ExecuteReader())
                 {
+
                     while (reader.Read())
                     {
                         count = reader.GetInt64(0);

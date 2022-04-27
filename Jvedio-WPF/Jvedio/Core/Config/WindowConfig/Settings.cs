@@ -36,6 +36,7 @@ namespace Jvedio.Core.WindowConfig
         public long TabControlSelectedIndex { get; set; }
         public bool OpenDataBaseDefault { get; set; }
         public bool CloseToTaskBar { get; set; }
+        public bool AutoGenScreenShot { get; set; }
         public long DefaultDBID { get; set; }
 
         /// <summary>
@@ -45,6 +46,28 @@ namespace Jvedio.Core.WindowConfig
         public bool SaveInfoToNFO { get; set; }
         public bool OverriteNFO { get; set; }
         public string NFOSavePath { get; set; }
+        public bool _TeenMode = true;
+        public bool TeenMode
+        {
+
+            get { return _TeenMode; }
+            set { _TeenMode = value; }
+        }
+        public bool _AutoAddPrefix = true;
+        public bool AutoAddPrefix
+        {
+
+            get { return _AutoAddPrefix; }
+            set { _AutoAddPrefix = value; }
+        }
+        public string _Prefix = "";
+        public string Prefix
+        {
+
+            get { return _Prefix; }
+            set { _Prefix = value; }
+        }
+
 
 
     }

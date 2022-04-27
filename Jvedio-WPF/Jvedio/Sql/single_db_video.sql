@@ -21,6 +21,9 @@
 -- LastScanDate 最新一次扫描该资源的日期
 -- CreateDate 数据创建时间
 -- UpdateDate 最近时间
+
+-- 索引说明
+-- 给一些经常排序的字段添加索引：Grade,LastScanDate,FirstScanDate,ReleaseDate,ViewDate
 drop table if exists metadata;
 BEGIN;
 create table if not exists metadata (
@@ -48,13 +51,19 @@ create table if not exists metadata (
     CreateDate VARCHAR(30) DEFAULT(STRFTIME('%Y-%m-%d %H:%M:%S', 'NOW', 'localtime')),
     UpdateDate VARCHAR(30) DEFAULT(STRFTIME('%Y-%m-%d %H:%M:%S', 'NOW', 'localtime'))
 );
-CREATE INDEX metadata_idx_DBId_DataID ON metadata (DBId,DataID);
-CREATE INDEX metadata_idx_ReleaseDate ON metadata (ReleaseDate);
-CREATE INDEX metadata_idx_DataType ON metadata (DBId,DataType);
+CREATE INDEX metadata_idx_DataID ON metadata (DataID);
+CREATE INDEX metadata_idx_DBId_DataID ON metadata (DBId,DataType);
+
 CREATE INDEX metadata_idx_Hash ON metadata (Hash);
-CREATE INDEX metadata_idx_ViewDate ON metadata (ViewDate);
-CREATE INDEX metadata_idx_FirstScanDate ON metadata (FirstScanDate);
-CREATE INDEX metadata_idx_LastScanDate ON metadata (LastScanDate);
+CREATE INDEX metadata_idx_DBId_Hash ON metadata (DBId,Hash);
+CREATE INDEX metadata_idx_DBId_DataType_Hash ON metadata (DBId,DataType,Hash);
+
+CREATE INDEX metadata_idx_DBId_DataType_ReleaseDate ON metadata (DBId,DataType,ReleaseDate);
+CREATE INDEX metadata_idx_DBId_DataType_FirstScanDate ON metadata (DBId,DataType,FirstScanDate);
+CREATE INDEX metadata_idx_DBId_DataType_LastScanDate ON metadata (DBId,DataType,LastScanDate);
+CREATE INDEX metadata_idx_DBId_DataType_Grade ON metadata (DBId,DataType,Grade);
+CREATE INDEX metadata_idx_DBId_DataType_Size ON metadata (DBId,DataType,Size);
+CREATE INDEX metadata_idx_DBId_DataType_ViewDate ON metadata (DBId,DataType,ViewDate);
 COMMIT;
 
 
@@ -97,14 +106,14 @@ CREATE INDEX metadata_video_idx_VideoType ON metadata_video (VideoType);
 COMMIT;
 
 
-insert into metadata( Title, Size, Path, ReleaseDate, ReleaseYear, ViewCount, DataType, Rating, RatingCount, FavoriteCount, Genre, Tag, Grade, Label )
-values
-('逃学威龙1',1024,'D:\逃学威龙1.mp4','1991-07-18',1991,0,0,4.5,1573,2721,'搞笑/休闲/警察/学校','',0.0,'无厘头/美女'),
-('逃学威龙2',1024,'D:\逃学威龙2.mp4','1991-07-18',1991,0,0,4.5,1573,2721,'搞笑/休闲/警察/学校','',0.0,'无厘头/美女'),
-('逃学威龙3-龙过鸡年',1024,'D:\逃学威龙3-龙过鸡年.mp4','1991-07-18',1991,0,0,4.5,1573,2721,'搞笑/休闲/警察/学校','',0.0,'无厘头/美女');
+-- insert into metadata( Title, Size, Path, ReleaseDate, ReleaseYear, ViewCount, DataType, Rating, RatingCount, FavoriteCount, Genre, Tag, Grade, Label )
+-- values
+-- ('逃学威龙1',1024,'D:\逃学威龙1.mp4','1991-07-18',1991,0,0,4.5,1573,2721,'搞笑/休闲/警察/学校','',0.0,'无厘头/美女'),
+-- ('逃学威龙2',1024,'D:\逃学威龙2.mp4','1991-07-18',1991,0,0,4.5,1573,2721,'搞笑/休闲/警察/学校','',0.0,'无厘头/美女'),
+-- ('逃学威龙3-龙过鸡年',1024,'D:\逃学威龙3-龙过鸡年.mp4','1991-07-18',1991,0,0,4.5,1573,2721,'搞笑/休闲/警察/学校','',0.0,'无厘头/美女');
 
-insert into metadata_video(DataID,VID,Director,Country,Studio,Plot,Outline,Duration,PreviewImages,ExtraInfo)
-values(1,'逃学威龙1','陈嘉上/王晶','中国','永盛电影制作有限公司','','',101,'D:\预览图\逃学威龙','{"外文名":"Fight Back to School","类型":"喜剧","色彩":"彩色"}');
+-- insert into metadata_video(DataID,VID,Director,Country,Studio,Plot,Outline,Duration,PreviewImages,ExtraInfo)
+-- values(1,'逃学威龙1','陈嘉上/王晶','中国','永盛电影制作有限公司','','',101,'D:\预览图\逃学威龙','{"外文名":"Fight Back to School","类型":"喜剧","色彩":"彩色"}');
 
 
 
@@ -122,7 +131,7 @@ create table metadata_to_translation(
 CREATE INDEX metadata_to_translation_idx_DataID_FieldType ON metadata_to_translation (DataID,FieldType);
 COMMIT;
 
-
+-- 标记转换表
 drop table if exists metadata_to_tagstamp;
 BEGIN;
 create table metadata_to_tagstamp(
@@ -135,7 +144,7 @@ CREATE INDEX metadata_to_tagstamp_idx_DataID ON metadata_to_tagstamp (DataID);
 CREATE INDEX metadata_to_tagstamp_idx_TagID ON metadata_to_tagstamp (TagID);
 COMMIT;
 
-
+-- 标签转换表
 drop table if exists metadata_to_label;
 BEGIN;
 create table metadata_to_label(

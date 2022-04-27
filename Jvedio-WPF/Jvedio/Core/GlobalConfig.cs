@@ -22,6 +22,7 @@ namespace Jvedio
         public static Jvedio.Core.Config.ProxyConfig ProxyConfig = Jvedio.Core.Config.ProxyConfig.createInstance();
         public static Jvedio.Core.Config.ScanConfig ScanConfig = Jvedio.Core.Config.ScanConfig.createInstance();
         public static Jvedio.Core.Config.FFmpegConfig FFmpegConfig = Jvedio.Core.Config.FFmpegConfig.createInstance();
+        public static Jvedio.Core.Config.RenameConfig RenameConfig = Jvedio.Core.Config.RenameConfig.createInstance();
 
         static GlobalConfig()
         {
@@ -34,6 +35,7 @@ namespace Jvedio
             ProxyConfig.Read();
             ScanConfig.Read();
             FFmpegConfig.Read();
+            RenameConfig.Read();
             EnsurePicPaths();// 确保 PicPaths
         }
 

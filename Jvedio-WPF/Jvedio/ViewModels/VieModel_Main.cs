@@ -47,11 +47,7 @@ namespace Jvedio.ViewModel
 {
     public class VieModel_Main : ViewModelBase
     {
-        public event EventHandler CurrentMovieListHideOrChanged;
-        public event EventHandler CurrentActorListHideOrChanged;
-        public event EventHandler MovieFlipOverCompleted;
-        public event EventHandler ActorFlipOverCompleted;
-        public event EventHandler OnCurrentMovieListRemove;
+
         public event EventHandler PageChangedCompleted;
         public event EventHandler ActorPageChangedCompleted;
         public event EventHandler RenderSqlChanged;
@@ -725,7 +721,6 @@ namespace Jvedio.ViewModel
             {
                 _CurrentActorList = value;
                 RaisePropertyChanged();
-                CurrentActorListHideOrChanged?.Invoke(this, EventArgs.Empty);
             }
         }
 
@@ -2558,16 +2553,16 @@ namespace Jvedio.ViewModel
         #region "影片 => 翻页" 
         public static Dictionary<int, string> SortDict = new Dictionary<int, string>()
         {
-            { 0, "VID" },
-            { 1, "Size" },
-            { 2, "FirstScanDate" },
-            { 3, "LastScanDate" },
-            { 4, "Grade" },
-            { 5, "Title" },
-            { 6, "ViewCount" },
-            { 7, "ReleaseDate" },
-            { 8, "Rating" },
-            { 9, "Duration" },
+            { 0, "metadata.VID" },
+            { 1, "metadata.Grade" },
+            { 2, "metadata.Size" },
+            { 3, "metadata.LastScanDate" },
+            { 4, "metadata.FirstScanDate" },
+            { 5, "metadata.Title" },
+            { 6, "metadata.ViewCount" },
+            { 7, "metadata.ReleaseDate" },
+            { 8, "metadata.Rating" },
+            { 9, "metadata.Duration" },
         };
 
 
@@ -2576,12 +2571,12 @@ namespace Jvedio.ViewModel
             "MVID",
             "VID",
             "metadata.Grade",
-            "Title",
-            "Path",
-            "SubSection",
-            "ImageUrls",
-            "ReleaseDate",
-            "LastScanDate",
+            "metadata.Title",
+            "metadata.Path",
+            "metadata_video.SubSection",
+            "metadata_video.ImageUrls",
+            "metadata.ReleaseDate",
+            "metadata.LastScanDate",
             "metadata_video.WebUrl",
             "metadata_video.WebType",
             "(select group_concat(TagID,',') from metadata_to_tagstamp where metadata_to_tagstamp.DataID=metadata.DataID)  as TagIDs ",

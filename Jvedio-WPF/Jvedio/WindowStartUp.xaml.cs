@@ -64,7 +64,7 @@ namespace Jvedio
 
 
 
-
+        // todo
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
             EnsureSettings();//修复设置错误
@@ -100,9 +100,7 @@ namespace Jvedio
             }
             GlobalVariable.CurrentDataType = (DataType)GlobalConfig.StartUp.SideIdx;
 
-            // todo 
-            GlobalConfig.Settings.OpenDataBaseDefault = false;
-            if (GlobalConfig.Settings.OpenDataBaseDefault)
+            if (!ClickGoBackToStartUp && GlobalConfig.Settings.OpenDataBaseDefault)
             {
                 tabControl.SelectedIndex = 0;
                 LoadDataBase();
@@ -113,9 +111,6 @@ namespace Jvedio
                 vieModel_StartUp.Loading = false;
                 this.TitleHeight = 30;
             }
-
-
-
         }
 
 
@@ -217,32 +212,6 @@ namespace Jvedio
         }
 
 
-        public async void OpenDefaultDatabase()
-        {
-            //try
-            //{
-            //    if (Properties.Settings.Default.ScanGivenPath)
-            //    {
-            //        // todo 开启是扫描文件夹
-            //        await Task.Run(() =>
-            //        {
-            //            this.Dispatcher.BeginInvoke(new Action(() =>
-            //            {
-            //                //statusText.Text = Jvedio.Language.Resources.Status_ScanDir; 
-            //            }), System.Windows.Threading.DispatcherPriority.Render);
-            //            List<string> filepaths = Scan.ScanPaths(ReadScanPathFromConfig(Path.GetFileNameWithoutExtension(Properties.Settings.Default.DataBasePath)), ct);
-            //            Scan.InsertWithNfo(filepaths, ct);
-            //        }, cts.Token);
-
-            //    }
-            //}
-            //catch (Exception ex)
-            //{
-            //    Logger.LogE(ex);
-            //}
-        }
-
-
 
         private double MIN_SIDE_GRID_WIDTH = 40;
 
@@ -262,8 +231,6 @@ namespace Jvedio
                 MessageBox.Show(ex.Message);
                 Logger.LogE(ex);
             }
-
-            if (Properties.Settings.Default.SideGridWidth <= 0) Properties.Settings.Default.SideGridWidth = MIN_SIDE_GRID_WIDTH;
 
 
 
@@ -463,7 +430,7 @@ namespace Jvedio
             //加载数据库
             long id = vieModel_StartUp.CurrentDBID;
             AppDatabase database = null;
-            if (!GlobalConfig.Settings.OpenDataBaseDefault)
+            if (ClickGoBackToStartUp || !GlobalConfig.Settings.OpenDataBaseDefault)
             {
                 if (listBox.SelectedIndex >= 0)
                 {
@@ -481,11 +448,12 @@ namespace Jvedio
             {
                 // 默认打开上一次的库
                 id = GlobalConfig.Settings.DefaultDBID;
+                List<AppDatabase> appDatabases = appDatabaseMapper.selectList();
+                database = appDatabases.Where(arg => arg.DBId == id).FirstOrDefault();
             }
 
             // 检测该 id 是否在数据库中存在
-            //List<AppDatabase> appDatabases = appDatabaseMapper.selectList();
-            //if (appDatabases.Count <= 0 || !appDatabases.Where(arg => arg.DBId == id).Any()) return;
+
             if (database == null)
             {
                 MessageCard.Error("无此数据库");

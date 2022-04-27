@@ -12,6 +12,7 @@
     xmlns:style="clr-namespace:Jvedio.Style;assembly=Jvedio.Style"
     xmlns:trace="clr-namespace:System.Diagnostics;assembly=WindowsBase"
     Title="{x:Static lang:Resources.Add}"
+    Closing="BaseDialog_Closing" 
     Width="600"
     ContentRendered="BaseDialog_ContentRendered"
     SizeToContent="Height"
@@ -65,7 +66,10 @@
                 VerticalScrollBarVisibility="Auto" />
 
 
-            <WrapPanel Grid.Row="1">
+            <WrapPanel
+                Name="videoTypeWrapPanel"
+                Grid.Row="1"
+                Visibility="Collapsed">
                 <Label
                     Margin="20,10"
                     Background="Transparent"

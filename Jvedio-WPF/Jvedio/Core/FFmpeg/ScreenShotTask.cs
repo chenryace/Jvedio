@@ -30,27 +30,28 @@ namespace Jvedio.Core.FFmpeg
     {
 
 
-        public bool DownloadPreview { get; set; }
 
-        public event EventHandler onDownloadSuccess;
-        public event EventHandler onDownloadPreview;
+        public new static Dictionary<TaskStatus, string> STATUS_TO_TEXT_DICT = new Dictionary<TaskStatus, string>()
+        {
 
-
-
-
-
-
-
+            {TaskStatus.WaitingToRun,"等待中..."},
+            {TaskStatus.Running,"截图中..."},
+            {TaskStatus.Canceled,"已取消"},
+            {TaskStatus.RanToCompletion,"已完成"},
+        };
 
 
-        public ScreenShotTask(Video video, bool downloadPreview = false, bool overrideInfo = false) : this(video.toMetaData())
+
+
+
+        public ScreenShotTask(Video video, bool gif = false) : this(video.toMetaData())
         {
             Title = string.IsNullOrEmpty(video.VID) ? video.Title : video.VID;
-            DownloadPreview = downloadPreview;
-            OverrideInfo = overrideInfo;
+            Gif = gif;
         }
 
-
+        public long DataID { get; set; }
+        public bool Gif { get; set; }
 
         public ScreenShotTask(MetaData data) : base()
         {
@@ -75,17 +76,58 @@ namespace Jvedio.Core.FFmpeg
         }
 
 
-        public long DataID { get; set; }
+        public event EventHandler onCompleted;
+
         public DataType DataType { get; set; }
         public string Title { get; set; }
-        public bool OverrideInfo { get; set; }//强制下载覆盖信息
-
-
 
 
         public override void doWrok()
         {
+            Task.Run(async () =>
+            {
+                Progress = 0;
+                stopwatch.Start();
+                Video video = videoMapper.SelectVideoByID(DataID);
+                ScreenShot shot = new ScreenShot(video, token);
+                shot.onProgress += (s, e) =>
+                {
+                    ScreenShot screenShot = s as ScreenShot;
+                    Progress = (float)Math.Round(((float)screenShot.CurrentTaskCount + 1) / screenShot.TotalTaskCount, 4) * 100;
+                };
 
+                shot.onError += (s, e) =>
+                {
+                    MessageCallBackEventArgs arg = e as MessageCallBackEventArgs;
+                    if (!string.IsNullOrEmpty(arg.Message))
+                        logger.Error(arg.Message);
+                };
+
+                try
+                {
+                    string outputs = "";
+                    if (Gif)
+                        outputs = await shot.AsyncGenrateGif();
+                    else
+                        outputs = await shot.AsyncScreenShot();
+                    Success = true;
+                    Status = TaskStatus.RanToCompletion;
+                    stopwatch.Stop();
+                    ElapsedMilliseconds = stopwatch.ElapsedMilliseconds;
+                    logger.Info($"总计耗时：{ElapsedMilliseconds} ms");
+                    logger.Info("详细信息");
+                    logger.Info(outputs);
+                }
+                catch (Exception ex)
+                {
+                    StatusText = ex.Message;
+                    logger.Error(ex.Message);
+                    finalizeWithCancel();
+                }
+                onCompleted?.Invoke(this, null);
+
+
+            });
         }
     }
 }

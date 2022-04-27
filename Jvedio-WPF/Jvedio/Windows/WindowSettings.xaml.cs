@@ -23,6 +23,7 @@ using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Security.Permissions;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
@@ -44,23 +45,23 @@ namespace Jvedio
         //public const string ffmpeg_url = "https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-full.7z";
         public const string ffmpeg_url = "https://www.gyan.dev/ffmpeg/builds/";
         public static string GrowlToken = "SettingsGrowl";
-        public DetailMovie SampleMovie = new DetailMovie()
+        public Video SampleVideo = new Video()
         {
-            id = "AAA-001",
-            title = Jvedio.Language.Resources.SampleMovie_Title,
-            vediotype = 1,
-            releasedate = "2020-01-01",
-            director = Jvedio.Language.Resources.SampleMovie_Director,
-            genre = Jvedio.Language.Resources.SampleMovie_Genre,
-            tag = Jvedio.Language.Resources.SampleMovie_Tag,
-            actor = Jvedio.Language.Resources.SampleMovie_Actor,
-            studio = Jvedio.Language.Resources.SampleMovie_Studio,
-            rating = 9.0f,
-            chinesetitle = Jvedio.Language.Resources.SampleMovie_TranslatedTitle,
-            label = Jvedio.Language.Resources.SampleMovie_Label,
-            year = 2020,
-            runtime = 126,
-            country = Jvedio.Language.Resources.SampleMovie_Country
+            VID = "IRONMAN-01",
+            Title = Jvedio.Language.Resources.SampleMovie_Title,
+            VideoType = VideoType.Normal,
+            ReleaseDate = "2020-01-01",
+            Director = Jvedio.Language.Resources.SampleMovie_Director,
+            Genre = Jvedio.Language.Resources.SampleMovie_Genre,
+            Series = Jvedio.Language.Resources.SampleMovie_Tag,
+            ActorNames = Jvedio.Language.Resources.SampleMovie_Actor,
+            Studio = Jvedio.Language.Resources.SampleMovie_Studio,
+            Rating = 9.0f,
+            Label = Jvedio.Language.Resources.SampleMovie_Label,
+            ReleaseYear = 2020,
+            Duration = 126,
+
+            Country = Jvedio.Language.Resources.SampleMovie_Country
         };
         public VieModel_Settings vieModel;
         public Settings()
@@ -368,7 +369,7 @@ namespace Jvedio
             if (new Msgbox(this, Jvedio.Language.Resources.Message_IsToReset).ShowDialog() == true)
             {
                 Properties.Settings.Default.Reset();
-                Properties.Settings.Default.FirstRun = false;
+                GlobalConfig.Main.FirstRun = false;
                 Properties.Settings.Default.Save();
             }
 
@@ -391,73 +392,7 @@ namespace Jvedio
 
         }
 
-        private void FlowTextBox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            TextBox textBox = sender as TextBox;
-            int num = 0;
-            bool success = int.TryParse(textBox.Text, out num);
-            if (success)
-            {
-                num = int.Parse(textBox.Text);
-                if (num > 0 & num <= 30)
-                {
-                    Properties.Settings.Default.FlowNum = num;
-                    Properties.Settings.Default.Save();
-                }
-            }
 
-        }
-
-        private void ActorTextBox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            TextBox textBox = sender as TextBox;
-            int num = 0;
-            bool success = int.TryParse(textBox.Text, out num);
-            if (success)
-            {
-                num = int.Parse(textBox.Text);
-                if (num > 0 & num <= 50)
-                {
-                    Properties.Settings.Default.ActorDisplayNum = num;
-                    Properties.Settings.Default.Save();
-                }
-            }
-
-        }
-
-        private void ScreenShotNumTextBox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            TextBox textBox = sender as TextBox;
-            int num = 0;
-            bool success = int.TryParse(textBox.Text, out num);
-            if (success)
-            {
-                num = int.Parse(textBox.Text);
-                if (num > 0 & num <= 20)
-                {
-                    GlobalConfig.FFmpegConfig.ScreenShotNum = num;
-                    Properties.Settings.Default.Save();
-                }
-            }
-
-        }
-
-        private void ScanMinFileSizeTextBox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            //    TextBox textBox = sender as TextBox;
-            //    int num = 0;
-            //    bool success = int.TryParse(textBox.Text, out num);
-            //    if (success)
-            //    {
-            //        num = int.Parse(textBox.Text);
-            //        if (num >= 0 & num <= 2000)
-            //        {
-            //            //Properties.Settings.Default.ScanMinFileSize = num;
-            //            //Properties.Settings.Default.Save();
-            //        }
-            //    }
-
-        }
 
 
 
@@ -726,29 +661,28 @@ namespace Jvedio
 
             //if (vieModel.DataBases?.Count == 1) DatabaseComboBox.Visibility = Visibility.Hidden;
 
-            ShowViewRename(Properties.Settings.Default.RenameFormat);
+            ShowViewRename(GlobalConfig.RenameConfig.FormatString);
 
             SetCheckedBoxChecked();
-
-
             foreach (ComboBoxItem item in OutComboBox.Items)
             {
-                if (item.Content.ToString() == Properties.Settings.Default.OutSplit)
+                if (item.Content.ToString().Equals(GlobalConfig.RenameConfig.OutSplit))
                 {
                     OutComboBox.SelectedIndex = OutComboBox.Items.IndexOf(item);
                     break;
                 }
             }
-
+            if (OutComboBox.SelectedIndex < 0) OutComboBox.SelectedIndex = 0;
 
             foreach (ComboBoxItem item in InComboBox.Items)
             {
-                if (item.Content.ToString() == Properties.Settings.Default.InSplit)
+                if (item.Content.ToString().Equals(GlobalConfig.RenameConfig.InSplit))
                 {
                     InComboBox.SelectedIndex = InComboBox.Items.IndexOf(item);
                     break;
                 }
             }
+            if (InComboBox.SelectedIndex < 0) OutComboBox.SelectedIndex = 0;
 
             //设置主题选中
             bool findTheme = false;
@@ -816,7 +750,7 @@ namespace Jvedio
         {
             foreach (ToggleButton item in CheckedBoxWrapPanel.Children.OfType<ToggleButton>().ToList())
             {
-                if (Properties.Settings.Default.RenameFormat.IndexOf(item.Content.ToString().ToSqlField()) >= 0)
+                if (GlobalConfig.RenameConfig.FormatString.IndexOf(Video.ToSqlField(item.Content.ToString())) >= 0)
                 {
                     item.IsChecked = true;
                 }
@@ -1075,24 +1009,27 @@ namespace Jvedio
 
         private void ReplaceWithValue(string property)
         {
-            string inSplit = InComboBox.Text.Replace(Jvedio.Language.Resources.Nothing, "");
-            PropertyInfo[] PropertyList = SampleMovie.GetType().GetProperties();
+            string inSplit = GlobalConfig.RenameConfig.InSplit.Equals("[null]") ? "" : GlobalConfig.RenameConfig.InSplit;
+            PropertyInfo[] PropertyList = SampleVideo.GetType().GetProperties();
             foreach (PropertyInfo item in PropertyList)
             {
                 string name = item.Name;
                 if (name == property)
                 {
-                    object o = item.GetValue(SampleMovie);
+                    object o = item.GetValue(SampleVideo);
                     if (o != null)
                     {
                         string value = o.ToString();
 
-                        if (property == "actor" || property == "genre" || property == "label")
+                        if (property == "ActorNames" || property == "Genre" || property == "Label")
                             value = value.Replace(" ", inSplit).Replace("/", inSplit);
 
-                        if (property == "vediotype")
+                        if (vieModel.RemoveTitleSpace && property.Equals("Title"))
+                            value = value.Trim();
+
+                        if (property == "VideoType")
                         {
-                            int v = 1;
+                            int v = 0;
                             int.TryParse(value, out v);
                             if (v == 1)
                                 value = Jvedio.Language.Resources.Uncensored;
@@ -1108,46 +1045,39 @@ namespace Jvedio
             }
         }
 
-        private void AddToRename(object sender, RoutedEventArgs e)
+
+        private void SetRenameFormat()
         {
-            ToggleButton toggleButton = sender as ToggleButton;
-            string text = toggleButton.Content.ToString();
-            bool ischecked = (bool)toggleButton.IsChecked;
-            string formatstring = "{" + text.ToSqlField() + "}";
 
-            string split = OutComboBox.Text.Replace(Jvedio.Language.Resources.Nothing, "");
+            List<ToggleButton> toggleButtons = CheckedBoxWrapPanel.Children.OfType<ToggleButton>().ToList();
+            List<string> names = toggleButtons.Where(arg => (bool)arg.IsChecked).Select(arg => arg.Content.ToString()).ToList();
 
-
-            if (ischecked)
+            if (names.Count > 0)
             {
-                if (string.IsNullOrEmpty(Properties.Settings.Default.RenameFormat))
+                StringBuilder builder = new StringBuilder();
+                string sep = GlobalConfig.RenameConfig.OutSplit.Equals("[null]") ? "" : GlobalConfig.RenameConfig.OutSplit;
+                List<string> formatNames = new List<string>();
+                foreach (string name in names)
                 {
-                    Properties.Settings.Default.RenameFormat += formatstring;
+                    formatNames.Add($"{{{Video.ToSqlField(name)}}}");
                 }
-                else
-                {
-                    Properties.Settings.Default.RenameFormat += split + formatstring;
-                }
+                vieModel.FormatString = string.Join(sep, formatNames);
             }
             else
-            {
-                int idx = Properties.Settings.Default.RenameFormat.IndexOf(formatstring);
-                if (idx == 0)
-                {
-                    Properties.Settings.Default.RenameFormat = Properties.Settings.Default.RenameFormat.Replace(formatstring, "");
-                }
-                else
-                {
-                    Properties.Settings.Default.RenameFormat = Properties.Settings.Default.RenameFormat.Replace(getSplit(formatstring) + formatstring, "");
-                }
-            }
+                vieModel.FormatString = "";
+        }
+
+        private void AddToRename(object sender, RoutedEventArgs e)
+        {
+            SetRenameFormat();
+            ShowViewRename(vieModel.FormatString);
         }
 
         private char getSplit(string formatstring)
         {
-            int idx = Properties.Settings.Default.RenameFormat.IndexOf(formatstring);
+            int idx = vieModel.FormatString.IndexOf(formatstring);
             if (idx > 0)
-                return Properties.Settings.Default.RenameFormat[idx - 1];
+                return vieModel.FormatString[idx - 1];
             else
                 return '\0';
 
@@ -1163,8 +1093,12 @@ namespace Jvedio
 
         private void ShowViewRename(string txt)
         {
-
-            MatchCollection matches = Regex.Matches(txt, "\\{[a-z]+\\}");
+            if (string.IsNullOrEmpty(txt))
+            {
+                vieModel.ViewRenameFormat = "";
+                return;
+            }
+            MatchCollection matches = Regex.Matches(txt, "\\{[a-zA-Z]+\\}");
             if (matches != null && matches.Count > 0)
             {
                 vieModel.ViewRenameFormat = txt;
@@ -1183,13 +1117,16 @@ namespace Jvedio
         private void OutComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (e.AddedItems.Count == 0) return;
-            Properties.Settings.Default.OutSplit = ((ComboBoxItem)e.AddedItems[0]).Content.ToString();
+            GlobalConfig.RenameConfig.OutSplit = ((ComboBoxItem)e.AddedItems[0]).Content.ToString();
+            SetRenameFormat();
         }
 
         private void InComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (e.AddedItems.Count == 0) return;
-            Properties.Settings.Default.InSplit = ((ComboBoxItem)e.AddedItems[0]).Content.ToString();
+            GlobalConfig.RenameConfig.InSplit = ((ComboBoxItem)e.AddedItems[0]).Content.ToString();
+            SetRenameFormat();
+            ShowViewRename(vieModel.FormatString);
         }
 
         private void SetBackgroundImage(object sender, RoutedEventArgs e)
@@ -1222,6 +1159,7 @@ namespace Jvedio
             GlobalConfig.ProxyConfig.Save();
             GlobalConfig.ScanConfig.Save();
             GlobalConfig.FFmpegConfig.Save();
+            GlobalConfig.RenameConfig.Save();
         }
 
 
@@ -1230,6 +1168,8 @@ namespace Jvedio
         {
             GlobalConfig.Settings.TabControlSelectedIndex = vieModel.TabControlSelectedIndex;
             GlobalConfig.Settings.OpenDataBaseDefault = vieModel.OpenDataBaseDefault;
+            GlobalConfig.Settings.AutoGenScreenShot = vieModel.AutoGenScreenShot;
+            GlobalConfig.Settings.TeenMode = vieModel.TeenMode;
             GlobalConfig.Settings.CloseToTaskBar = vieModel.CloseToTaskBar;
             GlobalConfig.Settings.SelectedLanguage = vieModel.SelectedLanguage;
             GlobalConfig.Settings.SaveInfoToNFO = vieModel.SaveInfoToNFO;
@@ -1267,6 +1207,14 @@ namespace Jvedio
             GlobalConfig.FFmpegConfig.GifWidth = vieModel.GifWidth;
             GlobalConfig.FFmpegConfig.GifHeight = vieModel.GifHeight;
             GlobalConfig.FFmpegConfig.GifDuration = vieModel.GifDuration;
+
+            // 重命名
+
+            GlobalConfig.RenameConfig.AddRenameTag = vieModel.AddRenameTag;
+            GlobalConfig.RenameConfig.RemoveTitleSpace = vieModel.RemoveTitleSpace;
+            GlobalConfig.RenameConfig.FormatString = vieModel.FormatString;
+
+
 
         }
 
@@ -1448,6 +1396,32 @@ namespace Jvedio
         private void url_PreviewMouseLeftButtonUp_1(object sender, MouseButtonEventArgs e)
         {
             setHeaderPopup.IsOpen = true;
+            SearchBox searchBox = sender as SearchBox;
+            string headers = searchBox.Text;
+            if (!string.IsNullOrEmpty(headers))
+            {
+                try
+                {
+                    Dictionary<string, string> dict = JsonConvert.DeserializeObject<Dictionary<string, string>>(headers);
+                    if (dict != null && dict.Count > 0)
+                    {
+                        StringBuilder builder = new StringBuilder();
+                        foreach (string key in dict.Keys)
+                        {
+                            builder.Append($"{key}: {dict[key]}{Environment.NewLine}");
+                        }
+                        inputTextbox.Text = builder.ToString();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+
+
+            }
+
+
             //currentHeaderBox = sender as SearchBox;
             //parsedTextbox.Text = currentHeaderBox.Text;
             string serverType = getCurrentServerType();
@@ -1498,15 +1472,15 @@ namespace Jvedio
                 if (!data.ContainsKey(key)) data.Add(key, value);
             }
 
-            if (vieModel.AutoHandleHeader)
-            {
-                data.Remove("content-encoding");
-                data.Remove("accept-encoding");
-                data.Remove("host");
+            //if (vieModel.AutoHandleHeader)
+            //{
+            data.Remove("content-encoding");
+            data.Remove("accept-encoding");
+            data.Remove("host");
 
-                data = data.Where(arg => arg.Key.IndexOf(" ") < 0).ToDictionary(x => x.Key, y => y.Value);
+            data = data.Where(arg => arg.Key.IndexOf(" ") < 0).ToDictionary(x => x.Key, y => y.Value);
 
-            }
+            //}
 
 
 
@@ -1573,7 +1547,7 @@ namespace Jvedio
 
         private void ShowHeaderHelp(object sender, RoutedEventArgs e)
         {
-
+            MessageBox.Show("根据之前的方法，打开网页的 cookie 所在处，把 request header 下所有的内容复制进来即可");
         }
 
         private void ShowScanReHelp(object sender, MouseButtonEventArgs e)
@@ -1581,7 +1555,10 @@ namespace Jvedio
             //MessageCard.Info("在扫描时，对于视频 VID 的识别，例如填写正则为 .*钢铁侠.* 则只要文件名含有钢铁侠，");
         }
 
-
+        private void ShowRenameHelp(object sender, MouseButtonEventArgs e)
+        {
+            MessageCard.Info(Jvedio.Language.Resources.Attention_Rename);
+        }
     }
 
 

@@ -52,7 +52,14 @@ namespace Jvedio.Core.Net
             OverrideInfo = overrideInfo;
         }
 
+        public new static Dictionary<TaskStatus, string> STATUS_TO_TEXT_DICT = new Dictionary<TaskStatus, string>()
+        {
 
+            {TaskStatus.WaitingToRun,"等待中..."},
+            {TaskStatus.Running,"下载中..."},
+            {TaskStatus.Canceled,"已取消"},
+            {TaskStatus.RanToCompletion,"已完成"},
+        };
 
         public DownLoadTask(MetaData data) : base()
         {

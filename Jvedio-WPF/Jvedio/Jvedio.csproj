@@ -268,6 +268,7 @@
     <Compile Include="Core\Command\OpenWindow.cs" />
     <Compile Include="Core\Config\ProxyConfig.cs" />
     <Compile Include="Core\Config\FFmpegConfig.cs" />
+    <Compile Include="Core\Config\RenameConfig.cs" />
     <Compile Include="Core\Config\ScanConfig.cs" />
     <Compile Include="Core\Config\ServerConfig.cs" />
     <Compile Include="Core\Config\WindowConfig\Settings.cs" />
@@ -280,6 +281,8 @@
     <Compile Include="Core\Enums\DownLoadState.cs" />
     <Compile Include="Core\Enums\ImageType.cs" />
     <Compile Include="Core\Exceptions\CrawlerNotFoundException.cs" />
+    <Compile Include="Core\Exceptions\MediaCutOutOfRangeException.cs" />
+    <Compile Include="Core\Exceptions\NotFoundException.cs" />
     <Compile Include="Core\FFmpeg\ScreenShotTask.cs" />
     <Compile Include="Core\Net\ActorDownloader.cs" />
     <Compile Include="Core\CustomTask\TaskDispatcher.cs" />
@@ -438,7 +441,7 @@
     <Compile Include="Utils\ImageAndVedio\FFmpegHelper.cs" />
     <Compile Include="Utils\ImageAndVedio\Gif.cs" />
     <Compile Include="Utils\ImageAndVedio\GifImage.cs" />
-    <Compile Include="Utils\ImageAndVedio\ScreenShot.cs" />
+    <Compile Include="Core\FFmpeg\ScreenShot.cs" />
     <Compile Include="Utils\Net\DetailDownLoad.cs" />
     <Compile Include="Utils\Net\Upgrade.cs" />
     <Compile Include="Utils\FileProcess\FileProcess.cs" />
@@ -687,10 +690,12 @@
     </Compile>
     <Content Include="Reference\ChaoControls.Style.dll" />
     <Content Include="Reference\CommonNet.dll" />
+    <Content Include="Sql\app_cache.sql" />
     <Content Include="Sql\single_db_comic.sql" />
     <Content Include="Sql\single_db_game.sql" />
     <Content Include="Sql\single_db_picture.sql" />
     <Content Include="Test\SqliteTest\main.py" />
+    <None Include="Test\FFmpeg\command.md" />
     <Resource Include="Resources\Picture\Empty.png" />
     <Content Include="Sql\app_configs.sql" />
     <Content Include="Sql\app_datas.sql" />

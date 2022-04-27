@@ -454,7 +454,7 @@ namespace Jvedio
 
         private async void Rename()
         {
-            if (Properties.Settings.Default.RenameFormat.IndexOf("{") < 0)
+            if (GlobalConfig.RenameConfig.FormatString.IndexOf("{") < 0)
             {
                 MessageCard.Error(Jvedio.Language.Resources.Message_SetRenameRule);
                 cts.Dispose();
@@ -548,39 +548,39 @@ namespace Jvedio
 
             if (!File.Exists(detailMovie.filepath)) return (false, $"{Jvedio.Language.Resources.Message_FileNotExist} {detailMovie.filepath}");
             DetailMovie movie = DataBase.SelectDetailMovieById(id);
-            string[] newPath = movie.ToFileName();
-            if (movie.hassubsection)
-            {
-                for (int i = 0; i < newPath.Length; i++)
-                {
-                    if (File.Exists(newPath[i])) return (false, $"{Jvedio.Language.Resources.NewFileExists}：{newPath[i]}，{Jvedio.Language.Resources.SourceFile}：{detailMovie.filepath}");
-                }
+            //string[] newPath = movie.ToFileName();
+            //if (movie.hassubsection)
+            //{
+            //    for (int i = 0; i < newPath.Length; i++)
+            //    {
+            //        if (File.Exists(newPath[i])) return (false, $"{Jvedio.Language.Resources.NewFileExists}：{newPath[i]}，{Jvedio.Language.Resources.SourceFile}：{detailMovie.filepath}");
+            //    }
 
-                for (int i = 0; i < newPath.Length; i++)
-                {
-                    try
-                    {
-                        File.Move(movie.subsectionlist[i], newPath[i]);
-                    }
-                    catch (Exception ex)
-                    {
-                        Logger.LogF(ex);
-                        continue;
-                    }
-                }
-                movie.filepath = newPath[0];
-                movie.subsection = string.Join(";", newPath);
-                DataBase.UpdateMovieByID(movie.id, "filepath", movie.filepath, "string");//保存
-                DataBase.UpdateMovieByID(movie.id, "subsection", movie.subsection, "string");//保存
+            //    for (int i = 0; i < newPath.Length; i++)
+            //    {
+            //        try
+            //        {
+            //            File.Move(movie.subsectionlist[i], newPath[i]);
+            //        }
+            //        catch (Exception ex)
+            //        {
+            //            Logger.LogF(ex);
+            //            continue;
+            //        }
+            //    }
+            //    movie.filepath = newPath[0];
+            //    movie.subsection = string.Join(";", newPath);
+            //    DataBase.UpdateMovieByID(movie.id, "filepath", movie.filepath, "string");//保存
+            //    DataBase.UpdateMovieByID(movie.id, "subsection", movie.subsection, "string");//保存
 
-            }
-            else
-            {
-                if (File.Exists(newPath[0])) return (false, $"{Jvedio.Language.Resources.NewFileExists}：{newPath[0]}，{Jvedio.Language.Resources.NewFileExists}：{detailMovie.filepath}");
-                File.Move(movie.filepath, newPath[0]);
-                movie.filepath = newPath[0];
-                DataBase.UpdateMovieByID(movie.id, "filepath", movie.filepath, "string");//保存
-            }
+            //}
+            //else
+            //{
+            //    if (File.Exists(newPath[0])) return (false, $"{Jvedio.Language.Resources.NewFileExists}：{newPath[0]}，{Jvedio.Language.Resources.NewFileExists}：{detailMovie.filepath}");
+            //    File.Move(movie.filepath, newPath[0]);
+            //    movie.filepath = newPath[0];
+            //    DataBase.UpdateMovieByID(movie.id, "filepath", movie.filepath, "string");//保存
+            //}
             return (true, "");
         }
 

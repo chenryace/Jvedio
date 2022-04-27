@@ -31,6 +31,17 @@ namespace Jvedio.ViewModel
 
         }
 
+        private bool _TeenMode = GlobalConfig.Settings.TeenMode;
+
+        public bool TeenMode
+        {
+            get { return _TeenMode; }
+            set
+            {
+                _TeenMode = value;
+                RaisePropertyChanged();
+            }
+        }
         private int _SelectImageIndex = 0;
 
         public int SelectImageIndex
@@ -199,6 +210,8 @@ namespace Jvedio.ViewModel
 
             windowDetails.DataID = dataID;
             //((WindowDetails)FileProcess.GetWindowByName("WindowDetails")).SetStatus(false);
+
+            // todo 事务下导致阻塞
             metaDataMapper.increaseFieldById("ViewCount", dataID); //访问次数+1
             Video video = videoMapper.SelectVideoByID(dataID);
             Video.setTagStamps(ref video);// 设置标签戳

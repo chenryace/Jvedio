@@ -32,22 +32,22 @@ create table actor_info(
     CreateDate VARCHAR(30) DEFAULT(STRFTIME('%Y-%m-%d %H:%M:%S', 'NOW', 'localtime')),
     UpdateDate VARCHAR(30) DEFAULT(STRFTIME('%Y-%m-%d %H:%M:%S', 'NOW', 'localtime'))
 );
-CREATE INDEX actor_info_name_idx ON actor_info (ActorName);
+CREATE INDEX actor_info_idx_ActorName ON actor_info (ActorName);
 COMMIT;
 
 -- 【演员关系表】
 -- 翻译的名字也属于此列
--- Relation: [0-同名不同人，1-同人不同名]
+-- Relation: [0-sameperson，1-different]
 drop table if exists actor_relation;
 BEGIN;
 create table actor_relation(
-    ID INTEGER PRIMARY KEY autoincrement,
+    id INTEGER PRIMARY KEY autoincrement,
     ActorID INTEGER,
     ActorIDAnother INTEGER,
     ActorRelation VARCHAR(500),
     unique(ActorID,ActorIDAnother,ActorRelation)
 );
-CREATE INDEX actor_relation_idx ON actor_relation (ActorID);
+CREATE INDEX actor_relation_idx_ActorID ON actor_relation (ActorID);
 COMMIT;
 
 

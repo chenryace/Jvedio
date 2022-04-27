@@ -180,7 +180,7 @@ namespace Jvedio.Core.Scan
             toInsertData.RemoveAt(0);
             try
             {
-                metaDataMapper.executeNonQuery("BEGIN EXCLUSIVE TRANSACTION;");//设置排它锁
+                metaDataMapper.executeNonQuery("BEGIN TRANSACTION;");//开启事务，这样子其他线程就不能更新
                 metaDataMapper.insertBatch(toInsertData);
 
             }
@@ -205,12 +205,12 @@ namespace Jvedio.Core.Scan
 
                 if (dataType == DataType.Picture)
                 {
-                    pictureMapper.executeNonQuery("BEGIN EXCLUSIVE TRANSACTION;");//设置排它锁
+                    pictureMapper.executeNonQuery("BEGIN TRANSACTION;");//开启事务，这样子其他线程就不能更新
                     pictureMapper.insertBatch(toInsert);
                 }
                 else if (dataType == DataType.Comics)
                 {
-                    comicMapper.executeNonQuery("BEGIN EXCLUSIVE TRANSACTION;");//设置排它锁
+                    comicMapper.executeNonQuery("BEGIN TRANSACTION;");//开启事务，这样子其他线程就不能更新
                     comicMapper.insertBatch(toInsert.Select(arg => arg.toSimpleComic()).ToList());
                 }
 

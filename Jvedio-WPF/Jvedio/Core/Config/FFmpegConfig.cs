@@ -13,6 +13,12 @@ namespace Jvedio.Core.Config
 
         private FFmpegConfig() : base("FFmpegConfig")
         {
+            ThreadNum = 2;
+            ScreenShotNum = 5;
+            ScreenShotIgnoreStart = 1;
+            ScreenShotIgnoreEnd = 1;
+            GifAutoHeight = true;
+            GifWidth = 300;
         }
 
         private static FFmpegConfig _instance = null;

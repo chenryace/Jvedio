@@ -18,6 +18,7 @@ using static Jvedio.FileProcess;
 using Jvedio.Utils;
 using Jvedio.Style;
 using Jvedio.Core.Enums;
+using ChaoControls.Style;
 
 namespace Jvedio
 {
@@ -32,14 +33,23 @@ namespace Jvedio
         public bool AutoAddPrefix { get; set; }
         public string Prefix { get; set; }
         public VideoType VideoType { get; set; }
-        public Dialog_NewMovie(Window owner, bool autoAddPrefix = false, string prefix = "") : base(owner)
+        public Dialog_NewMovie(Window owner) : base(owner)
         {
             InitializeComponent();
-            Prefix = prefix;
-            AutoAddPrefix = autoAddPrefix;
             VideoType = VideoType.Censored;
             autoPrefix.IsChecked = AutoAddPrefix;
             PrefixTextBox.Text = Prefix;
+            if (!GlobalConfig.Settings.TeenMode)
+            {
+                videoTypeWrapPanel.Visibility = Visibility.Visible;
+            }
+            autoPrefix.IsChecked = GlobalConfig.Settings.AutoAddPrefix;
+            PrefixTextBox.Text = GlobalConfig.Settings.Prefix;
+
+            AutoAddPrefix = GlobalConfig.Settings.AutoAddPrefix;
+            Prefix = GlobalConfig.Settings.Prefix;
+
+
         }
 
         protected override void Confirm(object sender, RoutedEventArgs e)
@@ -73,17 +83,24 @@ namespace Jvedio
 
         private void PrefixTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            Prefix = (sender as TextBox).Text;
+            Prefix = (sender as SearchBox).Text;
         }
 
         private void PrefixTextBox_LostFocus(object sender, RoutedEventArgs e)
         {
-            Prefix = (sender as TextBox).Text;
+            Prefix = (sender as SearchBox).Text;
         }
 
         private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             VideoType = (VideoType)((sender as ComboBox).SelectedIndex);
+        }
+
+        private void BaseDialog_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            GlobalConfig.Settings.AutoAddPrefix = AutoAddPrefix;
+            GlobalConfig.Settings.Prefix = Prefix;
+            GlobalConfig.Settings.Save();
         }
     }
 

@@ -32,9 +32,6 @@
     <Setting Name="SortDescending" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
-    <Setting Name="FirstRun" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">True</Value>
-    </Setting>
     <Setting Name="OnlyShowPlay" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
@@ -137,9 +134,6 @@
     <Setting Name="BasePicPath" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="FlowNum" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">10</Value>
-    </Setting>
     <Setting Name="Baidu_API_KEY" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
@@ -190,9 +184,6 @@
     </Setting>
     <Setting Name="SearchImmediately" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
-    </Setting>
-    <Setting Name="ActorDisplayNum" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">50</Value>
     </Setting>
     <Setting Name="DisPlayNoStamp" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
@@ -260,9 +251,6 @@
     <Setting Name="Timeout_stream" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">20</Value>
     </Setting>
-    <Setting Name="SideGridWidth" Type="System.Double" Scope="User">
-      <Value Profile="(Default)">200</Value>
-    </Setting>
     <Setting Name="IsExpanded1" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
@@ -320,20 +308,8 @@
     <Setting Name="DetialWindowShowAllMovie" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
-    <Setting Name="RenameFormat" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
-    </Setting>
-    <Setting Name="OutSplit" Type="System.String" Scope="User">
-      <Value Profile="(Default)">_</Value>
-    </Setting>
-    <Setting Name="InSplit" Type="System.String" Scope="User">
-      <Value Profile="(Default)">-</Value>
-    </Setting>
     <Setting Name="DelRenameTitleSpace" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
-    </Setting>
-    <Setting Name="AddLabelTagWhenRename" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="ShowFileNameIfTitleEmpty" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
@@ -350,14 +326,8 @@
     <Setting Name="HalfCutOFf" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
-    <Setting Name="Gif_Duration" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">5</Value>
-    </Setting>
     <Setting Name="GifImage_Width" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">250</Value>
-    </Setting>
-    <Setting Name="GifImage_Height" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">200</Value>
     </Setting>
     <Setting Name="SkipExistGif" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
@@ -417,6 +387,12 @@
       <Value Profile="(Default)">0</Value>
     </Setting>
     <Setting Name="DisplayPage" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="GifImage_Height" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">200</Value>
+    </Setting>
+    <Setting Name="DisplaySearchBox" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
   </Settings>

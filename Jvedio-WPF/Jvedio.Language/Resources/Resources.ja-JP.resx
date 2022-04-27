@@ -901,7 +901,7 @@
     <value>スコア</value>
   </data>
   <data name="SampleMovie_Title" xml:space="preserve">
-    <value>IronMan1</value>
+    <value>  IronMan1  </value>
   </data>
   <data name="SampleMovie_TranslatedTitle" xml:space="preserve">
     <value>アイアンマン1</value>
@@ -913,7 +913,7 @@
     <value>アクションアドベンチャーサイエンスフィクション</value>
   </data>
   <data name="SampleMovie_Tag" xml:space="preserve">
-    <value>色</value>
+    <value>Series</value>
   </data>
   <data name="SampleMovie_Actor" xml:space="preserve">
     <value>ロバートダウニージュニア/グウィネスパルトロウ/テレンスハワード/ジェフブリッジ</value>
@@ -922,7 +922,7 @@
     <value>マーベルスタジオ</value>
   </data>
   <data name="SampleMovie_Label" xml:space="preserve">
-    <value>ラベル1</value>
+    <value>ラベル1/ラベル2/ラベル3</value>
   </data>
   <data name="SampleMovie_Country" xml:space="preserve">
     <value>United States</value>

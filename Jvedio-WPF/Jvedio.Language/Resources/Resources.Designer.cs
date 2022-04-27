@@ -385,7 +385,7 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
-        ///   查找类似 自动添加中字标签戳 的本地化字符串。
+        ///   查找类似 添加中字、高清等标记 的本地化字符串。
         /// </summary>
         public static string AutoAddStamp {
             get {
@@ -601,7 +601,7 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
-        ///   查找类似 骑兵 的本地化字符串。
+        ///   查找类似 修正 的本地化字符串。
         /// </summary>
         public static string Censored {
             get {
@@ -2842,6 +2842,15 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
+        ///   查找类似 未找到 的本地化字符串。
+        /// </summary>
+        public static string NotFound {
+            get {
+                return ResourceManager.GetString("NotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 无 的本地化字符串。
         /// </summary>
         public static string Nothing {
@@ -3427,7 +3436,7 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
-        ///   查找类似 标签1 的本地化字符串。
+        ///   查找类似 标签1/标签2/标签3 的本地化字符串。
         /// </summary>
         public static string SampleMovie_Label {
             get {
@@ -3445,7 +3454,7 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
-        ///   查找类似 彩色 的本地化字符串。
+        ///   查找类似 系列 的本地化字符串。
         /// </summary>
         public static string SampleMovie_Tag {
             get {
@@ -3454,7 +3463,7 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
-        ///   查找类似 钢铁侠1 的本地化字符串。
+        ///   查找类似   钢铁侠1   的本地化字符串。
         /// </summary>
         public static string SampleMovie_Title {
             get {
@@ -4624,7 +4633,7 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
-        ///   查找类似 步兵 的本地化字符串。
+        ///   查找类似 无修正 的本地化字符串。
         /// </summary>
         public static string Uncensored {
             get {

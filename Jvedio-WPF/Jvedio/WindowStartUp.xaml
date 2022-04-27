@@ -365,6 +365,7 @@
                                 Click="ChangeDataType"
                                 Content="图片"
                                 Foreground="White"
+                                IsEnabled="False"
                                 Style="{StaticResource SideRadioButton}"
                                 Tag="5" />
 
@@ -376,6 +377,7 @@
                                 Click="ChangeDataType"
                                 Content="游戏"
                                 Foreground="White"
+                                IsEnabled="False"
                                 Style="{StaticResource SideRadioButton}"
                                 Tag="5" />
                             <RadioButton
@@ -385,6 +387,7 @@
                                 Click="ChangeDataType"
                                 Content="漫画"
                                 Foreground="White"
+                                IsEnabled="False"
                                 Style="{StaticResource SideRadioButton}"
                                 Tag="5" />
                         </StackPanel>

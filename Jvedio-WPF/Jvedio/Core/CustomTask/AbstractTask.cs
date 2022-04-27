@@ -33,6 +33,7 @@ namespace Jvedio.Core.CustomTask
 
         public AbstractTask()
         {
+
             Status = System.Threading.Tasks.TaskStatus.WaitingToRun;
             CreateTime = DateHelper.Now();
 
@@ -90,7 +91,7 @@ namespace Jvedio.Core.CustomTask
         {
 
             {TaskStatus.WaitingToRun,"等待中..."},
-            {TaskStatus.Running,"下载中..."},
+            {TaskStatus.Running,"进行中..."},
             {TaskStatus.Canceled,"已取消"},
             {TaskStatus.RanToCompletion,"已完成"},
         };

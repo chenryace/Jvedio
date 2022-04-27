@@ -15,7 +15,7 @@ namespace Jvedio.Global
 
         static FFmpeg()
         {
-            Dispatcher = TaskDispatcher<ScreenShotTask>.createInstance();
+            Dispatcher = TaskDispatcher<ScreenShotTask>.createInstance(0);
         }
 
 

@@ -31,8 +31,19 @@ namespace Jvedio.Core.WindowConfig
         public long CurrentDBId { get; set; }
         public long SearchSelectedIndex { get; set; }
         public long ClassifySelectedIndex { get; set; }
-        public double SideGridWidth { get; set; }
+        public double _SideGridWidth = 200;
+        public double SideGridWidth
+        {
+            get { return _SideGridWidth; }
+            set { _SideGridWidth = value; }
+        }
 
+        public bool _FirstRun = true;
+        public bool FirstRun
+        {
+            get { return _FirstRun; }
+            set { _FirstRun = value; }
+        }
 
     }
 }

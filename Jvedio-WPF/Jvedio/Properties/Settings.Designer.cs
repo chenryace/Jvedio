@@ -145,18 +145,6 @@ namespace Jvedio.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool FirstRun {
-            get {
-                return ((bool)(this["FirstRun"]));
-            }
-            set {
-                this["FirstRun"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
         public bool OnlyShowPlay {
             get {
@@ -565,18 +553,6 @@ namespace Jvedio.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("10")]
-        public int FlowNum {
-            get {
-                return ((int)(this["FlowNum"]));
-            }
-            set {
-                this["FlowNum"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string Baidu_API_KEY {
             get {
@@ -776,18 +752,6 @@ namespace Jvedio.Properties {
             }
             set {
                 this["SearchImmediately"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("50")]
-        public int ActorDisplayNum {
-            get {
-                return ((int)(this["ActorDisplayNum"]));
-            }
-            set {
-                this["ActorDisplayNum"] = value;
             }
         }
         
@@ -1057,18 +1021,6 @@ namespace Jvedio.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("200")]
-        public double SideGridWidth {
-            get {
-                return ((double)(this["SideGridWidth"]));
-            }
-            set {
-                this["SideGridWidth"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
         public bool IsExpanded1 {
             get {
@@ -1297,42 +1249,6 @@ namespace Jvedio.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string RenameFormat {
-            get {
-                return ((string)(this["RenameFormat"]));
-            }
-            set {
-                this["RenameFormat"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("_")]
-        public string OutSplit {
-            get {
-                return ((string)(this["OutSplit"]));
-            }
-            set {
-                this["OutSplit"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("-")]
-        public string InSplit {
-            get {
-                return ((string)(this["InSplit"]));
-            }
-            set {
-                this["InSplit"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
         public bool DelRenameTitleSpace {
             get {
@@ -1340,18 +1256,6 @@ namespace Jvedio.Properties {
             }
             set {
                 this["DelRenameTitleSpace"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool AddLabelTagWhenRename {
-            get {
-                return ((bool)(this["AddLabelTagWhenRename"]));
-            }
-            set {
-                this["AddLabelTagWhenRename"] = value;
             }
         }
         
@@ -1417,18 +1321,6 @@ namespace Jvedio.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("5")]
-        public int Gif_Duration {
-            get {
-                return ((int)(this["Gif_Duration"]));
-            }
-            set {
-                this["Gif_Duration"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("250")]
         public int GifImage_Width {
             get {
@@ -1436,18 +1328,6 @@ namespace Jvedio.Properties {
             }
             set {
                 this["GifImage_Width"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("200")]
-        public int GifImage_Height {
-            get {
-                return ((int)(this["GifImage_Height"]));
-            }
-            set {
-                this["GifImage_Height"] = value;
             }
         }
         
@@ -1688,6 +1568,30 @@ namespace Jvedio.Properties {
             }
             set {
                 this["DisplayPage"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("200")]
+        public int GifImage_Height {
+            get {
+                return ((int)(this["GifImage_Height"]));
+            }
+            set {
+                this["GifImage_Height"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool DisplaySearchBox {
+            get {
+                return ((bool)(this["DisplaySearchBox"]));
+            }
+            set {
+                this["DisplaySearchBox"] = value;
             }
         }
     }

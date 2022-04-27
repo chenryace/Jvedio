@@ -11,5 +11,5 @@ create table app_configs (
     UpdateDate VARCHAR(30) DEFAULT(STRFTIME('%Y-%m-%d %H:%M:%S', 'NOW', 'localtime')),
     unique(ConfigName)
 );
-CREATE INDEX app_configs_name_idx ON app_configs (ConfigName);
+CREATE INDEX app_configs_idx_ConfigName ON app_configs (ConfigName);
 COMMIT;

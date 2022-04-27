@@ -254,30 +254,7 @@ namespace Jvedio.ViewModel
         }
 
 
-        //private Skin _Themes = (Skin)Enum.Parse(typeof(Skin), "黑色", true);
 
-        //public Skin Themes
-        //{
-        //    get { return _Themes; }
-        //    set
-        //    {
-        //        _Themes = value;
-        //        RaisePropertyChanged();
-        //    }
-        //}
-
-
-        //private MyLanguage _Language = (MyLanguage)Enum.Parse(typeof(MyLanguage), Properties.Settings.Default.Language, true);
-
-        //public MyLanguage Language
-        //{
-        //    get { return _Language; }
-        //    set
-        //    {
-        //        _Language = value;
-        //        RaisePropertyChanged();
-        //    }
-        //}
 
         private int _PicPathMode = (int)GlobalConfig.Settings.PicPathMode;
 
@@ -512,6 +489,17 @@ namespace Jvedio.ViewModel
 
         #region "常规设置"
 
+        private bool _AutoGenScreenShot = GlobalConfig.Settings.AutoGenScreenShot;
+
+        public bool AutoGenScreenShot
+        {
+            get { return _AutoGenScreenShot; }
+            set
+            {
+                _AutoGenScreenShot = value;
+                RaisePropertyChanged();
+            }
+        }
         private bool _OpenDataBaseDefault = GlobalConfig.Settings.OpenDataBaseDefault;
 
         public bool OpenDataBaseDefault
@@ -520,6 +508,17 @@ namespace Jvedio.ViewModel
             set
             {
                 _OpenDataBaseDefault = value;
+                RaisePropertyChanged();
+            }
+        }
+        private bool _TeenMode = GlobalConfig.Settings.TeenMode;
+
+        public bool TeenMode
+        {
+            get { return _TeenMode; }
+            set
+            {
+                _TeenMode = value;
                 RaisePropertyChanged();
             }
         }
@@ -646,7 +645,9 @@ namespace Jvedio.ViewModel
             get { return _ScreenShotNum; }
             set
             {
-                _ScreenShotNum = value;
+
+                if (value <= 0 || value > 30) _ScreenShotNum = 10;
+                else _ScreenShotNum = value;
                 RaisePropertyChanged();
             }
         }
@@ -734,6 +735,45 @@ namespace Jvedio.ViewModel
 
         #endregion
 
+
+        #region "重命名"
+
+        private bool _RemoveTitleSpace = GlobalConfig.RenameConfig.RemoveTitleSpace;
+
+        public bool RemoveTitleSpace
+        {
+            get { return _RemoveTitleSpace; }
+            set
+            {
+                _RemoveTitleSpace = value;
+                RaisePropertyChanged();
+            }
+        }
+        private bool _AddRenameTag = GlobalConfig.RenameConfig.AddRenameTag;
+
+        public bool AddRenameTag
+        {
+            get { return _AddRenameTag; }
+            set
+            {
+                _AddRenameTag = value;
+                RaisePropertyChanged();
+            }
+        }
+        private string _FormatString = GlobalConfig.RenameConfig.FormatString;
+
+        public string FormatString
+        {
+            get { return _FormatString; }
+            set
+            {
+                _FormatString = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
+        #endregion
 
 
 

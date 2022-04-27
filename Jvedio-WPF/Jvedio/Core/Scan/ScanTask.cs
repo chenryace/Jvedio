@@ -83,28 +83,13 @@ namespace Jvedio.Core.Scan
             if (ScanPaths == null) ScanPaths = new List<string>();
             if (FilePaths == null) FilePaths = new List<string>();
             if (FileExt == null) FileExt = VIDEO_EXTENSIONS_LIST;// 默认导入视频
-
+            ScanResult = new ScanResult();
         }
 
 
 
 
-
-        public void Stop()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Start()
-        {
-            Status = TaskStatus.Running;
-            CreateTime = DateHelper.Now();
-            doWrok();
-
-
-        }
-
-        public virtual void doWrok()
+        public override void doWrok()
         {
 
             Task.Run(() =>
@@ -268,7 +253,7 @@ namespace Jvedio.Core.Scan
             try
             {
 
-                metaDataMapper.executeNonQuery("BEGIN EXCLUSIVE TRANSACTION;");//设置排它锁
+                metaDataMapper.executeNonQuery("BEGIN TRANSACTION;");//开启事务，这样子其他线程就不能更新
                 metaDataMapper.insertBatch(toInsertData);
 
             }
@@ -291,8 +276,16 @@ namespace Jvedio.Core.Scan
 
             try
             {
-                videoMapper.executeNonQuery("BEGIN EXCLUSIVE TRANSACTION;");//设置排它锁
+                videoMapper.executeNonQuery("BEGIN TRANSACTION;");//开启事务，这样子其他线程就不能更新
+                GlobalVariable.DataBaseBusy = true;
                 videoMapper.insertBatch(toInsert);
+
+                //Console.WriteLine("暂停一段时间");
+
+                //Task.Delay(5000).Wait();
+
+                //Console.WriteLine("暂停结束");
+
             }
             catch (Exception ex)
             {
@@ -302,6 +295,7 @@ namespace Jvedio.Core.Scan
             finally
             {
                 videoMapper.executeNonQuery("END TRANSACTION;");
+                GlobalVariable.DataBaseBusy = false;
             }
         }
 
@@ -332,29 +326,5 @@ namespace Jvedio.Core.Scan
 
         }
 
-        public void Pause()
-        {
-            Status = TaskStatus.WaitingToRun;
-        }
-
-        public void Cancel()
-        {
-            if (Status == TaskStatus.Running)
-            {
-                Status = TaskStatus.Canceled;
-                tokenCTS.Cancel();
-            }
-        }
-
-        // todo 持久化到硬盘
-        public void WriteToDisk()
-        {
-
-        }
-
-        public void Finished()
-        {
-            WriteToDisk();
-        }
     }
 }

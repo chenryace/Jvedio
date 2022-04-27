@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Jvedio.Utils.Common;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,6 +18,7 @@ namespace Jvedio.Core.Scan
             NotImport = new Dictionary<string, string>();
             FailNFO = new List<string>();
             Logs = new List<string>();
+            ScanDate = DateHelper.Now();
         }
 
 

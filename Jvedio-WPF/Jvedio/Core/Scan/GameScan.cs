@@ -158,7 +158,8 @@ namespace Jvedio.Core.Scan
             toInsertData.RemoveAt(0);
             try
             {
-                metaDataMapper.executeNonQuery("BEGIN EXCLUSIVE TRANSACTION;");//设置排它锁
+                //开启事务，这样子其他线程就不能更新
+                metaDataMapper.executeNonQuery("BEGIN TRANSACTION;");
                 metaDataMapper.insertBatch(toInsertData);
 
             }
@@ -181,7 +182,7 @@ namespace Jvedio.Core.Scan
             try
             {
 
-                gameMapper.executeNonQuery("BEGIN EXCLUSIVE TRANSACTION;");//设置排它锁
+                gameMapper.executeNonQuery("BEGIN TRANSACTION;");//开启事务，这样子其他线程就不能更新
                 gameMapper.insertBatch(toInsert);
 
 

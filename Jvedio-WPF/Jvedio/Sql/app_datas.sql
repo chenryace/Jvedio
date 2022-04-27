@@ -30,8 +30,8 @@ CREATE INDEX name_idx ON app_databases (Name);
 CREATE INDEX type_idx ON app_databases (DataType);
 COMMIT;
 
-insert into app_databases ( Count, Name, ImagePath, ViewCount )
-values ( 55,'test', '123.png', 55);
+-- insert into app_databases ( Count, Name, ImagePath, ViewCount )
+-- values ( 55,'test', '123.png', 55);
 
 
 
@@ -51,9 +51,9 @@ create table common_transaltions(
     UpdateDate VARCHAR(30) DEFAULT(STRFTIME('%Y-%m-%d %H:%M:%S', 'NOW', 'localtime'))
 );
 
-insert into common_transaltions
-(SourceLang,TargetLang,SourceText,TargetText,Platform)
-values ('简体中文','English','人是生而自由的','Man is born free','youdao');
+-- insert into common_transaltions
+-- (SourceLang,TargetLang,SourceText,TargetText,Platform)
+-- values ('简体中文','English','人是生而自由的','Man is born free','youdao');
 
 -- 【磁力链接】
 -- Magnet 40位磁力链接
@@ -87,9 +87,9 @@ CREATE INDEX common_magnets_idx_DataID ON common_magnets (DataID);
 CREATE INDEX common_magnets_idx_VID ON common_magnets (VID);
 COMMIT;
 
-insert into common_magnets
-(Magnet,TorrentUrl,DataID,Title,Size,Releasedate,Tag,DownloadNumber,ExtraInfo)
-values ('7c5cd6144ae373fec931f20deabcf25eda85cb40','种子下载地址',5,'磁力链接1',1034.24,'2014-10-30','高清 中文',15,'{"Seeds":"1","Peers":"0"}');
+-- insert into common_magnets
+-- (Magnet,TorrentUrl,DataID,Title,Size,Releasedate,Tag,DownloadNumber,ExtraInfo)
+-- values ('7c5cd6144ae373fec931f20deabcf25eda85cb40','种子下载地址',5,'磁力链接1',1034.24,'2014-10-30','高清 中文',15,'{"Seeds":"1","Peers":"0"}');
 
 -- 【db和library等识别码和网址的对应关系】
 -- web_type : 所属网址 => [db,library,bus]
@@ -107,7 +107,7 @@ create table common_url_code (
     UpdateDate VARCHAR(30) DEFAULT(STRFTIME('%Y-%m-%d %H:%M:%S', 'NOW', 'localtime')),
     unique(ValueType,WebType,LocalValue,RemoteValue)
 );
-CREATE INDEX common_url_code_idx_VID ON common_url_code (ValueType,WebType,LocalValue);
+CREATE INDEX common_url_code_idx_ValueType_WebType_LocalValue ON common_url_code (ValueType,WebType,LocalValue);
 COMMIT;
 
 
@@ -168,7 +168,7 @@ create table common_tagstamp (
     CreateDate VARCHAR(30) DEFAULT(STRFTIME('%Y-%m-%d %H:%M:%S', 'NOW', 'localtime')),
     UpdateDate VARCHAR(30) DEFAULT(STRFTIME('%Y-%m-%d %H:%M:%S', 'NOW', 'localtime'))
 );
-insert into common_tagstamp(Background,Foreground,TagName) values('154,88,183,255','255,255,255,255','高清'),('154,205,50,255','255,255,255,255','中文');
+insert into common_tagstamp(Background,Foreground,TagName) values('154,88,183,255','255,255,255,255','HD'),('154,205,50,255','255,255,255,255','Translated');
 COMMIT;
 
 
@@ -176,28 +176,28 @@ COMMIT;
 
 -- 【存储刮削的图片】
 -- PathType: 0-绝对路径 1-相对于Jvedio路径 2-相对于影片路径 3-网络绝对路径
-drop table if exists common_images;
-create table common_images(
-    ImageID INTEGER PRIMARY KEY autoincrement,
+-- drop table if exists common_images;
+-- create table common_images(
+--     ImageID INTEGER PRIMARY KEY autoincrement,
 
-    Name VARCHAR(500),
-    Path VARCHAR(1000),
-    PathType INT DEFAULT 0,
-    Ext VARCHAR(100),
-    Size INTEGER,
-    Height INT,
-    Width INT,
+--     Name VARCHAR(500),
+--     Path VARCHAR(1000),
+--     PathType INT DEFAULT 0,
+--     Ext VARCHAR(100),
+--     Size INTEGER,
+--     Height INT,
+--     Width INT,
 
-    Url TEXT,
-    ExtraInfo TEXT,
-    Source VARCHAR(100),
+--     Url TEXT,
+--     ExtraInfo TEXT,
+--     Source VARCHAR(100),
 
-    CreateDate VARCHAR(30) DEFAULT(STRFTIME('%Y-%m-%d %H:%M:%S', 'NOW', 'localtime')),
-    UpdateDate VARCHAR(30) DEFAULT(STRFTIME('%Y-%m-%d %H:%M:%S', 'NOW', 'localtime')),
+--     CreateDate VARCHAR(30) DEFAULT(STRFTIME('%Y-%m-%d %H:%M:%S', 'NOW', 'localtime')),
+--     UpdateDate VARCHAR(30) DEFAULT(STRFTIME('%Y-%m-%d %H:%M:%S', 'NOW', 'localtime')),
 
-    unique(PathType,Path)
-);
+--     unique(PathType,Path)
+-- );
 
-insert into common_images
-(Name,Path,PathType,Ext,Size,Height,Width,Url,ExtraInfo,Source)
-values ('test','C:\test.jpg',0,'jpg',2431,720,1080,'http://www.demo.com/123.jpg','{"BitDepth":"32"}','IMDB');
+-- insert into common_images
+-- (Name,Path,PathType,Ext,Size,Height,Width,Url,ExtraInfo,Source)
+-- values ('test','C:\test.jpg',0,'jpg',2431,720,1080,'http://www.demo.com/123.jpg','{"BitDepth":"32"}','IMDB');

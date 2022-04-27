@@ -37,6 +37,7 @@ using Jvedio.CommonNet.Crawler;
 using Jvedio.CommonNet;
 using Jvedio.Core.Net;
 using Jvedio.Core.CustomEventArgs;
+using Jvedio.Core.FFmpeg;
 
 namespace Jvedio
 {
@@ -52,7 +53,6 @@ namespace Jvedio
         Main windowMain = GetWindowByName("Main") as Main;
         WindowEdit WindowEdit;
 
-        //public DetailDownLoad DetailDownLoad;
         public List<long> DataIDs = new List<long>();
         public long DataID;
 
@@ -272,43 +272,54 @@ namespace Jvedio
             windowMain?.setDownloadStatus();
         }
 
-        public async void GetScreenShot(object sender, RoutedEventArgs e)
+        public void GetScreenGif(object sender, RoutedEventArgs e)
         {
-            //if (!File.Exists(GlobalConfig.FFmpegConfig.Path)) { ChaoControls.Style.MessageCard.Info(Jvedio.Language.Resources.Message_SetFFmpeg); return; }
-
-            //if (((MenuItem)(sender)).Parent is MenuItem mnu)
+            Video video = vieModel.CurrentVideo;
+            ScreenShotTask task = new ScreenShotTask(vieModel.CurrentVideo, true);// 详情页面下载预览图
+            //long dataid = video.DataID;
+            //task.onCompleted += (s, ev) =>
             //{
-            //    CurrentVideo movie = vieModel.CurrentVideo;
+            //    ScreenShotTask t = s as ScreenShotTask;
+            //    PreviewImageEventArgs arg = ev as PreviewImageEventArgs;
+            //    Dispatcher.Invoke(async () =>
+            //   {
+            //       if (vieModel.ShowScreenShot && dataid.Equals(vieModel.CurrentVideo.DataID))
+            //       {
+            //           // 加入到列表
+            //           if (vieModel.CurrentVideo.PreviewImagePathList == null) vieModel.CurrentVideo.PreviewImagePathList = new ObservableCollection<string>();
+            //           if (vieModel.CurrentVideo.PreviewImageList == null) vieModel.CurrentVideo.PreviewImageList = new ObservableCollection<BitmapSource>();
+            //           await LoadImage(true);
+            //       }
+            //   });
+            //};
+            if (!Global.FFmpeg.Dispatcher.Working)
+                Global.FFmpeg.Dispatcher.BeginWork();
+            windowMain?.addToScreenShot(task);
+        }
 
-            //    if (!File.Exists(movie.filepath)) { ChaoControls.Style.MessageCard.Error(Jvedio.Language.Resources.Message_FileNotExist); return; }
-
-            //    bool success = false;
-            //    string message = "";
-
-            //    ScreenShotRadioButton.IsChecked = true;
-            //    ExtraImageRadioButton.IsChecked = false;
-            //    vieModel.CurrentVideo.extraimagelist = new ObservableCollection<BitmapSource>();
-            //    vieModel.CurrentVideo.extraimagePath = new ObservableCollection<string>();
-            //    App.Current.Dispatcher.Invoke((Action)delegate { imageItemsControl.ItemsSource = vieModel.CurrentVideo.extraimagelist; });
-
-            //    ScreenShot screenShot = new ScreenShot();
-            //    screenShot.SingleScreenShotCompleted += (s, ev) =>
-            //    {
-            //        App.Current.Dispatcher.Invoke((Action)delegate
-            //        {
-            //            if (Path.GetDirectoryName(((ScreenShotEventArgs)ev).FilePath).Split('\\').Last().ToUpper() != vieModel.CurrentVideo.id) return;
-            //            if (!(bool)ScreenShotRadioButton.IsChecked) return;
-            //            vieModel.CurrentVideo.extraimagePath.Add(((ScreenShotEventArgs)ev).FilePath);
-            //            vieModel.CurrentVideo.extraimagelist.Add(GetExtraImage(((ScreenShotEventArgs)ev).FilePath));
-            //            imageItemsControl.ItemsSource = vieModel.CurrentVideo.extraimagelist;
-            //            if (vieModel.CurrentVideo.extraimagelist.Count == 1) SetImage(0);
-            //        });
-            //    };
-            //    (success, message) = await screenShot.AsyncScreenShot(movie);
-
-            //    if (success) ChaoControls.Style.MessageCard.Success(Jvedio.Language.Resources.Message_Success);
-            //    else ChaoControls.Style.MessageCard.Error(message);
-            //}
+        public void GetScreenShot(object sender, RoutedEventArgs e)
+        {
+            Video video = vieModel.CurrentVideo;
+            ScreenShotTask task = new ScreenShotTask(vieModel.CurrentVideo);// 详情页面下载预览图
+            long dataid = video.DataID;
+            task.onCompleted += (s, ev) =>
+            {
+                ScreenShotTask t = s as ScreenShotTask;
+                PreviewImageEventArgs arg = ev as PreviewImageEventArgs;
+                Dispatcher.Invoke(async () =>
+               {
+                   if (vieModel.ShowScreenShot && dataid.Equals(vieModel.CurrentVideo.DataID))
+                   {
+                       // 加入到列表
+                       if (vieModel.CurrentVideo.PreviewImagePathList == null) vieModel.CurrentVideo.PreviewImagePathList = new ObservableCollection<string>();
+                       if (vieModel.CurrentVideo.PreviewImageList == null) vieModel.CurrentVideo.PreviewImageList = new ObservableCollection<BitmapSource>();
+                       await LoadImage(true);
+                   }
+               });
+            };
+            if (!Global.FFmpeg.Dispatcher.Working)
+                Global.FFmpeg.Dispatcher.BeginWork();
+            windowMain?.addToScreenShot(task);
         }
 
 

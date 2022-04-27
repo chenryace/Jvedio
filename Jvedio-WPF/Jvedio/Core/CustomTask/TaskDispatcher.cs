@@ -15,9 +15,10 @@ namespace Jvedio.Core.CustomTask
         private static int MAX_PRIORITY = 5;
         private static int NORMAL_PRIORITY = 3;
         private static int MIN_PRIORITY = 1;
+        private const int DEFAULT_TASKDELAY = 3000;
 
         private static int MAX_TASK_COUNT = 3;// 每次同时下载的任务数量
-        private static int TASK_DELAY = 3000;// 每一批次下载后暂停的时间
+
         private static int CHECK_PERIOD = 1000;  // 调度器运行周期
 
 
@@ -25,6 +26,7 @@ namespace Jvedio.Core.CustomTask
         public bool Cancel = false;// 调度器是否被取消了
 
         public double Progress { get; set; }// 总的工作进度
+        private int TaskDelay { get; set; }// 每一批次任务完成后暂停的时间
 
         public event EventHandler onWorking;
 
@@ -35,14 +37,21 @@ namespace Jvedio.Core.CustomTask
 
         private static TaskDispatcher<T> instance = null;
 
-        private TaskDispatcher() { }
-
-
-        public static TaskDispatcher<T> createInstance()
+        private TaskDispatcher(int taskDelay)
         {
-            if (instance == null) instance = new TaskDispatcher<T>();
+            TaskDelay = taskDelay;
+        }
+
+
+        public static TaskDispatcher<T> createInstance(int taskDelay = DEFAULT_TASKDELAY)
+        {
+            if (instance == null) instance = new TaskDispatcher<T>(taskDelay);
+
+
             return instance;
         }
+
+
 
 
         public void Enqueue(T task)
@@ -87,7 +96,7 @@ namespace Jvedio.Core.CustomTask
                             WorkingList.RemoveAt(i);
                         }
                     }
-                    if (WorkingList.Count != 0) await Task.Delay(TASK_DELAY);
+                    if (WorkingList.Count != 0 && TaskDelay > 0) await Task.Delay(TaskDelay);
                     // 将等待队列中的下载任务添加到工作队列
                     while (WorkingList.Count < MAX_TASK_COUNT && WaitingQueue.Count > 0)
                     {

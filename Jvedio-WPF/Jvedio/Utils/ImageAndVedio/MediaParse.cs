@@ -44,8 +44,9 @@ namespace Jvedio
         /// <returns></returns>
         public static string[] GetCutOffArray(string path)
         {
-            if (GlobalConfig.FFmpegConfig.ScreenShotNum <= 0 || GlobalConfig.FFmpegConfig.ScreenShotNum > 30) GlobalConfig.FFmpegConfig.ScreenShotNum = 10;
-            string[] result = new string[GlobalConfig.FFmpegConfig.ScreenShotNum];
+            int num = (int)GlobalConfig.FFmpegConfig.ScreenShotNum;
+            if (num <= 0 || num > 30) num = 10;
+            string[] result = new string[num];
             string Duration = GetVideoDuration(path);
             double Second = DurationToSecond(Duration);
             Second = GetProperSecond(Second);

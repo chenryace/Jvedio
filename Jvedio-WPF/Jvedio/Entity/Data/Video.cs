@@ -233,7 +233,12 @@ namespace Jvedio.Entity
             return null;
         }
 
-
+        /// <summary>
+        /// ext 必须要带上 '.'
+        /// </summary>
+        /// <param name="imageType"></param>
+        /// <param name="ext">ext 必须要带上 '.'</param>
+        /// <returns></returns>
         public string getImagePath(ImageType imageType, string ext = null)
         {
             string result = "";
@@ -390,6 +395,20 @@ namespace Jvedio.Entity
             }
             return imagePath;
         }
+        public string getGifPath()
+        {
+            string imagePath = getImagePath(ImageType.Gif, ".gif");
+
+            PathType pathType = (PathType)GlobalConfig.Settings.PicPathMode;
+            if (pathType == PathType.RelativeToData && !string.IsNullOrEmpty(Path) && File.Exists(Path))
+            {
+                string basePicPath = System.IO.Path.GetDirectoryName(Path);
+                Dictionary<string, string> dict = (Dictionary<string, string>)GlobalConfig.Settings.PicPaths[pathType.ToString()];
+                string path = System.IO.Path.Combine(basePicPath, dict["Gif"]);
+                imagePath = parseRelativePath(path);
+            }
+            return imagePath;
+        }
 
         public bool parseDictInfo(Dictionary<string, object> dict)
         {
@@ -467,5 +486,195 @@ namespace Jvedio.Entity
                 NFOHelper.SaveToNFO(this, saveFileName);
 
         }
+
+        public static string ToSqlField(string content)
+        {
+            if (content == Jvedio.Language.Resources.ID)
+            {
+                return "VID";
+            }
+            else if (content == Jvedio.Language.Resources.Title)
+            {
+                return "Title";
+            }
+            //else if (content == Jvedio.Language.Resources.TranslatedTitle)
+            //{
+            //    return "chinesetitle";
+            //}
+            else if (content == Jvedio.Language.Resources.VideoType)
+            {
+                return "VideoType";
+            }
+            else if (content == Jvedio.Language.Resources.Tag)
+            {
+                return "Series";
+            }
+            else if (content == Jvedio.Language.Resources.ReleaseDate)
+            {
+                return "ReleaseDate";
+            }
+            else if (content == Jvedio.Language.Resources.Year)
+            {
+                return "ReleaseYear";
+            }
+            else if (content == Jvedio.Language.Resources.Duration)
+            {
+                return "Duration";
+            }
+            else if (content == Jvedio.Language.Resources.Country)
+            {
+                return "Country";
+            }
+            else if (content == Jvedio.Language.Resources.Director)
+            {
+                return "Director";
+            }
+            else if (content == Jvedio.Language.Resources.Genre)
+            {
+                return "Genre";
+            }
+            else if (content == Jvedio.Language.Resources.Label)
+            {
+                return "Label";
+            }
+            else if (content == Jvedio.Language.Resources.Actor)
+            {
+                return "ActorNames";
+            }
+            else if (content == Jvedio.Language.Resources.Studio)
+            {
+                return "Studio";
+            }
+            else if (content == Jvedio.Language.Resources.Rating)
+            {
+                return "Rating";
+            }
+
+            else
+            {
+                return "";
+            }
+
+        }
+
+
+        public string[] ToFileName()
+        {
+            bool addTag = GlobalConfig.RenameConfig.AddRenameTag;
+            string formatString = GlobalConfig.RenameConfig.FormatString;
+            FileInfo fileInfo = new FileInfo(Path);
+            string name = System.IO.Path.GetFileNameWithoutExtension(Path);
+            string dir = fileInfo.Directory.FullName;
+            string ext = fileInfo.Extension;
+            string newName = "";
+            MatchCollection matches = Regex.Matches(formatString, "\\{[a-zA-Z]+\\}");
+            PropertyInfo[] PropertyList = this.GetType().GetProperties();
+
+            if (matches != null && matches.Count > 0)
+            {
+                newName = formatString;
+                foreach (Match match in matches)
+                {
+                    string property = match.Value.Replace("{", "").Replace("}", "");
+                    try
+                    {
+                        ReplaceWithValue(ref newName, property, PropertyList);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw ex;
+                    }
+
+                }
+            }
+
+            //替换掉特殊字符
+            foreach (char item in GlobalVariable.BANFILECHAR)
+            {
+                newName = newName.Replace(item.ToString(), "");
+            }
+            if (GlobalConfig.RenameConfig.RemoveTitleSpace) newName = newName.Trim();
+
+            if (HasSubSection)
+            {
+                string[] result = new string[SubSectionList.Count];
+                for (int i = 0; i < SubSectionList.Count; i++)
+                {
+                    if (addTag && Identify.IsCHS(Path))
+                        result[i] = System.IO.Path.Combine(dir, $"{newName}-{i + 1}_{Jvedio.Language.Resources.Translated}{ext}");
+                    else
+                        result[i] = System.IO.Path.Combine(dir, $"{newName}-{i + 1}{ext}");
+                }
+                return result;
+            }
+            else
+            {
+                if (addTag && Identify.IsCHS(Path))
+                    return new string[] { System.IO.Path.Combine(dir, $"{newName}_{Jvedio.Language.Resources.Translated}{ext}") };
+                else
+                    return new string[] { System.IO.Path.Combine(dir, $"{newName}{ext}") };
+            }
+
+
+        }
+
+
+
+        private void ReplaceWithValue(ref string result, string property, PropertyInfo[] PropertyList)
+        {
+            string inSplit = GlobalConfig.RenameConfig.InSplit.Equals("[null]") ? "" : GlobalConfig.RenameConfig.InSplit;
+            foreach (PropertyInfo item in PropertyList)
+            {
+                string name = item.Name;
+                if (name == property)
+                {
+                    object o = item.GetValue(this);
+                    if (o != null)
+                    {
+                        string value = o.ToString();
+
+                        if (property == "ActorNames" || property == "Genre" || property == "Label")
+                            value = value.Replace(GlobalVariable.Separator.ToString(), inSplit);
+
+                        if (property == "VideoType")
+                        {
+                            int v = 0;
+                            int.TryParse(value, out v);
+                            if (v == 1)
+                                value = Jvedio.Language.Resources.Uncensored;
+                            else if (v == 2)
+                                value = Jvedio.Language.Resources.Censored;
+                            else if (v == 3)
+                                value = Jvedio.Language.Resources.Europe;
+                        }
+                        if (string.IsNullOrEmpty(value))
+                        {
+                            //如果值为空，则删掉前面的分隔符
+                            int idx = result.IndexOf("{" + property + "}");
+                            if (idx >= 1)
+                            {
+                                result = result.Remove(idx - 1, 1);
+                            }
+                            result = result.Replace("{" + property + "}", "");
+                        }
+                        else
+                            result = result.Replace("{" + property + "}", value);
+                    }
+                    else
+                    {
+                        int idx = result.IndexOf("{" + property + "}");
+                        if (idx >= 1)
+                        {
+                            result = result.Remove(idx - 1);
+                        }
+                        result = result.Replace("{" + property + "}", "");
+                    }
+                    break;
+                }
+            }
+
+        }
+
+
     }
 }

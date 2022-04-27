@@ -95,7 +95,7 @@ namespace Jvedio
             Path.Combine(CurrentUserFolder, DB_TABLENAME_APP_CONFIG + ".sqlite");
 
         public static DataBaseType CurrentDataBaseType = DataBaseType.SQLite;
-
+        public static bool ClickGoBackToStartUp = false;//是否是点击了返回去到 Startup
 
 
 
@@ -104,7 +104,7 @@ namespace Jvedio
         //bmp,gif,ico,jpe,jpeg,jpg,png
         public static string SupportVideoFormat = $"{Jvedio.Language.Resources.NormalVedio}(*.avi, *.mp4, *.mkv, *.mpg, *.rmvb)| *.avi; *.mp4; *.mkv; *.mpg; *.rmvb|{Jvedio.Language.Resources.OtherVedio}((*.rm, *.mov, *.mpeg, *.flv, *.wmv, *.m4v)| *.rm; *.mov; *.mpeg; *.flv; *.wmv; *.m4v|{Jvedio.Language.Resources.AllFile} (*.*)|*.*";
         public static string SupportPictureFormat = $"图片(*.bmp, *.jpe, *.jpeg, *.jpg, *.png)|*.bmp;*.jpe;*.jpeg;*.jpg;*.png";
-
+        public static bool DataBaseBusy = false;
 
 
 

@@ -386,12 +386,22 @@
                                         Visibility="{Binding ShowSecret, Source={x:Static p:Settings.Default}, Mode=OneWay, Converter={StaticResource bool2VisibilityConverter}}">
                                         <MenuItem Click="DownLoadMagnets" Header="{x:Static lang:Resources.SyncMagnets}" />
                                     </MenuItem>
-                                    <MenuItem Header="{x:Static lang:Resources.Menu_Advance}" IsEnabled="False">
-                                        <MenuItem Click="TranslateMovie" Header="{x:Static lang:Resources.Menu_Translate}" />
-                                        <MenuItem Click="GenerateSmallImage" Header="{x:Static lang:Resources.Menu_GenerateThumbnail}" />
-                                        <MenuItem Click="GenerateActor" Header="{x:Static lang:Resources.Menu_GenerateActressImage}" />
+                                    <MenuItem Header="{x:Static lang:Resources.Menu_Advance}">
                                         <MenuItem Click="GetScreenShot" Header="{x:Static lang:Resources.Menu_GenerateScreenShot}" />
-                                        <MenuItem Header="{x:Static lang:Resources.Menu_GenerateGif}" Visibility="Collapsed" />
+                                        <MenuItem Click="GetScreenGif" Header="{x:Static lang:Resources.Menu_GenerateGif}" />
+
+                                        <MenuItem
+                                            Click="TranslateMovie"
+                                            Header="{x:Static lang:Resources.Menu_Translate}"
+                                            IsEnabled="False" />
+                                        <MenuItem
+                                            Click="GenerateSmallImage"
+                                            Header="{x:Static lang:Resources.Menu_GenerateThumbnail}"
+                                            IsEnabled="False" />
+                                        <MenuItem
+                                            Click="GenerateActor"
+                                            Header="{x:Static lang:Resources.Menu_GenerateActressImage}"
+                                            IsEnabled="False" />
                                     </MenuItem>
                                     <MenuItem Header="{x:Static lang:Resources.OpenPath}">
                                         <MenuItem
@@ -813,7 +823,7 @@
                                                     Margin="0,5,0,5"
                                                     Style="{StaticResource InfoStackPanel}"
                                                     Tag="{Binding CurrentVideo.VideoType}"
-                                                    Visibility="{Binding TeenMode, Source={x:Static p:Settings.Default}, Converter={StaticResource BoolToOppositeVisibilityConverter}, Mode=OneWay}">
+                                                    Visibility="{Binding TeenMode, Converter={StaticResource BoolToOppositeVisibilityConverter}, Mode=OneWay}">
                                                     <TextBlock Style="{StaticResource BaseTextBlock}" Text="修正" />
                                                     <TextBlock Style="{StaticResource BaseTextBlock}" Text="：" />
                                                     <ComboBox

@@ -853,7 +853,7 @@
     <value>Remove spaces</value>
   </data>
   <data name="AutoAddStamp" xml:space="preserve">
-    <value>Automatically add Translated stamp</value>
+    <value>Automatically add Translated/HD stamp</value>
   </data>
   <data name="OuterSplitChar" xml:space="preserve">
     <value>Information external separator</value>
@@ -901,7 +901,7 @@
     <value>Rating</value>
   </data>
   <data name="SampleMovie_Title" xml:space="preserve">
-    <value>IronMan1</value>
+    <value>  IronMan1  </value>
   </data>
   <data name="SampleMovie_TranslatedTitle" xml:space="preserve">
     <value>IronMan1</value>
@@ -913,7 +913,7 @@
     <value>动作 冒险 科幻</value>
   </data>
   <data name="SampleMovie_Tag" xml:space="preserve">
-    <value>color</value>
+    <value>Series</value>
   </data>
   <data name="SampleMovie_Actor" xml:space="preserve">
     <value>Robert Downey Jr./Gwyneth Paltrow/Terrence Howard/Jeff Bridges</value>
@@ -922,7 +922,7 @@
     <value>Marvel Studios</value>
   </data>
   <data name="SampleMovie_Label" xml:space="preserve">
-    <value>Label 1</value>
+    <value>Label 1/Label 2/Label 3</value>
   </data>
   <data name="SampleMovie_Country" xml:space="preserve">
     <value>United States</value>
@@ -1745,5 +1745,8 @@
   </data>
   <data name="AllGame" xml:space="preserve">
     <value>All Game</value>
+  </data>
+  <data name="NotFound" xml:space="preserve">
+    <value>NotFound</value>
   </data>
 </root>
