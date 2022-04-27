@@ -2573,6 +2573,7 @@ namespace Jvedio.ViewModel
             "metadata.Grade",
             "metadata.Title",
             "metadata.Path",
+            "metadata.Hash",
             "metadata_video.SubSection",
             "metadata_video.ImageUrls",
             "metadata.ReleaseDate",

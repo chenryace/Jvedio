@@ -684,6 +684,17 @@ namespace Jvedio.ViewModel
                 RaisePropertyChanged();
             }
         }
+        private bool _SkipExistScreenShot = GlobalConfig.FFmpegConfig.SkipExistScreenShot;
+
+        public bool SkipExistScreenShot
+        {
+            get { return _SkipExistScreenShot; }
+            set
+            {
+                _SkipExistScreenShot = value;
+                RaisePropertyChanged();
+            }
+        }
         private bool _GifAutoHeight = GlobalConfig.FFmpegConfig.GifAutoHeight;
 
         public bool GifAutoHeight

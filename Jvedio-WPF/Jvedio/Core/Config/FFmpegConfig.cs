@@ -19,6 +19,7 @@ namespace Jvedio.Core.Config
             ScreenShotIgnoreEnd = 1;
             GifAutoHeight = true;
             GifWidth = 300;
+            SkipExistScreenShot = true;
         }
 
         private static FFmpegConfig _instance = null;
@@ -37,6 +38,7 @@ namespace Jvedio.Core.Config
         public long ScreenShotNum { get; set; }
         public long ScreenShotIgnoreStart { get; set; }
         public long ScreenShotIgnoreEnd { get; set; }
+        public bool SkipExistScreenShot { get; set; }
         public bool SkipExistGif { get; set; }
         public bool GifAutoHeight { get; set; }
         public long GifWidth { get; set; }

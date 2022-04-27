@@ -48,6 +48,7 @@ using Jvedio.Core.CustomEventArgs;
 using Jvedio.CommonNet;
 using Jvedio.Core.FFmpeg;
 using Jvedio.Core.CustomTask;
+using Jvedio.Mapper;
 
 namespace Jvedio
 {
@@ -1112,7 +1113,8 @@ namespace Jvedio
             }
             else
             {
-                //(bool success, string remote, string updateContent) = await HTTP.CheckUpdate(UpdateUrl);
+                // 启动后检查更新
+                //(bool success, string remote, string updateContent) = await HttpHelper.CheckUpdate(UpdateUrl);
                 //string local = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
                 //if (success && local.CompareTo(remote) < 0)
                 //{
@@ -2258,6 +2260,25 @@ namespace Jvedio
         {
             GenerateScreenShot(sender);
         }
+        public void GenerateAllScreenShot(object sender, RoutedEventArgs e)
+        {
+            if (!File.Exists(GlobalConfig.FFmpegConfig.Path))
+            {
+                MessageCard.Error(Jvedio.Language.Resources.Message_SetFFmpeg);
+                return;
+            }
+
+            SelectWrapper<MetaData> wrapper = new SelectWrapper<MetaData>();
+            wrapper.Eq("DBId", GlobalConfig.Main.CurrentDBId).Eq("DataType", "0");
+            List<MetaData> metaDatas = metaDataMapper.selectList(wrapper);
+
+            foreach (MetaData metaData in metaDatas)
+            {
+                screenShotVideo(metaData);
+            }
+            if (!Global.FFmpeg.Dispatcher.Working)
+                Global.FFmpeg.Dispatcher.BeginWork();
+        }
 
 
         public void GenerateScreenShot(object sender, bool gif = false)
@@ -2935,6 +2956,16 @@ namespace Jvedio
         public void screenShotVideo(Video video, bool gif = false)
         {
             ScreenShotTask task = new ScreenShotTask(video, gif);
+            task.onError += (s, ev) =>
+            {
+                msgCard.Error((ev as MessageCallBackEventArgs).Message);
+            };
+            addToScreenShot(task);
+
+        }
+        public void screenShotVideo(MetaData metaData)
+        {
+            ScreenShotTask task = new ScreenShotTask(metaData);
             task.onError += (s, ev) =>
             {
                 msgCard.Error((ev as MessageCallBackEventArgs).Message);

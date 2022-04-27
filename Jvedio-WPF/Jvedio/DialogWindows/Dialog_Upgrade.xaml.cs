@@ -146,7 +146,7 @@ namespace Jvedio
             {
                 //TODO
                 //IsChecking = true;
-                //(bool success, string remote, string updateContent) = await HTTP.CheckUpdate(UpdateUrl);
+                //(bool success, string remote, string updateContent) = await httpHelper.CheckUpdate(UpdateUrl);
                 //string local = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
                 //if (success && !IsClosed)
                 //{

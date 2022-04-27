@@ -1203,6 +1203,7 @@ namespace Jvedio
             GlobalConfig.FFmpegConfig.ScreenShotIgnoreStart = vieModel.ScreenShotIgnoreStart;
             GlobalConfig.FFmpegConfig.ScreenShotIgnoreEnd = vieModel.ScreenShotIgnoreEnd;
             GlobalConfig.FFmpegConfig.SkipExistGif = vieModel.SkipExistGif;
+            GlobalConfig.FFmpegConfig.SkipExistScreenShot = vieModel.SkipExistScreenShot;
             GlobalConfig.FFmpegConfig.GifAutoHeight = vieModel.GifAutoHeight;
             GlobalConfig.FFmpegConfig.GifWidth = vieModel.GifWidth;
             GlobalConfig.FFmpegConfig.GifHeight = vieModel.GifHeight;

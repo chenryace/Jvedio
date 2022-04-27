@@ -86,10 +86,7 @@
                 <MenuItem Click="OpenApplicationPath" Header="{x:Static lang:Resources.SoftWare}" />
             </MenuItem>
 
-            <MenuItem
-                Click="CheckUpgrade"
-                Header="{x:Static lang:Resources.Upgrade}"
-                IsEnabled="False" />
+            <MenuItem Click="CheckUpgrade" Header="{x:Static lang:Resources.Upgrade}" />
 
         </ContextMenu>
 
@@ -2608,6 +2605,7 @@
                                                         Header="{x:Static lang:Resources.Refresh}"
                                                         IsEnabled="False" />
                                                     <MenuItem Click="SelectAll" Header="选中/取消当前页" />
+
                                                     <MenuItem
                                                         Command="{Binding FlipOverCommand}"
                                                         Header="{x:Static lang:Resources.ShowExists}"
@@ -2620,7 +2618,9 @@
                                                         IsCheckable="True"
                                                         IsChecked="{Binding OnlyShowSubSection, Mode=TwoWay, Source={x:Static p:Settings.Default}}"
                                                         IsEnabled="False" />
-
+                                                    <MenuItem Header="全部影片">
+                                                        <MenuItem Click="GenerateAllScreenShot" Header="{x:Static lang:Resources.Menu_GenerateScreenShot}" />
+                                                    </MenuItem>
                                                 </ContextMenu>
                                             </Grid.ContextMenu>
 
@@ -3254,8 +3254,8 @@
 
                                             <Button
                                                 Margin="10,5"
-                                                Click="NewActor"
                                                 HorizontalAlignment="Left"
+                                                Click="NewActor"
                                                 Content="新增演员" />
 
                                             <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">

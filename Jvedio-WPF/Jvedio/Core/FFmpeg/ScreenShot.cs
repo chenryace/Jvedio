@@ -26,7 +26,6 @@ namespace Jvedio.Core.FFmpeg
 
         private static int MAX_THREAD_NUM = 10;
 
-        public event EventHandler SingleScreenShotCompleted;
         private object ScreenShotLockObject = 0;
 
         private Video CurrentVideo { get; set; }
@@ -34,6 +33,7 @@ namespace Jvedio.Core.FFmpeg
         private int TotalCount = (int)GlobalConfig.FFmpegConfig.ScreenShotNum;
         private int TimeOut = (int)GlobalConfig.FFmpegConfig.TimeOut;
         private string FFmpegPath = GlobalConfig.FFmpegConfig.Path;
+        private bool SkipExistScreenShot = GlobalConfig.FFmpegConfig.SkipExistScreenShot;
 
         private List<string> saveFileNames = new List<string>();
 
@@ -81,7 +81,13 @@ namespace Jvedio.Core.FFmpeg
             if (threadNum > MAX_THREAD_NUM || threadNum <= 0) threadNum = 1;
 
             string outputDir = CurrentVideo.getScreenShot();
+            if (SkipExistScreenShot && Directory.Exists(outputDir))
+            {
+                outputs.Append($"跳过截图，因为文件夹存在（如需关闭，请在设置中修改） => {outputDir}");
+                return outputs.ToString();
+            }
             if (!Directory.Exists(outputDir)) Directory.CreateDirectory(outputDir);
+
 
 
             // 生成截图命令
