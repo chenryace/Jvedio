@@ -265,6 +265,10 @@ namespace Jvedio.Entity
                 else
                     result = System.IO.Path.Combine(saveDir, $"{Hash}{(string.IsNullOrEmpty(ext) ? "" : ext)}");
             }
+            else
+            {
+
+            }
             return result;
         }
 
@@ -306,35 +310,35 @@ namespace Jvedio.Entity
         {
 
             string dirName = System.IO.Path.GetDirectoryName(path);
-            string regex = System.IO.Path.GetFileName(path);
+            string fileName = System.IO.Path.GetFileNameWithoutExtension(path).ToLower();
             List<string> list = FileHelper.TryGetAllFiles(dirName, "*.*").ToList();
             list = list.Where(arg => ScanTask.PICTURE_EXTENSIONS_LIST.Contains(System.IO.Path.GetExtension(arg).ToLower())).ToList();
-            if (list.Count == 0) return null;
+
+
             foreach (string item in list)
             {
-                Match match = Regex.Match(System.IO.Path.GetFileNameWithoutExtension(item), regex);
-                if (match.Success) return item;
+                if (System.IO.Path.GetFileNameWithoutExtension(item).ToLower().IndexOf(fileName) >= 0)
+                    return item;
             }
-            return null;
+            return path;
         }
 
         private static string parseRelativePath(string path)
         {
-            string dirName = System.IO.Path.GetDirectoryName(path);
-            List<string> list = DirHelper.GetDirList(dirName).ToList();
-            string regex = System.IO.Path.GetFileName(path);
-            if (list.Count == 0) return null;
+            string rootDir = System.IO.Path.GetDirectoryName(path);
+            List<string> list = DirHelper.GetDirList(rootDir).ToList();
+            string dirName = System.IO.Path.GetFileName(path);
             foreach (string item in list)
             {
-                Match match = Regex.Match(System.IO.Path.GetFileNameWithoutExtension(item), regex);
-                if (match.Success) return item;
+                if (System.IO.Path.GetFileName(item).ToLower().IndexOf(dirName.ToLower()) >= 0)
+                    return item;
             }
-            return null;
+            return path;
         }
 
-        public string getSmallImage()
+        public string getSmallImage(string ext = ".jpg")
         {
-            string smallImagePath = getImagePath(ImageType.Small, ".jpg");
+            string smallImagePath = getImagePath(ImageType.Small, ext);
             PathType pathType = (PathType)GlobalConfig.Settings.PicPathMode;
             if (pathType == PathType.RelativeToData && !string.IsNullOrEmpty(Path) && File.Exists(Path))
             {
@@ -342,15 +346,16 @@ namespace Jvedio.Entity
                 string basePicPath = System.IO.Path.GetDirectoryName(Path);
                 Dictionary<string, string> dict = (Dictionary<string, string>)GlobalConfig.Settings.PicPaths[pathType.ToString()];
                 string smallPath = System.IO.Path.Combine(basePicPath, dict["SmallImagePath"]);
+                if (string.IsNullOrEmpty(System.IO.Path.GetExtension(smallPath))) smallPath += ext;
                 smallImagePath = parseRelativeImageFileName(smallPath);
 
             }
             return smallImagePath;
         }
 
-        public string getBigImage()
+        public string getBigImage(string ext = ".jpg")
         {
-            string bigImagePath = getImagePath(ImageType.Big, ".jpg");
+            string bigImagePath = getImagePath(ImageType.Big, ext);
 
             PathType pathType = (PathType)GlobalConfig.Settings.PicPathMode;
             if (pathType == PathType.RelativeToData && !string.IsNullOrEmpty(Path) && File.Exists(Path))
@@ -358,10 +363,9 @@ namespace Jvedio.Entity
 
                 string basePicPath = System.IO.Path.GetDirectoryName(Path);
                 Dictionary<string, string> dict = (Dictionary<string, string>)GlobalConfig.Settings.PicPaths[pathType.ToString()];
-                string bigPath = System.IO.Path.Combine(basePicPath, dict["BigImagePath"]);
-
+                string bigPath = System.IO.Path.GetFullPath(System.IO.Path.Combine(basePicPath, dict["BigImagePath"]));
+                if (string.IsNullOrEmpty(System.IO.Path.GetExtension(bigPath))) bigPath += ext;
                 bigImagePath = parseRelativeImageFileName(bigPath);
-
             }
             return bigImagePath;
         }
@@ -375,7 +379,7 @@ namespace Jvedio.Entity
             {
                 string basePicPath = System.IO.Path.GetDirectoryName(Path);
                 Dictionary<string, string> dict = (Dictionary<string, string>)GlobalConfig.Settings.PicPaths[pathType.ToString()];
-                string path = System.IO.Path.Combine(basePicPath, dict["PreviewImagePath"]);
+                string path = System.IO.Path.GetFullPath(System.IO.Path.Combine(basePicPath, dict["PreviewImagePath"]));
                 imagePath = parseRelativePath(path);
             }
             return imagePath;
@@ -390,7 +394,7 @@ namespace Jvedio.Entity
             {
                 string basePicPath = System.IO.Path.GetDirectoryName(Path);
                 Dictionary<string, string> dict = (Dictionary<string, string>)GlobalConfig.Settings.PicPaths[pathType.ToString()];
-                string path = System.IO.Path.Combine(basePicPath, dict["ScreenShotPath"]);
+                string path = System.IO.Path.GetFullPath(System.IO.Path.Combine(basePicPath, dict["ScreenShotPath"]));
                 imagePath = parseRelativePath(path);
             }
             return imagePath;
@@ -404,7 +408,7 @@ namespace Jvedio.Entity
             {
                 string basePicPath = System.IO.Path.GetDirectoryName(Path);
                 Dictionary<string, string> dict = (Dictionary<string, string>)GlobalConfig.Settings.PicPaths[pathType.ToString()];
-                string path = System.IO.Path.Combine(basePicPath, dict["Gif"]);
+                string path = System.IO.Path.GetFullPath(System.IO.Path.Combine(basePicPath, dict["Gif"]));
                 imagePath = parseRelativePath(path);
             }
             return imagePath;

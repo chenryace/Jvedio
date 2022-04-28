@@ -427,6 +427,7 @@ namespace Jvedio
         {
             searchActorPopup.IsOpen = true;
             vieModel.SelectActor();
+            MessageCard.Info("由于你设置了图片资源文相对于影片的，因此该页面不显示头像");
         }
 
         private void DeleteActor(object sender, MouseButtonEventArgs e)

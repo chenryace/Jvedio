@@ -27,6 +27,8 @@ using Jvedio.CommonNet.Entity;
 using Jvedio.Core.Scan;
 using Newtonsoft.Json;
 using Jvedio.Core.CustomEventArgs;
+using Fare;
+using System.Text;
 
 namespace Jvedio
 {
@@ -55,14 +57,26 @@ namespace Jvedio
             FileHelper.TryDeleteFile("upgrade.bat");
             FileHelper.TryDeleteDir("Temp");
             //testWithAssembly();
+
         }
 
-        static string url = "https://www.javbus.com/ZOCM-032";
-        static string cookies = "existmag=mag; 4fJN_2132_nofavfid=1; 4fJN_2132_smile=4D1; cnadd36=off; 4fJN_2132_saltkey=xYcTY2kV; 4fJN_2132_lastvisit=1647868805; 4fJN_2132_lastcheckfeed=396344%7C1647873006; 4fJN_2132_auth=1fechcMw2Xa4JTFibVyOO3D8Y8INPbvI%2BBEhGBktrgcVptH02Akh1kuvriFMMTu%2FElhX2eZ43Ue2seZkqwdylvnsjD0; 4fJN_2132_fastpostrefresh=1; 4fJN_2132_ulastactivity=e22dXUABLK6Lbme9%2F39yg%2BjVBFioBZ7wDHM%2Fuc%2BYDNtNeEQ%2B9%2BvS; 4fJN_2132_visitedfid=2D36D37; 4fJN_2132_forum_lastvisit=D_36_1649606455D_2_1650036354; PHPSESSID=7s5fh0b15fpqf3urf3bno42ca2";
-        static RequestHeader header = null;
 
 
+        private void test()
+        {
+            //Dictionary<string, string> dict = (Dictionary<string, string>)GlobalConfig.Settings.PicPaths[PathType.RelativeToData.ToString()];
+            //string bigPath = dict["BigImagePath"];
 
+            //string regex = bigPath.Split('/').Last();
+            //var xeger = new Xeger(regex);
+
+            //var sb = new StringBuilder();
+            //for (int i = 0; i < 10; ++i)
+            //    sb.AppendLine(xeger.Generate());
+            //Console.Write(sb.ToString());
+
+            //Console.WriteLine("123");
+        }
 
         // todo
         private async void Window_Loaded(object sender, RoutedEventArgs e)
@@ -111,6 +125,7 @@ namespace Jvedio
                 vieModel_StartUp.Loading = false;
                 this.TitleHeight = 30;
             }
+            test();
         }
 
 

@@ -146,7 +146,7 @@ namespace Jvedio
                     if (cancelLoadImage) break;
                     ActorInfo actorInfo = vieModel.CurrentVideo.ActorInfos[i];
                     //加载图片
-                    string imagePath = actorInfo.getImagePath();
+                    string imagePath = actorInfo.getImagePath(vieModel.CurrentVideo.Path);
                     BitmapImage smallimage = ReadImageFromFile(imagePath);
                     if (smallimage == null) smallimage = DefaultActorImage;
                     actorInfo.SmallImage = smallimage;

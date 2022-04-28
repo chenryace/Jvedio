@@ -1,6 +1,7 @@
 ﻿using DynamicData.Annotations;
 using Jvedio.Core.Attributes;
 using Jvedio.Core.Enums;
+using Jvedio.Core.Scan;
 using Jvedio.Utils.Common;
 using System;
 using System.Collections.Generic;
@@ -92,15 +93,22 @@ namespace Jvedio.Entity
 
         public static void SetImage(ref ActorInfo actorInfo)
         {
+
+
             //加载图片
-            string smallImagePath = actorInfo.getImagePath();
-            BitmapImage smallimage = ImageProcess.ReadImageFromFile(smallImagePath);
+            PathType pathType = (PathType)GlobalConfig.Settings.PicPathMode;
+            BitmapImage smallimage = null;
+            if (pathType != PathType.RelativeToData)
+            {
+                // 如果是相对于影片格式的，则不设置图片
+                string smallImagePath = actorInfo.getImagePath();
+                smallimage = ImageProcess.ReadImageFromFile(smallImagePath);
+            }
             if (smallimage == null) smallimage = GlobalVariable.DefaultActorImage;
             actorInfo.SmallImage = smallimage;
         }
 
-
-        public string getImagePath()
+        public string getImagePath(string dataPath = "", string ext = ".jpg")
         {
             string result = "";
             PathType pathType = (PathType)GlobalConfig.Settings.PicPathMode;
@@ -113,7 +121,32 @@ namespace Jvedio.Entity
                 if (!Directory.Exists(saveDir)) FileHelper.TryCreateDir(saveDir);
                 result = System.IO.Path.Combine(saveDir, $"{ActorName}.jpg");
             }
+            else if (!string.IsNullOrEmpty(dataPath))
+            {
+                string basePath = System.IO.Path.GetDirectoryName(dataPath);
+                Dictionary<string, string> dict = (Dictionary<string, string>)GlobalConfig.Settings.PicPaths[pathType.ToString()];
+                string smallPath = System.IO.Path.GetFullPath(System.IO.Path.Combine(basePath, dict["ActorImagePath"]));
+                if (string.IsNullOrEmpty(System.IO.Path.GetExtension(smallPath))) smallPath += ext;
+                result = parseRelativeImageFileName(smallPath);
+            }
             return result;
+        }
+
+        private string parseRelativeImageFileName(string path)
+        {
+
+            string dirName = System.IO.Path.GetDirectoryName(path);
+            string fileName = System.IO.Path.GetFileNameWithoutExtension(path).ToLower();
+            List<string> list = FileHelper.TryGetAllFiles(dirName, "*.*").ToList();
+            list = list.Where(arg => ScanTask.PICTURE_EXTENSIONS_LIST.Contains(System.IO.Path.GetExtension(arg).ToLower())).ToList();
+
+
+            foreach (string item in list)
+            {
+                if (System.IO.Path.GetFileNameWithoutExtension(item).ToLower().IndexOf(fileName) >= 0)
+                    return item;
+            }
+            return path;
         }
     }
 }

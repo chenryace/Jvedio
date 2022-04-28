@@ -59,11 +59,11 @@ namespace Jvedio
                 dict.Add(PathType.RelativeToApp.ToString(), "./Pic");
 
                 Dictionary<string, string> d = new Dictionary<string, string>();
-                d.Add("BigImagePath", "./.*fanart");
-                d.Add("SmallImagePath", "./.*poster");
-                d.Add("PreviewImagePath", "./.*预览图");
-                d.Add("ScreenShotPath", "./.*截图");
-                d.Add("ActorImagePath", "");
+                d.Add("BigImagePath", "./fanart");
+                d.Add("SmallImagePath", "./poster");
+                d.Add("PreviewImagePath", "./preview");
+                d.Add("ScreenShotPath", "./screenshot");
+                d.Add("ActorImagePath", "./actor");
                 dict.Add(PathType.RelativeToData.ToString(), d);
                 Settings.PicPathJson = JsonConvert.SerializeObject(dict);
                 Settings.PicPaths = dict;

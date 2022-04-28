@@ -286,7 +286,7 @@ namespace Jvedio
             return result;
         }
 
-        public static void ByteArrayToFile(byte[] byteArray, string fileName)
+        public static void ByteArrayToFile(byte[] byteArray, string fileName, Action<string> errorCallBack)
         {
             if (byteArray == null) return;
             try
@@ -301,7 +301,7 @@ namespace Jvedio
             }
             catch (Exception ex)
             {
-                Logger.LogF(ex);
+                errorCallBack.Invoke(ex.Message);
             }
         }
 

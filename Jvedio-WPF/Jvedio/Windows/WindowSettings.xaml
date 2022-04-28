@@ -458,7 +458,7 @@
                                     Margin="16,5"
                                     HorizontalAlignment="Left"
                                     Style="{StaticResource BaseTextBlock}"
-                                    Text="文件或文件夹名称使用正则表达式" />
+                                    Text="请输入文件名或文件夹名称（无需后缀名，自动识别）" />
                                 <StackPanel Orientation="Horizontal">
 
                                     <Label
@@ -512,7 +512,7 @@
                                         Style="{StaticResource BaseSearchTextBox}"
                                         Text="{Binding ScreenShotPath, Mode=TwoWay}" />
                                 </StackPanel>
-                                <StackPanel IsEnabled="False" Orientation="Horizontal">
+                                <StackPanel Orientation="Horizontal">
                                     <Label
                                         Margin="0,10"
                                         VerticalAlignment="Top"

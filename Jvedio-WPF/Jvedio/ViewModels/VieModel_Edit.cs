@@ -17,6 +17,7 @@ using Jvedio.Entity;
 using Jvedio.Core.SimpleORM;
 using System.Windows;
 using System.Windows.Threading;
+using Jvedio.Core.Enums;
 
 namespace Jvedio.ViewModel
 {
@@ -380,8 +381,14 @@ namespace Jvedio.ViewModel
             {
                 ActorInfo actorInfo = ActorList[i];
                 //加载图片
-                string smallImagePath = actorInfo.getImagePath();
-                BitmapImage smallimage = ReadImageFromFile(smallImagePath);
+                PathType pathType = (PathType)GlobalConfig.Settings.PicPathMode;
+                BitmapImage smallimage = null;
+                if (pathType != PathType.RelativeToData)
+                {
+                    // 如果是相对于影片格式的，则不设置图片
+                    string smallImagePath = actorInfo.getImagePath();
+                    smallimage = ImageProcess.ReadImageFromFile(smallImagePath);
+                }
                 if (smallimage == null) smallimage = DefaultActorImage;
                 actorInfo.SmallImage = smallimage;
                 await App.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new LoadActorDelegate(LoadActor), actorInfo, i);

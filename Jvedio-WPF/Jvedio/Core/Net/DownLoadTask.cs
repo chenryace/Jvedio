@@ -210,8 +210,8 @@ namespace Jvedio.Core.Net
                     if (!string.IsNullOrEmpty(imageUrl))
                     {
                         // todo 原来的 domain 可能没法用，得替换 domain
-                        string saveFileName = video.getImagePath(ImageType.Big, Path.GetExtension(imageUrl));
-                        if (!File.Exists(saveFileName))
+                        string saveFileName = video.getBigImage(Path.GetExtension(imageUrl));
+                        if (!File.Exists(saveFileName) || !string.IsNullOrEmpty(saveFileName))
                         {
                             byte[] fileByte = await downLoader.DownloadImage(imageUrl, header, (error) =>
                              {
@@ -219,7 +219,7 @@ namespace Jvedio.Core.Net
                                      logger.Error($"{imageUrl} => {error}");
                              });
                             if (fileByte != null && fileByte.Length > 0)
-                                FileProcess.ByteArrayToFile(fileByte, saveFileName);
+                                FileProcess.ByteArrayToFile(fileByte, saveFileName, (error) => logger.Error(error));
                             await Task.Delay(Delay.BIG_IMAGE);
                         }
                         else
@@ -244,7 +244,7 @@ namespace Jvedio.Core.Net
                     // 2. 小图
                     if (!string.IsNullOrEmpty(imageUrl))
                     {
-                        string saveFileName = video.getImagePath(ImageType.Small, Path.GetExtension(imageUrl));
+                        string saveFileName = video.getSmallImage(Path.GetExtension(imageUrl));
                         if (!File.Exists(saveFileName))
                         {
                             byte[] fileByte = await downLoader.DownloadImage(imageUrl, header, (error) =>
@@ -253,7 +253,7 @@ namespace Jvedio.Core.Net
                                     logger.Error($"{imageUrl} => {error}");
                             });
                             if (fileByte != null && fileByte.Length > 0)
-                                FileProcess.ByteArrayToFile(fileByte, saveFileName);
+                                FileProcess.ByteArrayToFile(fileByte, saveFileName, (error) => logger.Error(error));
                             await Task.Delay(Delay.SMALL_IMAGE);
                         }
                         else
@@ -294,7 +294,7 @@ namespace Jvedio.Core.Net
                                 string sql = $"insert or ignore into metadata_to_actor (ActorID,DataID) values ({actorInfo.ActorID},{video.DataID})";
                                 metaDataMapper.executeNonQuery(sql);
                                 // 下载图片
-                                string saveFileName = actorInfo.getImagePath();
+                                string saveFileName = actorInfo.getImagePath(video.Path, Path.GetExtension(url));
                                 if (!File.Exists(saveFileName))
                                 {
                                     byte[] fileByte = await downLoader.DownloadImage(url, header, (error) =>
@@ -304,7 +304,7 @@ namespace Jvedio.Core.Net
 
                                     });
                                     if (fileByte != null && fileByte.Length > 0)
-                                        FileProcess.ByteArrayToFile(fileByte, saveFileName);
+                                        FileProcess.ByteArrayToFile(fileByte, saveFileName, (error) => logger.Error(error));
 
                                 }
                                 else
@@ -358,7 +358,7 @@ namespace Jvedio.Core.Net
                                     });
                                     if (fileByte != null && fileByte.Length > 0)
                                     {
-                                        FileProcess.ByteArrayToFile(fileByte, saveFileName);
+                                        FileProcess.ByteArrayToFile(fileByte, saveFileName, (error) => logger.Error(error));
                                         PreviewImageEventArgs arg = new PreviewImageEventArgs(saveFileName, fileByte);
                                         onDownloadPreview?.Invoke(this, arg);
                                     }

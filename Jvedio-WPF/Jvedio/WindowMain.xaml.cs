@@ -6365,6 +6365,11 @@ namespace Jvedio
         {
             msgCard.Info("开发中");
         }
+
+        private void ShowActorNotice(object sender, RoutedEventArgs e)
+        {
+            msgCard.Info("由于你设置了图片资源文相对于影片的，因此该页面不显示头像");
+        }
     }
 
 
