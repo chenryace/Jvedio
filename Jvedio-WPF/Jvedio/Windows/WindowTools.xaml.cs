@@ -793,6 +793,29 @@ namespace Jvedio
                 TabControl.IsEnabled = true;
             }
         }
+
+        private void GoBack(object sender, MouseButtonEventArgs e)
+        {
+            vieModel.TabControlSelectedIndex = 0;
+        }
+
+        private void GoToTool(object sender, MouseButtonEventArgs e)
+        {
+            Border border = sender as Border;
+            WrapPanel wrapPanel = border.Parent as WrapPanel;
+            List<Border> borders = wrapPanel.Children.OfType<Border>().Where(arg => arg.IsEnabled = true).ToList();
+            int idx = borders.IndexOf(border);
+            vieModel.TabControlSelectedIndex = idx + 2;
+
+        }
+
+        private void BaseWindow_ContentRendered(object sender, EventArgs e)
+        {
+            foreach (Border border in toolWrapPanel.Children.OfType<Border>().ToList())
+            {
+                border.MouseLeftButtonUp += GoToTool;
+            }
+        }
     }
 
 }

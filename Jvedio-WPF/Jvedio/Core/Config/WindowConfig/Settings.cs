@@ -12,7 +12,7 @@ namespace Jvedio.Core.WindowConfig
     {
         private Settings() : base($"WindowConfig.Settings")
         {
-
+            PicPathMode = 1;// 相对路径
         }
 
         private static Settings _instance = null;

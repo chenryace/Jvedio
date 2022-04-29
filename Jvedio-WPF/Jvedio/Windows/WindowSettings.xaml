@@ -637,7 +637,12 @@
                         Content="{x:Static lang:Resources.ImportNFOWhenScan}"
                         IsChecked="{Binding ScanNfo, Mode=TwoWay, Source={x:Static p:Settings.Default}}" />
 
-
+                    <CheckBox
+                        Margin="25,5"
+                        HorizontalAlignment="Left"
+                        Content="{x:Static lang:Resources.CopyNFOImage}"
+                        IsChecked="{Binding CopyNFOPicture}"
+                        Visibility="{Binding ScanNfo, Converter={StaticResource bool2VisibilityConverter}, Mode=TwoWay, Source={x:Static p:Settings.Default}}" />
 
 
                     <StackPanel

@@ -42,6 +42,7 @@ namespace Jvedio.Core.Config
             }
         }
         public bool ScanOnStartUp { get; set; }
+        public bool CopyNFOPicture { get; set; }
 
 
     }

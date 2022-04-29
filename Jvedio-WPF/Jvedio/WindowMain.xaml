@@ -58,18 +58,17 @@
             HorizontalOffset="-45"
             VerticalOffset="-5">
             <MenuItem Click="OpenSet_MouseDown" Header="{x:Static lang:Resources.Settings}" />
-            <MenuItem
-                Click="OpenTools"
-                Header="{x:Static lang:Resources.Tools}"
-                IsEnabled="False" />
+            <MenuItem Header="{x:Static lang:Resources.Scan}">
+                <MenuItem Header="扫描文件夹" />
+                <MenuItem Header="扫描 NFO" />
+                <MenuItem Header="扫描欧美影片" />
+                <MenuItem Header="扫描网络磁盘" />
+            </MenuItem>
             <MenuItem
                 Click="OpenDataBase"
                 Header="{x:Static lang:Resources.MovieManagement}"
                 IsEnabled="False" />
-            <MenuItem
-                Click="OpenBatching"
-                Header="{x:Static lang:Resources.BatchProcessing}"
-                IsEnabled="False" />
+
 
 
 
@@ -86,7 +85,10 @@
                 <MenuItem Click="OpenApplicationPath" Header="{x:Static lang:Resources.SoftWare}" />
             </MenuItem>
 
-            <MenuItem Click="CheckUpgrade" Header="{x:Static lang:Resources.Upgrade}" />
+            <MenuItem
+                Command="cmd:OpenWindow.Upgrade"
+                CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}"
+                Header="{x:Static lang:Resources.CheckUpgrade}" />
 
         </ContextMenu>
 
@@ -657,6 +659,10 @@
                 <ContextMenu>
                     <MenuItem Click="ShowMainWindow" Header="{x:Static lang:Resources.OpenJvedio}" />
                     <MenuItem Click="ShowSettings" Header="{x:Static lang:Resources.Settings}" />
+                    <MenuItem
+                        Command="cmd:OpenWindow.Upgrade"
+                        CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}"
+                        Header="{x:Static lang:Resources.CheckUpgrade}" />
                     <MenuItem Click="Notify_Close" Header="{x:Static lang:Resources.Exit}" />
                 </ContextMenu>
             </hc:NotifyIcon.ContextMenu>
@@ -1387,6 +1393,7 @@
                     <Grid Grid.Column="1">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="auto" />
+                            <RowDefinition Height="auto" />
                             <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
                         <Grid Grid.Row="0">
@@ -1470,13 +1477,112 @@
 
 
                         </Grid>
+                        <ItemsControl Grid.Row="1" ItemsSource="{Binding Notices}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border
+                                        Name="msgBorder"
+                                        Height="30"
+                                        Background="{DynamicResource Window.Title.Background}">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="50" />
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="auto" />
+                                            </Grid.ColumnDefinitions>
+                                            <Border>
+                                                <Border.Style>
+                                                    <Style TargetType="Border">
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding NoticeType}" Value="Warning">
+                                                                <Setter Property="Background" Value="Yellow" />
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding NoticeType}" Value="Error">
+                                                                <Setter Property="Background" Value="Red" />
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding NoticeType}" Value="Hint">
+                                                                <Setter Property="Background" Value="Green" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Border.Style>
+                                                <TextBlock
+                                                    Grid.Column="0"
+                                                    HorizontalAlignment="Center"
+                                                    VerticalAlignment="Center"
+                                                    FontFamily="微软雅黑"
+                                                    FontSize="13"
+                                                    FontWeight="Bold"
+                                                    TextAlignment="Center">
+                                                    <TextBlock.Style>
+                                                        <Style TargetType="TextBlock">
+                                                            <Setter Property="Foreground" Value="{DynamicResource Global.Background}" />
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding NoticeType}" Value="Warning">
+                                                                    <Setter Property="Text" Value="警告" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding NoticeType}" Value="Error">
+                                                                    <Setter Property="Text" Value="严重" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding NoticeType}" Value="Hint">
+                                                                    <Setter Property="Text" Value="提示" />
+                                                                    <Setter Property="Foreground" Value="{DynamicResource Global.Foreground}" />
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </TextBlock.Style>
+                                                </TextBlock>
+                                            </Border>
+                                            <TextBox
+                                                Grid.Column="1"
+                                                Height="auto"
+                                                Margin="5"
+                                                Padding="0"
+                                                VerticalAlignment="Center"
+                                                Background="Transparent"
+                                                FontFamily="微软雅黑"
+                                                FontSize="12"
+                                                Foreground="{DynamicResource Global.Foreground}"
+                                                Style="{StaticResource ReadOnlyNoWrapTextBox}"
+                                                Text="{Binding Message}" />
+                                            <Button
+                                                Grid.Column="2"
+                                                Width="20"
+                                                Height="20"
+                                                Margin="5,0"
+                                                Background="{Binding Path=Background, ElementName=msgBorder}"
+                                                Click="HideMsg"
+                                                Style="{StaticResource RoundNormalButton}"
+                                                Tag="{DynamicResource Window.Title.Hover.Background}">
+                                                <Viewbox
+                                                    Width="12"
+                                                    Height="auto"
+                                                    VerticalAlignment="Center">
+                                                    <Path
+                                                        HorizontalAlignment="Center"
+                                                        VerticalAlignment="Center"
+                                                        Data="M610.218667 505.6l398.08-387.413333a49.664 49.664 0 0 0 0-71.338667l-2.133334-2.133333a52.992 52.992 0 0 0-73.301333 0L534.784 432.64 136.704 44.373333a52.992 52.992 0 0 0-73.386667 0L61.269333 46.592a48.810667 48.810667 0 0 0 0 71.338667l398.165334 387.669333-398.165334 387.498667a49.664 49.664 0 0 0 0 71.253333l2.218667 2.133333c20.48 19.626667 52.821333 19.626667 73.301333 0l398.08-387.413333 398.08 387.413333c20.48 19.626667 52.906667 19.626667 73.386667 0l2.048-2.133333a49.664 49.664 0 0 0 0-71.253333l-398.08-387.413334z"
+                                                        Fill="{DynamicResource Global.Foreground}" />
+                                                </Viewbox>
+                                            </Button>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel Orientation="Vertical" />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                        </ItemsControl>
+
                         <TabControl
-                            Grid.Row="1"
+                            Grid.Row="2"
                             Background="Transparent"
                             FocusVisualStyle="{x:Null}"
                             ItemContainerStyle="{StaticResource FlatTabItem}"
                             SelectedIndex="{Binding TabSelectedIndex, FallbackValue=0}"
-                            Style="{StaticResource FlatTabControl}">
+                            Style="{StaticResource HeaderHideTabControlStyle}">
                             <TabItem Header="影片">
                                 <!--  影片  -->
                                 <Grid HorizontalAlignment="Stretch">
@@ -1764,13 +1870,34 @@
                                                     Click="LoadFromPage"
                                                     Content="{x:Static lang:Resources.LoadFromNet}"
                                                     IsEnabled="False"
-                                                    Style="{StaticResource FlatButton}" />
+                                                    Style="{StaticResource FlatButton}"
+                                                    Visibility="Collapsed" />
                                                 <Button
-                                                    HorizontalAlignment="Stretch"
-                                                    VerticalAlignment="Center"
+                                                    Width="auto"
+                                                    MinWidth="0"
+                                                    Style="{StaticResource ButtonPrimary}">
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <Image
+                                                            Height="13"
+                                                            Margin="0,0,5,0"
+                                                            Source="/Resources/Picture/导入.png" />
+                                                        <TextBlock Text="导入视频" />
+                                                    </StackPanel>
+                                                </Button>
+                                                <Button
+                                                    Width="auto"
+                                                    MinWidth="0"
                                                     Command="{Binding AddNewMovie}"
-                                                    Content="{x:Static lang:Resources.FastImport}"
-                                                    Style="{StaticResource ButtonPrimary}" />
+                                                    Style="{StaticResource ButtonPrimary}"
+                                                    Visibility="{Binding TeenMode, Converter={StaticResource BoolToOppositeVisibilityConverter}}">
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <Image
+                                                            Height="13"
+                                                            Margin="0,0,5,0"
+                                                            Source="/Resources/Picture/新增.png" />
+                                                        <TextBlock Text="{x:Static lang:Resources.FastImport}" />
+                                                    </StackPanel>
+                                                </Button>
 
 
                                                 <chao:Switch
@@ -2601,24 +2728,11 @@
                                             PreviewKeyUp="Grid_PreviewKeyUp">
                                             <Grid.ContextMenu>
                                                 <ContextMenu IsEnabled="{Binding IsLoadingMovie, Converter={StaticResource OppositeBooleanConverter}}">
-                                                    <MenuItem
-                                                        Click="RefreshCurrentPage"
-                                                        Header="{x:Static lang:Resources.Refresh}"
-                                                        IsEnabled="False" />
                                                     <MenuItem Click="SelectAll" Header="选中/取消当前页" />
-
-                                                    <MenuItem
-                                                        Command="{Binding FlipOverCommand}"
-                                                        Header="{x:Static lang:Resources.ShowExists}"
-                                                        IsCheckable="True"
-                                                        IsChecked="{Binding OnlyShowPlay, Mode=TwoWay, Source={x:Static p:Settings.Default}}"
-                                                        IsEnabled="False" />
-                                                    <MenuItem
-                                                        Command="{Binding FlipOverCommand}"
-                                                        Header="{x:Static lang:Resources.ShowSubSection}"
-                                                        IsCheckable="True"
-                                                        IsChecked="{Binding OnlyShowSubSection, Mode=TwoWay, Source={x:Static p:Settings.Default}}"
-                                                        IsEnabled="False" />
+                                                    <MenuItem Header="{x:Static lang:Resources.ShowExists}" IsCheckable="True" />
+                                                    <MenuItem Header="{x:Static lang:Resources.ShowSubSection}" IsCheckable="True" />
+                                                    <MenuItem Header="图片显示模式" IsCheckable="True" />
+                                                    <MenuItem Header="{x:Static lang:Resources.VideoType}" IsCheckable="True" />
                                                     <MenuItem Header="全部影片">
                                                         <MenuItem Click="GenerateAllScreenShot" Header="{x:Static lang:Resources.Menu_GenerateScreenShot}" />
                                                     </MenuItem>
@@ -3395,26 +3509,29 @@
                                     <Grid
                                         Grid.Row="2"
                                         Panel.ZIndex="5"
-                                        Visibility="{Binding DisplayStatusBar, Converter={StaticResource BoolToVis}, Mode=TwoWay, Source={x:Static p:Settings.Default}}">
+                                        Visibility="{Binding DisplayPage, Converter={StaticResource BoolToVis}, Mode=TwoWay, Source={x:Static p:Settings.Default}}">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="*" />
                                             <ColumnDefinition Width="auto" />
                                             <ColumnDefinition Width="auto" />
                                         </Grid.ColumnDefinitions>
 
-
-
-                                        <TextBlock
+                                        <Border
                                             Grid.Column="1"
                                             VerticalAlignment="Center"
-                                            Style="{StaticResource BaseTextBlock}">
-                                            <TextBlock.Text>
-                                                <MultiBinding StringFormat="{} {0}/{1}">
-                                                    <Binding Path="CurrentActorCount" />
-                                                    <Binding Path="ActorTotalCount" />
-                                                </MultiBinding>
-                                            </TextBlock.Text>
-                                        </TextBlock>
+                                            Background="{DynamicResource Window.Title.Background}"
+                                            CornerRadius="5">
+                                            <TextBlock VerticalAlignment="Center" Style="{StaticResource BaseTextBlock}">
+                                                <TextBlock.Text>
+                                                    <MultiBinding StringFormat="{} {0}/{1}">
+                                                        <Binding Path="CurrentActorCount" />
+                                                        <Binding Path="ActorTotalCount" />
+                                                    </MultiBinding>
+                                                </TextBlock.Text>
+                                            </TextBlock>
+                                        </Border>
+
+
                                         <!--  页码  -->
                                         <chao:Pagination
                                             Name="actorPagination"

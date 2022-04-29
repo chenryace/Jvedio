@@ -1426,6 +1426,31 @@ namespace Jvedio.ViewModel
             }
         }
 
+
+        private ObservableCollection<Notice> _Notices;
+
+        public ObservableCollection<Notice> Notices
+        {
+            get { return _Notices; }
+            set
+            {
+                _Notices = value;
+                RaisePropertyChanged();
+            }
+        }
+        private bool _TeenMode = GlobalConfig.Settings.TeenMode;
+
+        public bool TeenMode
+        {
+            get { return _TeenMode; }
+            set
+            {
+                _TeenMode = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
         public List<List<string>> Filters;
 
         public async void GetFilterInfo()
@@ -2553,7 +2578,7 @@ namespace Jvedio.ViewModel
         #region "影片 => 翻页" 
         public static Dictionary<int, string> SortDict = new Dictionary<int, string>()
         {
-            { 0, "metadata.VID" },
+            { 0, "metadata_video.VID" },
             { 1, "metadata.Grade" },
             { 2, "metadata.Size" },
             { 3, "metadata.LastScanDate" },
@@ -2562,7 +2587,7 @@ namespace Jvedio.ViewModel
             { 6, "metadata.ViewCount" },
             { 7, "metadata.ReleaseDate" },
             { 8, "metadata.Rating" },
-            { 9, "metadata.Duration" },
+            { 9, "metadata_video.Duration" },
         };
 
 

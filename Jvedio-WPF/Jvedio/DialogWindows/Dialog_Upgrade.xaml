@@ -28,13 +28,13 @@
             Width="auto"
             Margin="20"
             HorizontalAlignment="Left">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="auto" />
-                <RowDefinition Height="auto" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="auto" />
 
-            <Grid Grid.Row="0">
+            </Grid.ColumnDefinitions>
+
+            <Grid Grid.Column="0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="auto" />
                     <ColumnDefinition Width="*" />
@@ -52,15 +52,15 @@
                             FontSize="20"
                             FontWeight="Bold"
                             Foreground="{DynamicResource ForegroundSearch}"
-                            Text="{x:Static lang:Resources.CheckUpgrade}"
+                            Text="{x:Static lang:Resources.Upgrade}"
                             TextAlignment="Center" />
 
                         <Button
                             Click="CheckUpgrade"
                             Content="{x:Static lang:Resources.CheckUpgrade}"
                             Cursor="Hand"
-                            IsEnabled="{Binding IsChecking, Converter={StaticResource BoolToOppositeVisibilityConverter}, Mode=OneWay}"
-                            Style="{StaticResource FlatButton}" />
+                            IsEnabled="{Binding IsChecking, Converter={StaticResource OppositeBooleanConverter}, Mode=OneWay}"
+                            Style="{StaticResource FillButton}" />
 
                         <hc:LoadingCircle
                             x:Name="UpgradeLoadingCircle"
@@ -71,7 +71,7 @@
                     </StackPanel>
 
                     <StackPanel
-                        Margin="50,0"
+                        Margin="30,10"
                         HorizontalAlignment="Left"
                         Orientation="Vertical">
                         <TextBlock
@@ -81,108 +81,153 @@
                             FontSize="14"
                             Foreground="{DynamicResource ForegroundGlobal}"
                             Text="{x:Static lang:Resources.UpgradeSource}" />
-                        <TextBlock
-                            x:Name="LocalVersionTextBlock"
+
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock
+                                Margin="10"
+                                HorizontalAlignment="Left"
+                                FontSize="14"
+                                Foreground="{DynamicResource Global.Foreground}"
+                                Opacity="0.7"
+                                Text="{x:Static lang:Resources.ReleaseDate}" />
+                            <TextBlock
+                                Margin="10"
+                                FontSize="16"
+                                Foreground="{DynamicResource Global.Foreground}"
+                                Opacity="0.7"
+                                Text="{Binding ReleaseDate}" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock
+                                Margin="10"
+                                HorizontalAlignment="Left"
+                                FontSize="14"
+                                Foreground="{DynamicResource Global.Foreground}"
+                                Opacity="0.7"
+                                Text="{x:Static lang:Resources.CurrentVersion}" />
+                            <TextBlock
+                                Margin="10"
+                                FontSize="16"
+                                Foreground="{DynamicResource Global.Foreground}"
+                                Opacity="0.7"
+                                Text="{Binding LocalVersion}" />
+                        </StackPanel>
+
+
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock
+                                Margin="10"
+                                FontSize="16"
+                                Foreground="{DynamicResource Global.Foreground}"
+                                Text="{x:Static lang:Resources.LatestVersion}" />
+                            <TextBlock
+                                Margin="10"
+                                FontSize="16"
+                                Foreground="{DynamicResource Global.Foreground}"
+                                Text="{Binding LatestVersion}" />
+                        </StackPanel>
+                    </StackPanel>
+
+
+
+                    <StackPanel
+                        Grid.Column="1"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Orientation="Horizontal">
+                        <Button
+                            MinWidth="120"
                             Margin="10"
-                            HorizontalAlignment="Left"
-                            FontSize="14"
-                            Foreground="{DynamicResource ForegroundGlobal}"
-                            Text="{x:Static lang:Resources.CurrentVersion}" />
-                        <TextBlock
-                            x:Name="RemoteVersionTextBlock"
+                            Click="BeginUpgrade"
+                            Content="{x:Static lang:Resources.BeginUpgrade}"
+                            FontSize="15"
+                            IsEnabled="{Binding CanUpgrade}"
+                            Style="{StaticResource ButtonStyleFill}" />
+                        <Button
+                            MinWidth="120"
                             Margin="10"
-                            FontSize="16"
-                            Foreground="{DynamicResource ForegroundSearch}"
-                            Text="{x:Static lang:Resources.LatestVersion}" />
+                            Click="GotoDownloadUrl"
+                            Content="{x:Static lang:Resources.DownLoadFromUrl}"
+                            Cursor="Hand"
+                            FontSize="15"
+                            Style="{StaticResource ButtonPrimary}" />
+                    </StackPanel>
+
+                    <StackPanel
+                        Grid.Row="1"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Orientation="Horizontal"
+                        Visibility="{Binding IsUpgrading, Converter={StaticResource bool2VisibilityConverter}, Mode=OneWay}">
+                        <ProgressBar
+                            Width="220"
+                            Maximum="100"
+                            Minimum="0"
+                            Style="{StaticResource ProgressBarFlat}"
+                            Visibility="{Binding IsUpgrading, Converter={StaticResource bool2VisibilityConverter}}"
+                            Value="{Binding UpgradeProgress}" />
+                        <TextBlock
+                            x:Name="progressText"
+                            Margin="20,20,0,20"
+                            FontSize="12"
+                            Style="{StaticResource BaseTextBlock}"
+                            Text="{Binding Path=UpgradeProgress, StringFormat='{}{0} %'}" />
                     </StackPanel>
                 </StackPanel>
 
 
 
-                <StackPanel
-                    Grid.Column="1"
-                    HorizontalAlignment="Right"
-                    VerticalAlignment="Center"
-                    Orientation="Vertical">
-                    <Button
-                        MinWidth="120"
-                        Margin="0,10"
-                        Click="BeginUpgrade"
-                        Content="{x:Static lang:Resources.BeginUpgrade}"
-                        FontSize="15"
-                        IsEnabled="{Binding IsChecking, Converter={StaticResource OppositeBooleanConverter}}"
-                        Style="{StaticResource ButtonStyleFill}" />
-                    <Button
-                        MinWidth="120"
-                        Margin="0,10"
-                        Click="GotoDownloadUrl"
-                        Content="{x:Static lang:Resources.DownLoadFromUrl}"
-                        Cursor="Hand"
-                        FontSize="15"
-                        Style="{StaticResource ButtonPrimary}" />
-                </StackPanel>
+
 
             </Grid>
 
-            <StackPanel
-                Grid.Row="1"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center"
-                Orientation="Horizontal"
-                Visibility="{Binding IsUpgrading, Converter={StaticResource bool2VisibilityConverter}, Mode=OneWay}">
-                <ProgressBar
-                    x:Name="UpgradeProgressBar"
-                    Width="300"
-                    Maximum="100"
-                    Minimum="0"
-                    Style="{StaticResource ProgressBarSuccessStripe}"
-                    Value="50" />
-                <TextBlock
-                    x:Name="progressText"
-                    Margin="20,0"
-                    Style="{StaticResource BaseTextBlock}"
-                    Text="{Binding ElementName=UpgradeProgressBar, Path=Value, StringFormat='{}{0}%'}" />
-            </StackPanel>
 
-            <Grid
-                x:Name="UpgradeInfoGrid"
-                Grid.Row="2"
-                Width="auto"
-                Margin="50,10"
-                HorizontalAlignment="Stretch">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="auto" />
-                    <RowDefinition Height="*" />
-                </Grid.RowDefinitions>
 
-                <TextBlock
-                    Grid.Row="0"
-                    Margin="10"
-                    HorizontalAlignment="Left"
-                    FontSize="18"
-                    FontWeight="Bold"
-                    Foreground="{DynamicResource ForegroundSearch}"
-                    Text="{x:Static lang:Resources.Log}"
-                    TextAlignment="Center" />
-                <TextBox
-                    x:Name="UpdateContentTextBox"
-                    Grid.Row="1"
+            <Border
+                Grid.Column="1"
+                Margin="10"
+                Background="Transparent"
+                CornerRadius="5">
+                <Grid
+                    x:Name="UpgradeInfoGrid"
                     Width="auto"
-                    Height="auto"
-                    Margin="10"
-                    HorizontalAlignment="Stretch"
-                    VerticalContentAlignment="Top"
-                    FontSize="20"
-                    Foreground="{DynamicResource ForegroundGlobal}"
-                    HorizontalScrollBarVisibility="Auto"
-                    IsReadOnly="True"
-                    Style="{StaticResource ReadOnlyTextBox}"
-                    Text="https://github.com/hitchao/Jvedio/releases"
-                    TextAlignment="Left"
-                    TextWrapping="Wrap"
-                    VerticalScrollBarVisibility="Auto" />
+                    HorizontalAlignment="Stretch">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
 
-            </Grid>
+
+                    <TextBlock
+                        Grid.Row="0"
+                        Margin="10"
+                        HorizontalAlignment="Left"
+                        FontSize="18"
+                        FontWeight="Bold"
+                        Foreground="{DynamicResource ForegroundSearch}"
+                        Text="新版本详情"
+                        TextAlignment="Center" />
+                    <TextBox
+                        Grid.Row="1"
+                        Width="500"
+                        Margin="10"
+                        HorizontalAlignment="Stretch"
+                        VerticalContentAlignment="Top"
+                        FontFamily="微软雅黑"
+                        FontSize="15"
+                        Foreground="{DynamicResource ForegroundGlobal}"
+                        HorizontalScrollBarVisibility="Auto"
+                        IsReadOnly="True"
+                        Style="{StaticResource ReadOnlyTextBox}"
+                        Text="{Binding ReleaseNote}"
+                        TextAlignment="Left"
+                        TextWrapping="NoWrap"
+                        VerticalScrollBarVisibility="Auto" />
+
+                </Grid>
+            </Border>
+
+
 
 
         </Grid>

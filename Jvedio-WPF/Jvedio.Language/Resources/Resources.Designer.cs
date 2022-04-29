@@ -1240,7 +1240,7 @@ namespace Jvedio.Language {
         }
         
         /// <summary>
-        ///   查找类似 快速添加 + 的本地化字符串。
+        ///   查找类似 快速添加 的本地化字符串。
         /// </summary>
         public static string FastImport {
             get {

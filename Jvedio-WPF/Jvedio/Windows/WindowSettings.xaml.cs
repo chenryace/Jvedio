@@ -1194,6 +1194,7 @@ namespace Jvedio
             // 扫描
             GlobalConfig.ScanConfig.MinFileSize = vieModel.MinFileSize;
             GlobalConfig.ScanConfig.ScanOnStartUp = vieModel.ScanOnStartUp;
+            GlobalConfig.ScanConfig.CopyNFOPicture = vieModel.CopyNFOPicture;
 
             // ffmpeg
             GlobalConfig.FFmpegConfig.Path = vieModel.FFMPEG_Path;

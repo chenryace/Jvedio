@@ -461,6 +461,17 @@ namespace Jvedio.ViewModel
 
         #region "扫描"
 
+        private bool _CopyNFOPicture = GlobalConfig.ScanConfig.CopyNFOPicture;
+
+        public bool CopyNFOPicture
+        {
+            get { return _CopyNFOPicture; }
+            set
+            {
+                _CopyNFOPicture = value;
+                RaisePropertyChanged();
+            }
+        }
         private double _MinFileSize = GlobalConfig.ScanConfig.MinFileSize;
 
         public double MinFileSize

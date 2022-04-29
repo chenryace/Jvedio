@@ -283,6 +283,7 @@
     <Compile Include="Core\CustomTask\AbstractTask.cs" />
     <Compile Include="Core\Enums\DownLoadState.cs" />
     <Compile Include="Core\Enums\ImageType.cs" />
+    <Compile Include="Core\Enums\NoticeType.cs" />
     <Compile Include="Core\Exceptions\CrawlerNotFoundException.cs" />
     <Compile Include="Core\Exceptions\MediaCutOutOfRangeException.cs" />
     <Compile Include="Core\Exceptions\NotFoundException.cs" />
@@ -292,6 +293,7 @@
     <Compile Include="Core\Net\DownLoadProgress.cs" />
     <Compile Include="Core\Net\DownloadResult.cs" />
     <Compile Include="Core\Net\DownLoadTask.cs" />
+    <Compile Include="Core\Net\UpgradeHelper.cs" />
     <Compile Include="Core\Plugins\Crawler\CrawlerLoader.cs" />
     <Compile Include="Core\CustomSettingsProvider.cs" />
     <Compile Include="Core\DataBase\Connection.cs" />
@@ -369,6 +371,7 @@
     <Compile Include="Entity\Message.cs" />
     <Compile Include="Entity\Movie.cs" />
     <Compile Include="Entity\MyListItem.cs" />
+    <Compile Include="Entity\Notice.cs" />
     <Compile Include="Entity\SampleMovies.cs" />
     <Compile Include="Entity\Serilizable.cs" />
     <Compile Include="Core\Crawler\CrawlerServer.cs" />
@@ -445,8 +448,6 @@
     <Compile Include="Utils\ImageAndVedio\Gif.cs" />
     <Compile Include="Utils\ImageAndVedio\GifImage.cs" />
     <Compile Include="Core\FFmpeg\ScreenShot.cs" />
-    <Compile Include="Utils\Net\DetailDownLoad.cs" />
-    <Compile Include="Utils\Net\Upgrade.cs" />
     <Compile Include="Utils\FileProcess\FileProcess.cs" />
     <Compile Include="Utils\ImageAndVedio\MediaParse.cs" />
     <Compile Include="Utils\Config\RecentWatchedConfig.cs" />
@@ -476,7 +477,6 @@
     <Compile Include="Utils\Sqlite\MySqlite.cs" />
     <Compile Include="Utils\Sqlite\SqliteHelper.cs" />
     <Compile Include="Utils\Visual\VisualHelper.cs" />
-    <Compile Include="ViewModels\VieModel_Batch.cs" />
     <Compile Include="ViewModels\VieModel_MetaDataEdit.cs" />
     <Compile Include="ViewModels\VieModel_MetaData.cs" />
     <Compile Include="Windows\DialogInput.xaml.cs">
@@ -515,9 +515,6 @@
     </Compile>
     <Compile Include="Windows\WindowEdit.xaml.cs">
       <DependentUpon>WindowEdit.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\WindowBatch.xaml.cs">
-      <DependentUpon>WindowBatch.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\WindowTools.xaml.cs">
       <DependentUpon>WindowTools.xaml</DependentUpon>
@@ -609,10 +606,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Windows\WindowBatch.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="Windows\Window_DBManagement.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -693,6 +686,13 @@
     </Compile>
     <Content Include="Reference\ChaoControls.Style.dll" />
     <Content Include="Reference\CommonNet.dll" />
+    <Resource Include="Resources\Picture\雷达扫描.png" />
+    <Resource Include="Resources\Picture\网络信息.png" />
+    <Resource Include="Resources\Picture\欧美扫描.png" />
+    <Resource Include="Resources\Picture\网络磁盘扫描.png" />
+    <Resource Include="Resources\Picture\搜索.png" />
+    <Resource Include="Resources\Picture\新增.png" />
+    <Resource Include="Resources\Picture\导入.png" />
     <Content Include="Sql\app_cache.sql" />
     <Content Include="Sql\single_db_comic.sql" />
     <Content Include="Sql\single_db_game.sql" />

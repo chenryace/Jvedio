@@ -31,7 +31,7 @@ namespace Jvedio.Core.Command
         }
         static void OpenUpgrade(Window parent)
         {
-            new Dialog_Upgrade(parent, false, "", "").ShowDialog();
+            new Dialog_Upgrade(parent).ShowDialog();
         }
     }
 }

@@ -462,6 +462,21 @@
             </Trigger>
         </Style.Triggers>
     </Style>
+    <Style x:Key="RoundHoverBorder" TargetType="Border">
+        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+        <Setter Property="CornerRadius" Value="5" />
+        <Setter Property="Background" Value="{DynamicResource Window.Title.Background}" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="Margin" Value="2" />
+        <Setter Property="Padding" Value="5" />
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{DynamicResource ListBoxItem.Selected.Active.Background}" />
+                <Setter Property="BorderBrush" Value="{DynamicResource ListBoxItem.Selected.Active.BorderBrush}" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
 
 
     <Style x:Key="BgHoverBorder" TargetType="Border">

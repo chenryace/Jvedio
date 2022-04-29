@@ -12,7 +12,7 @@ namespace Jvedio.ViewModel
 
     class VieModel_Tools : ViewModelBase
     {
-        private ObservableCollection<string> scanPath=new ObservableCollection<string>();
+        private ObservableCollection<string> scanPath = new ObservableCollection<string>();
 
         public ObservableCollection<string> ScanPath
         {
@@ -45,6 +45,18 @@ namespace Jvedio.ViewModel
             set
             {
                 scanEuPath = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private int _TabControlSelectedIndex = 0;
+
+        public int TabControlSelectedIndex
+        {
+            get { return _TabControlSelectedIndex; }
+            set
+            {
+                _TabControlSelectedIndex = value;
                 RaisePropertyChanged();
             }
         }

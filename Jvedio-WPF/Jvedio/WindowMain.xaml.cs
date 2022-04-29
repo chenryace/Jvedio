@@ -49,6 +49,9 @@ using Jvedio.CommonNet;
 using Jvedio.Core.FFmpeg;
 using Jvedio.Core.CustomTask;
 using Jvedio.Mapper;
+using Jvedio.CommonNet.Entity;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Jvedio
 {
@@ -103,6 +106,8 @@ namespace Jvedio
         public static bool CheckingScanStatus = false;
         public static bool CheckingDownloadStatus = false;
 
+        public static int NOTICE_INTERVAL = 1800;//30分钟检测一次
+
         public Main()
         {
             InitializeComponent();
@@ -122,9 +127,9 @@ namespace Jvedio
             ConfigFirstRun();
             FadeIn();//淡入
             SetSkin();//设置主题颜色
-            ShowNotice();//显示公告
+            InitNotice();//初始化公告
             SetLoadingStatus(false); // todo 删除该行
-            CheckUpgrade(null, null);//检查更新
+            CheckUpgrade();//检查更新
             setDataBases();// 设置当前下拉数据库
             setRecentWatched();// 显示最近播放
             //vieModel.GetFilterInfo(); //todo 筛选器
@@ -137,10 +142,7 @@ namespace Jvedio
             initTagStamp();
             AllRadioButton.IsChecked = true;
 
-            //// 测试
-            //Core.Scan.ScanTask scanTask = new Core.Scan.ScanTask(new List<string> { @"E:\资料\测试用" }, null);
-            //vieModel.ScanTasks.Add(scanTask);
-            //scanTask.Start();
+            //OpenTools(null, null);
         }
 
 
@@ -368,6 +370,7 @@ namespace Jvedio
             UnregisterHotKey(_windowHandle, HOTKEY_ID);//取消热键
             vieModel.HideToIcon = false;//隐藏图标
             DisposeGif("", true);//清除 gif 资源
+            NoticeTimer.Stop();
             base.OnClosed(e);
         }
 
@@ -601,34 +604,82 @@ namespace Jvedio
 
 
 
+        DispatcherTimer NoticeTimer = new DispatcherTimer();
+
+        public void InitNotice()
+        {
+            NoticeTimer.Tick += (s, e) =>
+            {
+                ShowNotice();
+            };
+            NoticeTimer.Interval = TimeSpan.FromSeconds(NOTICE_INTERVAL);
+            NoticeTimer.Start();
+            ShowNotice();
+        }
 
         void ShowNotice()
         {
-            //    Task.Run(async () =>
-            //    {
-            //        string configName = "Notice";
-            //        //获取本地的公告
-            //        string notices = "";
-            //        SelectWrapper<AppConfig> wrapper = new SelectWrapper<AppConfig>();
-            //        wrapper.Eq("ConfigName", configName);
-            //        AppConfig appConfig = appConfigMapper.selectOne(wrapper);
-            //        if (appConfig != null && !string.IsNullOrEmpty(appConfig.ConfigValue))
-            //            notices = appConfig.ConfigValue.Replace(GlobalVariable.Separator, '\n');
-            //        HttpResult httpResult = await new BaseHttp().Send(NoticeUrl);
-            //        //判断公告是否内容不同
-            //        if (httpResult != null && httpResult.SourceCode != "" && httpResult.SourceCode != notices)
-            //        {
-            //            //覆盖原有公告
-            //            appConfig.ConfigValue = SqliteHelper.handleNewLine(httpResult.SourceCode);
-            //            appConfig.ConfigName = configName;
-            //            appConfigMapper.insert(appConfig, Core.Enums.InsertMode.Replace);
-            //            //提示用户
-            //            this.Dispatcher.Invoke((Action)delegate ()
-            //            {
-            //                new Dialog_Notice(this, false, GetNoticeByLanguage(httpResult.SourceCode, Properties.Settings.Default.Language)).ShowDialog();
-            //            });
-            //        }
-            //    });
+            Task.Run(async () =>
+            {
+                string configName = "Notice";
+                //获取本地的公告
+                string notices = "";
+                SelectWrapper<AppConfig> wrapper = new SelectWrapper<AppConfig>();
+                wrapper.Eq("ConfigName", configName);
+                AppConfig appConfig = appConfigMapper.selectOne(wrapper);
+                if (appConfig != null && !string.IsNullOrEmpty(appConfig.ConfigValue))
+                    notices = appConfig.ConfigValue;
+                HttpResult httpResult = await HttpClient.Get(NoticeUrl, UpgradeHelper.Header);
+                //判断公告是否内容不同
+                if (httpResult.StatusCode == HttpStatusCode.OK && !httpResult.SourceCode.Equals(notices))
+                {
+                    //覆盖原有公告
+                    string json = httpResult.SourceCode;
+                    appConfig.ConfigValue = SqliteHelper.handleNewLine(httpResult.SourceCode);
+                    appConfig.ConfigName = configName;
+                    appConfigMapper.insert(appConfig, Core.Enums.InsertMode.Replace);
+
+                    Dictionary<string, object> dictionary = JsonConvert.DeserializeObject<Dictionary<string, object>>(json);
+                    if (dictionary != null && dictionary.ContainsKey("Date") && dictionary.ContainsKey("Data"))
+                    {
+                        string date = dictionary["Date"].ToString();
+                        List<Dictionary<string, string>> Data = ((JArray)dictionary["Data"]).ToObject<List<Dictionary<string, string>>>();
+                        if (Data != null && Data.Count > 0)
+                        {
+                            vieModel.Notices = new ObservableCollection<Notice>();
+                            foreach (Dictionary<string, string> dict in Data)
+                            {
+                                if (dict.ContainsKey("Type") && dict.ContainsKey("Message"))
+                                {
+                                    string type = dict["Type"].ToString();
+                                    string message = dict["Message"].ToString();
+                                    Enum.TryParse(type, out NoticeType noticeType);
+                                    if (noticeType == NoticeType.MarkDown)
+                                    {
+                                        //弹窗提示
+                                        this.Dispatcher.Invoke((Action)delegate ()
+                                        {
+                                            new Dialog_Notice(this, false, message).ShowDialog();
+                                        });
+                                    }
+                                    else
+                                    {
+                                        Notice notice = new Notice();
+                                        notice.NoticeType = noticeType;
+                                        notice.Message = message;
+                                        notice.Date = date;
+                                        vieModel.Notices.Add(notice);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("公告相同无需提示");
+                }
+            });
         }
 
         private string GetNoticeByLanguage(string notice, string language)
@@ -707,29 +758,7 @@ namespace Jvedio
             //DownLoader.StartThread();
         }
 
-        public async void RefreshCurrentPage(object sender, RoutedEventArgs e)
-        {
-            //if (DownLoader?.State == DownLoadState.DownLoading)
-            //{
-            //    msgCard.Info(Jvedio.Language.Resources.Message_StopAndTry);
-            //    return;
-            //}
 
-            //刷新文件夹
-
-            if (vieModel.IsScanning)
-            {
-                vieModel.IsScanning = false;
-                try
-                {
-                    RefreshScanCTS?.Cancel();
-                }
-                catch (ObjectDisposedException ex) { Console.WriteLine(ex.Message); }
-
-            }
-
-            CancelSelect();
-        }
 
         public void CancelSelect()
         {
@@ -922,7 +951,6 @@ namespace Jvedio
                 this.Hide();
                 WindowSet?.Hide();
                 WindowTools?.Hide();
-                WindowBatch?.Hide();
                 WindowEdit?.Hide();
                 window_DBManagement?.Hide();
             }
@@ -1105,21 +1133,25 @@ namespace Jvedio
             new Dialog_Thanks(this, false).ShowDialog();
         }
 
-        private async void CheckUpgrade(object sender, RoutedEventArgs e)
+        private async void CheckUpgrade()
         {
-            if (sender != null)
+            // 启动后检查更新
+            try
             {
-                new Dialog_Upgrade(this, false, "", "").ShowDialog();
+                (string LatestVersion, string ReleaseDate, string ReleaseNote) result = await UpgradeHelper.getUpgardeInfo();
+                string remote = result.LatestVersion;
+                if (!string.IsNullOrEmpty(remote))
+                {
+                    string local = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
+                    if (local.CompareTo(remote) < 0)
+                    {
+                        new Dialog_Upgrade(this, false, remote, result.ReleaseDate, result.ReleaseNote).ShowDialog();
+                    }
+                }
             }
-            else
+            catch (Exception ex)
             {
-                // 启动后检查更新
-                //(bool success, string remote, string updateContent) = await HttpHelper.CheckUpdate(UpdateUrl);
-                //string local = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
-                //if (success && local.CompareTo(remote) < 0)
-                //{
-                //    new Dialog_Upgrade(this, false, remote, updateContent).ShowDialog();
-                //}
+                Logger.LogF(ex);
             }
         }
 
@@ -4266,15 +4298,6 @@ namespace Jvedio
         }
 
 
-        WindowBatch WindowBatch;
-
-        private void OpenBatching(object sender, RoutedEventArgs e)
-        {
-            if (WindowBatch != null) WindowBatch.Close();
-            WindowBatch = new WindowBatch();
-            WindowBatch.Show();
-        }
-
 
 
 
@@ -6368,7 +6391,16 @@ namespace Jvedio
 
         private void ShowActorNotice(object sender, RoutedEventArgs e)
         {
-            msgCard.Info("由于你设置了图片资源文相对于影片的，因此该页面不显示头像");
+            PathType pathType = (PathType)GlobalConfig.Settings.PicPathMode;
+            if (pathType.Equals(PathType.RelativeToData))
+                msgCard.Info("由于当前图片资源文相对于影片，因此该页面不显示头像");
+        }
+
+        private void HideMsg(object sender, RoutedEventArgs e)
+        {
+            Button button = sender as Button;
+            Border border = (button.Parent as Grid).Parent as Border;
+            border.Visibility = Visibility.Collapsed;
         }
     }
 

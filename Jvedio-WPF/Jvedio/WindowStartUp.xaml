@@ -225,6 +225,7 @@
             Name="tabControl"
             Background="Transparent"
             ItemContainerStyle="{StaticResource FlatTabItem}"
+            SelectedIndex="1"
             Style="{StaticResource HeaderHideTabControlStyle}">
             <TabItem Header="加载中">
                 <Border Panel.ZIndex="20" Background="{DynamicResource Window.Background}">
@@ -576,8 +577,7 @@
                                     <MenuItem
                                         Command="cmd:OpenWindow.Upgrade"
                                         CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}"
-                                        Header="检查更新"
-                                        IsEnabled="False" />
+                                        Header="检查更新" />
                                     <MenuItem Command="cmd:File.OpenBaseDir" Header="打开程序所在路径" />
                                 </ContextMenu>
                             </Border.ContextMenu>
